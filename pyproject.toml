@@ -1,0 +1,28 @@
+[project]
+name = "morpheus-mamba"
+version = "2.0.0"
+description = "Morpheus v2 — Mamba-2 State Space Model for on-device Basque autocomplete"
+requires-python = ">=3.11"
+dependencies = [
+    "torch>=2.4.0",
+    "mamba-ssm>=2.2.0",
+    "causal-conv1d>=1.4.0",
+    "sentencepiece>=0.2.0",
+    "safetensors>=0.4.0",
+    "tqdm>=4.66",
+    "numpy>=1.24",
+    "pyyaml>=6.0",
+    "wandb>=0.28.0",
+    "datasets>=2.14.0",
+]
+
+[project.scripts]
+pretokenize = "scripts.pretokenize:main"
+export-hf = "scripts.export_hf:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src", "scripts"]

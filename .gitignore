@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.venv/
+venv/
+
+# Training artifacts
+checkpoints/
+exports/
+logs/
+
+# Data (large files)
+data/train_tokens.npy
+data/valid_tokens.npy
+data/test_tokens.npy
+data/splits/
+
+# Tokenizer (symlinked from v1, but ignore copies)
+tokenizer/*.model
+tokenizer/*.vocab
+
+# W&B
+wandb/
+
+# Docker
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# llama.cpp (if cloned locally)
+llama.cpp/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Obsidian
+.obsidian/
+
+# Environment
+.env
+.env.local

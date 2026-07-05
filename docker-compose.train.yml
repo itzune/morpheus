@@ -1,0 +1,17 @@
+services:
+  morpheus-train:
+    build:
+      context: .
+      dockerfile: Dockerfile.train
+    volumes:
+      - .:/workspace
+      - ./data:/data
+      - ./checkpoints:/checkpoints
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    shm_size: '16g'

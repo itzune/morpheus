@@ -1,0 +1,27 @@
+FROM nvidia/cuda:12.4.1-devel-ubuntu22.04
+
+RUN apt-get update && apt-get install -y \
+    python3.11 python3.11-dev python3.11-venv python3-pip \
+    git wget cmake build-essential ninja-build \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN python3.11 -m pip install --upgrade pip
+
+# PyTorch (CUDA 12.4)
+RUN pip install torch==2.4.* torchvision --index-url https://download.pytorch.org/whl/cu124
+
+# Mamba dependencies (must install in this order)
+RUN pip install causal-conv1d>=1.4.0 --no-build-isolation
+RUN pip install mamba-ssm --no-build-isolation
+
+# Training utilities
+RUN pip install \
+    sentencepiece==0.2.* \
+    wandb \
+    safetensors \
+    tqdm \
+    numpy \
+    datasets \
+    pyyaml
+
+WORKDIR /workspace
