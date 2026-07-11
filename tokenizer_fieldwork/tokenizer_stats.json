@@ -1,0 +1,29 @@
+[
+  {
+    "name": "raw-4k",
+    "vocab_size": 4000,
+    "model_type": "unigram",
+    "character_coverage": 0.9995,
+    "actual_vocab_size": 4000,
+    "fertility": 2.577,
+    "training_time_s": 59.6
+  },
+  {
+    "name": "raw-8k",
+    "vocab_size": 8000,
+    "model_type": "unigram",
+    "character_coverage": 0.9995,
+    "actual_vocab_size": 8000,
+    "fertility": 2.28,
+    "training_time_s": 57.2
+  },
+  {
+    "name": "raw-16k",
+    "vocab_size": 16000,
+    "model_type": "unigram",
+    "character_coverage": 0.9995,
+    "actual_vocab_size": 16000,
+    "fertility": 2.057,
+    "training_time_s": 53.0
+  }
+]

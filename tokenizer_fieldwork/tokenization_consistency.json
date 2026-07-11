@@ -1,0 +1,592 @@
+{
+  "baseline-32k": {
+    "morphacc_consistency": 28.6,
+    "per_word": {
+      "etxea": {
+        "tokens": [
+          "\u2581etxea"
+        ],
+        "boundary_correct": false
+      },
+      "etxera": {
+        "tokens": [
+          "\u2581etxera"
+        ],
+        "boundary_correct": false
+      },
+      "etxetik": {
+        "tokens": [
+          "\u2581etxetik"
+        ],
+        "boundary_correct": false
+      },
+      "etxeko": {
+        "tokens": [
+          "\u2581etxeko"
+        ],
+        "boundary_correct": false
+      },
+      "etxean": {
+        "tokens": [
+          "\u2581etxean"
+        ],
+        "boundary_correct": false
+      },
+      "etxearekin": {
+        "tokens": [
+          "\u2581etxe",
+          "arekin"
+        ],
+        "boundary_correct": true
+      },
+      "etxearentzat": {
+        "tokens": [
+          "\u2581etxe",
+          "arentzat"
+        ],
+        "boundary_correct": true
+      },
+      "etxearengatik": {
+        "tokens": [
+          "\u2581etxearen",
+          "gatik"
+        ],
+        "boundary_correct": false
+      },
+      "laguna": {
+        "tokens": [
+          "\u2581lagun",
+          "a"
+        ],
+        "boundary_correct": true
+      },
+      "lagunera": {
+        "tokens": [
+          "\u2581lagun",
+          "era"
+        ],
+        "boundary_correct": false
+      },
+      "lagunetik": {
+        "tokens": [
+          "\u2581lagun",
+          "etik"
+        ],
+        "boundary_correct": false
+      },
+      "laguneko": {
+        "tokens": [
+          "\u2581lagun",
+          "eko"
+        ],
+        "boundary_correct": false
+      },
+      "mendia": {
+        "tokens": [
+          "\u2581mendia"
+        ],
+        "boundary_correct": false
+      },
+      "mendira": {
+        "tokens": [
+          "\u2581mendira"
+        ],
+        "boundary_correct": false
+      },
+      "menditik": {
+        "tokens": [
+          "\u2581mendi",
+          "tik"
+        ],
+        "boundary_correct": true
+      },
+      "mendiko": {
+        "tokens": [
+          "\u2581mendiko"
+        ],
+        "boundary_correct": false
+      },
+      "gizona": {
+        "tokens": [
+          "\u2581gizona"
+        ],
+        "boundary_correct": false
+      },
+      "gizonarekin": {
+        "tokens": [
+          "\u2581gizon",
+          "arekin"
+        ],
+        "boundary_correct": true
+      },
+      "gizonarentzat": {
+        "tokens": [
+          "\u2581gizon",
+          "arentzat"
+        ],
+        "boundary_correct": true
+      },
+      "kaletik": {
+        "tokens": [
+          "\u2581kaletik"
+        ],
+        "boundary_correct": false
+      },
+      "kalean": {
+        "tokens": [
+          "\u2581kalean"
+        ],
+        "boundary_correct": false
+      }
+    }
+  },
+  "raw-4k": {
+    "morphacc_consistency": 66.7,
+    "per_word": {
+      "etxea": {
+        "tokens": [
+          "\u2581etxe",
+          "a"
+        ],
+        "boundary_correct": true
+      },
+      "etxera": {
+        "tokens": [
+          "\u2581etxe",
+          "ra"
+        ],
+        "boundary_correct": true
+      },
+      "etxetik": {
+        "tokens": [
+          "\u2581etxe",
+          "tik"
+        ],
+        "boundary_correct": true
+      },
+      "etxeko": {
+        "tokens": [
+          "\u2581etxe",
+          "ko"
+        ],
+        "boundary_correct": true
+      },
+      "etxean": {
+        "tokens": [
+          "\u2581etxean"
+        ],
+        "boundary_correct": false
+      },
+      "etxearekin": {
+        "tokens": [
+          "\u2581etxe",
+          "arekin"
+        ],
+        "boundary_correct": true
+      },
+      "etxearentzat": {
+        "tokens": [
+          "\u2581etxe",
+          "a",
+          "rentzat"
+        ],
+        "boundary_correct": false
+      },
+      "etxearengatik": {
+        "tokens": [
+          "\u2581etxe",
+          "aren",
+          "gatik"
+        ],
+        "boundary_correct": false
+      },
+      "laguna": {
+        "tokens": [
+          "\u2581lagun",
+          "a"
+        ],
+        "boundary_correct": true
+      },
+      "lagunera": {
+        "tokens": [
+          "\u2581lagun",
+          "era"
+        ],
+        "boundary_correct": false
+      },
+      "lagunetik": {
+        "tokens": [
+          "\u2581lagun",
+          "etik"
+        ],
+        "boundary_correct": false
+      },
+      "laguneko": {
+        "tokens": [
+          "\u2581lagun",
+          "eko"
+        ],
+        "boundary_correct": false
+      },
+      "mendia": {
+        "tokens": [
+          "\u2581mendi",
+          "a"
+        ],
+        "boundary_correct": true
+      },
+      "mendira": {
+        "tokens": [
+          "\u2581mendi",
+          "ra"
+        ],
+        "boundary_correct": true
+      },
+      "menditik": {
+        "tokens": [
+          "\u2581mendi",
+          "tik"
+        ],
+        "boundary_correct": true
+      },
+      "mendiko": {
+        "tokens": [
+          "\u2581mendi",
+          "ko"
+        ],
+        "boundary_correct": true
+      },
+      "gizona": {
+        "tokens": [
+          "\u2581gizon",
+          "a"
+        ],
+        "boundary_correct": true
+      },
+      "gizonarekin": {
+        "tokens": [
+          "\u2581gizon",
+          "arekin"
+        ],
+        "boundary_correct": true
+      },
+      "gizonarentzat": {
+        "tokens": [
+          "\u2581gizon",
+          "a",
+          "rentzat"
+        ],
+        "boundary_correct": false
+      },
+      "kaletik": {
+        "tokens": [
+          "\u2581kale",
+          "tik"
+        ],
+        "boundary_correct": true
+      },
+      "kalean": {
+        "tokens": [
+          "\u2581kale",
+          "an"
+        ],
+        "boundary_correct": true
+      }
+    }
+  },
+  "raw-8k": {
+    "morphacc_consistency": 61.9,
+    "per_word": {
+      "etxea": {
+        "tokens": [
+          "\u2581etxe",
+          "a"
+        ],
+        "boundary_correct": true
+      },
+      "etxera": {
+        "tokens": [
+          "\u2581etxera"
+        ],
+        "boundary_correct": false
+      },
+      "etxetik": {
+        "tokens": [
+          "\u2581etxe",
+          "tik"
+        ],
+        "boundary_correct": true
+      },
+      "etxeko": {
+        "tokens": [
+          "\u2581etxeko"
+        ],
+        "boundary_correct": false
+      },
+      "etxean": {
+        "tokens": [
+          "\u2581etxean"
+        ],
+        "boundary_correct": false
+      },
+      "etxearekin": {
+        "tokens": [
+          "\u2581etxe",
+          "arekin"
+        ],
+        "boundary_correct": true
+      },
+      "etxearentzat": {
+        "tokens": [
+          "\u2581etxe",
+          "arentzat"
+        ],
+        "boundary_correct": true
+      },
+      "etxearengatik": {
+        "tokens": [
+          "\u2581etxe",
+          "aren",
+          "gatik"
+        ],
+        "boundary_correct": false
+      },
+      "laguna": {
+        "tokens": [
+          "\u2581lagun",
+          "a"
+        ],
+        "boundary_correct": true
+      },
+      "lagunera": {
+        "tokens": [
+          "\u2581lagun",
+          "era"
+        ],
+        "boundary_correct": false
+      },
+      "lagunetik": {
+        "tokens": [
+          "\u2581lagun",
+          "etik"
+        ],
+        "boundary_correct": false
+      },
+      "laguneko": {
+        "tokens": [
+          "\u2581lagun",
+          "eko"
+        ],
+        "boundary_correct": false
+      },
+      "mendia": {
+        "tokens": [
+          "\u2581mendi",
+          "a"
+        ],
+        "boundary_correct": true
+      },
+      "mendira": {
+        "tokens": [
+          "\u2581mendi",
+          "ra"
+        ],
+        "boundary_correct": true
+      },
+      "menditik": {
+        "tokens": [
+          "\u2581mendi",
+          "tik"
+        ],
+        "boundary_correct": true
+      },
+      "mendiko": {
+        "tokens": [
+          "\u2581mendi",
+          "ko"
+        ],
+        "boundary_correct": true
+      },
+      "gizona": {
+        "tokens": [
+          "\u2581gizon",
+          "a"
+        ],
+        "boundary_correct": true
+      },
+      "gizonarekin": {
+        "tokens": [
+          "\u2581gizon",
+          "arekin"
+        ],
+        "boundary_correct": true
+      },
+      "gizonarentzat": {
+        "tokens": [
+          "\u2581gizon",
+          "arentzat"
+        ],
+        "boundary_correct": true
+      },
+      "kaletik": {
+        "tokens": [
+          "\u2581kale",
+          "tik"
+        ],
+        "boundary_correct": true
+      },
+      "kalean": {
+        "tokens": [
+          "\u2581kalean"
+        ],
+        "boundary_correct": false
+      }
+    }
+  },
+  "raw-16k": {
+    "morphacc_consistency": 52.4,
+    "per_word": {
+      "etxea": {
+        "tokens": [
+          "\u2581etxea"
+        ],
+        "boundary_correct": false
+      },
+      "etxera": {
+        "tokens": [
+          "\u2581etxera"
+        ],
+        "boundary_correct": false
+      },
+      "etxetik": {
+        "tokens": [
+          "\u2581etxetik"
+        ],
+        "boundary_correct": false
+      },
+      "etxeko": {
+        "tokens": [
+          "\u2581etxeko"
+        ],
+        "boundary_correct": false
+      },
+      "etxean": {
+        "tokens": [
+          "\u2581etxean"
+        ],
+        "boundary_correct": false
+      },
+      "etxearekin": {
+        "tokens": [
+          "\u2581etxe",
+          "arekin"
+        ],
+        "boundary_correct": true
+      },
+      "etxearentzat": {
+        "tokens": [
+          "\u2581etxe",
+          "arentzat"
+        ],
+        "boundary_correct": true
+      },
+      "etxearengatik": {
+        "tokens": [
+          "\u2581etxea",
+          "rengatik"
+        ],
+        "boundary_correct": false
+      },
+      "laguna": {
+        "tokens": [
+          "\u2581lagun",
+          "a"
+        ],
+        "boundary_correct": true
+      },
+      "lagunera": {
+        "tokens": [
+          "\u2581lagun",
+          "era"
+        ],
+        "boundary_correct": false
+      },
+      "lagunetik": {
+        "tokens": [
+          "\u2581lagun",
+          "etik"
+        ],
+        "boundary_correct": false
+      },
+      "laguneko": {
+        "tokens": [
+          "\u2581lagun",
+          "eko"
+        ],
+        "boundary_correct": false
+      },
+      "mendia": {
+        "tokens": [
+          "\u2581mendi",
+          "a"
+        ],
+        "boundary_correct": true
+      },
+      "mendira": {
+        "tokens": [
+          "\u2581mendi",
+          "ra"
+        ],
+        "boundary_correct": true
+      },
+      "menditik": {
+        "tokens": [
+          "\u2581mendi",
+          "tik"
+        ],
+        "boundary_correct": true
+      },
+      "mendiko": {
+        "tokens": [
+          "\u2581mendi",
+          "ko"
+        ],
+        "boundary_correct": true
+      },
+      "gizona": {
+        "tokens": [
+          "\u2581gizon",
+          "a"
+        ],
+        "boundary_correct": true
+      },
+      "gizonarekin": {
+        "tokens": [
+          "\u2581gizon",
+          "arekin"
+        ],
+        "boundary_correct": true
+      },
+      "gizonarentzat": {
+        "tokens": [
+          "\u2581gizon",
+          "arentzat"
+        ],
+        "boundary_correct": true
+      },
+      "kaletik": {
+        "tokens": [
+          "\u2581kale",
+          "tik"
+        ],
+        "boundary_correct": true
+      },
+      "kalean": {
+        "tokens": [
+          "\u2581kalean"
+        ],
+        "boundary_correct": false
+      }
+    }
+  }
+}
