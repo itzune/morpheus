@@ -1,0 +1,123 @@
+{
+  "bpc": 0.969731,
+  "ppl_per_token": 9.8263,
+  "total_nll_bits": 461349.4930232081,
+  "total_tokens": 139945,
+  "total_chars": 475750,
+  "tokens_per_char": 0.2942,
+  "files": [
+    {
+      "file": "berria_0.txt",
+      "chars": 4417,
+      "tokens": 1341,
+      "nll_bits": 5030.15869877391,
+      "bpc": 1.138818,
+      "tokens_per_char": 0.3036
+    },
+    {
+      "file": "berria_1.txt",
+      "chars": 2920,
+      "tokens": 757,
+      "nll_bits": 2411.8543166845798,
+      "bpc": 0.825978,
+      "tokens_per_char": 0.2592
+    },
+    {
+      "file": "berria_2.txt",
+      "chars": 4073,
+      "tokens": 950,
+      "nll_bits": 3341.1816840856527,
+      "bpc": 0.820324,
+      "tokens_per_char": 0.2332
+    },
+    {
+      "file": "berria_3.txt",
+      "chars": 2699,
+      "tokens": 748,
+      "nll_bits": 2720.30399575261,
+      "bpc": 1.007893,
+      "tokens_per_char": 0.2771
+    },
+    {
+      "file": "berria_4.txt",
+      "chars": 6070,
+      "tokens": 1656,
+      "nll_bits": 5813.954996421364,
+      "bpc": 0.957818,
+      "tokens_per_char": 0.2728
+    },
+    {
+      "file": "wiki_Bilbo.txt",
+      "chars": 41990,
+      "tokens": 12747,
+      "nll_bits": 39714.40826248214,
+      "bpc": 0.945806,
+      "tokens_per_char": 0.3036
+    },
+    {
+      "file": "wiki_Donostia.txt",
+      "chars": 57018,
+      "tokens": 17133,
+      "nll_bits": 55798.597099601415,
+      "bpc": 0.978614,
+      "tokens_per_char": 0.3005
+    },
+    {
+      "file": "wiki_Euskal_Herria.txt",
+      "chars": 105553,
+      "tokens": 30460,
+      "nll_bits": 100001.52717253026,
+      "bpc": 0.947406,
+      "tokens_per_char": 0.2886
+    },
+    {
+      "file": "wiki_Euskara.txt",
+      "chars": 74654,
+      "tokens": 21830,
+      "nll_bits": 74002.81916684253,
+      "bpc": 0.991277,
+      "tokens_per_char": 0.2924
+    },
+    {
+      "file": "wiki_Euskara_batua.txt",
+      "chars": 22263,
+      "tokens": 6121,
+      "nll_bits": 21352.15499715401,
+      "bpc": 0.959087,
+      "tokens_per_char": 0.2749
+    },
+    {
+      "file": "wiki_Gipuzkoa.txt",
+      "chars": 33599,
+      "tokens": 10150,
+      "nll_bits": 31021.98105845872,
+      "bpc": 0.923301,
+      "tokens_per_char": 0.3021
+    },
+    {
+      "file": "wiki_Hezkuntza.txt",
+      "chars": 22100,
+      "tokens": 5834,
+      "nll_bits": 20779.98587747442,
+      "bpc": 0.940271,
+      "tokens_per_char": 0.264
+    },
+    {
+      "file": "wiki_Musika.txt",
+      "chars": 23429,
+      "tokens": 6868,
+      "nll_bits": 24484.59145920401,
+      "bpc": 1.045055,
+      "tokens_per_char": 0.2931
+    },
+    {
+      "file": "wiki_Nafarroa_Garaia.txt",
+      "chars": 74965,
+      "tokens": 23350,
+      "nll_bits": 74875.9742377425,
+      "bpc": 0.998812,
+      "tokens_per_char": 0.3115
+    }
+  ],
+  "eval_time_s": 8.9
+}

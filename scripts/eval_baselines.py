@@ -141,10 +141,18 @@ class HFModelWrapper(ModelWrapper):
             self.tokenizer.pad_token = self.tokenizer.eos_token
 
         print(f"Loading model: {hf_model_name}...")
-        config = AutoConfig.from_pretrained(hf_model_name)
-        self._vocab_size = config.vocab_size
+        config = AutoConfig.from_pretrained(hf_model_name, trust_remote_code=True)
+
+        # VLM configs may nest vocab_size under text_config
+        if hasattr(config, 'vocab_size'):
+            self._vocab_size = config.vocab_size
+        elif hasattr(config, 'text_config') and hasattr(config.text_config, 'vocab_size'):
+            self._vocab_size = config.text_config.vocab_size
+        else:
+            self._vocab_size = None  # will get from model after loading
 
         # Try AutoModelForCausalLM first; fall back to multimodal for VLMs
+        self._is_multimodal = False
         try:
             from transformers import AutoModelForCausalLM
             self.model = AutoModelForCausalLM.from_pretrained(
@@ -153,9 +161,8 @@ class HFModelWrapper(ModelWrapper):
                 device_map=device if device == "cuda" else None,
                 trust_remote_code=True,
             )
-            self._is_multimodal = False
         except Exception as e:
-            print(f"  AutoModelForCausalLM failed ({e}), trying AutoModelForMultimodalLM...")
+            print(f"  AutoModelForCausalLM failed ({e}), trying multimodal...")
             from transformers import AutoProcessor, AutoModelForMultimodalLM
             processor = AutoProcessor.from_pretrained(hf_model_name, trust_remote_code=True)
             self.tokenizer = processor.tokenizer
@@ -166,6 +173,16 @@ class HFModelWrapper(ModelWrapper):
                 trust_remote_code=True,
             )
             self._is_multimodal = True
+
+        # Get vocab_size from model config if not set
+        if self._vocab_size is None:
+            mc = self.model.config
+            if hasattr(mc, 'vocab_size'):
+                self._vocab_size = mc.vocab_size
+            elif hasattr(mc, 'text_config') and hasattr(mc.text_config, 'vocab_size'):
+                self._vocab_size = mc.text_config.vocab_size
+            else:
+                self._vocab_size = len(self.tokenizer)
 
         self.model.eval()
         self._n_params = sum(p.numel() for p in self.model.parameters())
@@ -400,11 +417,14 @@ def compute_bpc_hf(wrapper, corpus_dir, device="cuda", seq_len=SEQ_LEN):
                 outputs = wrapper.model(x)
                 logits = outputs.logits[0]  # [seq_len, vocab]
 
-            # Compute per-token NLL in bits
-            log_probs = torch.log_softmax(logits.float(), dim=-1)
-            # Gather log probs for target tokens
-            target_log_probs = log_probs.gather(1, y.unsqueeze(1)).squeeze(1)
-            nll_bits = -target_log_probs.sum().item() / math.log(2)  # nats → bits
+            # Compute per-token NLL in bits (use cross_entropy for robustness)
+            # logits: [seq_len, vocab], y: [1, seq_len] → flatten y
+            ce_sum = F.cross_entropy(
+                logits.float(),
+                y.view(-1),  # flatten to [seq_len]
+                reduction="sum",
+            )
+            nll_bits = ce_sum.item() / math.log(2)  # nats → bits
 
             file_nll += nll_bits
             file_tok += len(chunk) - 1
@@ -493,9 +513,10 @@ def compute_bpc_mamba(wrapper, corpus_dir, device="cuda", seq_len=SEQ_LEN):
                 logits = output.logits[0]
 
             # Sum CE (reduction=sum for token-weighted aggregation)
+            # logits: [seq_len, vocab], y: [1, seq_len] → flatten y
             ce_sum = F.cross_entropy(
                 logits.float(),
-                y,
+                y.view(-1),  # flatten to [seq_len]
                 ignore_index=0,  # <unk>
                 reduction="sum",
             )
