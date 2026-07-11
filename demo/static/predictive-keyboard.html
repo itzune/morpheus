@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="eu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Morpheus — Basque Predictive Keyboard</title>
+<style>
+  :root {
+    --kb-bg: #d1d3da;
+    --kb-key: #ffffff;
+    --kb-key-active: #d0d0d8;
+    --kb-mod: #a5a9b5;
+    --kb-text: #000000;
+    --kb-text-muted: #6b6b7b;
+    --chat-bg: #0e1621;
+    --input-bg: #17212b;
+    --input-text: #ffffff;
+    --accent: #5288c1;
+    --accent-glow: rgba(82, 136, 193, 0.25);
+    --chip-bg: #ffffff;
+    --chip-text: #000000;
+    --chip-divider: #b8bbc4;
+    --radius: 8px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  html, body {
+    height: 100%; overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  body {
+    display: flex; flex-direction: column;
+    background: var(--chat-bg);
+    -webkit-font-smoothing: antialiased;
+    touch-action: manipulation;
+  }
+
+  /* ── Header ── */
+  .header {
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 16px; padding-top: max(10px, env(safe-area-inset-top));
+    background: #17212b; color: #fff;
+    border-bottom: 1px solid #0e1621;
+  }
+  .header .title { font-size: 1rem; font-weight: 600; }
+  .header .link { font-size: 0.75rem; color: var(--accent); text-decoration: none; }
+
+  /* ── Chat area (decorative, shows typed messages) ── */
+  .chat-area {
+    flex: 1; overflow-y: auto; padding: 16px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .chat-bubble {
+    align-self: flex-end; max-width: 70%;
+    background: #2b5276; color: #fff;
+    padding: 8px 12px; border-radius: 12px 12px 4px 12px;
+    font-size: 0.95rem; line-height: 1.4; word-break: break-word;
+  }
+
+  /* ── Input bar ── */
+  .input-bar {
+    flex-shrink: 0;
+    display: flex; align-items: flex-end; gap: 8px;
+    padding: 8px 12px; padding-bottom: max(8px, env(safe-area-inset-bottom));
+    background: var(--input-bg);
+  }
+  .input-bar .input-wrapper {
+    flex: 1; display: flex; align-items: center; gap: 8px;
+    background: var(--chat-bg); border-radius: 20px;
+    padding: 8px 14px; min-height: 40px;
+  }
+  .input-bar textarea {
+    flex: 1; border: none; outline: none; background: transparent;
+    color: var(--input-text); font-size: 1rem; line-height: 1.4;
+    resize: none; max-height: 120px; min-height: 24px;
+    font-family: inherit;
+    caret-color: var(--accent);
+  }
+  /* Make the blinking caret thicker and more visible */
+  .input-bar textarea::selection { background: rgba(82, 136, 193, 0.4); }
+  .input-bar textarea::placeholder { color: #6b7280; }
+  .input-bar .send-btn {
+    flex-shrink: 0; width: 44px; height: 44px; border-radius: 50%;
+    background: var(--accent); border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; transition: opacity 0.15s;
+  }
+  .input-bar .send-btn:disabled { opacity: 0.4; }
+  .input-bar .send-btn svg { width: 20px; height: 20px; }
+
+  /* ── Suggestion bar ── */
+  .suggestion-bar {
+    flex-shrink: 0;
+    display: flex; align-items: center;
+    background: var(--kb-bg);
+    border-bottom: 1px solid #b0b3bb;
+    min-height: 40px; overflow: hidden;
+  }
+  .suggestion-bar .chip {
+    flex: 1; padding: 8px 4px; text-align: center;
+    font-size: 0.95rem; color: var(--chip-text);
+    cursor: pointer; user-select: none;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    border-right: 1px solid var(--chip-divider);
+    transition: background 0.1s;
+  }
+  .suggestion-bar .chip:last-child { border-right: none; }
+  .suggestion-bar .chip:active { background: var(--kb-key-active); }
+  .suggestion-bar .chip.placeholder { color: var(--kb-text-muted); font-style: italic; font-size: 0.85rem; }
+  .suggestion-bar .chip.chip-primary {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* ── Virtual keyboard ── */
+  .keyboard {
+    flex-shrink: 0;
+    background: var(--kb-bg);
+    padding: 6px 4px; padding-bottom: max(6px, env(safe-area-inset-bottom));
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .kb-row {
+    display: flex; gap: 6px; justify-content: center;
+  }
+  .kb-key {
+    flex: 1; min-width: 0;
+    height: 42px; border-radius: 6px;
+    background: var(--kb-key); color: var(--kb-text);
+    font-size: 1.05rem; font-weight: 400;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; user-select: none;
+    border: none; transition: background 0.05s;
+    position: relative;
+  }
+  .kb-key:active { background: var(--kb-key-active); }
+  .kb-key.mod { background: var(--kb-mod); }
+  .kb-key.mod:active { background: #9a9eaa; }
+  .kb-key.wide { flex: 4; }
+  .kb-key.extra-wide { flex: 6; }
+  .kb-key.narrow { flex: 0.8; }
+
+  .kb-key .alt-chars {
+    position: absolute; top: 3px; right: 5px;
+    font-size: 0.6rem; color: var(--kb-text-muted);
+    pointer-events: none;
+  }
+
+  /* Shift active state */
+  .kb-key.shift-active {
+    background: #ffffff; color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent) inset;
+  }
+
+  /* Status indicator */
+  .status-dot {
+    width: 6px; height: 6px; border-radius: 50%; display: inline-block;
+    margin-right: 4px;
+  }
+  .status-dot.online { background: #4ade80; }
+  .status-dot.offline { background: #ef4444; }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div>
+    <span class="status-dot offline" id="statusDot"></span>
+    <span class="title" style="font-size: 0.85rem;">Morpheus</span>
+  </div>
+  <a class="link" href="/">← ghost mode</a>
+</div>
+
+<!-- Chat area -->
+<div class="chat-area" id="chatArea"></div>
+
+<!-- Input bar -->
+<div class="input-bar">
+  <div class="input-wrapper">
+    <textarea id="editor" rows="1" placeholder="Idatzi mezua..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+  </div>
+  <button class="send-btn" id="sendBtn" disabled onclick="sendMessage()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+  </button>
+</div>
+
+<!-- Suggestion bar -->
+<div class="suggestion-bar" id="suggestionBar">
+  <div class="chip placeholder">Idatzi letra bat gutxienez...</div>
+</div>
+
+<!-- Virtual keyboard -->
+<div class="keyboard" id="keyboard">
+  <!-- Row 1: q w e r t y u i o p -->
+  <div class="kb-row" data-row="1"></div>
+  <!-- Row 2: a s d f g h j k l ñ -->
+  <div class="kb-row" data-row="2"></div>
+  <!-- Row 3: shift z x c v b n m backspace -->
+  <div class="kb-row" data-row="3"></div>
+  <!-- Row 4: 123 , space . enter -->
+  <div class="kb-row" data-row="4"></div>
+</div>
+
+<script>
+const editor = document.getElementById('editor');
+const sendBtn = document.getElementById('sendBtn');
+const chatArea = document.getElementById('chatArea');
+const suggestionBar = document.getElementById('suggestionBar');
+const statusDot = document.getElementById('statusDot');
+
+let ws = null;
+let shiftActive = false;
+let symbolsMode = false;
+let pendingRequest = null;
+const DEBOUNCE_MS = 150;
+
+// ── Completion logging state ──
+// Store the last suggestion batch so we can log what was offered + accepted.
+let lastCandidates = [];
+let lastSmartContext = '';
+
+// ── Sticky merge state ──
+// When the user types the first letter of a predicted word, the tokenization
+// path can switch (e.g. "▁izan" is one token, but "▁i" + "zan" is a different
+// path the model may not explore). This causes good predictions to vanish.
+// Sticky merge carries forward previous candidates that match the new prefix.
+let stickyPool = [];   // candidates from the previous render
+let stickyWord = '';   // current word when stickyPool was set
+
+// ── Keyboard layouts ──
+const LETTER_LAYOUT = {
+  1: [
+    {l:'q', a:'1'}, {l:'w', a:'2'}, {l:'e', a:'3', alt:'éêëè'},
+    {l:'r', a:'4'}, {l:'t', a:'5'}, {l:'y', a:'6'}, {l:'u', a:'7', alt:'ûüùú'},
+    {l:'i', a:'8', alt:'îïìí'}, {l:'o', a:'9', alt:'ôöòó'}, {l:'p', a:'0'},
+  ],
+  2: [
+    {l:'a', alt:'áàâäã'}, {l:'s', alt:'šß'}, {l:'d'}, {l:'f'}, {l:'g'},
+    {l:'h'}, {l:'j'}, {l:'k'}, {l:'l'}, {l:'ñ', alt:'ñ'},
+  ],
+  3: [
+    {l:'shift'}, {l:'z'}, {l:'x'}, {l:'c', alt:'ç'}, {l:'v'},
+    {l:'b'}, {l:'n', alt:'ñ'}, {l:'m'}, {l:'backspace'},
+  ],
+  4: [
+    {l:'symbols'}, {l:','}, {l:'space', extraWide:true}, {l:'.'}, {l:'enter'},
+  ],
+};
+
+const SYMBOL_LAYOUT = {
+  1: [
+    {l:'1'}, {l:'2'}, {l:'3'}, {l:'4'}, {l:'5'},
+    {l:'6'}, {l:'7'}, {l:'8'}, {l:'9'}, {l:'0'},
+  ],
+  2: [
+    {l:'@'}, {l:'#'}, {l:'$'}, {l:'%'}, {l:'&'},
+    {l:'*'}, {l:'-'}, {l:'+'}, {l:'('}, {l:')'},
+  ],
+  3: [
+    {l:'shift'}, {l:'!'}, {l:'"'}, {l:"'"}, {l:':'},
+    {l:';'}, {l:'/'}, {l:'?'}, {l:'backspace'},
+  ],
+  4: [
+    {l:'ABC'}, {l:','}, {l:'space', extraWide:true}, {l:'.'}, {l:'enter'},
+  ],
+};
+
+// ── Render keyboard ──
+function renderKeyboard() {
+  const layout = symbolsMode ? SYMBOL_LAYOUT : LETTER_LAYOUT;
+  for (let rowNum = 1; rowNum <= 4; rowNum++) {
+    const rowEl = document.querySelector(`.kb-row[data-row="${rowNum}"]`);
+    rowEl.innerHTML = '';
+    for (const key of layout[rowNum]) {
+      const btn = document.createElement('button');
+      btn.className = 'kb-key';
+      btn.dataset.key = key.l;
+
+      if (key.l === 'shift') {
+        btn.classList.add('mod');
+        if (shiftActive) btn.classList.add('shift-active');
+        btn.innerHTML = shiftSVG();
+        btn.dataset.action = 'shift';
+      } else if (key.l === 'backspace') {
+        btn.classList.add('mod');
+        btn.innerHTML = backspaceSVG();
+        btn.dataset.action = 'backspace';
+      } else if (key.l === 'enter') {
+        btn.classList.add('mod');
+        btn.innerHTML = enterSVG();
+        btn.dataset.action = 'enter';
+      } else if (key.l === 'symbols') {
+        btn.classList.add('mod');
+        btn.textContent = '123';
+        btn.dataset.action = 'symbols';
+      } else if (key.l === 'ABC') {
+        btn.classList.add('mod');
+        btn.textContent = 'ABC';
+        btn.dataset.action = 'symbols';
+      } else if (key.l === 'space') {
+        btn.classList.add('extra-wide');
+        btn.innerHTML = '<svg width="28" height="22" viewBox="0 0 28 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6" y1="11" x2="22" y2="11"/></svg>';
+        btn.dataset.action = 'space';
+      } else {
+        // Letter key
+        let display = key.l;
+        if (shiftActive && !symbolsMode) display = display.toUpperCase();
+        btn.textContent = display;
+        if (key.a) {
+          const alt = document.createElement('span');
+          alt.className = 'alt-chars';
+          alt.textContent = key.a;
+          btn.appendChild(alt);
+        }
+        btn.dataset.action = 'type';
+        btn.dataset.char = display;
+      }
+
+      // Long-press for alternate characters
+      if (key.alt) {
+        let pressTimer = null;
+        let altMenu = null;
+        btn.addEventListener('touchstart', (e) => {
+          pressTimer = setTimeout(() => {
+            showAltChars(btn, key.alt, key.l);
+          }, 400);
+        });
+        btn.addEventListener('touchend', () => {
+          clearTimeout(pressTimer);
+        });
+        btn.addEventListener('touchmove', () => {
+          clearTimeout(pressTimer);
+        });
+      }
+
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        handleKey(btn.dataset.action, btn.dataset.char);
+      });
+
+      // Prevent button from stealing focus from the textarea (keeps caret blinking)
+      btn.addEventListener('mousedown', (e) => e.preventDefault());
+
+      rowEl.appendChild(btn);
+    }
+  }
+}
+
+// ── SVG icons ──
+function shiftSVG() {
+  return '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>';
+}
+function backspaceSVG() {
+  return '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"/><line x1="18" y1="9" x2="12" y2="15"/><line x1="12" y1="9" x2="18" y2="15"/></svg>';
+}
+function enterSVG() {
+  return '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 10 4 15 9 20"/><path d="M20 4v7a4 4 0 0 1-4 4H4"/></svg>';
+}
+
+// ── Alternate characters popup ──
+function showAltChars(btn, altChars, baseChar) {
+  // Create popup
+  const popup = document.createElement('div');
+  popup.style.cssText = 'position:fixed; background:#333; border-radius:8px; padding:4px; display:flex; gap:2px; z-index:1000; box-shadow:0 4px 12px rgba(0,0,0,0.3);';
+  const rect = btn.getBoundingClientRect();
+  popup.style.left = rect.left + 'px';
+  popup.style.top = (rect.top - 50) + 'px';
+
+  const chars = altChars.split('');
+  chars.unshift(baseChar);
+  for (const c of chars) {
+    const chip = document.createElement('div');
+    chip.textContent = c;
+    chip.style.cssText = 'padding:8px 12px; font-size:1.1rem; color:#fff; cursor:pointer; border-radius:6px; min-width:36px; text-align:center;';
+    chip.addEventListener('click', (e) => {
+      e.stopPropagation();
+      typeChar(c);
+      popup.remove();
+    });
+    popup.appendChild(chip);
+  }
+  document.body.appendChild(popup);
+
+  // Remove on outside click
+  setTimeout(() => {
+    const handler = (e) => {
+      if (!popup.contains(e.target)) {
+        popup.remove();
+        document.removeEventListener('click', handler);
+      }
+    };
+    document.addEventListener('click', handler);
+  }, 100);
+}
+
+// ── Handle key press ──
+function handleKey(action, char) {
+  switch (action) {
+    case 'type':
+      typeChar(char);
+      break;
+    case 'shift':
+      shiftActive = !shiftActive;
+      renderKeyboard();
+      break;
+    case 'backspace':
+      const pos = editor.selectionStart;
+      if (pos > 0) {
+        editor.value = editor.value.substring(0, pos - 1) + editor.value.substring(pos);
+        editor.setSelectionRange(pos - 1, pos - 1);
+      }
+      editor.focus();
+      checkAutoShift();
+      onInput();
+      break;
+    case 'enter':
+      sendMessage();
+      break;
+    case 'symbols':
+      symbolsMode = !symbolsMode;
+      renderKeyboard();
+      break;
+    case 'space':
+      typeChar(' ');
+      editor.focus();
+      break;
+  }
+}
+
+function typeChar(c) {
+  const pos = editor.selectionStart;
+  editor.value = editor.value.substring(0, pos) + c + editor.value.substring(pos);
+  editor.setSelectionRange(pos + 1, pos + 1);
+  editor.focus();
+  // Shift is one-shot: consume it after typing a character, then re-render
+  // immediately so the key labels revert to lowercase. checkAutoShift()
+  // will re-enable shift only if we're at a sentence boundary (punct + space).
+  shiftActive = false;
+  renderKeyboard();
+  checkAutoShift();
+  onInput();
+  autoResize();
+}
+
+// ── Auto-resize textarea ──
+function autoResize() {
+  editor.style.height = 'auto';
+  editor.style.height = Math.min(editor.scrollHeight, 120) + 'px';
+}
+
+// ── Auto-shift: enable uppercase after sentence-ending punctuation + space ──
+function checkAutoShift() {
+  const prefix = getPrefix();
+  // Enable shift ONLY if the cursor is at the start of a new word:
+  // 1. At the very start of the text (first character should be capitalized)
+  // 2. After sentence-ending punctuation (. ! ?) optionally followed by a
+  //    closing quote/bracket, then whitespace — AND the last char is whitespace.
+  //    Once the user types a letter, shift turns off (one-shot behavior).
+  const lastIsSpace = prefix.length > 0 && /\s/.test(prefix[prefix.length - 1]);
+  const shouldShift = prefix.trim() === '' || (lastIsSpace && /[.!?]["')\]]?\s+$/.test(prefix));
+  if (shouldShift !== shiftActive) {
+    shiftActive = shouldShift;
+    renderKeyboard();
+  }
+}
+
+// ── Send message ──
+function sendMessage() {
+  const text = editor.value.trim();
+  if (!text) return;
+  // Log the final message for session context
+  logInteraction({ event: 'send', text: text });
+  // Reset sticky merge — new message starts fresh
+  stickyPool = [];
+  stickyWord = '';
+  const bubble = document.createElement('div');
+  bubble.className = 'chat-bubble';
+  bubble.textContent = text;
+  chatArea.appendChild(bubble);
+  chatArea.scrollTop = chatArea.scrollHeight;
+  editor.value = '';
+  autoResize();
+  sendBtn.disabled = true;
+  clearSuggestions();
+  // New message: auto-enable shift for the first character
+  shiftActive = false;
+  checkAutoShift();
+  onInput();
+}
+
+// ── Suggestions ──
+function clearSuggestions() {
+  suggestionBar.innerHTML = '<div class="chip placeholder">Idatzi letra bat gutxienez...</div>';
+}
+
+// Extract the current partial word being typed (text after last space/punct)
+function getCurrentWord() {
+  const prefix = getPrefix();
+  // Walk backwards from cursor to find word boundary
+  let i = prefix.length - 1;
+  while (i >= 0 && !/\s/.test(prefix[i])) i--;
+  return prefix.substring(i + 1);
+}
+
+// Find where the current word starts in the full text
+function getCurrentWordStart() {
+  const prefix = getPrefix();
+  let i = prefix.length - 1;
+  while (i >= 0 && !/\s/.test(prefix[i])) i--;
+  return i + 1;
+}
+
+// ── Sticky merge ──
+// Carry forward previous candidates that match the current prefix.
+// Prevents predictions from vanishing when the user types the first letter
+// of a predicted word and the tokenization path switches.
+function mergeCandidates(freshCandidates) {
+  const currentWord = getCurrentWord().toLowerCase();
+
+  // Filter previous candidates by the current prefix
+  let survivors = [];
+  if (stickyPool.length > 0 && currentWord.length > 0) {
+    survivors = stickyPool
+      .filter(c => c.text.toLowerCase().startsWith(currentWord))
+      .map(c => ({
+        text: c.text,
+        prob: c.prob,
+        is_next_word: c.is_next_word || false,
+        _sticky: true,
+      }));
+  }
+
+  // Fresh candidates not already in survivors
+  const survivorTexts = new Set(survivors.map(c => c.text));
+  const freshOnly = freshCandidates
+    .filter(c => !survivorTexts.has(c.text))
+    .map(c => ({
+      text: c.text,
+      prob: c.prob,
+      is_next_word: c.is_next_word || false,
+      _sticky: false,
+    }));
+
+  // Merge and sort. Sticky survivors get a small boost because cross-path
+  // probabilities (next-word vs word-completion) aren't directly comparable.
+  const STICKY_BOOST = 0.1;
+  const merged = [...survivors, ...freshOnly];
+  merged.sort((a, b) =>
+    (b.prob + (b._sticky ? STICKY_BOOST : 0)) -
+    (a.prob + (a._sticky ? STICKY_BOOST : 0))
+  );
+
+  // Update sticky state for next iteration (store original prob, no boost)
+  stickyPool = merged.slice(0, 5).map(c => ({
+    text: c.text, prob: c.prob, is_next_word: c.is_next_word || false,
+  }));
+  stickyWord = currentWord;
+
+  // Return top 3 (strip internal _sticky flag)
+  return merged.slice(0, 3).map(c => ({
+    text: c.text, prob: c.prob, is_next_word: c.is_next_word || false,
+  }));
+}
+
+function renderChips(candidates) {
+  if (!candidates.length) {
+    suggestionBar.innerHTML = '<div class="chip placeholder">Ez dago iradokizunik...</div>';
+    return;
+  }
+
+  const wordStart = getCurrentWordStart();
+
+  // Android-style layout: highest-probability word in the CENTER chip.
+  // 3 chips: [2nd, 1st, 3rd]  2 chips: [2nd, 1st]  1 chip: [1st]
+  let ordered;
+  if (candidates.length >= 3) {
+    ordered = [candidates[1], candidates[0], candidates[2]];
+  } else if (candidates.length === 2) {
+    ordered = [candidates[1], candidates[0]];
+  } else {
+    ordered = candidates;
+  }
+
+  suggestionBar.innerHTML = '';
+  for (let i = 0; i < ordered.length; i++) {
+    const c = ordered[i];
+    const chip = document.createElement('div');
+    chip.className = 'chip';
+    // Highlight the center (most probable) chip
+    if (i === Math.floor(ordered.length / 2)) {
+      chip.classList.add('chip-primary');
+    }
+    chip.textContent = c.text;
+    chip.addEventListener('click', () => acceptChip({
+      text: c.text,
+      replaceFrom: wordStart,
+      is_next_word: c.is_next_word || false
+    }));
+    chip.addEventListener('mousedown', (e) => e.preventDefault());
+    suggestionBar.appendChild(chip);
+  }
+}
+
+function acceptChip(data) {
+  const pos = editor.selectionStart;
+  let newText = data.text;
+  const PUNCT = '.,!?;:()[]{}';
+  const isPunct = newText.trim().length > 0 && [...newText.trim()].every(c => PUNCT.includes(c));
+
+  // ── Log this acceptance for offline eval/replay ──
+  const contextBefore = editor.value.substring(0, pos);
+  const fullCandidate = lastCandidates.find(c => c.text === data.text) || {};
+  logInteraction({
+    event: 'accept',
+    context: contextBefore,
+    smart_context: lastSmartContext,
+    current_word: getCurrentWord(),
+    accepted: {
+      text: data.text,
+      prob: fullCandidate.prob ?? null,
+      is_next_word: data.is_next_word || false,
+      is_punct: isPunct,
+    },
+    candidates: lastCandidates.map(c => ({
+      text: c.text, prob: c.prob, is_next_word: c.is_next_word || false,
+    })),
+  });
+
+  // Reset sticky merge — accepted word starts a fresh prediction context
+  stickyPool = [];
+  stickyWord = '';
+
+  if (data.is_next_word) {
+    // Next-word candidate: the model confirmed the current word is complete
+    // and predicted the NEXT word. Insert it with a leading space after the
+    // cursor (which is right after the current word). "Kaixo, zer" + " moduz "
+    // → "Kaixo, zer moduz "
+    const insert = ' ' + newText + ' ';
+    editor.value = editor.value.substring(0, pos) + insert + editor.value.substring(pos);
+    const newPos = pos + insert.length;
+    editor.setSelectionRange(newPos, newPos);
+  } else if (isPunct) {
+    // Punctuation: attach directly to the previous word, no space before.
+    // If there's a space right before the cursor, remove it so the
+    // punctuation attaches to the word ("kaixo ," → "kaixo,").
+    let insertPos = pos;
+    let before = editor.value.substring(0, insertPos);
+    let after = editor.value.substring(pos);
+    if (before.endsWith(' ')) {
+      before = before.slice(0, -1);
+      insertPos--;
+    }
+    // Add trailing space after punctuation so user can type next word
+    const insert = newText.trim() + ' ';
+    editor.value = before + insert + after;
+    const newPos = insertPos + insert.length;
+    editor.setSelectionRange(newPos, newPos);
+  } else {
+    // Normal word: auto-add a trailing space after accepting
+    if (!newText.endsWith(' ') && !newText.endsWith('\n')) {
+      newText += ' ';
+    }
+    if (data.replaceFrom !== null) {
+      // Replace the current partial word with the completed word
+      editor.value = editor.value.substring(0, data.replaceFrom) + newText + editor.value.substring(pos);
+      const newPos = data.replaceFrom + newText.length;
+      editor.setSelectionRange(newPos, newPos);
+    } else {
+      // Append (new word suggestion)
+      editor.value = editor.value.substring(0, pos) + newText + editor.value.substring(pos);
+      const newPos = pos + newText.length;
+      editor.setSelectionRange(newPos, newPos);
+    }
+  }
+  editor.focus();
+  autoResize();
+  // Shift is one-shot: consume it, then re-evaluate for auto-shift
+  shiftActive = false;
+  checkAutoShift();
+  onInput();
+}
+
+// ── WebSocket ──
+function connectWS() {
+  const proto = location.protocol === 'https:' ? 'wss:' : 'ws:';
+  ws = new WebSocket(proto + '//' + location.host + '/ws/greedy');
+  ws.onopen = () => { statusDot.className = 'status-dot online'; };
+  ws.onmessage = (e) => {
+    const d = JSON.parse(e.data);
+    if (d.type === 'suggestion') {
+      if (d.smart_context && getPrefix() !== d.smart_context) return;
+      lastCandidates = mergeCandidates(d.candidates || []);
+      lastSmartContext = d.smart_context || getPrefix();
+      renderChips(lastCandidates);
+    }
+  };
+  ws.onclose = () => {
+    statusDot.className = 'status-dot offline';
+    setTimeout(connectWS, 3000);
+  };
+  ws.onerror = () => { statusDot.className = 'status-dot offline'; };
+}
+
+function getPrefix() { return editor.value.substring(0, editor.selectionStart); }
+function getFilterNum() { return true; }
+
+// ── Completion logging ──
+// Fire-and-forget POST to /api/log. Best-effort: never blocks UI.
+function logInteraction(payload) {
+  try {
+    fetch('/api/log', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    }).catch(() => {});  // swallow errors silently
+  } catch (e) { /* logging must never break UX */ }
+}
+
+function onInput() {
+  sendBtn.disabled = !editor.value.trim();
+  const prefix = getPrefix();
+  if (!prefix.trim()) {
+    clearSuggestions();
+    return;
+  }
+  if (ws && ws.readyState === WebSocket.OPEN) {
+    ws.send(JSON.stringify({
+      text: prefix,
+      max_tokens: 3,
+      top_k: 5,  // fetch 5 candidates; sticky pool keeps extras for carry-forward
+      filter_numeric: true,
+      keyboard_mode: true,
+    }));
+  }
+}
+
+// ── Event listeners ──
+// Real keyboard input: native textarea handles typing, but we need to
+// sync the virtual keyboard's shift state and handle special keys.
+editor.addEventListener('input', () => { autoResize(); onInput(); });
+
+editor.addEventListener('keydown', (e) => {
+  // Enter (without Shift) → send message, matching virtual keyboard's enter key
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+    return;
+  }
+  // Shift+Enter → allow newline (default textarea behavior)
+
+  // Tab → accept the center (most probable) suggestion, like a real keyboard autocomple
+  if (e.key === 'Tab') {
+    const primaryChip = suggestionBar.querySelector('.chip-primary');
+    if (primaryChip && !primaryChip.classList.contains('placeholder')) {
+      e.preventDefault();
+      primaryChip.click();
+      return;
+    }
+  }
+});
+
+editor.addEventListener('keyup', (e) => {
+  if (['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)) {
+    onInput();
+    checkAutoShift();
+    return;
+  }
+  // Sync virtual keyboard shift state with real keyboard after each keystroke.
+  // This handles: typing uppercase via Shift, Caps Lock, auto-shift after punct.
+  checkAutoShift();
+});
+
+// Prevent native mobile keyboard from popping up (we have our own virtual one).
+// On desktop this has no effect — real keyboard input works normally.
+editor.addEventListener('focus', (e) => {
+  // On mobile, we could blur+refocus to suppress native keyboard, but that
+  // would also kill real keyboard support on desktop. For the demo we allow both.
+});
+
+// Click on chat area → refocus editor
+chatArea.addEventListener('click', () => { editor.focus(); });
+
+// Initialize
+renderKeyboard();
+connectWS();
+autoResize();
+checkAutoShift();  // Enable shift for first character
+onInput();
+editor.focus();  // Focus editor so real keyboard works immediately
+
+// Prevent double-tap zoom
+let lastTouch = 0;
+document.addEventListener('touchend', (e) => {
+  const now = Date.now();
+  if (now - lastTouch <= 300) { e.preventDefault(); }
+  lastTouch = now;
+}, { passive: false });
+</script>
+</body>
+</html>

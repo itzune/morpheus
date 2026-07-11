@@ -1,0 +1,41 @@
+# Morpheus v2 Mamba Demo — one-command local demo
+#
+# The GGUF model is downloaded automatically from HuggingFace on first start
+# and cached in a Docker volume. No local model files needed.
+#
+# Usage (run from the demo/ directory):
+#   # CPU mode (default):
+#   docker compose up -d
+#
+#   # GPU mode (requires NVIDIA Container Toolkit):
+#   docker compose -f docker-compose.yml -f docker-compose.gpu.yml up -d
+#
+#   # Switch model via env var:
+#   MORPHEUS_MODEL=step_0074000.Q5_K_M.gguf docker compose up -d
+#
+#   # Open: http://localhost:9090
+#
+# The GGUF model is downloaded from HuggingFace (itzune/morpheus-gguf) on
+# first start and cached in a Docker volume. No local model files needed.
+
+services:
+  demo:
+    build:
+      context: ..
+      dockerfile: demo/Dockerfile
+    ports:
+      - "9090:9090"
+    volumes:
+      # Cache for downloaded GGUF models (persists across restarts)
+      - morpheus-models:/app/models
+      # Mount tokenizer (needed by demo server)
+      - ../tokenizer:/app/tokenizer:ro
+      # Persist completion logs (user acceptance events for eval/replay)
+      - ../logs:/app/logs
+    environment:
+      - MORPHEUS_MODEL=${MORPHEUS_MODEL:-step_0074000.Q4_K_M.gguf}
+      - MORPHEUS_NGL=${MORPHEUS_NGL:-0}
+    restart: unless-stopped
+
+volumes:
+  morpheus-models:

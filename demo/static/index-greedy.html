@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Morpheus — Basque Autocomplete (Greedy)</title>
+<style>
+  :root {
+    --bg: #fafafa; --surface: #ffffff; --border: #e5e5e5;
+    --text: #18181b; --muted: #a1a1aa;
+    --accent: #22c55e; --accent-glow: rgba(34, 197, 94, 0.12);
+    --ghost: #c4c4cf; --success: #22c55e; --danger: #ef4444;
+    --radius: 8px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text);
+    display: flex; flex-direction: column; align-items: center;
+    min-height: 100vh; padding: 60px 20px 40px; -webkit-font-smoothing: antialiased;
+  }
+  .container { width: 100%; max-width: 680px; }
+
+  header { margin-bottom: 24px; }
+  .brand { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+  .brand svg { color: var(--accent); }
+  .brand h1 { font-size: 1.35rem; font-weight: 600; }
+  .brand .version { font-size: 0.7rem; font-weight: 500; color: var(--muted); background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 1px 6px; }
+  .tagline { font-size: 0.85rem; color: var(--muted); margin-left: 34px; }
+  .mode-switch { display: inline-flex; align-items: center; gap: 6px; margin-left: 34px; margin-top: 6px; font-size: 0.78rem; color: var(--muted); text-decoration: none; padding: 3px 10px; border: 1px solid var(--border); border-radius: 4px; background: var(--surface); transition: border-color 0.2s; }
+  .mode-switch:hover { border-color: var(--accent); color: var(--text); }
+  .mode-switch .badge { font-size: 0.65rem; font-weight: 600; color: #fff; background: var(--accent); padding: 1px 5px; border-radius: 3px; }
+
+  .status-bar { display: flex; align-items: center; gap: 20px; margin-bottom: 12px; padding: 8px 0; font-size: 0.78rem; color: var(--muted); border-bottom: 1px solid var(--border); }
+  .status-bar .metric { display: flex; align-items: center; gap: 5px; }
+  .status-bar .metric span { color: var(--text); font-variant-numeric: tabular-nums; font-weight: 500; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+  .dot-online { background: var(--success); box-shadow: 0 0 6px rgba(34, 197, 94, 0.5); }
+  .dot-offline { background: var(--danger); }
+
+  /* ── Editor (simple, no overlay layers) ────── */
+  .editor-wrapper {
+    border: 1px solid var(--border); border-radius: var(--radius);
+    background: var(--surface); overflow: hidden; transition: border-color 0.2s;
+  }
+  .editor-wrapper:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+
+  textarea#editor {
+    display: block; width: 100%; min-height: 240px;
+    padding: 18px 20px;
+    font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+    font-size: 15px; line-height: 1.65;
+    white-space: pre-wrap; overflow-wrap: break-word;
+    border: none; outline: none; background: transparent; resize: vertical;
+    color: var(--text); caret-color: var(--accent);
+  }
+  textarea#editor::placeholder { color: var(--ghost); font-style: italic; }
+
+  /* Ghost text: selection after cursor appears grey */
+  textarea#editor.ghost-active {
+    /* The ghost text is rendered as a browser selection */
+  }
+  textarea#editor.ghost-active::selection {
+    color: var(--ghost);
+    background: transparent;
+    font-style: italic;
+  }
+  textarea#editor.ghost-active::-moz-selection {
+    color: var(--ghost);
+    background: transparent;
+  }
+
+  /* ── Token viz panel (separate, below editor) ── */
+  .token-viz-panel {
+    display: none;
+    margin-top: 8px; padding: 10px 14px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.8;
+    flex-wrap: wrap; gap: 2px; align-items: baseline;
+  }
+  .token-viz-panel.visible { display: flex; }
+
+  .tok-bg {
+    display: inline-block; padding: 1px 4px; border-radius: 3px;
+    font-size: 13px; white-space: pre; cursor: default;
+  }
+  .tok-bg-0 { background: #dbeafe; } .tok-bg-1 { background: #dcfce7; }
+  .tok-bg-2 { background: #fef3c7; } .tok-bg-3 { background: #fce7f3; }
+  .tok-bg-4 { background: #e0e7ff; } .tok-bg-5 { background: #ccfbf1; }
+  .tok-bg-6 { background: #f3e8ff; } .tok-bg-7 { background: #fee2e2; }
+  .tok-bg-8 { background: #e0f2fe; } .tok-bg-9 { background: #fef9c3; }
+  .tok-bg-10 { background: #ffe4e6; } .tok-bg-11 { background: #ecfccb; }
+  .tok-bg-excluded { opacity: 0.25; }
+  .tok-bg-incomplete { outline: 1px dashed var(--danger); outline-offset: -1px; }
+
+  /* ── Controls ─────────────────────────────── */
+  .controls { display: flex; align-items: center; gap: 18px; margin-top: 12px; padding: 0 2px; flex-wrap: wrap; }
+  .control-group { display: flex; align-items: center; gap: 6px; }
+  .control-group label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 500; }
+  .control-group select {
+    appearance: none; background: var(--surface); border: 1px solid var(--border);
+    color: var(--text); padding: 5px 28px 5px 10px; border-radius: 5px;
+    font-size: 0.82rem; cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b6b7b' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 8px center;
+  }
+  .control-group select:focus { outline: none; border-color: var(--accent); }
+  input[type="range"] { -webkit-appearance: none; appearance: none; width: 80px; height: 4px; background: var(--border); border-radius: 2px; cursor: pointer; }
+  input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; border-radius: 50%; background: var(--accent); cursor: pointer; }
+  .temp-value { font-size: 0.78rem; color: var(--text); font-variant-numeric: tabular-nums; min-width: 28px; }
+
+  /* ── Advanced section ── */
+  .advanced-toggle { font-size: 0.78rem; color: var(--muted); cursor: pointer; background: none; border: none; padding: 3px 0; display: flex; align-items: center; gap: 4px; margin-top: 8px; width: 100%; }
+  .advanced-toggle:hover { color: var(--accent); }
+  .advanced-toggle .arrow { display: inline-block; transition: transform 0.2s; font-size: 0.65rem; }
+  .advanced-toggle.open .arrow { transform: rotate(90deg); }
+  .advanced-panel { display: none; margin-top: 8px; padding: 12px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); font-size: 0.78rem; }
+  .advanced-panel.visible { display: block; }
+  .advanced-panel .adv-row { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; flex-wrap: wrap; }
+  .advanced-panel .adv-row:last-child { margin-bottom: 0; }
+  .advanced-panel .adv-desc { font-size: 0.7rem; color: var(--muted); margin-left: 4px; }
+  .toggle-switch { position: relative; display: inline-block; width: 36px; height: 20px; }
+  .toggle-switch input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: var(--border); border-radius: 10px; transition: 0.2s; }
+  .toggle-slider::before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background: white; border-radius: 50%; transition: 0.2s; }
+  input:checked + .toggle-slider { background: var(--accent); }
+  input:checked + .toggle-slider::before { transform: translateX(16px); }
+
+  .hint { margin-top: 16px; font-size: 0.75rem; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+  .kbd { display: inline-block; padding: 2px 6px; font-size: 0.7rem; font-weight: 600; color: var(--muted); background: var(--surface); border: 1px solid var(--border); border-radius: 4px; }
+
+  footer { margin-top: 40px; font-size: 0.72rem; color: var(--muted); text-align: center; }
+  footer .dot { display: inline-block; margin: 0 4px; color: var(--border); }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="brand">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      <h1>Morpheus</h1>
+      <span class="version">v0.1</span>
+    </div>
+    <p class="tagline">Basque predictive autocomplete</p>
+    <a class="mode-switch" href="/index-sampling.html">← <span class="badge">sampling</span> sampling mode</a>
+    <a class="mode-switch" href="/keyboard.html"><span class="badge">keyboard</span> keyboard mode →</a>
+  </header>
+
+  <div class="status-bar">
+    <div class="metric"><span class="dot dot-offline" id="statusDot"></span><span id="statusLabel">offline</span></div>
+    <div class="metric">latency <span id="latency">—</span>ms</div>
+    <div class="metric">confidence <span id="confidence">—</span>%</div>
+  </div>
+
+  <div class="editor-wrapper">
+    <textarea id="editor" placeholder="Hasi idazten euskaraz..." autofocus spellcheck="false"></textarea>
+  </div>
+
+  <div class="controls">
+    <div class="control-group">
+      <label>Tokens</label>
+      <select id="maxTokens">
+        <option value="1">1</option><option value="2">2</option>
+        <option value="3" selected>3</option><option value="5">5</option>
+        <option value="8">8</option><option value="12">12</option>
+      </select>
+    </div>
+    <div class="control-group">
+      <label>Min conf</label>
+      <input type="range" id="minConfidence" min="0" max="25" step="1" value="18">
+      <span class="temp-value" id="minConfVal">18%</span>
+    </div>
+    <div class="control-group">
+      <label>Token viz</label>
+      <select id="showTokens"><option value="off">Off</option><option value="on">On</option></select>
+    </div>
+  </div>
+
+  <div class="token-viz-panel" id="tokenVizPanel"></div>
+
+  <button class="advanced-toggle" id="advancedToggle" onclick="toggleAdvanced()">
+    <span class="arrow">▶</span> Advanced filters
+  </button>
+  <div class="advanced-panel" id="advancedPanel">
+    <div class="adv-row">
+      <label class="toggle-switch">
+        <input type="checkbox" id="filterNumeric" checked onchange="onInput()">
+        <span class="toggle-slider"></span>
+      </label>
+      <span>Suppress digit artifacts (gazette pollution)</span>
+      <span class="adv-desc">(strips "19ko", "1964ko" number-year tokens from suggestions)</span>
+    </div>
+    <div class="adv-row">
+      <label class="toggle-switch">
+        <input type="checkbox" id="filterPunct" onchange="onInput()">
+        <span class="toggle-slider"></span>
+      </label>
+      <span>Punctuation filter (legacy)</span>
+      <span class="adv-desc">(collapses repeated punct — 4K model no longer needs this)</span>
+    </div>
+  </div>
+
+  <div class="hint"><span style="color:var(--accent);font-weight:600;">Greedy (Smart Compose)</span> — deterministic, temp=0, repeat_penalty=1.1</div>
+
+  <footer>Mamba-2 SSM<span class="dot">·</span>113M params<span class="dot">·</span>PPL ~22.5 · Q5_K_M · clean data</footer>
+</div>
+
+<script>
+const editor = document.getElementById('editor');
+const latencyEl = document.getElementById('latency');
+const confidenceEl = document.getElementById('confidence');
+const statusDot = document.getElementById('statusDot');
+const statusLabel = document.getElementById('statusLabel');
+const maxTokensSelect = document.getElementById('maxTokens');
+const minConfSlider = document.getElementById('minConfidence');
+const minConfVal = document.getElementById('minConfVal');
+const showTokens = document.getElementById('showTokens');
+const tokenVizPanel = document.getElementById('tokenVizPanel');
+
+let ws = null, debounceTimer = null;
+let currentGhost = '';        // ghost text currently shown (for prefix matching)
+let _prefixMatchPending = false;  // flag: input is prefix match, skip re-query
+const DEBOUNCE_MS = 150;
+
+function toggleAdvanced() {
+  const panel = document.getElementById('advancedPanel');
+  const toggle = document.getElementById('advancedToggle');
+  panel.classList.toggle('visible');
+  toggle.classList.toggle('open');
+}
+
+function escapeHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function getPrefix() { return editor.value.substring(0, editor.selectionStart); }
+function getFilterNum() { return document.getElementById('filterNumeric').checked; }
+function getFilterPunc() { return document.getElementById('filterPunct').checked; }
+function setStatus(online) {
+  if (online) { statusDot.className = 'dot dot-online'; statusLabel.textContent = 'connected'; }
+  else { statusDot.className = 'dot dot-offline'; statusLabel.textContent = 'offline'; }
+}
+
+// ── Ghost text via browser selection API ──────
+// The model's suggestion (ghost_suffix) is shown as selected text after cursor.
+// Typing any key replaces the selection (reject); Tab moves cursor to end (accept).
+
+let _showingGhost = false;
+
+function showGhost(suggestion) {
+  if (!suggestion) { currentGhost = ''; return; }
+  const start = editor.selectionStart;
+  const end = editor.selectionEnd;
+  if (start !== end) return;
+
+  currentGhost = suggestion;
+  _showingGhost = true;
+  editor.value = editor.value.substring(0, start) + suggestion + editor.value.substring(end);
+  editor.setSelectionRange(start, start + suggestion.length);
+  editor.classList.add('ghost-active');
+  _showingGhost = false;
+}
+
+function clearGhost() {
+  if (!currentGhost) return;  // no ghost — don't touch user's selection
+  currentGhost = '';
+  const start = editor.selectionStart;
+  const end = editor.selectionEnd;
+  if (start !== end) {
+    editor.value = editor.value.substring(0, start) + editor.value.substring(end);
+    editor.setSelectionRange(start, start);
+  }
+  editor.classList.remove('ghost-active');
+}
+
+// Before any keystroke that modifies text, clear the ghost selection
+editor.addEventListener('keydown', (e) => {
+  if (e.key === 'Tab') {
+    e.preventDefault();
+    // Accept ghost: move cursor to end of selection
+    if (editor.selectionStart !== editor.selectionEnd) {
+      const end = editor.selectionEnd;
+      editor.setSelectionRange(end, end);
+    }
+    // Clear ghost state and fetch next prediction
+    currentGhost = '';
+    editor.classList.remove('ghost-active');
+    onInput();
+    return;
+  }
+  if (editor.selectionStart !== editor.selectionEnd) {
+    // Ghost is showing — check if typed char matches prediction prefix
+    if (!e.ctrlKey && !e.metaKey && !e.altKey && !e.key.startsWith('Arrow')) {
+      if (e.key.length === 1 && currentGhost && e.key === currentGhost[0]) {
+        // Prefix match: shrink ghost, skip model re-query
+        _prefixMatchPending = true;
+        const start = editor.selectionStart;
+        editor.value = editor.value.substring(0, start) + editor.value.substring(editor.selectionEnd);
+        editor.setSelectionRange(start, start);
+        return;  // let the character be typed naturally
+      }
+      clearGhost();
+      // Divergent character: ghost cleared. The browser will type this char,
+      // the input event fires, and onInput() sends a fresh model query with
+      // the updated text (including this divergent character).
+    }
+  }
+});
+
+// Watch for direct text changes (input event) — skip if we triggered it
+editor.addEventListener('input', () => {
+  if (_showingGhost) return;
+  if (_prefixMatchPending) {
+    _prefixMatchPending = false;
+    // User typed the next char of prediction — shrink ghost, don't re-query
+    currentGhost = currentGhost.slice(1);
+    if (currentGhost) {
+      showGhost(currentGhost);
+      updateTokenViz(getPrefix());
+      return;
+    }
+    // Ghost fully consumed — re-query for next suggestion
+  }
+  onInput();
+});
+
+editor.addEventListener('keyup', (e) => {
+  if (['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)) onInput();
+});
+
+// ── Mouse interaction ─────────────────────────
+// Ghost text lives in the textarea value as a selection. Without these
+// handlers, clicking would leave the ghost text in the value (looking
+// "accepted") while just moving the cursor. Instead, we clear the ghost
+// on mousedown (before the browser places the cursor) so the user can
+// click to position the cursor or drag to select text normally.
+editor.addEventListener('mousedown', () => {
+  if (editor.selectionStart !== editor.selectionEnd) {
+    clearGhost();
+  }
+});
+// After a simple click (no text selected) at end of text, refresh the
+// suggestion. After drag-select (selectionStart !== selectionEnd) do
+// nothing — the user's selected text must be preserved.
+editor.addEventListener('mouseup', () => {
+  if (editor.selectionStart === editor.selectionEnd &&
+      editor.selectionStart === editor.value.length) {
+    onInput();
+  }
+});
+
+// ── Token viz (separate panel, not overlay) ──
+async function updateTokenViz(text) {
+  if (showTokens.value !== 'on') { tokenVizPanel.classList.remove('visible'); return; }
+  if (!text.trim()) { tokenVizPanel.innerHTML = ''; tokenVizPanel.classList.remove('visible'); return; }
+  try {
+    const r = await fetch('/api/tokenize?text=' + encodeURIComponent(text));
+    const d = await r.json();
+    const tokens = d.tokens || [];
+    const smartCtx = d.smart_context || '';
+    let excludedCount = 0;
+    if (smartCtx && smartCtx !== text) {
+      const r2 = await fetch('/api/tokenize?text=' + encodeURIComponent(smartCtx));
+      if (r2.ok) { const d2 = await r2.json(); excludedCount = tokens.length - (d2.tokens || []).length; }
+    }
+    let html = '';
+    const lastIdx = tokens.length - 1, excludedStart = tokens.length - excludedCount;
+    const isMidWord = text.length > 0 && text[text.length - 1] !== ' ';
+    for (let i = 0; i < tokens.length; i++) {
+      const t = tokens[i];
+      const colorIdx = i % 12;
+      const piece = t.token || '';
+      let cls = 'tok-bg tok-bg-' + colorIdx;
+      if (i >= excludedStart && excludedCount > 0) cls += ' tok-bg-excluded';
+      if (i === lastIdx && isMidWord) cls += ' tok-bg-incomplete';
+      if (t.space_before && piece) html += '<span class="tok-bg" style="background:transparent;padding:1px 0;font-size:11px;color:var(--muted)">␣</span>';
+      html += '<span class="' + cls + '">' + escapeHtml(piece) + '</span>';
+    }
+    if (excludedCount > 0) {
+      html += '<span style="font-size:11px;color:var(--muted);margin-left:8px;font-family:Inter,sans-serif;font-style:italic">' +
+        excludedCount + ' excluded</span>';
+    }
+    tokenVizPanel.innerHTML = html;
+    tokenVizPanel.classList.add('visible');
+  } catch(e) { tokenVizPanel.innerHTML = ''; }
+}
+
+// ── WebSocket ─────────────────────────────────
+function connectWS() {
+  const proto = location.protocol === 'https:' ? 'wss:' : 'ws:';
+  ws = new WebSocket(proto + '//' + location.host + '/ws/greedy');
+  ws.onopen = () => setStatus(true);
+  ws.onmessage = (e) => {
+    const d = JSON.parse(e.data);
+    if (d.type === 'suggestion') {
+      // Ignore stale responses: user has typed since this request was sent.
+      // smart_context is the text the model was queried with; if getPrefix()
+      // differs, a newer request is in flight (or user typed the prediction).
+      if (d.smart_context && getPrefix() !== d.smart_context) return;
+      latencyEl.textContent = d.latency_ms.toFixed(1);
+      confidenceEl.textContent = (d.confidence * 100).toFixed(1);
+      const confPct = d.confidence * 100;
+      clearGhost();
+      updateTokenViz(getPrefix());
+      if (confPct >= minConfSlider.value && d.ghost_suffix) {
+        showGhost(d.ghost_suffix);
+      }
+    }
+  };
+  ws.onclose = () => { setStatus(false); setTimeout(connectWS, 3000); };
+  ws.onerror = () => setStatus(false);
+}
+
+// ── HTTP ──────────────────────────────────────
+async function fetchSuggestion(text) {
+  const url = '/api/autocomplete/greedy?text=' + encodeURIComponent(text) +
+    '&max_tokens=' + maxTokensSelect.value +
+    '&filter_punctuation=' + getFilterPunc() + '&filter_numeric=' + getFilterNum();
+  try {
+    const r = await fetch(url); const d = await r.json();
+    // Ignore stale responses — user has typed since this request was sent
+    if (d.smart_context && getPrefix() !== d.smart_context) return;
+    latencyEl.textContent = d.latency_ms.toFixed(1);
+    confidenceEl.textContent = (d.confidence * 100).toFixed(1);
+    const confPct = d.confidence * 100;
+    clearGhost();
+    updateTokenViz(text);
+    if (confPct >= minConfSlider.value && d.ghost_suffix) {
+      showGhost(d.ghost_suffix);
+    }
+    setStatus(true);
+  } catch(e) { setStatus(false); }
+}
+
+function onInput() {
+  // Only autocomplete when cursor is at end of text
+  if (editor.selectionStart !== editor.value.length) {
+    clearGhost();
+    return;
+  }
+
+  const prefix = getPrefix();
+  updateTokenViz(prefix);
+  clearGhost();
+
+  if (!prefix.trim()) return;
+
+  if (ws && ws.readyState === WebSocket.OPEN) {
+    ws.send(JSON.stringify({ text: prefix, max_tokens: parseInt(maxTokensSelect.value), filter_punctuation: getFilterPunc(), filter_numeric: getFilterNum() }));
+  } else {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => fetchSuggestion(prefix), DEBOUNCE_MS);
+  }
+}
+
+maxTokensSelect.addEventListener('change', onInput);
+minConfSlider.addEventListener('input', () => { minConfVal.textContent = minConfSlider.value + '%'; onInput(); });
+showTokens.addEventListener('change', onInput);
+
+connectWS();
+fetch('/health').then(r => r.json()).then(d => { if (d.status === 'ok') setStatus(true); }).catch(() => {});
+</script>
+</body>
+</html>
