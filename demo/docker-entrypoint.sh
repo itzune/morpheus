@@ -5,14 +5,14 @@
 # downloads once. Subsequent container starts use the cached file.
 #
 # Env vars:
-#   MORPHEUS_MODEL    GGUF filename (e.g. step_0074000.Q4_K_M.gguf)
+#   MORPHEUS_MODEL    GGUF filename (e.g. morpheus-v2-mamba.Q4_K_M.gguf)
 #   MORPHEUS_NGL      GPU layers to offload (0=CPU, 99=all GPU)
 #   HF_REPO           HuggingFace repo for GGUF models (default: itzune/morpheus-gguf)
 #   HF_TOKEN          Optional HF token for private repos (not needed for public)
 
 set -e
 
-MODEL="${MORPHEUS_MODEL:-step_0074000.Q4_K_M.gguf}"
+MODEL="${MORPHEUS_MODEL:-morpheus-v2-mamba.Q4_K_M.gguf}"
 NGL="${MORPHEUS_NGL:-0}"
 HF_REPO="${HF_REPO:-itzune/morpheus-gguf}"
 MODEL_DIR="/app/models"

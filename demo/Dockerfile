@@ -67,7 +67,7 @@ RUN chmod +x /app/docker-entrypoint.sh
 
 # Default env (overridable via docker-compose or docker run)
 # MORPHEUS_NGL: GPU layers to offload (0=CPU only, 99=all layers for GPU)
-ENV MORPHEUS_MODEL=step_0074000.Q4_K_M.gguf
+ENV MORPHEUS_MODEL=morpheus-v2-mamba.Q4_K_M.gguf
 ENV MORPHEUS_NGL=0
 ENV HF_REPO=itzune/morpheus-gguf
 

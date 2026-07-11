@@ -11,7 +11,7 @@
 #   docker compose -f docker-compose.yml -f docker-compose.gpu.yml up -d
 #
 #   # Switch model via env var:
-#   MORPHEUS_MODEL=step_0074000.Q5_K_M.gguf docker compose up -d
+#   MORPHEUS_MODEL=morpheus-v2-mamba.Q5_K_M.gguf docker compose up -d
 #
 #   # Open: http://localhost:9090
 #
@@ -33,7 +33,7 @@ services:
       # Persist completion logs (user acceptance events for eval/replay)
       - ../logs:/app/logs
     environment:
-      - MORPHEUS_MODEL=${MORPHEUS_MODEL:-step_0074000.Q4_K_M.gguf}
+      - MORPHEUS_MODEL=${MORPHEUS_MODEL:-morpheus-v2-mamba.Q4_K_M.gguf}
       - MORPHEUS_NGL=${MORPHEUS_NGL:-0}
     restart: unless-stopped
 

@@ -157,7 +157,7 @@ EXPORTS_DIR = Path(os.environ.get("MORPHEUS_MODELS_DIR", Path(__file__).resolve(
 MODELS_DIR = Path(os.environ.get("MORPHEUS_MODELS_DIR", "/app/models"))
 
 # Default model — change this when a new checkpoint is promoted
-DEFAULT_MODEL = "step_0074000.Q4_K_M.gguf"
+DEFAULT_MODEL = "morpheus-v2-mamba.Q4_K_M.gguf"
 
 # ── Completion logging ──────────────────────────────────
 # Logs user acceptances (and sends) to a JSONL file so we can build a

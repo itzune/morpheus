@@ -33,4 +33,4 @@ uv run python server.py
 ```
 
 Requires a GGUF model in `../exports/` and `llama-server` on PATH (or set
-`LLAMA_SERVER_PATH`). The model defaults to `step_0074000.Q4_K_M.gguf`.
+`LLAMA_SERVER_PATH`). The model defaults to `morpheus-v2-mamba.Q4_K_M.gguf`.

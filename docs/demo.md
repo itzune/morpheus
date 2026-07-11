@@ -194,11 +194,11 @@ All Docker files live under `demo/`. Run commands from the `demo/` directory.
 ```bash
 cd demo
 
-# Default model (step_0074000.Q4_K_M.gguf, CPU inference)
+# Default model (morpheus-v2-mamba.Q4_K_M.gguf, CPU inference)
 docker compose up -d
 
 # Custom model
-MORPHEUS_MODEL=step_0074000.Q5_K_M.gguf docker compose up -d
+MORPHEUS_MODEL=morpheus-v2-mamba.Q5_K_M.gguf docker compose up -d
 
 # Rebuild after code changes
 docker compose up -d --build
@@ -216,7 +216,7 @@ cd demo
 docker compose -f docker-compose.yml -f docker-compose.gpu.yml up -d
 
 # Custom model in GPU mode
-MORPHEUS_MODEL=step_0074000.Q5_K_M.gguf \
+MORPHEUS_MODEL=morpheus-v2-mamba.Q5_K_M.gguf \
   docker compose -f docker-compose.yml -f docker-compose.gpu.yml up -d
 
 # Rebuild GPU image after code changes
@@ -237,7 +237,7 @@ runtime for execution) and reserves the GPU device for the container. The
 
 | Env var | Default | Description |
 |---------|---------|-------------|
-| `MORPHEUS_MODEL` | `step_0074000.Q4_K_M.gguf` | GGUF filename (downloaded from HF if not present) |
+| `MORPHEUS_MODEL` | `morpheus-v2-mamba.Q4_K_M.gguf` | GGUF filename (downloaded from HF if not present) |
 | `MORPHEUS_NGL` | `0` (CPU) / `99` (GPU) | GPU layers to offload (`0` = CPU only) |
 | `HF_REPO` | `itzune/morpheus-gguf` | HuggingFace repo to download GGUF from |
 | `HF_TOKEN` | _(empty)_ | Optional HF token for private repos |
