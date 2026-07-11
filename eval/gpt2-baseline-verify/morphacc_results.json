@@ -1,0 +1,2015 @@
+{
+  "summary": {
+    "morphacc": 0.38,
+    "hits": 19,
+    "total": 50
+  },
+  "details": [
+    {
+      "prompt": "etxe",
+      "category": "morphacc_bare",
+      "valid_suffixes": [
+        "ra",
+        "tik",
+        "an",
+        "ko"
+      ],
+      "morphacc_hit": false,
+      "best_rank": null,
+      "boundary_prob_mass": 0.0,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": ",",
+          "prob": 0.012608997523784637
+        },
+        {
+          "rank": 2,
+          "decoded": "eta",
+          "prob": 0.011480622924864292
+        },
+        {
+          "rank": 3,
+          "decoded": ".",
+          "prob": 0.006340201944112778
+        },
+        {
+          "rank": 4,
+          "decoded": "-",
+          "prob": 0.00525621185079217
+        },
+        {
+          "rank": 5,
+          "decoded": "",
+          "prob": 0.005094495136290789
+        }
+      ]
+    },
+    {
+      "prompt": "mendi",
+      "category": "morphacc_bare",
+      "valid_suffixes": [
+        "ra",
+        "tik",
+        "an",
+        "ko"
+      ],
+      "morphacc_hit": false,
+      "best_rank": null,
+      "boundary_prob_mass": 0.0,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": ",",
+          "prob": 0.011137526482343674
+        },
+        {
+          "rank": 2,
+          "decoded": "eta",
+          "prob": 0.010462737642228603
+        },
+        {
+          "rank": 3,
+          "decoded": ".",
+          "prob": 0.005600299686193466
+        },
+        {
+          "rank": 4,
+          "decoded": "",
+          "prob": 0.005260995123535395
+        },
+        {
+          "rank": 5,
+          "decoded": "-",
+          "prob": 0.004642811603844166
+        }
+      ]
+    },
+    {
+      "prompt": "herri",
+      "category": "morphacc_bare",
+      "valid_suffixes": [
+        "ra",
+        "tik",
+        "an",
+        "ko"
+      ],
+      "morphacc_hit": false,
+      "best_rank": null,
+      "boundary_prob_mass": 0.0,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": ",",
+          "prob": 0.010227048769593239
+        },
+        {
+          "rank": 2,
+          "decoded": "eta",
+          "prob": 0.010227048769593239
+        },
+        {
+          "rank": 3,
+          "decoded": ".",
+          "prob": 0.005305722821503878
+        },
+        {
+          "rank": 4,
+          "decoded": "-",
+          "prob": 0.005305722821503878
+        },
+        {
+          "rank": 5,
+          "decoded": "",
+          "prob": 0.004068038892000914
+        }
+      ]
+    },
+    {
+      "prompt": "kale",
+      "category": "morphacc_bare",
+      "valid_suffixes": [
+        "ra",
+        "tik",
+        "an",
+        "ko"
+      ],
+      "morphacc_hit": false,
+      "best_rank": null,
+      "boundary_prob_mass": 0.0,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": ",",
+          "prob": 0.011403580196201801
+        },
+        {
+          "rank": 2,
+          "decoded": "eta",
+          "prob": 0.010712672024965286
+        },
+        {
+          "rank": 3,
+          "decoded": ".",
+          "prob": 0.005916099529713392
+        },
+        {
+          "rank": 4,
+          "decoded": "",
+          "prob": 0.005557660944759846
+        },
+        {
+          "rank": 5,
+          "decoded": "-",
+          "prob": 0.005060308147221804
+        }
+      ]
+    },
+    {
+      "prompt": "baso",
+      "category": "morphacc_bare",
+      "valid_suffixes": [
+        "ra",
+        "tik",
+        "an",
+        "ko"
+      ],
+      "morphacc_hit": false,
+      "best_rank": null,
+      "boundary_prob_mass": 0.0,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": ",",
+          "prob": 0.012546708807349205
+        },
+        {
+          "rank": 2,
+          "decoded": "eta",
+          "prob": 0.012160686776041985
+        },
+        {
+          "rank": 3,
+          "decoded": ".",
+          "prob": 0.005744301714003086
+        },
+        {
+          "rank": 4,
+          "decoded": "-",
+          "prob": 0.0053962720558047295
+        },
+        {
+          "rank": 5,
+          "decoded": "",
+          "prob": 0.005230246111750603
+        }
+      ]
+    },
+    {
+      "prompt": "itsaso",
+      "category": "morphacc_bare",
+      "valid_suffixes": [
+        "ra",
+        "tik",
+        "an",
+        "ko"
+      ],
+      "morphacc_hit": true,
+      "best_rank": 4,
+      "boundary_prob_mass": 0.0429,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": "aren",
+          "prob": 0.2467830777168274
+        },
+        {
+          "rank": 2,
+          "decoded": "ari",
+          "prob": 0.09078643471002579
+        },
+        {
+          "rank": 3,
+          "decoded": "en",
+          "prob": 0.04565028101205826
+        },
+        {
+          "rank": 4,
+          "decoded": "tik",
+          "prob": 0.0428844653069973
+        },
+        {
+          "rank": 5,
+          "decoded": "eta",
+          "prob": 0.04028623178601265
+        }
+      ]
+    },
+    {
+      "prompt": "etxe",
+      "category": "morphacc_bare",
+      "valid_suffixes": [
+        "a",
+        "ak",
+        "aren",
+        "arekin",
+        "arentzat"
+      ],
+      "morphacc_hit": false,
+      "best_rank": null,
+      "boundary_prob_mass": 0.0,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": ",",
+          "prob": 0.012608997523784637
+        },
+        {
+          "rank": 2,
+          "decoded": "eta",
+          "prob": 0.011480622924864292
+        },
+        {
+          "rank": 3,
+          "decoded": ".",
+          "prob": 0.006340201944112778
+        },
+        {
+          "rank": 4,
+          "decoded": "-",
+          "prob": 0.00525621185079217
+        },
+        {
+          "rank": 5,
+          "decoded": "",
+          "prob": 0.005094495136290789
+        }
+      ]
+    },
+    {
+      "prompt": "mendi",
+      "category": "morphacc_bare",
+      "valid_suffixes": [
+        "a",
+        "ak",
+        "aren",
+        "arekin",
+        "arentzat"
+      ],
+      "morphacc_hit": false,
+      "best_rank": null,
+      "boundary_prob_mass": 0.0,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": ",",
+          "prob": 0.011137526482343674
+        },
+        {
+          "rank": 2,
+          "decoded": "eta",
+          "prob": 0.010462737642228603
+        },
+        {
+          "rank": 3,
+          "decoded": ".",
+          "prob": 0.005600299686193466
+        },
+        {
+          "rank": 4,
+          "decoded": "",
+          "prob": 0.005260995123535395
+        },
+        {
+          "rank": 5,
+          "decoded": "-",
+          "prob": 0.004642811603844166
+        }
+      ]
+    },
+    {
+      "prompt": "lagun",
+      "category": "morphacc_bare",
+      "valid_suffixes": [
+        "a",
+        "ak",
+        "aren",
+        "arekin",
+        "ekin",
+        "arentzat"
+      ],
+      "morphacc_hit": false,
+      "best_rank": null,
+      "boundary_prob_mass": 0.0,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": "eta",
+          "prob": 0.010202866047620773
+        },
+        {
+          "rank": 2,
+          "decoded": ",",
+          "prob": 0.009888957254588604
+        },
+        {
+          "rank": 3,
+          "decoded": "-",
+          "prob": 0.00529317744076252
+        },
+        {
+          "rank": 4,
+          "decoded": ".",
+          "prob": 0.004819492809474468
+        },
+        {
+          "rank": 5,
+          "decoded": "",
+          "prob": 0.004671212751418352
+        }
+      ]
+    },
+    {
+      "prompt": "gizon",
+      "category": "morphacc_bare",
+      "valid_suffixes": [
+        "a",
+        "ak",
+        "aren",
+        "arekin",
+        "arentzat"
+      ],
+      "morphacc_hit": false,
+      "best_rank": null,
+      "boundary_prob_mass": 0.0,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": "eta",
+          "prob": 0.013198346830904484
+        },
+        {
+          "rank": 2,
+          "decoded": ",",
+          "prob": 0.012017231434583664
+        },
+        {
+          "rank": 3,
+          "decoded": ".",
+          "prob": 0.0056765382178127766
+        },
+        {
+          "rank": 4,
+          "decoded": "-",
+          "prob": 0.005168546456843615
+        },
+        {
+          "rank": 5,
+          "decoded": "",
+          "prob": 0.004561226814985275
+        }
+      ]
+    },
+    {
+      "prompt": "ikasle",
+      "category": "morphacc_bare",
+      "valid_suffixes": [
+        "a",
+        "ak",
+        "aren",
+        "arekin",
+        "arentzat"
+      ],
+      "morphacc_hit": false,
+      "best_rank": null,
+      "boundary_prob_mass": 0.0,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": "eta",
+          "prob": 0.08226300776004791
+        },
+        {
+          "rank": 2,
+          "decoded": ",",
+          "prob": 0.05653848871588707
+        },
+        {
+          "rank": 3,
+          "decoded": "entzat",
+          "prob": 0.03885829821228981
+        },
+        {
+          "rank": 4,
+          "decoded": "ekin",
+          "prob": 0.03650398924946785
+        },
+        {
+          "rank": 5,
+          "decoded": "entzako",
+          "prob": 0.02356874756515026
+        }
+      ]
+    },
+    {
+      "prompt": "etxe",
+      "category": "morphacc_bare",
+      "valid_suffixes": [
+        "etan",
+        "en",
+        "etara",
+        "etatik",
+        "etako"
+      ],
+      "morphacc_hit": false,
+      "best_rank": null,
+      "boundary_prob_mass": 0.0,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": ",",
+          "prob": 0.012608997523784637
+        },
+        {
+          "rank": 2,
+          "decoded": "eta",
+          "prob": 0.011480622924864292
+        },
+        {
+          "rank": 3,
+          "decoded": ".",
+          "prob": 0.006340201944112778
+        },
+        {
+          "rank": 4,
+          "decoded": "-",
+          "prob": 0.00525621185079217
+        },
+        {
+          "rank": 5,
+          "decoded": "",
+          "prob": 0.005094495136290789
+        }
+      ]
+    },
+    {
+      "prompt": "mendi",
+      "category": "morphacc_bare",
+      "valid_suffixes": [
+        "etan",
+        "en",
+        "etara",
+        "etatik",
+        "etako"
+      ],
+      "morphacc_hit": false,
+      "best_rank": null,
+      "boundary_prob_mass": 0.0,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": ",",
+          "prob": 0.011137526482343674
+        },
+        {
+          "rank": 2,
+          "decoded": "eta",
+          "prob": 0.010462737642228603
+        },
+        {
+          "rank": 3,
+          "decoded": ".",
+          "prob": 0.005600299686193466
+        },
+        {
+          "rank": 4,
+          "decoded": "",
+          "prob": 0.005260995123535395
+        },
+        {
+          "rank": 5,
+          "decoded": "-",
+          "prob": 0.004642811603844166
+        }
+      ]
+    },
+    {
+      "prompt": "liburu",
+      "category": "morphacc_bare",
+      "valid_suffixes": [
+        "a",
+        "ak",
+        "aren",
+        "an",
+        "tik",
+        "ra",
+        "ko"
+      ],
+      "morphacc_hit": false,
+      "best_rank": null,
+      "boundary_prob_mass": 0.0,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": "eta",
+          "prob": 0.011387775652110577
+        },
+        {
+          "rank": 2,
+          "decoded": ",",
+          "prob": 0.01036868803203106
+        },
+        {
+          "rank": 3,
+          "decoded": ".",
+          "prob": 0.005213703960180283
+        },
+        {
+          "rank": 4,
+          "decoded": "-",
+          "prob": 0.005213703960180283
+        },
+        {
+          "rank": 5,
+          "decoded": "",
+          "prob": 0.004459517076611519
+        }
+      ]
+    },
+    {
+      "prompt": "eskola",
+      "category": "morphacc_bare",
+      "valid_suffixes": [
+        "ra",
+        "tik",
+        "an",
+        "ko",
+        "a",
+        "ak"
+      ],
+      "morphacc_hit": false,
+      "best_rank": null,
+      "boundary_prob_mass": 0.0,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": ",",
+          "prob": 0.014880713075399399
+        },
+        {
+          "rank": 2,
+          "decoded": "eta",
+          "prob": 0.012336544692516327
+        },
+        {
+          "rank": 3,
+          "decoded": ".",
+          "prob": 0.008478774689137936
+        },
+        {
+          "rank": 4,
+          "decoded": "",
+          "prob": 0.006012351717799902
+        },
+        {
+          "rank": 5,
+          "decoded": "-",
+          "prob": 0.006012351717799902
+        }
+      ]
+    },
+    {
+      "prompt": "Bihar goizean, nire etxera etorriko",
+      "category": "morphacc_context",
+      "valid_suffixes": [
+        "naiz",
+        "gara",
+        "zara"
+      ],
+      "morphacc_hit": true,
+      "best_rank": 5,
+      "boundary_prob_mass": 0.0474,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": "dira",
+          "prob": 0.39664939045906067
+        },
+        {
+          "rank": 2,
+          "decoded": "da",
+          "prob": 0.21231113374233246
+        },
+        {
+          "rank": 3,
+          "decoded": "zirela",
+          "prob": 0.05714276805520058
+        },
+        {
+          "rank": 4,
+          "decoded": "ziren",
+          "prob": 0.05042830854654312
+        },
+        {
+          "rank": 5,
+          "decoded": "naiz",
+          "prob": 0.04737301543354988
+        }
+      ]
+    },
+    {
+      "prompt": "Gaur arratsaldean, mendira joango",
+      "category": "morphacc_context",
+      "valid_suffixes": [
+        "naiz",
+        "gara",
+        "zara"
+      ],
+      "morphacc_hit": true,
+      "best_rank": 3,
+      "boundary_prob_mass": 0.0224,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": "dira",
+          "prob": 0.8960846066474915
+        },
+        {
+          "rank": 2,
+          "decoded": "da",
+          "prob": 0.06909862160682678
+        },
+        {
+          "rank": 3,
+          "decoded": "gara",
+          "prob": 0.022433040663599968
+        },
+        {
+          "rank": 4,
+          "decoded": "direla",
+          "prob": 0.002852040808647871
+        },
+        {
+          "rank": 5,
+          "decoded": "diren",
+          "prob": 0.002852040808647871
+        }
+      ]
+    },
+    {
+      "prompt": "Zinemara joan eta gero, kalera aterako",
+      "category": "morphacc_context",
+      "valid_suffixes": [
+        "naiz",
+        "gara",
+        "zara"
+      ],
+      "morphacc_hit": true,
+      "best_rank": 2,
+      "boundary_prob_mass": 0.33,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": "da",
+          "prob": 0.2730499505996704
+        },
+        {
+          "rank": 2,
+          "decoded": "zara",
+          "prob": 0.25650668144226074
+        },
+        {
+          "rank": 3,
+          "decoded": "dira",
+          "prob": 0.12116517871618271
+        },
+        {
+          "rank": 4,
+          "decoded": "gara",
+          "prob": 0.07349039614200592
+        },
+        {
+          "rank": 5,
+          "decoded": "al",
+          "prob": 0.06485504657030106
+        }
+      ]
+    },
+    {
+      "prompt": "Euskal Herrian bizi",
+      "category": "morphacc_context",
+      "valid_suffixes": [
+        "naiz",
+        "gara",
+        "zara",
+        "da"
+      ],
+      "morphacc_hit": true,
+      "best_rank": 5,
+      "boundary_prob_mass": 0.0444,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": "diren",
+          "prob": 0.22562824189662933
+        },
+        {
+          "rank": 2,
+          "decoded": "den",
+          "prob": 0.1757194548845291
+        },
+        {
+          "rank": 3,
+          "decoded": "garen",
+          "prob": 0.1065792366862297
+        },
+        {
+          "rank": 4,
+          "decoded": "dugun",
+          "prob": 0.05034446716308594
+        },
+        {
+          "rank": 5,
+          "decoded": "gara",
+          "prob": 0.044428832828998566
+        }
+      ]
+    },
+    {
+      "prompt": "Donostian bizi",
+      "category": "morphacc_context",
+      "valid_suffixes": [
+        "naiz",
+        "gara",
+        "zara",
+        "da"
+      ],
+      "morphacc_hit": true,
+      "best_rank": 3,
+      "boundary_prob_mass": 0.1466,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": "den",
+          "prob": 0.1882738173007965
+        },
+        {
+          "rank": 2,
+          "decoded": "diren",
+          "prob": 0.14662779867649078
+        },
+        {
+          "rank": 3,
+          "decoded": "da",
+          "prob": 0.14662779867649078
+        },
+        {
+          "rank": 4,
+          "decoded": "zen",
+          "prob": 0.0574202686548233
+        },
+        {
+          "rank": 5,
+          "decoded": "dira",
+          "prob": 0.050673212856054306
+        }
+      ]
+    },
+    {
+      "prompt": "Bilbora joan",
+      "category": "morphacc_context",
+      "valid_suffixes": [
+        "naiz",
+        "gara",
+        "zara",
+        "da"
+      ],
+      "morphacc_hit": false,
+      "best_rank": null,
+      "boundary_prob_mass": 0.0,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": "nahi",
+          "prob": 0.28624671697616577
+        },
+        {
+          "rank": 2,
+          "decoded": "eta",
+          "prob": 0.06387028098106384
+        },
+        {
+          "rank": 3,
+          "decoded": "dira",
+          "prob": 0.05636531859636307
+        },
+        {
+          "rank": 4,
+          "decoded": "ziren",
+          "prob": 0.05295032262802124
+        },
+        {
+          "rank": 5,
+          "decoded": "aurretik",
+          "prob": 0.04672849550843239
+        }
+      ]
+    },
+    {
+      "prompt": "Gasteiztik etorri",
+      "category": "morphacc_context",
+      "valid_suffixes": [
+        "naiz",
+        "gara",
+        "zara",
+        "da"
+      ],
+      "morphacc_hit": true,
+      "best_rank": 4,
+      "boundary_prob_mass": 0.0722,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": "zen",
+          "prob": 0.12675051391124725
+        },
+        {
+          "rank": 2,
+          "decoded": "ziren",
+          "prob": 0.07687807083129883
+        },
+        {
+          "rank": 3,
+          "decoded": "eta",
+          "prob": 0.07687807083129883
+        },
+        {
+          "rank": 4,
+          "decoded": "da",
+          "prob": 0.07222025841474533
+        },
+        {
+          "rank": 5,
+          "decoded": "dira",
+          "prob": 0.04963621124625206
+        }
+      ]
+    },
+    {
+      "prompt": "Iruñeko alde zaharrean",
+      "category": "morphacc_context",
+      "valid_suffixes": [
+        "ibili",
+        "egon",
+        "bizi",
+        "dago"
+      ],
+      "morphacc_hit": true,
+      "best_rank": 5,
+      "boundary_prob_mass": 0.0219,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": ",",
+          "prob": 0.12619735300540924
+        },
+        {
+          "rank": 2,
+          "decoded": ".",
+          "prob": 0.07190507650375366
+        },
+        {
+          "rank": 3,
+          "decoded": "eta",
+          "prob": 0.031907688826322556
+        },
+        {
+          "rank": 4,
+          "decoded": "barrena",
+          "prob": 0.029052279889583588
+        },
+        {
+          "rank": 5,
+          "decoded": "bizi",
+          "prob": 0.02192980982363224
+        }
+      ]
+    },
+    {
+      "prompt": "Atzo ikusi nuen pelikula",
+      "category": "morphacc_verb",
+      "valid_suffixes": [
+        "polita",
+        "ederra",
+        "luzea"
+      ],
+      "morphacc_hit": false,
+      "best_rank": null,
+      "boundary_prob_mass": 0.0,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": ",",
+          "prob": 0.15793775022029877
+        },
+        {
+          "rank": 2,
+          "decoded": "bat",
+          "prob": 0.07460451126098633
+        },
+        {
+          "rank": 3,
+          "decoded": ".",
+          "prob": 0.061849307268857956
+        },
+        {
+          "rank": 4,
+          "decoded": "eta",
+          "prob": 0.03524067625403404
+        },
+        {
+          "rank": 5,
+          "decoded": "hori",
+          "prob": 0.03310554847121239
+        }
+      ]
+    },
+    {
+      "prompt": "Gaur ikusi dudan",
+      "category": "morphacc_verb",
+      "valid_suffixes": [
+        "filma",
+        "pelikula",
+        "etxea"
+      ],
+      "morphacc_hit": false,
+      "best_rank": null,
+      "boundary_prob_mass": 0.0,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": "agatik",
+          "prob": 0.12276564538478851
+        },
+        {
+          "rank": 2,
+          "decoded": "gauzarik",
+          "prob": 0.11532764881849289
+        },
+        {
+          "rank": 3,
+          "decoded": "aren",
+          "prob": 0.08437551558017731
+        },
+        {
+          "rank": 4,
+          "decoded": "arekin",
+          "prob": 0.07446113228797913
+        },
+        {
+          "rank": 5,
+          "decoded": "guztia",
+          "prob": 0.021333469077944756
+        }
+      ]
+    },
+    {
+      "prompt": "Atzo erosi",
+      "category": "morphacc_verb",
+      "valid_suffixes": [
+        "nuen",
+        "zuen",
+        "genuen"
+      ],
+      "morphacc_hit": false,
+      "best_rank": null,
+      "boundary_prob_mass": 0.0,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": "ahal",
+          "prob": 0.3482156991958618
+        },
+        {
+          "rank": 2,
+          "decoded": "daitezke",
+          "prob": 0.15451978147029877
+        },
+        {
+          "rank": 3,
+          "decoded": "ahalko",
+          "prob": 0.136363223195076
+        },
+        {
+          "rank": 4,
+          "decoded": "behar",
+          "prob": 0.06856773048639297
+        },
+        {
+          "rank": 5,
+          "decoded": "daiteke",
+          "prob": 0.05340060964226723
+        }
+      ]
+    },
+    {
+      "prompt": "Bihar erosiko",
+      "category": "morphacc_verb",
+      "valid_suffixes": [
+        "dut",
+        "duzu",
+        "du",
+        "dugu"
+      ],
+      "morphacc_hit": true,
+      "best_rank": 2,
+      "boundary_prob_mass": 0.2662,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": "dituzte",
+          "prob": 0.2855910360813141
+        },
+        {
+          "rank": 2,
+          "decoded": "dute",
+          "prob": 0.18439142405986786
+        },
+        {
+          "rank": 3,
+          "decoded": "dira",
+          "prob": 0.14360418915748596
+        },
+        {
+          "rank": 4,
+          "decoded": "da",
+          "prob": 0.08710033446550369
+        },
+        {
+          "rank": 5,
+          "decoded": "du",
+          "prob": 0.0818231999874115
+        }
+      ]
+    },
+    {
+      "prompt": "Gaur goizean, ikasleei",
+      "category": "morphacc_verb",
+      "valid_suffixes": [
+        "eskatu",
+        "eman",
+        "azaldu"
+      ],
+      "morphacc_hit": false,
+      "best_rank": null,
+      "boundary_prob_mass": 0.0,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": "zuzendutako",
+          "prob": 0.22958742082118988
+        },
+        {
+          "rank": 2,
+          "decoded": "harrera",
+          "prob": 0.07453612238168716
+        },
+        {
+          "rank": 3,
+          "decoded": "eta",
+          "prob": 0.02742030657827854
+        },
+        {
+          "rank": 4,
+          "decoded": "zuzenduriko",
+          "prob": 0.02575899288058281
+        },
+        {
+          "rank": 5,
+          "decoded": "egindako",
+          "prob": 0.022732233628630638
+        }
+      ]
+    },
+    {
+      "prompt": "Atzo lagunei",
+      "category": "morphacc_verb",
+      "valid_suffixes": [
+        "eskatu",
+        "esan",
+        "eman",
+        "bidali"
+      ],
+      "morphacc_hit": false,
+      "best_rank": null,
+      "boundary_prob_mass": 0.0,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": ",",
+          "prob": 0.06539689749479294
+        },
+        {
+          "rank": 2,
+          "decoded": "eta",
+          "prob": 0.0542159341275692
+        },
+        {
+          "rank": 3,
+          "decoded": "egindako",
+          "prob": 0.03966522216796875
+        },
+        {
+          "rank": 4,
+          "decoded": "",
+          "prob": 0.037262026220560074
+        },
+        {
+          "rank": 5,
+          "decoded": "eskerrak",
+          "prob": 0.032883625477552414
+        }
+      ]
+    },
+    {
+      "prompt": "Gurasoei opari bat",
+      "category": "morphacc_verb",
+      "valid_suffixes": [
+        "erosi",
+        "egin",
+        "eman",
+        "bidali"
+      ],
+      "morphacc_hit": true,
+      "best_rank": 1,
+      "boundary_prob_mass": 0.146,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": "eman",
+          "prob": 0.08430434763431549
+        },
+        {
+          "rank": 2,
+          "decoded": "emateko",
+          "prob": 0.07919660210609436
+        },
+        {
+          "rank": 3,
+          "decoded": "egiteko",
+          "prob": 0.07919660210609436
+        },
+        {
+          "rank": 4,
+          "decoded": "egin",
+          "prob": 0.06167837232351303
+        },
+        {
+          "rank": 5,
+          "decoded": "",
+          "prob": 0.06167837232351303
+        }
+      ]
+    },
+    {
+      "prompt": "Nire izebaren",
+      "category": "morphacc_possessive",
+      "valid_suffixes": [
+        "etxea",
+        "kotxea",
+        "liburua"
+      ],
+      "morphacc_hit": true,
+      "best_rank": 1,
+      "boundary_prob_mass": 0.071,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": "etxean",
+          "prob": 0.07102557271718979
+        },
+        {
+          "rank": 2,
+          "decoded": "eta",
+          "prob": 0.026128852739930153
+        },
+        {
+          "rank": 3,
+          "decoded": "bitartez",
+          "prob": 0.02034916914999485
+        },
+        {
+          "rank": 4,
+          "decoded": "etxera",
+          "prob": 0.02034916914999485
+        },
+        {
+          "rank": 5,
+          "decoded": "izena",
+          "prob": 0.016870053485035896
+        }
+      ]
+    },
+    {
+      "prompt": "Gure herriko",
+      "category": "morphacc_possessive",
+      "valid_suffixes": [
+        "jaiak",
+        "plaza",
+        "eliza",
+        "festak"
+      ],
+      "morphacc_hit": true,
+      "best_rank": 4,
+      "boundary_prob_mass": 0.023,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": "historia",
+          "prob": 0.019258366897702217
+        },
+        {
+          "rank": 2,
+          "decoded": "eta",
+          "prob": 0.01323606912046671
+        },
+        {
+          "rank": 3,
+          "decoded": "kaleetan",
+          "prob": 0.012828839011490345
+        },
+        {
+          "rank": 4,
+          "decoded": "festak",
+          "prob": 0.011680790223181248
+        },
+        {
+          "rank": 5,
+          "decoded": "jaiak",
+          "prob": 0.011321408674120903
+        }
+      ]
+    },
+    {
+      "prompt": "Zure amaren",
+      "category": "morphacc_possessive",
+      "valid_suffixes": [
+        "izena",
+        "etxea",
+        "laguna"
+      ],
+      "morphacc_hit": true,
+      "best_rank": 1,
+      "boundary_prob_mass": 0.0314,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": "etxean",
+          "prob": 0.0314401313662529
+        },
+        {
+          "rank": 2,
+          "decoded": "gandik",
+          "prob": 0.0202992744743824
+        },
+        {
+          "rank": 3,
+          "decoded": "ama",
+          "prob": 0.015809090808033943
+        },
+        {
+          "rank": 4,
+          "decoded": "eta",
+          "prob": 0.015809090808033943
+        },
+        {
+          "rank": 5,
+          "decoded": "tzako",
+          "prob": 0.014851266518235207
+        }
+      ]
+    },
+    {
+      "prompt": "Haurren",
+      "category": "morphacc_possessive",
+      "valid_suffixes": [
+        "jolasak",
+        "eskola",
+        "liburuak",
+        "jostailuak"
+      ],
+      "morphacc_hit": false,
+      "best_rank": null,
+      "boundary_prob_mass": 0.0,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": "eta",
+          "prob": 0.008778857998549938
+        },
+        {
+          "rank": 2,
+          "decoded": ",",
+          "prob": 0.007993240840733051
+        },
+        {
+          "rank": 3,
+          "decoded": "",
+          "prob": 0.004848145414143801
+        },
+        {
+          "rank": 4,
+          "decoded": ".",
+          "prob": 0.0038955945055931807
+        },
+        {
+          "rank": 5,
+          "decoded": "-",
+          "prob": 0.002940549049526453
+        }
+      ]
+    },
+    {
+      "prompt": "Udalerri",
+      "category": "morphacc_compound",
+      "valid_suffixes": [
+        "ak",
+        "ko",
+        "an",
+        "tik",
+        "ra",
+        "a"
+      ],
+      "morphacc_hit": false,
+      "best_rank": null,
+      "boundary_prob_mass": 0.0,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": ",",
+          "prob": 0.010556547902524471
+        },
+        {
+          "rank": 2,
+          "decoded": "eta",
+          "prob": 0.01023175660520792
+        },
+        {
+          "rank": 3,
+          "decoded": ".",
+          "prob": 0.005476664751768112
+        },
+        {
+          "rank": 4,
+          "decoded": "",
+          "prob": 0.0044006239622831345
+        },
+        {
+          "rank": 5,
+          "decoded": "-",
+          "prob": 0.0044006239622831345
+        }
+      ]
+    },
+    {
+      "prompt": "Unibertsitate",
+      "category": "morphacc_compound",
+      "valid_suffixes": [
+        "a",
+        "an",
+        "ko",
+        "tik",
+        "ra",
+        "ak"
+      ],
+      "morphacc_hit": false,
+      "best_rank": null,
+      "boundary_prob_mass": 0.0,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": ",",
+          "prob": 0.010102711617946625
+        },
+        {
+          "rank": 2,
+          "decoded": "eta",
+          "prob": 0.010102711617946625
+        },
+        {
+          "rank": 3,
+          "decoded": ".",
+          "prob": 0.005079962778836489
+        },
+        {
+          "rank": 4,
+          "decoded": "-",
+          "prob": 0.005079962778836489
+        },
+        {
+          "rank": 5,
+          "decoded": "",
+          "prob": 0.004483051132410765
+        }
+      ]
+    },
+    {
+      "prompt": "Gizarte",
+      "category": "morphacc_compound",
+      "valid_suffixes": [
+        "a",
+        "an",
+        "aren",
+        "tik",
+        "ra",
+        "ko"
+      ],
+      "morphacc_hit": false,
+      "best_rank": null,
+      "boundary_prob_mass": 0.0,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": "eta",
+          "prob": 0.008031112141907215
+        },
+        {
+          "rank": 2,
+          "decoded": ",",
+          "prob": 0.007784020621329546
+        },
+        {
+          "rank": 3,
+          "decoded": "-",
+          "prob": 0.004166486207395792
+        },
+        {
+          "rank": 4,
+          "decoded": "",
+          "prob": 0.003853369737043977
+        },
+        {
+          "rank": 5,
+          "decoded": ".",
+          "prob": 0.0037348142359405756
+        }
+      ]
+    },
+    {
+      "prompt": "Ekonomi",
+      "category": "morphacc_compound",
+      "valid_suffixes": [
+        "a",
+        "aren",
+        "an",
+        "ko",
+        "tik"
+      ],
+      "morphacc_hit": false,
+      "best_rank": null,
+      "boundary_prob_mass": 0.0,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": "eta",
+          "prob": 0.09921533614397049
+        },
+        {
+          "rank": 2,
+          "decoded": "-",
+          "prob": 0.08755722641944885
+        },
+        {
+          "rank": 3,
+          "decoded": "politika",
+          "prob": 0.019536655396223068
+        },
+        {
+          "rank": 4,
+          "decoded": "egoera",
+          "prob": 0.01893557794392109
+        },
+        {
+          "rank": 5,
+          "decoded": "jardueren",
+          "prob": 0.017241038382053375
+        }
+      ]
+    },
+    {
+      "prompt": "Euskara ikasten ari",
+      "category": "morphacc_context",
+      "valid_suffixes": [
+        "naiz",
+        "gara",
+        "zara",
+        "da"
+      ],
+      "morphacc_hit": false,
+      "best_rank": null,
+      "boundary_prob_mass": 0.0,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": "diren",
+          "prob": 0.25444674491882324
+        },
+        {
+          "rank": 2,
+          "decoded": "den",
+          "prob": 0.12794385850429535
+        },
+        {
+          "rank": 3,
+          "decoded": "direnei",
+          "prob": 0.06848341226577759
+        },
+        {
+          "rank": 4,
+          "decoded": "direnek",
+          "prob": 0.060436397790908813
+        },
+        {
+          "rank": 5,
+          "decoded": "direnak",
+          "prob": 0.060436397790908813
+        }
+      ]
+    },
+    {
+      "prompt": "Liburu hau irakurri",
+      "category": "morphacc_context",
+      "valid_suffixes": [
+        "dut",
+        "duzu",
+        "dugu",
+        "du"
+      ],
+      "morphacc_hit": true,
+      "best_rank": 4,
+      "boundary_prob_mass": 0.0469,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": "nahi",
+          "prob": 0.14437907934188843
+        },
+        {
+          "rank": 2,
+          "decoded": "eta",
+          "prob": 0.09321814030408859
+        },
+        {
+          "rank": 3,
+          "decoded": "ondoren",
+          "prob": 0.05311410129070282
+        },
+        {
+          "rank": 4,
+          "decoded": "dutenek",
+          "prob": 0.04687302187085152
+        },
+        {
+          "rank": 5,
+          "decoded": "ostean",
+          "prob": 0.04403312876820564
+        }
+      ]
+    },
+    {
+      "prompt": "Autoa gidatzen",
+      "category": "morphacc_context",
+      "valid_suffixes": [
+        "dakit",
+        "dakizu",
+        "daki"
+      ],
+      "morphacc_hit": false,
+      "best_rank": null,
+      "boundary_prob_mass": 0.0,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": "ari",
+          "prob": 0.29522424936294556
+        },
+        {
+          "rank": 2,
+          "decoded": "zuen",
+          "prob": 0.10202677547931671
+        },
+        {
+          "rank": 3,
+          "decoded": "duen",
+          "prob": 0.07464437931776047
+        },
+        {
+          "rank": 4,
+          "decoded": "hasi",
+          "prob": 0.031116405501961708
+        },
+        {
+          "rank": 5,
+          "decoded": "zihoan",
+          "prob": 0.024233480915427208
+        }
+      ]
+    },
+    {
+      "prompt": "Bihar etorriko",
+      "category": "morphacc_context",
+      "valid_suffixes": [
+        "naiz",
+        "gara",
+        "zara",
+        "da"
+      ],
+      "morphacc_hit": true,
+      "best_rank": 1,
+      "boundary_prob_mass": 0.3701,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": "da",
+          "prob": 0.37011247873306274
+        },
+        {
+          "rank": 2,
+          "decoded": "dira",
+          "prob": 0.2108837217092514
+        },
+        {
+          "rank": 3,
+          "decoded": "den",
+          "prob": 0.11287792026996613
+        },
+        {
+          "rank": 4,
+          "decoded": "diren",
+          "prob": 0.08790942281484604
+        },
+        {
+          "rank": 5,
+          "decoded": "dena",
+          "prob": 0.056758586317300797
+        }
+      ]
+    },
+    {
+      "prompt": "Gaur lanera joan",
+      "category": "morphacc_context",
+      "valid_suffixes": [
+        "naiz",
+        "gara",
+        "zara",
+        "da"
+      ],
+      "morphacc_hit": false,
+      "best_rank": null,
+      "boundary_prob_mass": 0.0,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": "behar",
+          "prob": 0.22636006772518158
+        },
+        {
+          "rank": 2,
+          "decoded": "eta",
+          "prob": 0.12897607684135437
+        },
+        {
+          "rank": 3,
+          "decoded": ",",
+          "prob": 0.0648532435297966
+        },
+        {
+          "rank": 4,
+          "decoded": "aurretik",
+          "prob": 0.04744764789938927
+        },
+        {
+          "rank": 5,
+          "decoded": "gabe",
+          "prob": 0.028778450563549995
+        }
+      ]
+    },
+    {
+      "prompt": "Etxean geratu",
+      "category": "morphacc_context",
+      "valid_suffixes": [
+        "naiz",
+        "gara",
+        "zara",
+        "da"
+      ],
+      "morphacc_hit": true,
+      "best_rank": 1,
+      "boundary_prob_mass": 0.2977,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": "da",
+          "prob": 0.29772618412971497
+        },
+        {
+          "rank": 2,
+          "decoded": "dira",
+          "prob": 0.19222648441791534
+        },
+        {
+          "rank": 3,
+          "decoded": "zen",
+          "prob": 0.1321152001619339
+        },
+        {
+          "rank": 4,
+          "decoded": "ziren",
+          "prob": 0.08013191819190979
+        },
+        {
+          "rank": 5,
+          "decoded": "behar",
+          "prob": 0.02601502276957035
+        }
+      ]
+    },
+    {
+      "prompt": "Kalea zeharkatu eta elizara iritsi",
+      "category": "morphacc_context",
+      "valid_suffixes": [
+        "naiz",
+        "gara",
+        "zara",
+        "da"
+      ],
+      "morphacc_hit": false,
+      "best_rank": null,
+      "boundary_prob_mass": 0.0,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": "arte",
+          "prob": 0.2185674011707306
+        },
+        {
+          "rank": 2,
+          "decoded": "aurretik",
+          "prob": 0.17022046446800232
+        },
+        {
+          "rank": 3,
+          "decoded": "dira",
+          "prob": 0.0709584429860115
+        },
+        {
+          "rank": 4,
+          "decoded": "ziren",
+          "prob": 0.058826617896556854
+        },
+        {
+          "rank": 5,
+          "decoded": "bitartean",
+          "prob": 0.04876897856593132
+        }
+      ]
+    },
+    {
+      "prompt": "Dirua bankuan sartu",
+      "category": "morphacc_context",
+      "valid_suffixes": [
+        "dut",
+        "duzu",
+        "dugu"
+      ],
+      "morphacc_hit": true,
+      "best_rank": 4,
+      "boundary_prob_mass": 0.0553,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": "eta",
+          "prob": 0.21889065206050873
+        },
+        {
+          "rank": 2,
+          "decoded": ",",
+          "prob": 0.1504412144422531
+        },
+        {
+          "rank": 3,
+          "decoded": "behar",
+          "prob": 0.11006513237953186
+        },
+        {
+          "rank": 4,
+          "decoded": "dute",
+          "prob": 0.055344223976135254
+        },
+        {
+          "rank": 5,
+          "decoded": "beharko",
+          "prob": 0.0458819754421711
+        }
+      ]
+    },
+    {
+      "prompt": "Atea itxi eta giltza poltsikoan gorde",
+      "category": "morphacc_context",
+      "valid_suffixes": [
+        "nuen",
+        "zuen",
+        "genuen"
+      ],
+      "morphacc_hit": false,
+      "best_rank": null,
+      "boundary_prob_mass": 0.0,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": ".",
+          "prob": 0.38702067732810974
+        },
+        {
+          "rank": 2,
+          "decoded": ",",
+          "prob": 0.09785415232181549
+        },
+        {
+          "rank": 3,
+          "decoded": "",
+          "prob": 0.033817488700151443
+        },
+        {
+          "rank": 4,
+          "decoded": "behar",
+          "prob": 0.033817488700151443
+        },
+        {
+          "rank": 5,
+          "decoded": ";",
+          "prob": 0.028035683557391167
+        }
+      ]
+    },
+    {
+      "prompt": "Ikasleak azterketa gainditu",
+      "category": "morphacc_verb",
+      "valid_suffixes": [
+        "du",
+        "dute",
+        "zuen",
+        "zuten"
+      ],
+      "morphacc_hit": true,
+      "best_rank": 3,
+      "boundary_prob_mass": 0.1767,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": "ez",
+          "prob": 0.15857847034931183
+        },
+        {
+          "rank": 2,
+          "decoded": "eta",
+          "prob": 0.10238596051931381
+        },
+        {
+          "rank": 3,
+          "decoded": "duten",
+          "prob": 0.07036877423524857
+        },
+        {
+          "rank": 4,
+          "decoded": "du",
+          "prob": 0.054803259670734406
+        },
+        {
+          "rank": 5,
+          "decoded": "dute",
+          "prob": 0.05148289352655411
+        }
+      ]
+    },
+    {
+      "prompt": "Haurrak parkean jolasten",
+      "category": "morphacc_verb",
+      "valid_suffixes": [
+        "dira",
+        "ziren",
+        "ari dira"
+      ],
+      "morphacc_hit": false,
+      "best_rank": null,
+      "boundary_prob_mass": 0.0,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": ".",
+          "prob": 0.2183658927679062
+        },
+        {
+          "rank": 2,
+          "decoded": "",
+          "prob": 0.2183658927679062
+        },
+        {
+          "rank": 3,
+          "decoded": "ari",
+          "prob": 0.09689927846193314
+        },
+        {
+          "rank": 4,
+          "decoded": ",",
+          "prob": 0.09102844446897507
+        },
+        {
+          "rank": 5,
+          "decoded": "(",
+          "prob": 0.051866449415683746
+        }
+      ]
+    },
+    {
+      "prompt": "Abestia entzun eta negar egin",
+      "category": "morphacc_verb",
+      "valid_suffixes": [
+        "nuen",
+        "zuen",
+        "genuen"
+      ],
+      "morphacc_hit": true,
+      "best_rank": 3,
+      "boundary_prob_mass": 0.0473,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "decoded": "dute",
+          "prob": 0.06884106248617172
+        },
+        {
+          "rank": 2,
+          "decoded": "zuten",
+          "prob": 0.06467019021511078
+        },
+        {
+          "rank": 3,
+          "decoded": "zuen",
+          "prob": 0.04731372371315956
+        },
+        {
+          "rank": 4,
+          "decoded": ",",
+          "prob": 0.04731372371315956
+        },
+        {
+          "rank": 5,
+          "decoded": "du",
+          "prob": 0.041754212230443954
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "n_prompts": 10,
+  "max_tokens": 15,
+  "pairs": [
+    {
+      "n": 1,
+      "prompt": "Irin-errota bat zegoen bailara osoan, eta jendeak olioa, ardoa, pattarra eta beste jaki batzuk inportatu behar zituen kontsumorako, ganadua,",
+      "completion_A": "oiloak eta abar.",
+      "completion_B": "oihalak, oihalak, etab."
+    },
+    {
+      "n": 2,
+      "prompt": "Bere aita, Haydar Bey, bertako",
+      "completion_A": "alkatea zen.",
+      "completion_B": "merkataria zen."
+    },
+    {
+      "n": 3,
+      "prompt": "Nolla Montseny ezkonduta zegoen eta etxekoandrea zen, senarrak Frantziara ihes egin zuen",
+      "completion_A": ".",
+      "completion_B": "ean."
+    },
+    {
+      "n": 4,
+      "prompt": "Beste hipotesi batzuk",
+      "completion_A": "ere badaude, hala nola, kokapena, kokapena",
+      "completion_B": "ere badaude, hala nola, 1990eko hamarkadan,"
+    },
+    {
+      "n": 5,
+      "prompt": "Dagoeneko errealitatearen irudikapen",
+      "completion_A": "a da, eta, beraz, ez da beharrezkoa identitatea",
+      "completion_B": "a da, eta, beraz, ez da erraza izango."
+    },
+    {
+      "n": 6,
+      "prompt": "Cervantesek nobela honetan aipatzen du karten batuketa eginez hogeita batera iritsi behar dela,",
+      "completion_A": "eta karta batuketa hori 100eko 10",
+      "completion_B": "eta karta hori 1500."
+    },
+    {
+      "n": 7,
+      "prompt": "Beste feminismo mota bat garatu zuen: hortarako, tradizio liberalean aurkitu zuen inspirazioa, baina beti ere azpimarratuz liberalismoan, genero harremanen inguruan eta familiaren arteko harremanen",
+      "completion_A": "inguruan.",
+      "completion_B": "inguruan."
+    },
+    {
+      "n": 8,
+      "prompt": "Mertxika-saskiek zulorik gabeko",
+      "completion_A": "ontziak dituzte, eta, beraz, ez dira oso egokiak.",
+      "completion_B": "ontziak dituzte, eta, beraz, ontzi horiek ontzi-"
+    },
+    {
+      "n": 9,
+      "prompt": "Jantziez gain, antiojuak, oinetakoak, poltsak bainujantziak, aterkinak, kapelak, gerrikoak,",
+      "completion_A": "txanoak, txanoak, txanoak,",
+      "completion_B": "txanoak, txanoak, txanoak,"
+    },
+    {
+      "n": 10,
+      "prompt": "Jaione zinegotzi egon zen",
+      "completion_A": ".",
+      "completion_B": ", eta, ondoren, 2011n, EAJren zerrenda"
+    }
+  ]
+}

@@ -1,0 +1,965 @@
+{
+  "summary": {
+    "hit_at_k": {
+      "1": 0.0,
+      "3": 0.011904761904761904,
+      "5": 0.011904761904761904
+    }
+  },
+  "details": [
+    {
+      "root": "etxe",
+      "cases": [
+        {
+          "root": "etxe",
+          "case": "absolutive",
+          "suffix": "a",
+          "description": "Absolutive singular (-a)",
+          "rank": 30,
+          "prob": 0.000618,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "etxe",
+          "case": "ergative",
+          "suffix": "ak",
+          "description": "Ergative singular (-ak)",
+          "rank": 57,
+          "prob": 0.000478,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "etxe",
+          "case": "dative",
+          "suffix": "ari",
+          "description": "Dative singular (-ari)",
+          "rank": 55,
+          "prob": 0.000489,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "etxe",
+          "case": "genitive",
+          "suffix": "aren",
+          "description": "Genitive singular (-aren)",
+          "rank": 57,
+          "prob": 0.000478,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "etxe",
+          "case": "comitative",
+          "suffix": "arekin",
+          "description": "Comitative singular (-arekin)",
+          "rank": 109,
+          "prob": 0.000378,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "etxe",
+          "case": "benefactive",
+          "suffix": "arentzat",
+          "description": "Benefactive singular (-arentzat)",
+          "rank": 2309,
+          "prob": 5.7e-05,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "etxe",
+          "case": "causal",
+          "suffix": "arengatik",
+          "description": "Causal singular (-arengatik)",
+          "rank": 8356,
+          "prob": 2.4e-05,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "etxe",
+          "case": "inessive",
+          "suffix": "an",
+          "description": "Inessive singular (-an)",
+          "rank": 30,
+          "prob": 0.000618,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "etxe",
+          "case": "elative",
+          "suffix": "tik",
+          "description": "Elative singular (-tik)",
+          "rank": 98,
+          "prob": 0.000387,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "etxe",
+          "case": "allative",
+          "suffix": "ra",
+          "description": "Allative singular (-ra)",
+          "rank": 179,
+          "prob": 0.000287,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "etxe",
+          "case": "directional_genitive",
+          "suffix": "ko",
+          "description": "Directional genitive (-ko)",
+          "rank": 66,
+          "prob": 0.000445,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "etxe",
+          "case": "instrumental",
+          "suffix": "z",
+          "description": "Instrumental (-z)",
+          "rank": 23,
+          "prob": 0.000711,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "etxe",
+          "case": "inessive_plural",
+          "suffix": "etan",
+          "description": "Inessive plural (-etan)",
+          "rank": 49,
+          "prob": 0.000516,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "etxe",
+          "case": "genitive_plural",
+          "suffix": "en",
+          "description": "Genitive plural (-en)",
+          "rank": 38,
+          "prob": 0.000541,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        }
+      ]
+    },
+    {
+      "root": "mendi",
+      "cases": [
+        {
+          "root": "mendi",
+          "case": "absolutive",
+          "suffix": "a",
+          "description": "Absolutive singular (-a)",
+          "rank": 17,
+          "prob": 0.000886,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "mendi",
+          "case": "ergative",
+          "suffix": "ak",
+          "description": "Ergative singular (-ak)",
+          "rank": 33,
+          "prob": 0.000595,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "mendi",
+          "case": "dative",
+          "suffix": "ari",
+          "description": "Dative singular (-ari)",
+          "rank": 42,
+          "prob": 0.000555,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "mendi",
+          "case": "genitive",
+          "suffix": "aren",
+          "description": "Genitive singular (-aren)",
+          "rank": 24,
+          "prob": 0.000679,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "mendi",
+          "case": "comitative",
+          "suffix": "arekin",
+          "description": "Comitative singular (-arekin)",
+          "rank": 84,
+          "prob": 0.000415,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "mendi",
+          "case": "benefactive",
+          "suffix": "arentzat",
+          "description": "Benefactive singular (-arentzat)",
+          "rank": 2110,
+          "prob": 5.9e-05,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "mendi",
+          "case": "causal",
+          "suffix": "arengatik",
+          "description": "Causal singular (-arengatik)",
+          "rank": 7234,
+          "prob": 2.7e-05,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "mendi",
+          "case": "inessive",
+          "suffix": "an",
+          "description": "Inessive singular (-an)",
+          "rank": 17,
+          "prob": 0.000886,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "mendi",
+          "case": "elative",
+          "suffix": "tik",
+          "description": "Elative singular (-tik)",
+          "rank": 49,
+          "prob": 0.000501,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "mendi",
+          "case": "allative",
+          "suffix": "ra",
+          "description": "Allative singular (-ra)",
+          "rank": 75,
+          "prob": 0.000428,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "mendi",
+          "case": "directional_genitive",
+          "suffix": "ko",
+          "description": "Directional genitive (-ko)",
+          "rank": 29,
+          "prob": 0.000648,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "mendi",
+          "case": "instrumental",
+          "suffix": "z",
+          "description": "Instrumental (-z)",
+          "rank": 39,
+          "prob": 0.000568,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "mendi",
+          "case": "inessive_plural",
+          "suffix": "etan",
+          "description": "Inessive plural (-etan)",
+          "rank": 57,
+          "prob": 0.000489,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "mendi",
+          "case": "genitive_plural",
+          "suffix": "en",
+          "description": "Genitive plural (-en)",
+          "rank": 22,
+          "prob": 0.000794,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        }
+      ]
+    },
+    {
+      "root": "lagun",
+      "cases": [
+        {
+          "root": "lagun",
+          "case": "absolutive",
+          "suffix": "a",
+          "description": "Absolutive singular (-a)",
+          "rank": 16,
+          "prob": 0.001127,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "lagun",
+          "case": "ergative",
+          "suffix": "ak",
+          "description": "Ergative singular (-ak)",
+          "rank": 24,
+          "prob": 0.000799,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "lagun",
+          "case": "dative",
+          "suffix": "ari",
+          "description": "Dative singular (-ari)",
+          "rank": 20,
+          "prob": 0.000892,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "lagun",
+          "case": "genitive",
+          "suffix": "aren",
+          "description": "Genitive singular (-aren)",
+          "rank": 16,
+          "prob": 0.001127,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "lagun",
+          "case": "comitative",
+          "suffix": "arekin",
+          "description": "Comitative singular (-arekin)",
+          "rank": 49,
+          "prob": 0.000585,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "lagun",
+          "case": "benefactive",
+          "suffix": "arentzat",
+          "description": "Benefactive singular (-arentzat)",
+          "rank": 1212,
+          "prob": 8.4e-05,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "lagun",
+          "case": "causal",
+          "suffix": "arengatik",
+          "description": "Causal singular (-arengatik)",
+          "rank": 3425,
+          "prob": 4.3e-05,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "lagun",
+          "case": "inessive",
+          "suffix": "an",
+          "description": "Inessive singular (-an)",
+          "rank": 19,
+          "prob": 0.00101,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "lagun",
+          "case": "elative",
+          "suffix": "tik",
+          "description": "Elative singular (-tik)",
+          "rank": 65,
+          "prob": 0.000473,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "lagun",
+          "case": "allative",
+          "suffix": "ra",
+          "description": "Allative singular (-ra)",
+          "rank": 96,
+          "prob": 0.000389,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "lagun",
+          "case": "directional_genitive",
+          "suffix": "ko",
+          "description": "Directional genitive (-ko)",
+          "rank": 22,
+          "prob": 0.000851,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "lagun",
+          "case": "instrumental",
+          "suffix": "z",
+          "description": "Instrumental (-z)",
+          "rank": 36,
+          "prob": 0.000632,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "lagun",
+          "case": "inessive_plural",
+          "suffix": "etan",
+          "description": "Inessive plural (-etan)",
+          "rank": 34,
+          "prob": 0.000705,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "lagun",
+          "case": "genitive_plural",
+          "suffix": "en",
+          "description": "Genitive plural (-en)",
+          "rank": 14,
+          "prob": 0.0012,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        }
+      ]
+    },
+    {
+      "root": "herri",
+      "cases": [
+        {
+          "root": "herri",
+          "case": "absolutive",
+          "suffix": "a",
+          "description": "Absolutive singular (-a)",
+          "rank": 15,
+          "prob": 0.000937,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "herri",
+          "case": "ergative",
+          "suffix": "ak",
+          "description": "Ergative singular (-ak)",
+          "rank": 15,
+          "prob": 0.000937,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "herri",
+          "case": "dative",
+          "suffix": "ari",
+          "description": "Dative singular (-ari)",
+          "rank": 31,
+          "prob": 0.000614,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "herri",
+          "case": "genitive",
+          "suffix": "aren",
+          "description": "Genitive singular (-aren)",
+          "rank": 29,
+          "prob": 0.000624,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "herri",
+          "case": "comitative",
+          "suffix": "arekin",
+          "description": "Comitative singular (-arekin)",
+          "rank": 70,
+          "prob": 0.000436,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "herri",
+          "case": "benefactive",
+          "suffix": "arentzat",
+          "description": "Benefactive singular (-arentzat)",
+          "rank": 1540,
+          "prob": 7.4e-05,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "herri",
+          "case": "causal",
+          "suffix": "arengatik",
+          "description": "Causal singular (-arengatik)",
+          "rank": 5840,
+          "prob": 3.1e-05,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "herri",
+          "case": "inessive",
+          "suffix": "an",
+          "description": "Inessive singular (-an)",
+          "rank": 17,
+          "prob": 0.000826,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "herri",
+          "case": "elative",
+          "suffix": "tik",
+          "description": "Elative singular (-tik)",
+          "rank": 42,
+          "prob": 0.000538,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "herri",
+          "case": "allative",
+          "suffix": "ra",
+          "description": "Allative singular (-ra)",
+          "rank": 56,
+          "prob": 0.000475,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "herri",
+          "case": "directional_genitive",
+          "suffix": "ko",
+          "description": "Directional genitive (-ko)",
+          "rank": 25,
+          "prob": 0.000664,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "herri",
+          "case": "instrumental",
+          "suffix": "z",
+          "description": "Instrumental (-z)",
+          "rank": 37,
+          "prob": 0.000555,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "herri",
+          "case": "inessive_plural",
+          "suffix": "etan",
+          "description": "Inessive plural (-etan)",
+          "rank": 38,
+          "prob": 0.000551,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "herri",
+          "case": "genitive_plural",
+          "suffix": "en",
+          "description": "Genitive plural (-en)",
+          "rank": 20,
+          "prob": 0.000776,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        }
+      ]
+    },
+    {
+      "root": "kale",
+      "cases": [
+        {
+          "root": "kale",
+          "case": "absolutive",
+          "suffix": "a",
+          "description": "Absolutive singular (-a)",
+          "rank": 30,
+          "prob": 0.000572,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "kale",
+          "case": "ergative",
+          "suffix": "ak",
+          "description": "Ergative singular (-ak)",
+          "rank": 51,
+          "prob": 0.000474,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "kale",
+          "case": "dative",
+          "suffix": "ari",
+          "description": "Dative singular (-ari)",
+          "rank": 44,
+          "prob": 0.000509,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "kale",
+          "case": "genitive",
+          "suffix": "aren",
+          "description": "Genitive singular (-aren)",
+          "rank": 49,
+          "prob": 0.000486,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "kale",
+          "case": "comitative",
+          "suffix": "arekin",
+          "description": "Comitative singular (-arekin)",
+          "rank": 107,
+          "prob": 0.000361,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "kale",
+          "case": "benefactive",
+          "suffix": "arentzat",
+          "description": "Benefactive singular (-arentzat)",
+          "rank": 3070,
+          "prob": 4.7e-05,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "kale",
+          "case": "causal",
+          "suffix": "arengatik",
+          "description": "Causal singular (-arengatik)",
+          "rank": 10474,
+          "prob": 2.1e-05,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "kale",
+          "case": "inessive",
+          "suffix": "an",
+          "description": "Inessive singular (-an)",
+          "rank": 30,
+          "prob": 0.000572,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "kale",
+          "case": "elative",
+          "suffix": "tik",
+          "description": "Elative singular (-tik)",
+          "rank": 125,
+          "prob": 0.000347,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "kale",
+          "case": "allative",
+          "suffix": "ra",
+          "description": "Allative singular (-ra)",
+          "rank": 180,
+          "prob": 0.000283,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "kale",
+          "case": "directional_genitive",
+          "suffix": "ko",
+          "description": "Directional genitive (-ko)",
+          "rank": 69,
+          "prob": 0.000419,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "kale",
+          "case": "instrumental",
+          "suffix": "z",
+          "description": "Instrumental (-z)",
+          "rank": 32,
+          "prob": 0.000559,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "kale",
+          "case": "inessive_plural",
+          "suffix": "etan",
+          "description": "Inessive plural (-etan)",
+          "rank": 64,
+          "prob": 0.000439,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "kale",
+          "case": "genitive_plural",
+          "suffix": "en",
+          "description": "Genitive plural (-en)",
+          "rank": 61,
+          "prob": 0.000453,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        }
+      ]
+    },
+    {
+      "root": "ikasle",
+      "cases": [
+        {
+          "root": "ikasle",
+          "case": "absolutive",
+          "suffix": "a",
+          "description": "Absolutive singular (-a)",
+          "rank": 6,
+          "prob": 0.020799,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "ikasle",
+          "case": "ergative",
+          "suffix": "ak",
+          "description": "Ergative singular (-ak)",
+          "rank": 155,
+          "prob": 0.000734,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "ikasle",
+          "case": "dative",
+          "suffix": "ari",
+          "description": "Dative singular (-ari)",
+          "rank": 16,
+          "prob": 0.008145,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "ikasle",
+          "case": "genitive",
+          "suffix": "aren",
+          "description": "Genitive singular (-aren)",
+          "rank": 95,
+          "prob": 0.001372,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "ikasle",
+          "case": "comitative",
+          "suffix": "arekin",
+          "description": "Comitative singular (-arekin)",
+          "rank": 102,
+          "prob": 0.001211,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "ikasle",
+          "case": "benefactive",
+          "suffix": "arentzat",
+          "description": "Benefactive singular (-arentzat)",
+          "rank": 95,
+          "prob": 0.001372,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "ikasle",
+          "case": "causal",
+          "suffix": "arengatik",
+          "description": "Causal singular (-arengatik)",
+          "rank": 4034,
+          "prob": 9e-06,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "ikasle",
+          "case": "inessive",
+          "suffix": "an",
+          "description": "Inessive singular (-an)",
+          "rank": 196,
+          "prob": 0.000489,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "ikasle",
+          "case": "elative",
+          "suffix": "tik",
+          "description": "Elative singular (-tik)",
+          "rank": 1735,
+          "prob": 3.1e-05,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "ikasle",
+          "case": "allative",
+          "suffix": "ra",
+          "description": "Allative singular (-ra)",
+          "rank": 1079,
+          "prob": 5.8e-05,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "ikasle",
+          "case": "directional_genitive",
+          "suffix": "ko",
+          "description": "Directional genitive (-ko)",
+          "rank": 7,
+          "prob": 0.019539,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "ikasle",
+          "case": "instrumental",
+          "suffix": "z",
+          "description": "Instrumental (-z)",
+          "rank": 39,
+          "prob": 0.004641,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "ikasle",
+          "case": "inessive_plural",
+          "suffix": "etan",
+          "description": "Inessive plural (-etan)",
+          "rank": 67,
+          "prob": 0.002125,
+          "hit@1": false,
+          "hit@3": false,
+          "hit@5": false
+        },
+        {
+          "root": "ikasle",
+          "case": "genitive_plural",
+          "suffix": "en",
+          "description": "Genitive plural (-en)",
+          "rank": 3,
+          "prob": 0.038858,
+          "hit@1": false,
+          "hit@3": true,
+          "hit@5": true
+        }
+      ]
+    }
+  ]
+}

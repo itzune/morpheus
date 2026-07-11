@@ -1,0 +1,46 @@
+{
+  "csr": {
+    "macro_csr": 0.29174,
+    "micro_csr": 0.2888146911519198,
+    "total_chars": 1198,
+    "total_saved": 346,
+    "by_category": {
+      "wikipedia_csr_short": {
+        "macro_csr": 0.27985333333333334
+      },
+      "wikipedia_csr_long": {
+        "macro_csr": 0.30362666666666666
+      }
+    }
+  },
+  "morphacc": {
+    "morphacc": 0.7,
+    "hits": 35,
+    "total": 50,
+    "avg_boundary_prob_mass": 0.178478
+  },
+  "paradigm": {
+    "hit_at_k": {
+      "1": 0.13095238095238096,
+      "3": 0.20238095238095238,
+      "5": 0.2857142857142857
+    },
+    "total": 84,
+    "by_case": {
+      "absolutive": 1.0,
+      "ergative": 0.3333333333333333,
+      "dative": 0.0,
+      "genitive": 0.0,
+      "comitative": 0.0,
+      "benefactive": 0.0,
+      "causal": 0.0,
+      "inessive": 0.5,
+      "elative": 0.0,
+      "allative": 0.0,
+      "directional_genitive": 0.0,
+      "instrumental": 0.0,
+      "inessive_plural": 0.0,
+      "genitive_plural": 0.0
+    }
+  }
+}

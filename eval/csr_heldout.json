@@ -1,0 +1,1812 @@
+{
+  "version": "v-heldout-300",
+  "description": "Frozen held-out CSR test set. Source: data/valid/wiki_valid.txt (excluded from training via leakage fix). 300 sentences, seed=20260710. For bootstrap CI eval — see scripts/ppl_eval.py and eval.py.",
+  "strategies": [
+    {
+      "name": "csr",
+      "description": "CSR — 300 held-out Wikipedia sentences, one cut each",
+      "tests": [
+        {
+          "category": "heldout_long",
+          "input": "Hiru kawésqarrek, bi gizonek eta",
+          "target_completion": "neskato batek, nahiz eta Jemmyren antza izan, hizkuntza desberdina hitz egiten zuten.",
+          "full_sentence": "Hiru kawésqarrek, bi gizonek eta neskato batek, nahiz eta Jemmyren antza izan, hizkuntza desberdina hitz egiten zuten."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Hiru ontzi hauek",
+          "target_completion": "ezberdin betetzen dira kasuen arabera.",
+          "full_sentence": "Hiru ontzi hauek ezberdin betetzen dira kasuen arabera."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Egunsentia Claude Gellée",
+          "target_completion": "frantziar margolariaren margolan ezaguna da.",
+          "full_sentence": "Egunsentia Claude Gellée frantziar margolariaren margolan ezaguna da."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Bragado herria eta partidoa probintziako",
+          "target_completion": "ipar-mendebaldeko erdialdean daude, Argentinako panparen bihotzean.",
+          "full_sentence": "Bragado herria eta partidoa probintziako ipar-mendebaldeko erdialdean daude, Argentinako panparen bihotzean."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Eskaiolak marrazki soilekoak dira, bai",
+          "target_completion": "eremu partekatuan, bai gauekoan, gehiegi apainduak dauden argi-sabaietan izan ezik.",
+          "full_sentence": "Eskaiolak marrazki soilekoak dira, bai eremu partekatuan, bai gauekoan, gehiegi apainduak dauden argi-sabaietan izan ezik."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Ardiak, behiak, akerrak, hurbiletik eta zaldizkoak irabazi",
+          "target_completion": "zituen; eperrak, otsoak, azeriak, erbiak eta basurdeak ehizatzen ziren.",
+          "full_sentence": "Ardiak, behiak, akerrak, hurbiletik eta zaldizkoak irabazi zituen; eperrak, otsoak, azeriak, erbiak eta basurdeak ehizatzen ziren."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Coonalpyn, Australiako herri",
+          "target_completion": "bat da, Hegoaldeko Australia estatuan.",
+          "full_sentence": "Coonalpyn, Australiako herri bat da, Hegoaldeko Australia estatuan."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Lekeition plan estrategiko bat daukagu, eta, hori aurrera ateratzeko, Garapen Agentzian sartuta gaude, eskualdeko",
+          "target_completion": "beste hainbat herri bezala.",
+          "full_sentence": "Lekeition plan estrategiko bat daukagu, eta, hori aurrera ateratzeko, Garapen Agentzian sartuta gaude, eskualdeko beste hainbat herri bezala."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Errenkada berde eta zuriek Kristautasuna eta",
+          "target_completion": "Islama elkarrekin bizitzea ahalbidetzen duen tolerantzia irudikatzen dute.",
+          "full_sentence": "Errenkada berde eta zuriek Kristautasuna eta Islama elkarrekin bizitzea ahalbidetzen duen tolerantzia irudikatzen dute."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Pribatutasunaren arazo nagusienetako bat",
+          "target_completion": "da goiburuetan erreparatzearekin bakarrik nahikoa delako zerbait bidali den edo ez jakitea.",
+          "full_sentence": "Pribatutasunaren arazo nagusienetako bat da goiburuetan erreparatzearekin bakarrik nahikoa delako zerbait bidali den edo ez jakitea."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Bere gorputza oso luzanga da eta sekzio zilindrikoa du, nahiz eta",
+          "target_completion": "alboetatik zertxobait konprimitua isats aldera.",
+          "full_sentence": "Bere gorputza oso luzanga da eta sekzio zilindrikoa du, nahiz eta alboetatik zertxobait konprimitua isats aldera."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Klima honetan tenperatura-gorabehera handiak",
+          "target_completion": "izaten dira, egunekoak zein urtarokoak, uda leunekin eta negu hotz eta elurtuekin.",
+          "full_sentence": "Klima honetan tenperatura-gorabehera handiak izaten dira, egunekoak zein urtarokoak, uda leunekin eta negu hotz eta elurtuekin."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "V-k armategi bat",
+          "target_completion": "eta aurrez aurre borrokatzeko aukerak ditu, hauek alda daitezkeelarik.",
+          "full_sentence": "V-k armategi bat eta aurrez aurre borrokatzeko aukerak ditu, hauek alda daitezkeelarik."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Final aurrekoetan Atletico Madril kanporatu",
+          "target_completion": "eta finalera sartu zen.",
+          "full_sentence": "Final aurrekoetan Atletico Madril kanporatu eta finalera sartu zen."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Tarbert, Eskoziako mendebaldeko kostaldean dagoen Jura uharteko ekialdeko",
+          "target_completion": "herrixka bat da, Argyll eta Bute konderrian.",
+          "full_sentence": "Tarbert, Eskoziako mendebaldeko kostaldean dagoen Jura uharteko ekialdeko herrixka bat da, Argyll eta Bute konderrian."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Herbeheretarrek asko gozatu zuten",
+          "target_completion": "ziklo-krosaren arrakastarekin, eta kirol hau oso ezaguna egin zen herrialdean.",
+          "full_sentence": "Herbeheretarrek asko gozatu zuten ziklo-krosaren arrakastarekin, eta kirol hau oso ezaguna egin zen herrialdean."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Lehengo irteera hartan hamabi anaidikidek eraman zuten baina, pisu handia zuela",
+          "target_completion": "eta, erortzeko arriskuan ibili ziren.",
+          "full_sentence": "Lehengo irteera hartan hamabi anaidikidek eraman zuten baina, pisu handia zuela eta, erortzeko arriskuan ibili ziren."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Ez zuen Frantziako Iraultzaren kontrako jarrerarik hartu eta Napoleonen aliatu izan zen; hark bere estatua erreinu bihurtu",
+          "target_completion": "eta Varsoviako Dukerri Handiko buru egin zuen.",
+          "full_sentence": "Ez zuen Frantziako Iraultzaren kontrako jarrerarik hartu eta Napoleonen aliatu izan zen; hark bere estatua erreinu bihurtu eta Varsoviako Dukerri Handiko buru egin zuen."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Michelsonek, gailuaren asmatzailea eta distantzia estandarra definitzeko argiaren uhin-luzera",
+          "target_completion": "bat erabiltzearen bultzatzailea zenak, lehenengoz neurtu zuen metro estandarra interferometro baten bidez.",
+          "full_sentence": "Michelsonek, gailuaren asmatzailea eta distantzia estandarra definitzeko argiaren uhin-luzera bat erabiltzearen bultzatzailea zenak, lehenengoz neurtu zuen metro estandarra interferometro baten bidez."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Saint-Aubin-le-Guichard Frantziako udalerria da, Eure departamenduan",
+          "target_completion": "dagoena, Normandia Garaia eskualdean.",
+          "full_sentence": "Saint-Aubin-le-Guichard Frantziako udalerria da, Eure departamenduan dagoena, Normandia Garaia eskualdean."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Getadar Bizkaia ibarreko herri hustu bat",
+          "target_completion": "da, Euskal Herriko Nafarroa Garaia lurraldean kokatuta, Zangozerria eskualdean.",
+          "full_sentence": "Getadar Bizkaia ibarreko herri hustu bat da, Euskal Herriko Nafarroa Garaia lurraldean kokatuta, Zangozerria eskualdean."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Gerra ostean, Poloniako Herri Errepublikako agintari komunistek ijitoak",
+          "target_completion": "euren bizimodu tradizionala uztera behartzeko kanpaina hasi zuten.",
+          "full_sentence": "Gerra ostean, Poloniako Herri Errepublikako agintari komunistek ijitoak euren bizimodu tradizionala uztera behartzeko kanpaina hasi zuten."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Emakumezko gauak heriotzeko lo amaigabeari egiten dio erreferentzia, eta gizonezko egunak bizitzaren iragankortasuna islatu nahi",
+          "target_completion": "du, emakumearen ondoan, bizkarra emanez eta gorputza erdi gorde nahian.",
+          "full_sentence": "Emakumezko gauak heriotzeko lo amaigabeari egiten dio erreferentzia, eta gizonezko egunak bizitzaren iragankortasuna islatu nahi du, emakumearen ondoan, bizkarra emanez eta gorputza erdi gorde nahian."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Hurrengo egunetan Masuriar lakuen lehen guduan alemaniar armadek errusiarrak Ekialdeko Prusiatik kanporatzea lortu zituzten, denbora motz",
+          "target_completion": "batez izan bazen ere.",
+          "full_sentence": "Hurrengo egunetan Masuriar lakuen lehen guduan alemaniar armadek errusiarrak Ekialdeko Prusiatik kanporatzea lortu zituzten, denbora motz batez izan bazen ere."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Musikari autodidakta izan zen, nerabezarotik, Seminarioan solfeo-katedra kentzeak bere kabuz",
+          "target_completion": "musika-ikasketak egitera behartu baitzuen, erlijiosoekin batera bere irakasleen baimenarekin.",
+          "full_sentence": "Musikari autodidakta izan zen, nerabezarotik, Seminarioan solfeo-katedra kentzeak bere kabuz musika-ikasketak egitera behartu baitzuen, erlijiosoekin batera bere irakasleen baimenarekin."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Zenbait landare-espezietan, bizitza-zikloak hilabete bat besterik ez",
+          "target_completion": "du irauten, baina gehienek zenbait hilabete behar dituzte.",
+          "full_sentence": "Zenbait landare-espezietan, bizitza-zikloak hilabete bat besterik ez du irauten, baina gehienek zenbait hilabete behar dituzte."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Gero, Turbay Amparo Canal Sandoval idazlearekin ezkondu zen, Leonardo",
+          "target_completion": "Canal jeneralaren amaginarreba eta ondorengoa zena.",
+          "full_sentence": "Gero, Turbay Amparo Canal Sandoval idazlearekin ezkondu zen, Leonardo Canal jeneralaren amaginarreba eta ondorengoa zena."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Pipistreloak ezberdintzea zaila da, dena den",
+          "target_completion": "hortzetan eta gorputzeko kolorean oinarritu ezkero egin liteke.",
+          "full_sentence": "Pipistreloak ezberdintzea zaila da, dena den hortzetan eta gorputzeko kolorean oinarritu ezkero egin liteke."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Uhartea izendatu zuen William Beechey artistaren ohorez, berau Frederick",
+          "target_completion": "William Beechey lotinantaren aita, zeina Parry-ren bigarrena baitzen espedizio hartan.",
+          "full_sentence": "Uhartea izendatu zuen William Beechey artistaren ohorez, berau Frederick William Beechey lotinantaren aita, zeina Parry-ren bigarrena baitzen espedizio hartan."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Vasil gizon azkarra da, eta",
+          "target_completion": "xakera jokatzeko izugarrizko gaitasuna du.",
+          "full_sentence": "Vasil gizon azkarra da, eta xakera jokatzeko izugarrizko gaitasuna du."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Autoritatea errespetatzen ez denean zigor sistema bat dago eta dialektika honek,",
+          "target_completion": "oro har, onarpen bat du gizartean.",
+          "full_sentence": "Autoritatea errespetatzen ez denean zigor sistema bat dago eta dialektika honek, oro har, onarpen bat du gizartean."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Egoismo etikoak, altruismo etikoarekin egiten du kontrastea, non bigarren kontzeptu honek besteak laguntzeko eta",
+          "target_completion": "zerbitzatzeko behar moralak izango dituen.",
+          "full_sentence": "Egoismo etikoak, altruismo etikoarekin egiten du kontrastea, non bigarren kontzeptu honek besteak laguntzeko eta zerbitzatzeko behar moralak izango dituen."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Emakumeak bizia emateko ahalmena zuen, eta ez zuen arduratu",
+          "target_completion": "behar eiakulazioaz edo aldi errefraktarioaz.",
+          "full_sentence": "Emakumeak bizia emateko ahalmena zuen, eta ez zuen arduratu behar eiakulazioaz edo aldi errefraktarioaz."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Gaur egungo autoreek beste maitasun mota batzuk ere desberdintzen dituzte: maiteminezko zoraldia, maitasun",
+          "target_completion": "propioa eta gorteko maitasuna.",
+          "full_sentence": "Gaur egungo autoreek beste maitasun mota batzuk ere desberdintzen dituzte: maiteminezko zoraldia, maitasun propioa eta gorteko maitasuna."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Harrapakinak osorik irensten dituzte, eta zenbait egun behar dituzte digestioa osorik egiteko; baita asteak ere,",
+          "target_completion": "harrapakina oso handia bada.",
+          "full_sentence": "Harrapakinak osorik irensten dituzte, eta zenbait egun behar dituzte digestioa osorik egiteko; baita asteak ere, harrapakina oso handia bada."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Plaken arteko konbergentzia hasten",
+          "target_completion": "denetik sedimentazio-baldintzak aldatzen doaz eta Eusko-kantauriar arroaren eboluzioak aurrera jarraitzen du.",
+          "full_sentence": "Plaken arteko konbergentzia hasten denetik sedimentazio-baldintzak aldatzen doaz eta Eusko-kantauriar arroaren eboluzioak aurrera jarraitzen du."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Teorian, ondasun baten oreka prezioa kalkulatzeak eskuragarri dauden ondasun ezberdinak kontutan",
+          "target_completion": "hartzen dituen analisi bat eskatzen du.",
+          "full_sentence": "Teorian, ondasun baten oreka prezioa kalkulatzeak eskuragarri dauden ondasun ezberdinak kontutan hartzen dituen analisi bat eskatzen du."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Prefektura mailako Meizhou hiriaren mugakideak honakoak dira: Heyuan hiria mendebaldean, Chaozhou hiria hego-ekialdean, Jieyang hegoaldean, Shanwei hego-mendebaldean,",
+          "target_completion": "Jiangxi probintzia ipar-mendebaldean, eta Fujian probintzia ipar-ekialdean.",
+          "full_sentence": "Prefektura mailako Meizhou hiriaren mugakideak honakoak dira: Heyuan hiria mendebaldean, Chaozhou hiria hego-ekialdean, Jieyang hegoaldean, Shanwei hego-mendebaldean, Jiangxi probintzia ipar-mendebaldean, eta Fujian probintzia ipar-ekialdean."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Dining Room gay bikote bat modu irekian aurkezten zuen herrialde horretako lehena",
+          "target_completion": "izan zen, horrek garrantzi handia emanez eta IKEA sustatuz.",
+          "full_sentence": "Dining Room gay bikote bat modu irekian aurkezten zuen herrialde horretako lehena izan zen, horrek garrantzi handia emanez eta IKEA sustatuz."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Emakumeak ere gizonen bizitza-luzera handitzeko",
+          "target_completion": "bitarteko gisa hartu ziren.",
+          "full_sentence": "Emakumeak ere gizonen bizitza-luzera handitzeko bitarteko gisa hartu ziren."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Villahermosa del Campo Teruelgo udalerria",
+          "target_completion": "da, Jiloca eskualdean dagoena.",
+          "full_sentence": "Villahermosa del Campo Teruelgo udalerria da, Jiloca eskualdean dagoena."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Gasteiztarrek, ordea, tinko eutsi",
+          "target_completion": "zioten setioari eta hainbat erasori.",
+          "full_sentence": "Gasteiztarrek, ordea, tinko eutsi zioten setioari eta hainbat erasori."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Gotorlekuen tipologiari dagokionez, harkaitz gaineko gazteluak dira, harresi batek",
+          "target_completion": "inguratzen duen dorre nagusi bateko egituradunak.",
+          "full_sentence": "Gotorlekuen tipologiari dagokionez, harkaitz gaineko gazteluak dira, harresi batek inguratzen duen dorre nagusi bateko egituradunak."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Hala ere, goi-lurretako eta behe-lurretako",
+          "target_completion": "herrien arteko erlazioa dago: goi-lurretako herriak funtsezkoak baitira merkataritza-iturri gisa.",
+          "full_sentence": "Hala ere, goi-lurretako eta behe-lurretako herrien arteko erlazioa dago: goi-lurretako herriak funtsezkoak baitira merkataritza-iturri gisa."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Argintzo ez da inguruko mendirik garaiena -ohore hau Okorok du- baina nolanahi pilaturiko harrizko kaskoak xarma berezia ematen dio oro",
+          "target_completion": "har muino belartsuz osaturiko katean.",
+          "full_sentence": "Argintzo ez da inguruko mendirik garaiena -ohore hau Okorok du- baina nolanahi pilaturiko harrizko kaskoak xarma berezia ematen dio oro har muino belartsuz osaturiko katean."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Allan Sekula argazkilaritza kritikaria Maloofekin kontaktuan",
+          "target_completion": "jarri zen Maierren argazki eta negatiboen balio artistikoaz ohartaraziz.",
+          "full_sentence": "Allan Sekula argazkilaritza kritikaria Maloofekin kontaktuan jarri zen Maierren argazki eta negatiboen balio artistikoaz ohartaraziz."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Bere obran nabari dira kubismoaren eragina, Parisen egin zuen egonaldiaren ondorioz, naturalismorako joera",
+          "target_completion": "eta historiako margolari handien inspirazioa.",
+          "full_sentence": "Bere obran nabari dira kubismoaren eragina, Parisen egin zuen egonaldiaren ondorioz, naturalismorako joera eta historiako margolari handien inspirazioa."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Politika horrek desordena sozial handiak eta indarkeria eragin zituen, destakamendu",
+          "target_completion": "armatuek nekazari-taldeei aurre egin baitzieten askotan, gerra zibilerako eremua prestatzen lagunduz.",
+          "full_sentence": "Politika horrek desordena sozial handiak eta indarkeria eragin zituen, destakamendu armatuek nekazari-taldeei aurre egin baitzieten askotan, gerra zibilerako eremua prestatzen lagunduz."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Kolonizazioak aukera gehiago eman zituen merkataritza, pirateria eta beste gatazka batzuk pizteko etruskoen, feniziarren eta greziarren artean,",
+          "target_completion": "inguru hartako itsas merkataritza kontrolatzeko lehian ari zirenak.",
+          "full_sentence": "Kolonizazioak aukera gehiago eman zituen merkataritza, pirateria eta beste gatazka batzuk pizteko etruskoen, feniziarren eta greziarren artean, inguru hartako itsas merkataritza kontrolatzeko lehian ari zirenak."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Ondo komunikatzeko zuzentasun",
+          "target_completion": "gramatikala lortzeaz gain, egokitasun pragmatikoa eta soziolinguistikoa lortzen ikasi beharko.",
+          "full_sentence": "Ondo komunikatzeko zuzentasun gramatikala lortzeaz gain, egokitasun pragmatikoa eta soziolinguistikoa lortzen ikasi beharko."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Hala ere, ez zuen lortu makinak",
+          "target_completion": "segurtasun gaindiezina eskaintzea, eta enpresak porrot egin zuen.",
+          "full_sentence": "Hala ere, ez zuen lortu makinak segurtasun gaindiezina eskaintzea, eta enpresak porrot egin zuen."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Sutearen ondorioz, Turkuko Akademia Inperiala Helsinkira, Finlandiako Dukerri Handiaren hiriburu berrira, lekualdatu zuten eta, beraz, Turku garrantzi erlatiboa",
+          "target_completion": "galtzen joan zen herrialdean.",
+          "full_sentence": "Sutearen ondorioz, Turkuko Akademia Inperiala Helsinkira, Finlandiako Dukerri Handiaren hiriburu berrira, lekualdatu zuten eta, beraz, Turku garrantzi erlatiboa galtzen joan zen herrialdean."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Antzinako Sumer eskualdeko emakumeek jabetzak eros,",
+          "target_completion": "ukan, sal eta oinorde zitzazketen.",
+          "full_sentence": "Antzinako Sumer eskualdeko emakumeek jabetzak eros, ukan, sal eta oinorde zitzazketen."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Kitajek, orduko joera nagusiaren kontra, pintura figuratiboa egin zuen batez ere, era askotako gaiak",
+          "target_completion": "landuz: historia, politika, soziologia eta, batez ere, poesia.",
+          "full_sentence": "Kitajek, orduko joera nagusiaren kontra, pintura figuratiboa egin zuen batez ere, era askotako gaiak landuz: historia, politika, soziologia eta, batez ere, poesia."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Orduan Leonek Asparri kargua kendu zion eta alanoak denbora luzez blokeaturiko Mendebaldeko Inperioari eskainitako laguntzak",
+          "target_completion": "egi bihurtu ziren, beranduegi zen jada ordea.",
+          "full_sentence": "Orduan Leonek Asparri kargua kendu zion eta alanoak denbora luzez blokeaturiko Mendebaldeko Inperioari eskainitako laguntzak egi bihurtu ziren, beranduegi zen jada ordea."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Emakumeek jarrera ezberdinak hartzen dituzte, eta horrek Melchior Lorck egileari aukera",
+          "target_completion": "eman zion hainbat angelutatik arropak hobeto ikus zitezen.",
+          "full_sentence": "Emakumeek jarrera ezberdinak hartzen dituzte, eta horrek Melchior Lorck egileari aukera eman zion hainbat angelutatik arropak hobeto ikus zitezen."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Ibaia zeharkatzen du",
+          "target_completion": "Erro ibaiak, Irati-Aragoi ibaiaren adarrak.",
+          "full_sentence": "Ibaia zeharkatzen du Erro ibaiak, Irati-Aragoi ibaiaren adarrak."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Gainera gene markatzaileekin ikerketak ere egin daitezke Huntinton",
+          "target_completion": "gaixotasuna sortzen duen genea dagoen edo ez ikusteko.",
+          "full_sentence": "Gainera gene markatzaileekin ikerketak ere egin daitezke Huntinton gaixotasuna sortzen duen genea dagoen edo ez ikusteko."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Ezaugarri hori",
+          "target_completion": "duelako erabiltzen da neurtzeko eta prezisiozko tresnak egiteko.",
+          "full_sentence": "Ezaugarri hori duelako erabiltzen da neurtzeko eta prezisiozko tresnak egiteko."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Koazerbatuen mintza, disoluzioan haren molekulek",
+          "target_completion": "hartzen duten orientazio espazialaren ondorioa da.",
+          "full_sentence": "Koazerbatuen mintza, disoluzioan haren molekulek hartzen duten orientazio espazialaren ondorioa da."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Bere aldetik,",
+          "target_completion": "ezker iraultzaileak ez du bere burua termino hoiekin gutxiesten.",
+          "full_sentence": "Bere aldetik, ezker iraultzaileak ez du bere burua termino hoiekin gutxiesten."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Askotan, Indiako azpikontinentea",
+          "target_completion": "termino geografikoaren sinonimoa baino ez da.",
+          "full_sentence": "Askotan, Indiako azpikontinentea termino geografikoaren sinonimoa baino ez da."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Bizipen ikaragarri ona izan",
+          "target_completion": "zen Txepetx euskaldun berriarentzat, baina era berean nahiko urduri ibili zen.",
+          "full_sentence": "Bizipen ikaragarri ona izan zen Txepetx euskaldun berriarentzat, baina era berean nahiko urduri ibili zen."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Hasieran, hirugarren",
+          "target_completion": "langilea sartu arte ekoizpen marjinalak edo errendimenduak gorakorrak dira.",
+          "full_sentence": "Hasieran, hirugarren langilea sartu arte ekoizpen marjinalak edo errendimenduak gorakorrak dira."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Alfred Feine frantses eklektizismoko arkitekto ezaguna da",
+          "target_completion": "eta bere ibilbidearen azken urteetan egin zuen jauregiaren proiektua.",
+          "full_sentence": "Alfred Feine frantses eklektizismoko arkitekto ezaguna da eta bere ibilbidearen azken urteetan egin zuen jauregiaren proiektua."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Bretignolles Frantziako",
+          "target_completion": "udalerria da, Deux-Sèvres departamenduan dagoena, Poitou-Charentes eskualdean.",
+          "full_sentence": "Bretignolles Frantziako udalerria da, Deux-Sèvres departamenduan dagoena, Poitou-Charentes eskualdean."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Metro-patroi berriaren txantiloia ixa",
+          "target_completion": "formako sekziodun barra bat izan zen.",
+          "full_sentence": "Metro-patroi berriaren txantiloia ixa formako sekziodun barra bat izan zen."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Donbass eskualde historiko, ekonomiko eta",
+          "target_completion": "kulturalaren hiri nagusia da.",
+          "full_sentence": "Donbass eskualde historiko, ekonomiko eta kulturalaren hiri nagusia da."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Armen joa hamar minutu iraun zuen",
+          "target_completion": "eta gero eskuekin eta baionetekin borrokatu zuten.",
+          "full_sentence": "Armen joa hamar minutu iraun zuen eta gero eskuekin eta baionetekin borrokatu zuten."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Bartzelonan jaio",
+          "target_completion": "zen, empordàr jatorriko familia burges batean.",
+          "full_sentence": "Bartzelonan jaio zen, empordàr jatorriko familia burges batean."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Iparraldean, mendi bat hegoaldera begira",
+          "target_completion": "duela, hazkunde-estazioa baino hilabete bat gehiago izan dezake.",
+          "full_sentence": "Iparraldean, mendi bat hegoaldera begira duela, hazkunde-estazioa baino hilabete bat gehiago izan dezake."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Europak lehengaiak behar zituen eta Amerikako kolonietatik lortzen hasi ziren, baina horretarako lurrak landuko zituzten langileak behar",
+          "target_completion": "zituzten, eta hauek Afrikatik esklaboak eramaten hasi ziren.",
+          "full_sentence": "Europak lehengaiak behar zituen eta Amerikako kolonietatik lortzen hasi ziren, baina horretarako lurrak landuko zituzten langileak behar zituzten, eta hauek Afrikatik esklaboak eramaten hasi ziren."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Doctor Phillips Ameriketako Estatu Batuetako erroldak",
+          "target_completion": "esleitutako leku bat da.",
+          "full_sentence": "Doctor Phillips Ameriketako Estatu Batuetako erroldak esleitutako leku bat da."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Jokalari izateari utzi zionetik, hainbat talderen",
+          "target_completion": "entrenatzaile moduan aritu izan da.",
+          "full_sentence": "Jokalari izateari utzi zionetik, hainbat talderen entrenatzaile moduan aritu izan da."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Nazio zein nazioarteko albisteak Radio Nacional de Españak",
+          "target_completion": "beretzat zuen kontu bat zen.",
+          "full_sentence": "Nazio zein nazioarteko albisteak Radio Nacional de Españak beretzat zuen kontu bat zen."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Artistak aldatu egiten ziren egunaren eta tokiaren arabera, eta Sarah",
+          "target_completion": "McLachlan izan zen ekitaldi guztietan aurkeztu zen bakarra.",
+          "full_sentence": "Artistak aldatu egiten ziren egunaren eta tokiaren arabera, eta Sarah McLachlan izan zen ekitaldi guztietan aurkeztu zen bakarra."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Kalifornian eta AEBko beste estatuetan bezala arma honek herrialde askotan debekatuta edota lege oso gogorrak jasaten ditu",
+          "target_completion": "erosi ahal izateko edo beste herrialde batzuetara bidali ahal izateko.",
+          "full_sentence": "Kalifornian eta AEBko beste estatuetan bezala arma honek herrialde askotan debekatuta edota lege oso gogorrak jasaten ditu erosi ahal izateko edo beste herrialde batzuetara bidali ahal izateko."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Copahue sumendian jaiotzen da eta beheranzko ibilbidean zazpi jauzi ditu arroka",
+          "target_completion": "eta araukarien artean paisaia paregabea emanez.",
+          "full_sentence": "Copahue sumendian jaiotzen da eta beheranzko ibilbidean zazpi jauzi ditu arroka eta araukarien artean paisaia paregabea emanez."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Kamerak unitate bereizi bat zuen,",
+          "target_completion": "kable baten bidez konektatua, eta bertan ateratako argazkia bistaratu eta artxibatu zitekeen.",
+          "full_sentence": "Kamerak unitate bereizi bat zuen, kable baten bidez konektatua, eta bertan ateratako argazkia bistaratu eta artxibatu zitekeen."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Londresen jaioa, aita ingeles legegizona eta ama Ekialdeko",
+          "target_completion": "Belfasteko irlandar protestantea izan zituen.",
+          "full_sentence": "Londresen jaioa, aita ingeles legegizona eta ama Ekialdeko Belfasteko irlandar protestantea izan zituen."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Katua, orduan, lekukoari oldartzen",
+          "target_completion": "zaio, eta desagertu egiten da bere 'biktima' harrapatu aurretik.",
+          "full_sentence": "Katua, orduan, lekukoari oldartzen zaio, eta desagertu egiten da bere 'biktima' harrapatu aurretik."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Prokariotoak ez dira eukariotoak bezain konplexuak eta lipidozko mintzezko konpartimenturik",
+          "target_completion": "ez dute azaltzen zelularen barnean.",
+          "full_sentence": "Prokariotoak ez dira eukariotoak bezain konplexuak eta lipidozko mintzezko konpartimenturik ez dute azaltzen zelularen barnean."
+        },
+        {
+          "category": "heldout_long",
+          "input": "XIV mendeko",
+          "target_completion": "apezpiku baten eskultura dago, baina ez da ezagutzen nor zen.",
+          "full_sentence": "XIV mendeko apezpiku baten eskultura dago, baina ez da ezagutzen nor zen."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Urdinak zerua eta espazioa sinbolizatzen ditu, zuriak",
+          "target_completion": "airea eta haizea, gorriak sua, berdeak ura eta horiak lurra.",
+          "full_sentence": "Urdinak zerua eta espazioa sinbolizatzen ditu, zuriak airea eta haizea, gorriak sua, berdeak ura eta horiak lurra."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Horrela, grekoerromatar garaian, jainkoarenganako errespetuagatik ez",
+          "target_completion": "zen arrainik jan behar.",
+          "full_sentence": "Horrela, grekoerromatar garaian, jainkoarenganako errespetuagatik ez zen arrainik jan behar."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Haurtzarotik nabaria",
+          "target_completion": "zen aitaren talentu musikala heredatu zuela.",
+          "full_sentence": "Haurtzarotik nabaria zen aitaren talentu musikala heredatu zuela."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Itzulpenak eta itzultzaileak",
+          "target_completion": "izan baziren, ez dago hain garbi benetako erakundea izan zenik.",
+          "full_sentence": "Itzulpenak eta itzultzaileak izan baziren, ez dago hain garbi benetako erakundea izan zenik."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Azkenik, beste batzuek jaus izenarekin",
+          "target_completion": "konparatzen dute, pluralean jani.",
+          "full_sentence": "Azkenik, beste batzuek jaus izenarekin konparatzen dute, pluralean jani."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Bi gorputz ezberdinek bibrazio",
+          "target_completion": "maiztasun bera dutenean gertatzen den fenomenoa da erresonantzia akustikoa.",
+          "full_sentence": "Bi gorputz ezberdinek bibrazio maiztasun bera dutenean gertatzen den fenomenoa da erresonantzia akustikoa."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Bizantzioko artea hego Italia, Sizilia, Venezia, Errusia, Bulgaria, Serbia",
+          "target_completion": "eta Errumaniara hedatu zen XIII.",
+          "full_sentence": "Bizantzioko artea hego Italia, Sizilia, Venezia, Errusia, Bulgaria, Serbia eta Errumaniara hedatu zen XIII."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Izar aldagarrien kasuan, planeta batek hartzen duen energia-kantitatea aldakorra izatea,",
+          "target_completion": "tenperatura-aldaketa katastrofikoak jasatea esan nahiko luke.",
+          "full_sentence": "Izar aldagarrien kasuan, planeta batek hartzen duen energia-kantitatea aldakorra izatea, tenperatura-aldaketa katastrofikoak jasatea esan nahiko luke."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Hizkuntza baten ikaskuntza sistema bakoitzaren elementuak ezagutzean eta horiek arautzen dituzten arauak ikastean datza, oinarrizkoenetik konplexuenerantz abiatuz,",
+          "target_completion": "hau da, fonemetatik morfemen bidez eta perpausetaraino.",
+          "full_sentence": "Hizkuntza baten ikaskuntza sistema bakoitzaren elementuak ezagutzean eta horiek arautzen dituzten arauak ikastean datza, oinarrizkoenetik konplexuenerantz abiatuz, hau da, fonemetatik morfemen bidez eta perpausetaraino."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Cagol erne egon",
+          "target_completion": "zen gau osoan, eta ohera joana zen.",
+          "full_sentence": "Cagol erne egon zen gau osoan, eta ohera joana zen."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Kontralto komikoa edo buffa kontralto bati paper",
+          "target_completion": "komiko bat egiten duenean ematen zaion izena da.",
+          "full_sentence": "Kontralto komikoa edo buffa kontralto bati paper komiko bat egiten duenean ematen zaion izena da."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Sistema biltzailearen kasuan,berdina gertatzen da, hau da, gune kortikalean kokatzen",
+          "target_completion": "dira hodi biltzaileak, baina batzen diren heinean piramidetara heltzen dira.",
+          "full_sentence": "Sistema biltzailearen kasuan,berdina gertatzen da, hau da, gune kortikalean kokatzen dira hodi biltzaileak, baina batzen diren heinean piramidetara heltzen dira."
+        },
+        {
+          "category": "heldout_long",
+          "input": "BIenkinsopen makinak gurpil horzdunak zituen eta karrilen alboetako kremailerarekin engranatzen ziren; Blücherrak,",
+          "target_completion": "berriz, irtengunean zituzten gurpilak zituen eta karril leunean zebilen, abiadura handiagoa ahalbidetuz.",
+          "full_sentence": "BIenkinsopen makinak gurpil horzdunak zituen eta karrilen alboetako kremailerarekin engranatzen ziren; Blücherrak, berriz, irtengunean zituzten gurpilak zituen eta karril leunean zebilen, abiadura handiagoa ahalbidetuz."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Dwight Mission",
+          "target_completion": "Ameriketako Estatu Batuetako erroldak esleitutako leku bat da.",
+          "full_sentence": "Dwight Mission Ameriketako Estatu Batuetako erroldak esleitutako leku bat da."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Egoera oso ahulean dagoen kolektibo bat da: bakarrik",
+          "target_completion": "dauden eta bazterkeria- eta babesgabezia-arrisku larria duten haur eta nerabeak dira.",
+          "full_sentence": "Egoera oso ahulean dagoen kolektibo bat da: bakarrik dauden eta bazterkeria- eta babesgabezia-arrisku larria duten haur eta nerabeak dira."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Kondairak Jainkoak harri bihurtu zuela esanez amaitzen da, baina koska horrek deabruak sorbalda hartu ziola korrika egiten zuen",
+          "target_completion": "bitartean egin ziola dio.",
+          "full_sentence": "Kondairak Jainkoak harri bihurtu zuela esanez amaitzen da, baina koska horrek deabruak sorbalda hartu ziola korrika egiten zuen bitartean egin ziola dio."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Zenbait zonaldetan aurrerapen teknologiko geldoak baina etengabeak izan ziren, eta garapen garrantzitsuak izan zituzten, hala nola estribuko eta isurbideko",
+          "target_completion": "goldeak, mende gutxitan behin iristen zirenak.",
+          "full_sentence": "Zenbait zonaldetan aurrerapen teknologiko geldoak baina etengabeak izan ziren, eta garapen garrantzitsuak izan zituzten, hala nola estribuko eta isurbideko goldeak, mende gutxitan behin iristen zirenak."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Sesio hauetan, Ijurko izan",
+          "target_completion": "zen ahotsak grabatu zituena.",
+          "full_sentence": "Sesio hauetan, Ijurko izan zen ahotsak grabatu zituena."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Kontzeptu horrek esan nahi du izaki bizidunek konplexutasun",
+          "target_completion": "molekular handia dutela ez-bizidunen aldean, baina egitura konplexu horrek aparteko ordena duela.",
+          "full_sentence": "Kontzeptu horrek esan nahi du izaki bizidunek konplexutasun molekular handia dutela ez-bizidunen aldean, baina egitura konplexu horrek aparteko ordena duela."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Hori dela-eta,",
+          "target_completion": "garrantzitsua da gai horiekiko esposizioa mugatzea.",
+          "full_sentence": "Hori dela-eta, garrantzitsua da gai horiekiko esposizioa mugatzea."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Bigarren Mundu Gerran ez zen soldadu izan,",
+          "target_completion": "pleurasia eta beste arazo batzuk zirela eta.",
+          "full_sentence": "Bigarren Mundu Gerran ez zen soldadu izan, pleurasia eta beste arazo batzuk zirela eta."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Haren senarra,",
+          "target_completion": "Alejandro Jiliberto diputatu sozialista, poliziaren helburua zen eta ezkutuan egon behar zuen.",
+          "full_sentence": "Haren senarra, Alejandro Jiliberto diputatu sozialista, poliziaren helburua zen eta ezkutuan egon behar zuen."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Biolina ikasi zuen lehenbizi, eta kimikako ikasketak egiten",
+          "target_completion": "ari zela, pianoa ikasten hasi zen.",
+          "full_sentence": "Biolina ikasi zuen lehenbizi, eta kimikako ikasketak egiten ari zela, pianoa ikasten hasi zen."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Paisaiekin interes berezia zuen eta",
+          "target_completion": "horrelakoak dira haren lan asko.",
+          "full_sentence": "Paisaiekin interes berezia zuen eta horrelakoak dira haren lan asko."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Arabiarren eta lombardiarren inbasioek, eta frankoen presentzia gero eta handiagoak, urruntze horretan sakondu zuten, eta",
+          "target_completion": "bi zentro espiritualen arteko jurisdikzioari eta aginteari buruzko eztabaidak areagotu zituen.",
+          "full_sentence": "Arabiarren eta lombardiarren inbasioek, eta frankoen presentzia gero eta handiagoak, urruntze horretan sakondu zuten, eta bi zentro espiritualen arteko jurisdikzioari eta aginteari buruzko eztabaidak areagotu zituen."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Epaiketa luzea izan zen baina, azkenik,",
+          "target_completion": "ez zen epairik eman.",
+          "full_sentence": "Epaiketa luzea izan zen baina, azkenik, ez zen epairik eman."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Bertrix, Belgikako hegoaldeko",
+          "target_completion": "udalerria da, Valoniako probintzian dagoena.",
+          "full_sentence": "Bertrix, Belgikako hegoaldeko udalerria da, Valoniako probintzian dagoena."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Genealogiak Gwenddoleuren bi",
+          "target_completion": "anaien izenak gorde zituzten baita: Nudd eta Chof.",
+          "full_sentence": "Genealogiak Gwenddoleuren bi anaien izenak gorde zituzten baita: Nudd eta Chof."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Epaileak esan beharko du",
+          "target_completion": "horietako zein ezarri behar zaion ezgaituari.",
+          "full_sentence": "Epaileak esan beharko du horietako zein ezarri behar zaion ezgaituari."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Izan ere, lente horiek, Newtonek esperimentatzeko erabiltzen zituen prismen bezala jokatzen zuten; argi zuria kolore-ostadar batean banatuz,",
+          "target_completion": "objektu astronomiko distiratsuen inguruan.",
+          "full_sentence": "Izan ere, lente horiek, Newtonek esperimentatzeko erabiltzen zituen prismen bezala jokatzen zuten; argi zuria kolore-ostadar batean banatuz, objektu astronomiko distiratsuen inguruan."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Madagaskarren baino ez",
+          "target_completion": "dira bizi, lemur guztiak bezala.",
+          "full_sentence": "Madagaskarren baino ez dira bizi, lemur guztiak bezala."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Estanflazioa gero eta",
+          "target_completion": "handiagoak, biztanleen soldatak gutxitzen zituzten.",
+          "full_sentence": "Estanflazioa gero eta handiagoak, biztanleen soldatak gutxitzen zituzten."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Gilliganen ustez hau bateraezina da ahotsaren berdintasunean",
+          "target_completion": "eta ekitate-presuntzioan oinarritzen den demokraziarekin.",
+          "full_sentence": "Gilliganen ustez hau bateraezina da ahotsaren berdintasunean eta ekitate-presuntzioan oinarritzen den demokraziarekin."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Lagostomus Chinchillidae",
+          "target_completion": "animalia familiako generoa da, karraskarien barruan sailkatua.",
+          "full_sentence": "Lagostomus Chinchillidae animalia familiako generoa da, karraskarien barruan sailkatua."
+        },
+        {
+          "category": "heldout_short",
+          "input": "North Great River Ameriketako Estatu",
+          "target_completion": "Batuetako erroldak esleitutako leku bat da.",
+          "full_sentence": "North Great River Ameriketako Estatu Batuetako erroldak esleitutako leku bat da."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Bere esperientzia eta ezagutza etorkizuneko korrikalariei",
+          "target_completion": "transmititzea eta bere marka pertsonalak hobetzen jarraitzea dira bere helburu nagusiak.",
+          "full_sentence": "Bere esperientzia eta ezagutza etorkizuneko korrikalariei transmititzea eta bere marka pertsonalak hobetzen jarraitzea dira bere helburu nagusiak."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Protestantismora hurrengo mendean nagusitzen hasi zen emeki-emeki, mugimendu erlijioso andanek, horietako asko",
+          "target_completion": "baptistekin erlazionatuta, entzute handia irabazi ahala.",
+          "full_sentence": "Protestantismora hurrengo mendean nagusitzen hasi zen emeki-emeki, mugimendu erlijioso andanek, horietako asko baptistekin erlazionatuta, entzute handia irabazi ahala."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Anarkismoak gobernu eta estatu oron",
+          "target_completion": "desagertzea defendatzen du, banakoaren eta gizarte-kolektiboaren askatasunaren alde.",
+          "full_sentence": "Anarkismoak gobernu eta estatu oron desagertzea defendatzen du, banakoaren eta gizarte-kolektiboaren askatasunaren alde."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Nolanahi ere, hienaren garbiketa, aztarna uzteko lurrina, estaltzeko forma eta hazteko modua",
+          "target_completion": "bat datoz beste feliforme batzuekin.",
+          "full_sentence": "Nolanahi ere, hienaren garbiketa, aztarna uzteko lurrina, estaltzeko forma eta hazteko modua bat datoz beste feliforme batzuekin."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Orokorrean, unitate hauek Europako antzerkiaren historian zehar errespetatuak",
+          "target_completion": "izan dira, bere garaitik hasi eta antzerki barroko eta neoklasikoraino, XVIII.",
+          "full_sentence": "Orokorrean, unitate hauek Europako antzerkiaren historian zehar errespetatuak izan dira, bere garaitik hasi eta antzerki barroko eta neoklasikoraino, XVIII."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Bob Dylan edota The Clash taldeko Joe Strummer musikariek bere eragina",
+          "target_completion": "izan dutela aitortu izan ohi dute.",
+          "full_sentence": "Bob Dylan edota The Clash taldeko Joe Strummer musikariek bere eragina izan dutela aitortu izan ohi dute."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Hurrengo mendeetan Zetaren Bidea eratu",
+          "target_completion": "zen eta basamortuaren erdian kokaturik zegoen hiria izanik ezinbesteko geldiunea bihurtu zen.",
+          "full_sentence": "Hurrengo mendeetan Zetaren Bidea eratu zen eta basamortuaren erdian kokaturik zegoen hiria izanik ezinbesteko geldiunea bihurtu zen."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Abu Safiya ospitaletik atera eta Israelgo tanke batera gerturatu zeneko irudiak zabaldu ziren, non soldadu bati eskua eman eta tankean sartu",
+          "target_completion": "aurretik ospitalean inor geratzen ez zela adierazi zuen.",
+          "full_sentence": "Abu Safiya ospitaletik atera eta Israelgo tanke batera gerturatu zeneko irudiak zabaldu ziren, non soldadu bati eskua eman eta tankean sartu aurretik ospitalean inor geratzen ez zela adierazi zuen."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Udalerrian zeuden jatorrizko basoak",
+          "target_completion": "ia erabat galdu dira gizakiaren eragina dela eta.",
+          "full_sentence": "Udalerrian zeuden jatorrizko basoak ia erabat galdu dira gizakiaren eragina dela eta."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Carlos Juana neska-lagunari bisita egitera joan",
+          "target_completion": "zaio lantokira, osasun mentaleko egoitza batera.",
+          "full_sentence": "Carlos Juana neska-lagunari bisita egitera joan zaio lantokira, osasun mentaleko egoitza batera."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Normalean bi",
+          "target_completion": "isomero monokloratuekin batera deribatu bikloratu eta trikloratuak ere eratzen dira.",
+          "full_sentence": "Normalean bi isomero monokloratuekin batera deribatu bikloratu eta trikloratuak ere eratzen dira."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Belarriak luzeak dira",
+          "target_completion": "eta ertz basal sinpleak dituzte eta ez dute burtsa marjinalik.",
+          "full_sentence": "Belarriak luzeak dira eta ertz basal sinpleak dituzte eta ez dute burtsa marjinalik."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Gilipok atzerapen hori erabili zuen oraindik",
+          "target_completion": "ez zeuden barrikadak altxatzeko.",
+          "full_sentence": "Gilipok atzerapen hori erabili zuen oraindik ez zeuden barrikadak altxatzeko."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Uretra prostatikoa trigonoaren beheko erpinetik",
+          "target_completion": "ateratzen da hain zuzen ere.",
+          "full_sentence": "Uretra prostatikoa trigonoaren beheko erpinetik ateratzen da hain zuzen ere."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Harrieta laborari etxean sortu",
+          "target_completion": "zen Mayi Jeanne eta Pantxoaren semea.",
+          "full_sentence": "Harrieta laborari etxean sortu zen Mayi Jeanne eta Pantxoaren semea."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Eguzki kolektore moduan ezagutzen direnak",
+          "target_completion": "kolektore lauak, xurgatzaileak eta hodi huts biltzaileak dira.",
+          "full_sentence": "Eguzki kolektore moduan ezagutzen direnak kolektore lauak, xurgatzaileak eta hodi huts biltzaileak dira."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Alemaniako Errepublika Federalaren sorkutzarekin batera,",
+          "target_completion": "Osnabrück Saxonia Behereko estatu berrian sartuta geratu zen.",
+          "full_sentence": "Alemaniako Errepublika Federalaren sorkutzarekin batera, Osnabrück Saxonia Behereko estatu berrian sartuta geratu zen."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Azkeneko lanetan,",
+          "target_completion": "gero eta nabarmenagoa da Frantziako XIX.",
+          "full_sentence": "Azkeneko lanetan, gero eta nabarmenagoa da Frantziako XIX."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Decker udalerria Ameriketako Estatu Batuetako Indiana estatuko udalerri",
+          "target_completion": "bat da, Knox konderrian.",
+          "full_sentence": "Decker udalerria Ameriketako Estatu Batuetako Indiana estatuko udalerri bat da, Knox konderrian."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Ordu-langa berrikusi da, eta orduz",
+          "target_completion": "geroztik giltzarrapo bikoitza proposatu du astez aste ordu.",
+          "full_sentence": "Ordu-langa berrikusi da, eta orduz geroztik giltzarrapo bikoitza proposatu du astez aste ordu."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Graduatu ondoren,",
+          "target_completion": "matematika eta fisikako irakasle izan zen.",
+          "full_sentence": "Graduatu ondoren, matematika eta fisikako irakasle izan zen."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Dagoeneko gure ibaien erdialdean barboak aurki daitezkeen arren, espeziea bere optimora beheko",
+          "target_completion": "ibilguetan iristen da, non espezie ugariena dela.",
+          "full_sentence": "Dagoeneko gure ibaien erdialdean barboak aurki daitezkeen arren, espeziea bere optimora beheko ibilguetan iristen da, non espezie ugariena dela."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Eraikinaren erdigunea estaltzen duen sabaia kristalez egina dago, Géza Maróti hungariarrak",
+          "target_completion": "diseinatua, eta musak Apolorekin irudikatzen ditu.",
+          "full_sentence": "Eraikinaren erdigunea estaltzen duen sabaia kristalez egina dago, Géza Maróti hungariarrak diseinatua, eta musak Apolorekin irudikatzen ditu."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Txikitatik, Adela aitonarekin batera joan zen",
+          "target_completion": "hirian egiten ziren langile-bileretara.",
+          "full_sentence": "Txikitatik, Adela aitonarekin batera joan zen hirian egiten ziren langile-bileretara."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Hala ere,",
+          "target_completion": "Irauregiko geltokian trenen arteko gurutzadura nahitaezkoa izaten jarraitu zuen.",
+          "full_sentence": "Hala ere, Irauregiko geltokian trenen arteko gurutzadura nahitaezkoa izaten jarraitu zuen."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Erabaki-zuhaitzek informazioa ematen dute, halaber,",
+          "target_completion": "zer dakien jokalari bakoitzak hartu beharreko ekintza bati buruz erabakitzen duen unean.",
+          "full_sentence": "Erabaki-zuhaitzek informazioa ematen dute, halaber, zer dakien jokalari bakoitzak hartu beharreko ekintza bati buruz erabakitzen duen unean."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Rio Negro, Kolonbian Guainia deitua, Hego Amerikako ibaia da,",
+          "target_completion": "Amazonasen adarrik emaritsuena, eta ezkerraldeko adarren artean luzeena.",
+          "full_sentence": "Rio Negro, Kolonbian Guainia deitua, Hego Amerikako ibaia da, Amazonasen adarrik emaritsuena, eta ezkerraldeko adarren artean luzeena."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Izan ere, zutabeko tenperatura txikiagoa da goian behean baino eta, beraz, zatiak irakite-tenperaturaren arabera bereizten dira, zenbat",
+          "target_completion": "eta astunago diren, beherago.",
+          "full_sentence": "Izan ere, zutabeko tenperatura txikiagoa da goian behean baino eta, beraz, zatiak irakite-tenperaturaren arabera bereizten dira, zenbat eta astunago diren, beherago."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Taoisten ustez, sexuak ez",
+          "target_completion": "zuen soilik gizonaren gustukoa izan behar.",
+          "full_sentence": "Taoisten ustez, sexuak ez zuen soilik gizonaren gustukoa izan behar."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Iparraldeko Europan eta iparraldeko Asian bizi dira, populazio",
+          "target_completion": "handiena Norvegiako kostaldetan egonik.",
+          "full_sentence": "Iparraldeko Europan eta iparraldeko Asian bizi dira, populazio handiena Norvegiako kostaldetan egonik."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Hantxe osatu zuen Tip",
+          "target_completion": "y Top umore bikotea, Luis Collekin, oso ospetsu izan zen.",
+          "full_sentence": "Hantxe osatu zuen Tip y Top umore bikotea, Luis Collekin, oso ospetsu izan zen."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Sassarierak gallureraren hainbat",
+          "target_completion": "ezaugarri ditu, baina sardinieratik gertuago dago.",
+          "full_sentence": "Sassarierak gallureraren hainbat ezaugarri ditu, baina sardinieratik gertuago dago."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Komunikazioa egoera erreal eta esanguratsuenetan gertatzen bada, horrelako egoera interesgarriak, esanguratsuak, sortzea izango da ikuspegi didaktiko honen ahalegina; betiere egoera",
+          "target_completion": "afektibo, emotibo egokiak sortzea.",
+          "full_sentence": "Komunikazioa egoera erreal eta esanguratsuenetan gertatzen bada, horrelako egoera interesgarriak, esanguratsuak, sortzea izango da ikuspegi didaktiko honen ahalegina; betiere egoera afektibo, emotibo egokiak sortzea."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Azkenean, hainbat egoera barregarri eta eljarbizitzaren nahas-mahasaren ondoren,",
+          "target_completion": "elkar maiteminduz amaituko dute.",
+          "full_sentence": "Azkenean, hainbat egoera barregarri eta eljarbizitzaren nahas-mahasaren ondoren, elkar maiteminduz amaituko dute."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Hau, autorearen aburuz, benetan erabakigarria",
+          "target_completion": "eta hausnartzailea den kultura demokratiko bat eraikitzeko bide bakarra baita.",
+          "full_sentence": "Hau, autorearen aburuz, benetan erabakigarria eta hausnartzailea den kultura demokratiko bat eraikitzeko bide bakarra baita."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Ska-punk abestien bertsioak egiten",
+          "target_completion": "zituzten, haien konposizioak egiteaz gain.",
+          "full_sentence": "Ska-punk abestien bertsioak egiten zituzten, haien konposizioak egiteaz gain."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Azken faktorea eta garrantzitsuena, errusiar informazio-jasotze teknikak alemaniarrena",
+          "target_completion": "baino askoz kaskarragoak zirela izan zen errekonozimendu unitateen faltarengatik.",
+          "full_sentence": "Azken faktorea eta garrantzitsuena, errusiar informazio-jasotze teknikak alemaniarrena baino askoz kaskarragoak zirela izan zen errekonozimendu unitateen faltarengatik."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Hain zuzen, errepublikazaleei 'demokrata' eta",
+          "target_completion": "'jakobino' deitzen hasi zitzaizkien, asmo ezkor batez.",
+          "full_sentence": "Hain zuzen, errepublikazaleei 'demokrata' eta 'jakobino' deitzen hasi zitzaizkien, asmo ezkor batez."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Pedagogo brasildarraren arabera, elkarrizketa gizakien arteko topaketa bat",
+          "target_completion": "da, munduak, testuinguruak baldintzatua.",
+          "full_sentence": "Pedagogo brasildarraren arabera, elkarrizketa gizakien arteko topaketa bat da, munduak, testuinguruak baldintzatua."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Ahotik sartzen den ura arrailduretatik irteten da, eta irten aurretik",
+          "target_completion": "zakatzak zeharkatzen ditu, odola oxigenatuz.",
+          "full_sentence": "Ahotik sartzen den ura arrailduretatik irteten da, eta irten aurretik zakatzak zeharkatzen ditu, odola oxigenatuz."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Ez du aberrazio kromatikorik",
+          "target_completion": "jasaten, teleskopio errefraktatzaileak ez bezala.",
+          "full_sentence": "Ez du aberrazio kromatikorik jasaten, teleskopio errefraktatzaileak ez bezala."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Gizakiaren historian zehar zenbait teoria",
+          "target_completion": "plazaratu dira herentzia azaltzeko.",
+          "full_sentence": "Gizakiaren historian zehar zenbait teoria plazaratu dira herentzia azaltzeko."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Produktu honek garrantzi handia du, esne likidoak ez bezala, ez baitu",
+          "target_completion": "kontserbatzeko hozketaren beharrik, ondorioz denbora luzeagoan iraun dezake.",
+          "full_sentence": "Produktu honek garrantzi handia du, esne likidoak ez bezala, ez baitu kontserbatzeko hozketaren beharrik, ondorioz denbora luzeagoan iraun dezake."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Mediarren erresumak Asiriar Inperioa suntsitzen lagundu zuen eszitiar",
+          "target_completion": "nomadekin eta babiloniarrekin batera.",
+          "full_sentence": "Mediarren erresumak Asiriar Inperioa suntsitzen lagundu zuen eszitiar nomadekin eta babiloniarrekin batera."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Haren bilakaera oso lotuta",
+          "target_completion": "dago estilo berriak sortu dituzten interprete handiei.",
+          "full_sentence": "Haren bilakaera oso lotuta dago estilo berriak sortu dituzten interprete handiei."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Eremu hura ez zen batere egokia gudu batean armada handiak izateko, lautada, zeharka, Karadro errekastoak banatzen baitzuen eta bi muturretan gune zingiratsuak",
+          "target_completion": "zeuden, iparraldekoa bertan ibili ezin izateko modukoa zelarik.",
+          "full_sentence": "Eremu hura ez zen batere egokia gudu batean armada handiak izateko, lautada, zeharka, Karadro errekastoak banatzen baitzuen eta bi muturretan gune zingiratsuak zeuden, iparraldekoa bertan ibili ezin izateko modukoa zelarik."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Horrela kastin bat antolatu",
+          "target_completion": "eta bertako aukeratuak programara joaten hasi ziren.",
+          "full_sentence": "Horrela kastin bat antolatu eta bertako aukeratuak programara joaten hasi ziren."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Era berean, herrialde batzutean adunak merkantzien inguruko kontrola egiteaz gain,",
+          "target_completion": "pertsonen joan etorriak eta kapitalen mugimenduak kontrolatzen ditu.",
+          "full_sentence": "Era berean, herrialde batzutean adunak merkantzien inguruko kontrola egiteaz gain, pertsonen joan etorriak eta kapitalen mugimenduak kontrolatzen ditu."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Tontorrean erpin geodesikoa, haitz bakan",
+          "target_completion": "batzuk eta buzoia, gasbidearen aldamenean.",
+          "full_sentence": "Tontorrean erpin geodesikoa, haitz bakan batzuk eta buzoia, gasbidearen aldamenean."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Sog ibaiaren urak hartu eta",
+          "target_completion": "gero Ölfusá ibaia sortzen du, eta haren bidez heltzen da itsasora.",
+          "full_sentence": "Sog ibaiaren urak hartu eta gero Ölfusá ibaia sortzen du, eta haren bidez heltzen da itsasora."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Iberia eta Europaren etengabeko",
+          "target_completion": "konbergentziaren ondorioz, S-ranzko bergentzia duen Toloño mendilerroko zamalkadura garatzen da.",
+          "full_sentence": "Iberia eta Europaren etengabeko konbergentziaren ondorioz, S-ranzko bergentzia duen Toloño mendilerroko zamalkadura garatzen da."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Bulle Frantziako",
+          "target_completion": "udalerria da, Doubs departamenduan dagoena, Franche-Comté eskualdean.",
+          "full_sentence": "Bulle Frantziako udalerria da, Doubs departamenduan dagoena, Franche-Comté eskualdean."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Bi lanak aho batez",
+          "target_completion": "ospatu zituzten kritikari espezializatuek.",
+          "full_sentence": "Bi lanak aho batez ospatu zituzten kritikari espezializatuek."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Nahiz eta Jeremy Bentham lotu panoptikoa kontzeptuarekin, esan daiteke asmakizuna bere",
+          "target_completion": "anaia Samuel Benthamena dela.",
+          "full_sentence": "Nahiz eta Jeremy Bentham lotu panoptikoa kontzeptuarekin, esan daiteke asmakizuna bere anaia Samuel Benthamena dela."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Bradshaw Sound edo Kaikiekie,",
+          "target_completion": "Zeelanda Berriko fiordo bat da.",
+          "full_sentence": "Bradshaw Sound edo Kaikiekie, Zeelanda Berriko fiordo bat da."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Taldeko poeta asko bere jaioterriko eskualdekoak ziren,",
+          "target_completion": "Galia Zisalpinokoak hain zuzen.",
+          "full_sentence": "Taldeko poeta asko bere jaioterriko eskualdekoak ziren, Galia Zisalpinokoak hain zuzen."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Hegal-pibot postuan jokatzen du",
+          "target_completion": "eta egun Bilbao Basket taldean dabil.",
+          "full_sentence": "Hegal-pibot postuan jokatzen du eta egun Bilbao Basket taldean dabil."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Bera izan",
+          "target_completion": "zen Indiako sitar instrumentua mendebaldera ekarri zuen lehena.",
+          "full_sentence": "Bera izan zen Indiako sitar instrumentua mendebaldera ekarri zuen lehena."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Sumendiaren gainetik Lombok",
+          "target_completion": "uharteko Rinjani mendia ikusi daiteke, nahiz eta biak askotan egon lainoz estalita.",
+          "full_sentence": "Sumendiaren gainetik Lombok uharteko Rinjani mendia ikusi daiteke, nahiz eta biak askotan egon lainoz estalita."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Sarri zaila da erdiko lamela zelula hormatik bereiztea, bereziki zelulak",
+          "target_completion": "pareta sekundario sendo bat garatzen badu.",
+          "full_sentence": "Sarri zaila da erdiko lamela zelula hormatik bereiztea, bereziki zelulak pareta sekundario sendo bat garatzen badu."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Arazoak konpontzeko trebetasunen nahasketa paregabearekin, ibilgailu bikainekin eta txakurtxo politen umore mordoarekin, Txakur Patruilaren",
+          "target_completion": "kideek arrisku handiko erreskate-misioetan lan egiten dute, Badia Abenturako komunitatea babesteko.",
+          "full_sentence": "Arazoak konpontzeko trebetasunen nahasketa paregabearekin, ibilgailu bikainekin eta txakurtxo politen umore mordoarekin, Txakur Patruilaren kideek arrisku handiko erreskate-misioetan lan egiten dute, Badia Abenturako komunitatea babesteko."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Zilindro baten hormen barnera, segmentu edo eraztun deituriko uztai malgu batzuen",
+          "target_completion": "bidez egokitzen den enbolo bat da.",
+          "full_sentence": "Zilindro baten hormen barnera, segmentu edo eraztun deituriko uztai malgu batzuen bidez egokitzen den enbolo bat da."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Indometazina eta ibuprofeno AIEEak ere erabili",
+          "target_completion": "dira, baina hauen eraginkortasuna ere eztabaidagarria da.",
+          "full_sentence": "Indometazina eta ibuprofeno AIEEak ere erabili dira, baina hauen eraginkortasuna ere eztabaidagarria da."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Axkelon filistearren bost",
+          "target_completion": "hiri nagusietako bat izan zen.",
+          "full_sentence": "Axkelon filistearren bost hiri nagusietako bat izan zen."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Norvegiako Erromantizismo",
+          "target_completion": "Nazionalean parte hartu zuen eta Düsseldorfeko Arte Eskolarekin elkartu zen.",
+          "full_sentence": "Norvegiako Erromantizismo Nazionalean parte hartu zuen eta Düsseldorfeko Arte Eskolarekin elkartu zen."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Anfibioen barruko Centrolenidae familian",
+          "target_completion": "sailkatuta dago, Anura ordenan.",
+          "full_sentence": "Anfibioen barruko Centrolenidae familian sailkatuta dago, Anura ordenan."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Irrati horiek eragin handiagoa zuten Euskal Autonomia Erkidegoan, baina, aldi",
+          "target_completion": "berean, Nafarroarako eta Iparralderako ere proiekzio garrantzitsu bat zuten.",
+          "full_sentence": "Irrati horiek eragin handiagoa zuten Euskal Autonomia Erkidegoan, baina, aldi berean, Nafarroarako eta Iparralderako ere proiekzio garrantzitsu bat zuten."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Kromatina DNA",
+          "target_completion": "eta proteinaz osatutako konplexua da eta zelulen genoma osatzen du.",
+          "full_sentence": "Kromatina DNA eta proteinaz osatutako konplexua da eta zelulen genoma osatzen du."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Nazioarteko biltzarretan berrogei artikulu",
+          "target_completion": "zientifiko baino gehiago argitaratu ditu.",
+          "full_sentence": "Nazioarteko biltzarretan berrogei artikulu zientifiko baino gehiago argitaratu ditu."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Ez dira pertsona jakin",
+          "target_completion": "bati buruzkoak; berezko bizitza duten izakiak dira.",
+          "full_sentence": "Ez dira pertsona jakin bati buruzkoak; berezko bizitza duten izakiak dira."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Euskadiko guda-ontzi laguntzarako ontzien misio gehienak segitaldeko misioak ziren, gehienetan Espainiako Bigarren Errepublikarako armak edo hornigaiak",
+          "target_completion": "ekartzen zituzten merkataritza-ontziak babesteko.",
+          "full_sentence": "Euskadiko guda-ontzi laguntzarako ontzien misio gehienak segitaldeko misioak ziren, gehienetan Espainiako Bigarren Errepublikarako armak edo hornigaiak ekartzen zituzten merkataritza-ontziak babesteko."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Gwenddoleuk arturiar kondairan parte hartzen ez duen arren, bere",
+          "target_completion": "gorteko aholkulari Myrddin izan zen kondaira arturiarren Merlin aztiaren oinarria.",
+          "full_sentence": "Gwenddoleuk arturiar kondairan parte hartzen ez duen arren, bere gorteko aholkulari Myrddin izan zen kondaira arturiarren Merlin aztiaren oinarria."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Patriarkatua eta erlijioarekin kritikoak",
+          "target_completion": "ziren, gizakiari askatasuna murrizten diotela esanez; emakumearen emantzipazioa planteatzen ere hasi ziren.",
+          "full_sentence": "Patriarkatua eta erlijioarekin kritikoak ziren, gizakiari askatasuna murrizten diotela esanez; emakumearen emantzipazioa planteatzen ere hasi ziren."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Irakasleak aurretiko jakintzak",
+          "target_completion": "suspertu eta erabiliko ditu oinarri gisa.",
+          "full_sentence": "Irakasleak aurretiko jakintzak suspertu eta erabiliko ditu oinarri gisa."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Sistema hau merkeago",
+          "target_completion": "izan arren, arazoak ekar ditzake.",
+          "full_sentence": "Sistema hau merkeago izan arren, arazoak ekar ditzake."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Buenos Airesen,",
+          "target_completion": "bigarren mailako ikasketak egin zituen, Frantziako domeinuetako Lacordiaire ikastetxean.",
+          "full_sentence": "Buenos Airesen, bigarren mailako ikasketak egin zituen, Frantziako domeinuetako Lacordiaire ikastetxean."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Pistoiaren ideia proposatu zuen, ordura",
+          "target_completion": "arte pentsaezinak ziren potentzia mailak ahalbidetuko zituena gerora.",
+          "full_sentence": "Pistoiaren ideia proposatu zuen, ordura arte pentsaezinak ziren potentzia mailak ahalbidetuko zituena gerora."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Ubidea Erdi Aroan eraiki zen arren,",
+          "target_completion": "ondorengo berrikuntzek eta edukiera handitzeak, ezinbestekoak izan ziren Cabanillasko nekazaritzaren hedapenean.",
+          "full_sentence": "Ubidea Erdi Aroan eraiki zen arren, ondorengo berrikuntzek eta edukiera handitzeak, ezinbestekoak izan ziren Cabanillasko nekazaritzaren hedapenean."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Erdigune edo herrigunetik",
+          "target_completion": "nahiko ipar-mendebaldera eta oso urruti dago, Getaria udalerriaren alboan.",
+          "full_sentence": "Erdigune edo herrigunetik nahiko ipar-mendebaldera eta oso urruti dago, Getaria udalerriaren alboan."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Hala ere, jainko",
+          "target_completion": "batzuk era batera edo bestera daude hiri esanguratsu gehienetan.",
+          "full_sentence": "Hala ere, jainko batzuk era batera edo bestera daude hiri esanguratsu gehienetan."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Gaur egun buru gehienak AEBetan, Argentinan, Hegoafrikan, Zeelanda Berrian eta,",
+          "target_completion": "batez ere, Australian biltzen dira.",
+          "full_sentence": "Gaur egun buru gehienak AEBetan, Argentinan, Hegoafrikan, Zeelanda Berrian eta, batez ere, Australian biltzen dira."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Hainbat kanpaina hasi zituen, emakumeak",
+          "target_completion": "estadioetan sartzeko debekua kentzeko kanpaina bat barne.",
+          "full_sentence": "Hainbat kanpaina hasi zituen, emakumeak estadioetan sartzeko debekua kentzeko kanpaina bat barne."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Aztarnategi esanguratsua da, Abu Hureyrako biztanleak ehiztari-biltzaile gisa hasi zirelako, baina pixkanaka nekazaritzan hasi",
+          "target_completion": "ziren eta munduko lehen nekazari ezagunak bihurtu ziren.",
+          "full_sentence": "Aztarnategi esanguratsua da, Abu Hureyrako biztanleak ehiztari-biltzaile gisa hasi zirelako, baina pixkanaka nekazaritzan hasi ziren eta munduko lehen nekazari ezagunak bihurtu ziren."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Halaber, kirolaren bidez emakumeak ahalduntzeko",
+          "target_completion": "aukerak sortzea du helburu.",
+          "full_sentence": "Halaber, kirolaren bidez emakumeak ahalduntzeko aukerak sortzea du helburu."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Grosley-sur-Risle Frantziako udalerria",
+          "target_completion": "da, Eure departamenduan dagoena, eskualdean.",
+          "full_sentence": "Grosley-sur-Risle Frantziako udalerria da, Eure departamenduan dagoena, eskualdean."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Kristau elizaren",
+          "target_completion": "tradizioaren fundatzaile horien artean nabarmenena Agustin Hiponakoa da.",
+          "full_sentence": "Kristau elizaren tradizioaren fundatzaile horien artean nabarmenena Agustin Hiponakoa da."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Estoniako Trenbideak,",
+          "target_completion": "Eesti Raudtee edo EVR bezala ezaguna, trenbide azpiegituren enpresa nazionala da.",
+          "full_sentence": "Estoniako Trenbideak, Eesti Raudtee edo EVR bezala ezaguna, trenbide azpiegituren enpresa nazionala da."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Jesusen azken hitzak, edo Zazpi",
+          "target_completion": "Hitzak ebanjelio kanoniko guztien artean aipatzen diren esaldiak dira.",
+          "full_sentence": "Jesusen azken hitzak, edo Zazpi Hitzak ebanjelio kanoniko guztien artean aipatzen diren esaldiak dira."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Okupazioaren ondoren, Mequinenza gotorleku sare baten parte bihurtu zen",
+          "target_completion": "Bocas del Ebro departamenduan, Frantziako tropei laguntza emateko eta hornitzeko.",
+          "full_sentence": "Okupazioaren ondoren, Mequinenza gotorleku sare baten parte bihurtu zen Bocas del Ebro departamenduan, Frantziako tropei laguntza emateko eta hornitzeko."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Azkoitiko Zalduntxoak Euskalerriaren Adiskideen Elkartea sortu zuten hiru jaun ilustratu azkoitiarrak dira: Frantzisko Xabier Munibe, Peñafloridako",
+          "target_completion": "Kondea; Manuel Ignacio Altuna eta Joaquín María Egia, Narrosko Markesa.",
+          "full_sentence": "Azkoitiko Zalduntxoak Euskalerriaren Adiskideen Elkartea sortu zuten hiru jaun ilustratu azkoitiarrak dira: Frantzisko Xabier Munibe, Peñafloridako Kondea; Manuel Ignacio Altuna eta Joaquín María Egia, Narrosko Markesa."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Maitasunaren alde sutsu eta biziari atxikitzen zaio,",
+          "target_completion": "askotan desio sexualekin erlazionatzen delarik.",
+          "full_sentence": "Maitasunaren alde sutsu eta biziari atxikitzen zaio, askotan desio sexualekin erlazionatzen delarik."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Jhon oraindik gaztetxoa zenean poliziaren eta",
+          "target_completion": "mafiaren arteko borrokak hasi ziren.",
+          "full_sentence": "Jhon oraindik gaztetxoa zenean poliziaren eta mafiaren arteko borrokak hasi ziren."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Haren arbasoak euskal herritarrak ziren, Madrilen hazi eta",
+          "target_completion": "hezi ziren, baina bere lehen bost urteetan Algortan bizi izan zen.",
+          "full_sentence": "Haren arbasoak euskal herritarrak ziren, Madrilen hazi eta hezi ziren, baina bere lehen bost urteetan Algortan bizi izan zen."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Miguel José de Azanza erregeordeak konspiratzaile guztiak",
+          "target_completion": "atxilotzeko agindua eman zuen.",
+          "full_sentence": "Miguel José de Azanza erregeordeak konspiratzaile guztiak atxilotzeko agindua eman zuen."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Berak, gaztea zela, gerra",
+          "target_completion": "horien azken gertaerak bizi izan zituen.",
+          "full_sentence": "Berak, gaztea zela, gerra horien azken gertaerak bizi izan zituen."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Forma esferiko bat",
+          "target_completion": "aukeratu zuen bere ispiluarentzat, forma parabolikoren ordez; eraikuntza errazteko.",
+          "full_sentence": "Forma esferiko bat aukeratu zuen bere ispiluarentzat, forma parabolikoren ordez; eraikuntza errazteko."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Santa Marina, Santanderreko Santa Marinaren kasua den bezala, egileak Venus Marina-ren",
+          "target_completion": "kristautze prozesutzat jotzen baitzuen.",
+          "full_sentence": "Santa Marina, Santanderreko Santa Marinaren kasua den bezala, egileak Venus Marina-ren kristautze prozesutzat jotzen baitzuen."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Etapa askoko prozesu kimiko",
+          "target_completion": "baten bidez ekoizten da.",
+          "full_sentence": "Etapa askoko prozesu kimiko baten bidez ekoizten da."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Librekanbismoa estatuen arteko merkataritza truke libreak eta tarifarik gabeko",
+          "target_completion": "aduanak dituen ekonomia sistema da.",
+          "full_sentence": "Librekanbismoa estatuen arteko merkataritza truke libreak eta tarifarik gabeko aduanak dituen ekonomia sistema da."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Emisio hauek europar herrialdeengatik ez da",
+          "target_completion": "kontutan hartu aldaketa klimatikoaren borrokan helburuak finkatzeko.",
+          "full_sentence": "Emisio hauek europar herrialdeengatik ez da kontutan hartu aldaketa klimatikoaren borrokan helburuak finkatzeko."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Horrela, mendebaldekoak ez diren alfabeto",
+          "target_completion": "eta idazketa-sistematan erabil daiteke.",
+          "full_sentence": "Horrela, mendebaldekoak ez diren alfabeto eta idazketa-sistematan erabil daiteke."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Leninen pentsamenduan antzeko ideia bat azaltzen zen: behin iraultza Sobietar Batasunean martxan jarrita, politika",
+          "target_completion": "ekonomikoa izan behar zen mundu mailan komunisten eragina zabaltzeko.",
+          "full_sentence": "Leninen pentsamenduan antzeko ideia bat azaltzen zen: behin iraultza Sobietar Batasunean martxan jarrita, politika ekonomikoa izan behar zen mundu mailan komunisten eragina zabaltzeko."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Armadako zuzendaritzapean Musnier",
+          "target_completion": "jeneralari Mequinenza erasotzeko agindu zion bere dibisioarekin.",
+          "full_sentence": "Armadako zuzendaritzapean Musnier jeneralari Mequinenza erasotzeko agindu zion bere dibisioarekin."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Batzuek, likore hau, Jerusalemgo emakumeek prestatzen zutela uste dute, gurutziltzatzearen biktimen minak arintzeko,",
+          "target_completion": "eta erromatarrek hau onartzen zutela amore emateagatik.",
+          "full_sentence": "Batzuek, likore hau, Jerusalemgo emakumeek prestatzen zutela uste dute, gurutziltzatzearen biktimen minak arintzeko, eta erromatarrek hau onartzen zutela amore emateagatik."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Sarritan terminoa gaizki erabiltzen da altzairuzko hariak",
+          "target_completion": "dituen folk gitarra adierazteko.",
+          "full_sentence": "Sarritan terminoa gaizki erabiltzen da altzairuzko hariak dituen folk gitarra adierazteko."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Frantziako Tourrean",
+          "target_completion": "sei aldiz parte hartu zuen eta bitan ez zuen amaitu.",
+          "full_sentence": "Frantziako Tourrean sei aldiz parte hartu zuen eta bitan ez zuen amaitu."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Alemanian jaio zen, errusiar familia aristokratiko batean eta",
+          "target_completion": "familiaren etxean hazi zen Errusian.",
+          "full_sentence": "Alemanian jaio zen, errusiar familia aristokratiko batean eta familiaren etxean hazi zen Errusian."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Usoaren antzeko hegaztia",
+          "target_completion": "da, burua, hegoak eta buztana beltzak dituena.",
+          "full_sentence": "Usoaren antzeko hegaztia da, burua, hegoak eta buztana beltzak dituena."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Nahiz eta Periklesek, oraindik bizirik zegoenak, aholkatu zuen atenastar inperioa gehiegi ez zabaltzea,",
+          "target_completion": "kontseilu hau ez zen kontuan hartu.",
+          "full_sentence": "Nahiz eta Periklesek, oraindik bizirik zegoenak, aholkatu zuen atenastar inperioa gehiegi ez zabaltzea, kontseilu hau ez zen kontuan hartu."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Karten kontaketaren estrategia erabiliko dute",
+          "target_completion": "krupierrari gainditzeko eta beraien artean ezezagunaren profila erabiliko dute keinu lagungarriak erabiliz.",
+          "full_sentence": "Karten kontaketaren estrategia erabiliko dute krupierrari gainditzeko eta beraien artean ezezagunaren profila erabiliko dute keinu lagungarriak erabiliz."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Itsas mina ukitzen denean eztanda",
+          "target_completion": "egiten duen lehergailua da.",
+          "full_sentence": "Itsas mina ukitzen denean eztanda egiten duen lehergailua da."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Aurreztutako diruarekin kasino txiki",
+          "target_completion": "bat irekitzea erabaki zuen Nevadan.",
+          "full_sentence": "Aurreztutako diruarekin kasino txiki bat irekitzea erabaki zuen Nevadan."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Bitxia bada ere, Étienne de Silouetteren",
+          "target_completion": "zaletasunak bere deitura famatua egin zuen, eta Europako hizkuntza guztietara hedatu.",
+          "full_sentence": "Bitxia bada ere, Étienne de Silouetteren zaletasunak bere deitura famatua egin zuen, eta Europako hizkuntza guztietara hedatu."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Nafarroan sortutako lehen unibertsitatea izateaz",
+          "target_completion": "gain, beneditarrek administratutako Europako lehen unibertsitatea ere bazen.",
+          "full_sentence": "Nafarroan sortutako lehen unibertsitatea izateaz gain, beneditarrek administratutako Europako lehen unibertsitatea ere bazen."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Momentu magnetiko nuklearraren balioa, bektore baten bidez irudikatzen",
+          "target_completion": "da: Momentu magnetiko nuklear bektorea.",
+          "full_sentence": "Momentu magnetiko nuklearraren balioa, bektore baten bidez irudikatzen da: Momentu magnetiko nuklear bektorea."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Antzinako ganbara izan zenaren aurreko aldean saietera",
+          "target_completion": "batzuk ikus daitezke: horietako bat oso aldatuta dago gaur egun.",
+          "full_sentence": "Antzinako ganbara izan zenaren aurreko aldean saietera batzuk ikus daitezke: horietako bat oso aldatuta dago gaur egun."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Erabat sendatu ezin diren gaixotasun",
+          "target_completion": "askok tratagarriak izaten jarraitzen dute.",
+          "full_sentence": "Erabat sendatu ezin diren gaixotasun askok tratagarriak izaten jarraitzen dute."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Alabaina, iturria mugitzen hasten bada, behatzaile finkoak jasotako uhinaren maiztasuna",
+          "target_completion": "ez da konstantea izango, aldakorra baizik.",
+          "full_sentence": "Alabaina, iturria mugitzen hasten bada, behatzaile finkoak jasotako uhinaren maiztasuna ez da konstantea izango, aldakorra baizik."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Postposizio-sintagma horrek perpaus nagusian",
+          "target_completion": "adizlagun baten lekua eta funtzioa betetzen du.",
+          "full_sentence": "Postposizio-sintagma horrek perpaus nagusian adizlagun baten lekua eta funtzioa betetzen du."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Gazta urdina da, erdi-leuna,",
+          "target_completion": "esne osoz egina, Roquefort-eko penicillium lizunaz zeharo zainduna.",
+          "full_sentence": "Gazta urdina da, erdi-leuna, esne osoz egina, Roquefort-eko penicillium lizunaz zeharo zainduna."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Txulapain ibarrean oso handia izan",
+          "target_completion": "da hiriburuaren eragina, jendea bertara joan ohi baita.",
+          "full_sentence": "Txulapain ibarrean oso handia izan da hiriburuaren eragina, jendea bertara joan ohi baita."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Handik aurrera etenik",
+          "target_completion": "gabe erreinatu zuen bere heriotzeraino.",
+          "full_sentence": "Handik aurrera etenik gabe erreinatu zuen bere heriotzeraino."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Ismail Enverrek protesta",
+          "target_completion": "handiz hartu zuen bere lekua, bere maila apalagatik.",
+          "full_sentence": "Ismail Enverrek protesta handiz hartu zuen bere lekua, bere maila apalagatik."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Espainiako estatuak, hala",
+          "target_completion": "ere, ez du ardura politikorik onartu.",
+          "full_sentence": "Espainiako estatuak, hala ere, ez du ardura politikorik onartu."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Eskultura epea akitu baino lehen bukatu zuen Michelangelo",
+          "target_completion": "baina ordurako enbaxadorea hila zen, egun gutxi batzuk lehenago.",
+          "full_sentence": "Eskultura epea akitu baino lehen bukatu zuen Michelangelo baina ordurako enbaxadorea hila zen, egun gutxi batzuk lehenago."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Abram-Perezville Ameriketako Estatu",
+          "target_completion": "Batuetako erroldak esleitutako leku bat da.",
+          "full_sentence": "Abram-Perezville Ameriketako Estatu Batuetako erroldak esleitutako leku bat da."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Lehen itzuliaren ondoren sei bertsolari gelditu ziren kanpoan: Amaia Agirre, Nerea Elustondo, Jon",
+          "target_completion": "Maia, Xabier Silveira, Odei Barroso eta Beñat Lizaso.",
+          "full_sentence": "Lehen itzuliaren ondoren sei bertsolari gelditu ziren kanpoan: Amaia Agirre, Nerea Elustondo, Jon Maia, Xabier Silveira, Odei Barroso eta Beñat Lizaso."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Sare fantasmak plastikozko mota problematiko bat ere badira ozeanoan, etengabe itsas",
+          "target_completion": "bizitza harrapa baitezakete arrantza fantasma izeneko prozesu batean.",
+          "full_sentence": "Sare fantasmak plastikozko mota problematiko bat ere badira ozeanoan, etengabe itsas bizitza harrapa baitezakete arrantza fantasma izeneko prozesu batean."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Joanen Ebanjelioan, berriz, ez da Bartolome izena agertzen, baizik eta",
+          "target_completion": "Natanael; hala ere, agian izen horren jabea Filipe ere bada.",
+          "full_sentence": "Joanen Ebanjelioan, berriz, ez da Bartolome izena agertzen, baizik eta Natanael; hala ere, agian izen horren jabea Filipe ere bada."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Mikroorganismoen aurkikuntzak goi bizidunak bapateko sorrera bidez sortuak izatearen teoria",
+          "target_completion": "baztertua izateko atea ireki zuen, mekanismo hau eurentzako erreserbatua egonik.",
+          "full_sentence": "Mikroorganismoen aurkikuntzak goi bizidunak bapateko sorrera bidez sortuak izatearen teoria baztertua izateko atea ireki zuen, mekanismo hau eurentzako erreserbatua egonik."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Gaueko giroa gauez espazio publikoetan",
+          "target_completion": "gertatzen den aisialdia da.",
+          "full_sentence": "Gaueko giroa gauez espazio publikoetan gertatzen den aisialdia da."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Kondearen ihesaldiarekin, Flandeseko langile gehienak batu ziren eta Flandeseko",
+          "target_completion": "konderriaren zatirik handiena, van Artevelderen eskuetan geratu zen.",
+          "full_sentence": "Kondearen ihesaldiarekin, Flandeseko langile gehienak batu ziren eta Flandeseko konderriaren zatirik handiena, van Artevelderen eskuetan geratu zen."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Linux, Mac OS X, Windows eta Solaris sistema eragileetan dabilen",
+          "target_completion": "eta estandar irekietan oinarritutako software libreko aplikazioa da.",
+          "full_sentence": "Linux, Mac OS X, Windows eta Solaris sistema eragileetan dabilen eta estandar irekietan oinarritutako software libreko aplikazioa da."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Adar bat hegaleko habe baten antzera, indarrik gehiena",
+          "target_completion": "bere oinarrian bilduz tolesten da.",
+          "full_sentence": "Adar bat hegaleko habe baten antzera, indarrik gehiena bere oinarrian bilduz tolesten da."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Negozio eredu",
+          "target_completion": "honen abantaila nagusia bezeroarekin lortzen den leialtasun handia da.",
+          "full_sentence": "Negozio eredu honen abantaila nagusia bezeroarekin lortzen den leialtasun handia da."
+        },
+        {
+          "category": "heldout_short",
+          "input": "LISA espazioko",
+          "target_completion": "misioa da, oraindik azterketa fasean dago.",
+          "full_sentence": "LISA espazioko misioa da, oraindik azterketa fasean dago."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Miguel Indurain Sari Nagusia Lizarra Txirrindulari",
+          "target_completion": "Elkarteak antolatutako lasterketa da, urtero apirilaren hasieran Lizarraren inguruan jokatzen dena.",
+          "full_sentence": "Miguel Indurain Sari Nagusia Lizarra Txirrindulari Elkarteak antolatutako lasterketa da, urtero apirilaren hasieran Lizarraren inguruan jokatzen dena."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Wesphaliako familia aristokratiko eta katoliko batean jaioa, haurtzaro eta gaztaro gaixotia izan",
+          "target_completion": "zuen, hasieran aitaren ardurapean eta hil ondoren, ahizpa zaharrenaren ardurapean.",
+          "full_sentence": "Wesphaliako familia aristokratiko eta katoliko batean jaioa, haurtzaro eta gaztaro gaixotia izan zuen, hasieran aitaren ardurapean eta hil ondoren, ahizpa zaharrenaren ardurapean."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Hurrengo goizean, erromatarren epaiketak eguerdia baino lehen egiten",
+          "target_completion": "zirenez, Jesus Pontzio Pilatosen aurrean eraman zuten, Jerusalemgo erromatar prokuradorearen aurrean.",
+          "full_sentence": "Hurrengo goizean, erromatarren epaiketak eguerdia baino lehen egiten zirenez, Jesus Pontzio Pilatosen aurrean eraman zuten, Jerusalemgo erromatar prokuradorearen aurrean."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Besteak beste, Arthur Frank",
+          "target_completion": "Mathews, Xavier Martinez eta Percy Gray.",
+          "full_sentence": "Besteak beste, Arthur Frank Mathews, Xavier Martinez eta Percy Gray."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Ikerketa horiek batez ere aldizkako barauari eta kaloria murrizketari buruz egin",
+          "target_completion": "dira eta hainbat onura aurkitu dira, esaterako, neurologikoak, kardiobaskularrak eta zerebrobaskularrak.",
+          "full_sentence": "Ikerketa horiek batez ere aldizkako barauari eta kaloria murrizketari buruz egin dira eta hainbat onura aurkitu dira, esaterako, neurologikoak, kardiobaskularrak eta zerebrobaskularrak."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Eskultura multzoaren",
+          "target_completion": "egiletza Fidiasi eman zitzaion, brontzez egina eta hamasei irudiz osatua dagoena.",
+          "full_sentence": "Eskultura multzoaren egiletza Fidiasi eman zitzaion, brontzez egina eta hamasei irudiz osatua dagoena."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Ia erabat",
+          "target_completion": "berreskuratu zen ezbeharretik, baina ibilera errena izan zuen bere bizitza osoan.",
+          "full_sentence": "Ia erabat berreskuratu zen ezbeharretik, baina ibilera errena izan zuen bere bizitza osoan."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Txinan badaude antzeko leize budista gehiago, baina Dunhuangen arroka biguna da, konglomeratua eta",
+          "target_completion": "honek maisutasun arkitektonikoa izan beharraz gain eskulturak egiteko zailtasuna ere badakar.",
+          "full_sentence": "Txinan badaude antzeko leize budista gehiago, baina Dunhuangen arroka biguna da, konglomeratua eta honek maisutasun arkitektonikoa izan beharraz gain eskulturak egiteko zailtasuna ere badakar."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Halere, bertakoek ez zuten elkartzeko asmo handiegirik erakutsi, irlandar bandera goratu eta behin aldarrikapen",
+          "target_completion": "bat egin ondoren, britainiar itsas armada sahisteko asmoz Eskoziako ipar-kostaldea inguratu zuten.",
+          "full_sentence": "Halere, bertakoek ez zuten elkartzeko asmo handiegirik erakutsi, irlandar bandera goratu eta behin aldarrikapen bat egin ondoren, britainiar itsas armada sahisteko asmoz Eskoziako ipar-kostaldea inguratu zuten."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Cézanne eta Signac pintore",
+          "target_completion": "inpresionisten kutsua igarri zaie, besteak beste, Prendergasten koadroei.",
+          "full_sentence": "Cézanne eta Signac pintore inpresionisten kutsua igarri zaie, besteak beste, Prendergasten koadroei."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Muga egiten duelako ez ezik, eskualde hori estrategikoa da",
+          "target_completion": "koka landarearen sail handiak dituelako.",
+          "full_sentence": "Muga egiten duelako ez ezik, eskualde hori estrategikoa da koka landarearen sail handiak dituelako."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Gaur egun Lipotyphla",
+          "target_completion": "deitzen den taldearen barruko Crocidurinae subfamilia eta Soricidae familian sailkatuta dago.",
+          "full_sentence": "Gaur egun Lipotyphla deitzen den taldearen barruko Crocidurinae subfamilia eta Soricidae familian sailkatuta dago."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Ekimen horren barruan, merkantzien terminal multimodal berri bat eraiki zen, Muuga portuarekin zuzenean konektatua, eta, hala, merkantzien garraioa erraztu zen",
+          "target_completion": "itsasoaren eta Estoniako trenbide-sarearen artean.",
+          "full_sentence": "Ekimen horren barruan, merkantzien terminal multimodal berri bat eraiki zen, Muuga portuarekin zuzenean konektatua, eta, hala, merkantzien garraioa erraztu zen itsasoaren eta Estoniako trenbide-sarearen artean."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Aldiz, barnean jaiotzen den nahi baten gisakoa denez, beste askok ezarritakoaren aurka bultzatzen",
+          "target_completion": "duen zerbait bezala aztertu dute.",
+          "full_sentence": "Aldiz, barnean jaiotzen den nahi baten gisakoa denez, beste askok ezarritakoaren aurka bultzatzen duen zerbait bezala aztertu dute."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Barrenean, bi jabe ezberdinek egindako aldaketak izan arren, eraikinak Feine arkitektoak asmatutako hasierako banaketa fideltasun",
+          "target_completion": "handiz gorde du, gorde diren planoen azterketa eginez egiazta daitekeen bezala.",
+          "full_sentence": "Barrenean, bi jabe ezberdinek egindako aldaketak izan arren, eraikinak Feine arkitektoak asmatutako hasierako banaketa fideltasun handiz gorde du, gorde diren planoen azterketa eginez egiazta daitekeen bezala."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Fotosintesia burutzen zuten lehen bizidunen",
+          "target_completion": "agerpenak errotik aldatu zuen atmosferaren egoera.",
+          "full_sentence": "Fotosintesia burutzen zuten lehen bizidunen agerpenak errotik aldatu zuen atmosferaren egoera."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Lehen Karlistaldian Fernandez kordobar jeneralak mañeruarrak herritik kanporatu zituen, karlistak",
+          "target_completion": "Larragako gotorlekuaren jabe egiten saiatzean.",
+          "full_sentence": "Lehen Karlistaldian Fernandez kordobar jeneralak mañeruarrak herritik kanporatu zituen, karlistak Larragako gotorlekuaren jabe egiten saiatzean."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Flavio Josefok kontatzen du erromatarren artean ohitura zela kateak haustea eta ez askatzea,",
+          "target_completion": "akusatu bat bere ustezko delitutik absolbitzen zutenean.",
+          "full_sentence": "Flavio Josefok kontatzen du erromatarren artean ohitura zela kateak haustea eta ez askatzea, akusatu bat bere ustezko delitutik absolbitzen zutenean."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Jatorriz Ahaide Nagusien Batzarra bazen ere, bizkaitar orok zuen Batzarrean parte",
+          "target_completion": "hartzeko eskubidea, ordezkari izanez gero.",
+          "full_sentence": "Jatorriz Ahaide Nagusien Batzarra bazen ere, bizkaitar orok zuen Batzarrean parte hartzeko eskubidea, ordezkari izanez gero."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Ignacioren aita, Gregorio Telleria Aiesta, Idiazabalgo parrokiako organista",
+          "target_completion": "eta Udal bandako Zuzendaria zen.",
+          "full_sentence": "Ignacioren aita, Gregorio Telleria Aiesta, Idiazabalgo parrokiako organista eta Udal bandako Zuzendaria zen."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Pickup kamioia edo pickup ibilgailua, automobil eta",
+          "target_completion": "kamioiaren arteko ibilgailu mota bat da.",
+          "full_sentence": "Pickup kamioia edo pickup ibilgailua, automobil eta kamioiaren arteko ibilgailu mota bat da."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Marrak frontisari",
+          "target_completion": "paralelo daude, hau da, kantxa zabalean zeharkatuz.",
+          "full_sentence": "Marrak frontisari paralelo daude, hau da, kantxa zabalean zeharkatuz."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Azpiespazio linealak azpiespazio euklidearrak dira; azpiespazio euklidear bat azpiespazio lineal bat da baldin eta",
+          "target_completion": "zero puntua azpiespazioaren barne dagoen.",
+          "full_sentence": "Azpiespazio linealak azpiespazio euklidearrak dira; azpiespazio euklidear bat azpiespazio lineal bat da baldin eta zero puntua azpiespazioaren barne dagoen."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Garai batean maitale izandako zerbitzu sekretuetako",
+          "target_completion": "bi agente dira istorio honetako protagonistak.",
+          "full_sentence": "Garai batean maitale izandako zerbitzu sekretuetako bi agente dira istorio honetako protagonistak."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Erabaki hori, guztiz lotuta egon zen herrialdetik ahalik eta azkarren",
+          "target_completion": "exiliatzeko beharrarekin, azkenik, Italiara lekualdatuz.",
+          "full_sentence": "Erabaki hori, guztiz lotuta egon zen herrialdetik ahalik eta azkarren exiliatzeko beharrarekin, azkenik, Italiara lekualdatuz."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Han igaro zituen lehen urteak, eta hiri horretako",
+          "target_completion": "teresiarren eskolan ikasi zuen.",
+          "full_sentence": "Han igaro zituen lehen urteak, eta hiri horretako teresiarren eskolan ikasi zuen."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Byrd eta Peary krater gailenen ekialdean",
+          "target_completion": "dago, azken horren ertzean etzanda.",
+          "full_sentence": "Byrd eta Peary krater gailenen ekialdean dago, azken horren ertzean etzanda."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Ordutik gaur egun arte gauzak asko aldatu dira eta gaur egun auzitegiko",
+          "target_completion": "hizkuntzalaritzak pisu handia hartu du eskubidearen munduan.",
+          "full_sentence": "Ordutik gaur egun arte gauzak asko aldatu dira eta gaur egun auzitegiko hizkuntzalaritzak pisu handia hartu du eskubidearen munduan."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Zazpi urte zituela hasi zen gimnasian, eta berehala egin zuen topo",
+          "target_completion": "Moskutik kanpoko zentro nazionalerako bidearekin.",
+          "full_sentence": "Zazpi urte zituela hasi zen gimnasian, eta berehala egin zuen topo Moskutik kanpoko zentro nazionalerako bidearekin."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Praktikante taoista askok eiakulazio-fluidoen galera bizi-indarraren galerarekin lotzen zuten: gehiegizko jariakin-galerak zahartze goiztiarra, gaixotasunak",
+          "target_completion": "eta neke orokorra eragiten zituztela zioten.",
+          "full_sentence": "Praktikante taoista askok eiakulazio-fluidoen galera bizi-indarraren galerarekin lotzen zuten: gehiegizko jariakin-galerak zahartze goiztiarra, gaixotasunak eta neke orokorra eragiten zituztela zioten."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Beste animalia batzuentzat jarritako harrapagailuek",
+          "target_completion": "askotan pandak zauritzen dituzte.",
+          "full_sentence": "Beste animalia batzuentzat jarritako harrapagailuek askotan pandak zauritzen dituzte."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Brankiak kanpoko organoak dira, urpeko",
+          "target_completion": "bizitzako animalien birikak ez bezala.",
+          "full_sentence": "Brankiak kanpoko organoak dira, urpeko bizitzako animalien birikak ez bezala."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "San Francisco del",
+          "target_completion": "Valle Hondurasko Ocotepeque departamenduko udalerri bat da.",
+          "full_sentence": "San Francisco del Valle Hondurasko Ocotepeque departamenduko udalerri bat da."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Estatu Batuetako hegoaldeko beste leku batzuetan, musika eta dantza bilera batzuen",
+          "target_completion": "historia kontatu izan da.",
+          "full_sentence": "Estatu Batuetako hegoaldeko beste leku batzuetan, musika eta dantza bilera batzuen historia kontatu izan da."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Ondorioz, bai tokiko emankizunetan bai kate-ekoizpenean, irrati-etxeek zorrotz jokatu",
+          "target_completion": "behar izan zuten, eta lehiaketak eta irrati-nobelak ekoizteari ekin zioten.",
+          "full_sentence": "Ondorioz, bai tokiko emankizunetan bai kate-ekoizpenean, irrati-etxeek zorrotz jokatu behar izan zuten, eta lehiaketak eta irrati-nobelak ekoizteari ekin zioten."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Donostia ez zen egunean egunean etxe gehiagotan sartzen ari zen asmakuntza horrekiko interesa erakutsi zuen",
+          "target_completion": "euskal hiri bakarra izan.",
+          "full_sentence": "Donostia ez zen egunean egunean etxe gehiagotan sartzen ari zen asmakuntza horrekiko interesa erakutsi zuen euskal hiri bakarra izan."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Hainbat futbol taldetan",
+          "target_completion": "jokatu du, esaterako Kataller Toyama eta AC Nagano Parceiro.",
+          "full_sentence": "Hainbat futbol taldetan jokatu du, esaterako Kataller Toyama eta AC Nagano Parceiro."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Hortik aurrera kontzertu dezente eman dituzte",
+          "target_completion": "Euskal Herrian eta baita kanpoan ere.",
+          "full_sentence": "Hortik aurrera kontzertu dezente eman dituzte Euskal Herrian eta baita kanpoan ere."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Alemaniako Donaueschingen herritik",
+          "target_completion": "abiatzen da eta Errumaniako Constanza hirian amaitzen da.",
+          "full_sentence": "Alemaniako Donaueschingen herritik abiatzen da eta Errumaniako Constanza hirian amaitzen da."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Afrikako iparraldera, Japoniara,",
+          "target_completion": "Txinara, Kaliforniara eta Mexikoko golkora ere joan daiteke.",
+          "full_sentence": "Afrikako iparraldera, Japoniara, Txinara, Kaliforniara eta Mexikoko golkora ere joan daiteke."
+        },
+        {
+          "category": "heldout_long",
+          "input": "Testu kuneiformeak, gakodun",
+          "target_completion": "kainabera bat erabiliz idatzi ziren, buztinezko taulatxoen gainean sinboloak marrazteko estilo bezala.",
+          "full_sentence": "Testu kuneiformeak, gakodun kainabera bat erabiliz idatzi ziren, buztinezko taulatxoen gainean sinboloak marrazteko estilo bezala."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Leize ugarik",
+          "target_completion": "egurrezko egiturak inkorporatu behar izan dituzte.",
+          "full_sentence": "Leize ugarik egurrezko egiturak inkorporatu behar izan dituzte."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Haragia: Lodia, trinkoa, berde-horixka kolorekoa, ebakitzean oinaren oinarrian horiagoa, kanario-hori",
+          "target_completion": "berdexka bihurtzen da erraboilean, usain eta zapore nabarmenik gabea.",
+          "full_sentence": "Haragia: Lodia, trinkoa, berde-horixka kolorekoa, ebakitzean oinaren oinarrian horiagoa, kanario-hori berdexka bihurtzen da erraboilean, usain eta zapore nabarmenik gabea."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Haren asmoa zen hainbat premia aseko",
+          "target_completion": "zituzten artikuluak prezio eskuragarrietan saltzea.",
+          "full_sentence": "Haren asmoa zen hainbat premia aseko zituzten artikuluak prezio eskuragarrietan saltzea."
+        },
+        {
+          "category": "heldout_short",
+          "input": "Bueltan Bizkerre",
+          "target_completion": "Futbol Taldean hasi zen, herriko taldean.",
+          "full_sentence": "Bueltan Bizkerre Futbol Taldean hasi zen, herriko taldean."
+        },
+        {
+          "category": "heldout_medium",
+          "input": "Nizias, Altzibiades eta Lamako",
+          "target_completion": "aukeratu zituzten espedizioa zuzentzeko, Nizias interesaturik ez bazegoen ere.",
+          "full_sentence": "Nizias, Altzibiades eta Lamako aukeratu zituzten espedizioa zuzentzeko, Nizias interesaturik ez bazegoen ere."
+        }
+      ]
+    }
+  ]
+}

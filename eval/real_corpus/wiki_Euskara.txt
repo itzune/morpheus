@@ -1,0 +1,506 @@
+Euskara Euskal Herriko hizkuntza da. Hizkuntza bakartua da, ez baitzaio munduko hizkuntzen artean ahaidetasunik aurkitu. Euskaraz mintzo direnei euskaldun deritze. Gaur egun, Euskal Herrian bertan ere hizkuntza gutxitua da, lurralde horretan gaztelania eta frantsesa nagusitu baitira.   
+Morfologiari dagokionez, hizkuntza ergatiboko eta eranskaria da, indoeuropar hizkuntzak ez bezala. Latindar alfabetoaren (euskal alfabetoaren) bidez idazten da. Euskararen dialektoei euskalkiak deritze eta horiek ezberdintasun (batez ere fonologian) nabariak izan ditzakete.
+Aitzineuskararen sustrairik zaharrenak, Erromatar Inperioaren aurretikoak, Akitania osoan eta Bizkaiko golkotik Andorraraino bitarteko Pirinioen bi aldeetan agertu dira. Erdi Aroan, gutxienez Errioxan eta Burgosko ipar-ekialdean ere hitz egin zela dokumentatuta dago. Gutxitze prozesu latza jasan du, eta lurraldeak galdu ditu etenik gabe. Nafarroa Garaian, bereziki, prozesu hori oso nabarmena izan da azken mendeetan. 
+XIX. mendearen amaieran eta XX. mendearen hasieran, hainbat intelektual nahiz Arturo Kanpion eta Sabino Arana bezalako politikarien eraginez nolabait biziberritu zen, eusko abertzaletasunari estuki lotu baitzen. Frankismoaren garaian (1936–1977) euskarak jazarpen arrotza pairatu zuen eta ia desagertu zen, baina berriro ere indartu egin da 1960ko hamarkadaz geroztik, euskararen aldeko herri mugimenduak (ikastolak, AEK...) eta idatzizko estandarizazioak lagunduta.
+1980ko hamarkadatik aurrera, erakundeen onarpena lortu du, lurralde zatiketa handiekin bada ere. Gernikako Estatutuak euskara Euskal Autonomia Erkidegoko berezko hizkuntza izendatu zuen eta gaztelaniarekin batera ofizial egin zuen Araba, Bizkai eta Gipuzkoan (Trebiñun eta Villaverde Turtziozen izan ezik). Nafarroa Garaian, Euskararen Legearen eraginez, herrialdeko ipar-mendebaldean (eremu euskaldunean) soilik da koofiziala. Iruñean eta erdialdeko beste hiri garrantzitsuetan (eremu mistoan), onarpen maila txikiagoa da eta traba handiagoak ditu euskarak. Nafarroako hegoaldean (eremu ez-euskaldunean), berriz, euskara ez dago onartuta. Ipar Euskal Herrian, euskarak ez du aginpidea duten erakunde publikoen onarpenik: hizkuntza ofizial bakarra frantsesa da.
+2016ko VI. Inkesta Soziolinguistikoaren arabera, euskararen eremu osoan bizi ziren 16 urtetik gorako biztanleen % 28,4 (751.500 pertsona) zen euskalduna, eta % 16,4 (434.000 pertsona) euskaldun hartzailea. Hala ere, adin tarte gazteagoak kontuan hartuta, kopurua handiagoa da. Adibidez, Euskal Autonomia Erkidegoko datuak soilik kontuan hartuta, 2016an 2 urtetik gorako 895.942 euskaldun eta 391.897 euskaldun hartzaile zeuden.
+
+
+== Izena ==
+
+
+=== Etimologia ===
+Gaur egun adituen artean onartua den etimologiak dioenez, hitzaren jatorria aitzineuskarako hau izan liteke: *enots(i) «esan», «hitz egin» (aldera bedi -i(ñ)o- erroko aditz jokatuekin: di(ñ)o, di(ñ)ost...) + -(k)ara («modua», «era»).
+Nolabaiteko sinesgarritasuna eman izan zaio erromatarren garaian dokumentatutako ausci hitzaren hipotesiari. Ausci hori, akitanieraren garaiko inguruko herri baten izena zen. Ausc- hori Auch bilakatu bide da. Loturarik ikusi izan da gaur egungo Eusk- horren eta akitanieraren garaiko ausc-i horren artean. Mitxelenak, esate baterako, noiz edo noiz, zuhurtziaz aipatu zuen hipotesi hau. Hala ere, bokal arteko sudurkariaren aztarnek baztertu egiten dute hipotesi hori: Ausci forma jasota dago Aintzaterako, eta bokal arteko sudurkari galtzea berantiarragoa da.
+Lehenago, XX. mendearen hondarrean, etimologia onartuena beste hau zen: *enau(t)si («esan») + -(k)ara («era»).
+«Euskara» hitzaren lehen aipamen idatzia abizen baten bidez egiten da: Bahlul ibn Marzuqen aita Marzuq ibn Uskara («Marzuq, Uskararen semea», alegia) zen Al-Udrik 1085ean esaten zuen bezala, eta Jimeno Juriok jaso zuenez. Hau da, Ibn Uskara patronimikoak 797. urtean Hueskako Pirinioetako buruzagi muladiaren aitonaren jatorri euskalduna erakusten du.
+
+
+=== Euskalkietan dituen izenak ===
+Euskarak euskalkietan hainbat izen ditu, euskara batuan onartu denaz beste: euskera, euzkera, euskala, eskuara, eskuera, eskara, eskera, eskoara, euskiera, auskera, uskara, üskara, oskara, uskera, uskaa, uska.
+
+
+== Sailkapena eta ahaidetasunak ==
+
+Indoeuropar hizkuntza erromantzez inguratuta dagoen arren, euskara hizkuntza bakartua da, ez du bere familiako beste hizkuntzarik. Euskara Europan indoeuroparrak etorri aurretik hitz egiten zela diote adituek.
+Euskara beste familietako hizkuntzekin alderatu izan da, baina ez zaio ezein hizkuntzarekin familia bat osatzeko moduko ahaidetasunik aurkitu, eta munduko hizkuntzen sailkapenean hizkuntza bakartua izaten jarraitzen du. Adibidez, euskara kartveliar hizkuntzekin eta iparraldeko Kaukasiako hizkuntzekin (txetxenera, esaterako) ahaidetu zuten iraganean, ezaugarri morfologiko erkideak dituztelako, hots, ergatiboak direlako; baina hizkuntza ergatiboak asko dira munduan, ezaugarri horretan berdinak izatea ez da nahikoa ahaidetasuna frogatzeko. Gaur egun, kartveliar hizkuntzen eta euskararen arteko ahaidetasun lotura ukatzen dute adituek.
+Beste hainbat teoria ere egin dira, euskarak amazigerarekin, iberierarekin eta beste hainbatekin ahaidetasuna baduela esan dutenak. Hala ere, hizkuntzen arteko alderaketarako hizkuntzalaritzak taxutu dituen metodoak erabiliz, frogatu da teoria horiek guztiek ez dutela behar besteko oinarririk, eta adituek baztertu egiten dituzte. Orain arte jakin denez, beraz, beste hizkuntzen artean euskarak ez du ahaiderik.
+
+
+== Historia ==
+
+
+=== Euskararen jatorria ===
+
+Euskararen jatorria ezezaguna da. Gaur egun, euskararen hizkuntzalaritza historikoan aditu direnen artean, hipotesi onartuena da euskara milaka urtez hitz egin dela Pirinioen inguruan, indoeuroparrak iritsi baino lehen.
+Hizkuntzalaritzan egin ohi denez, euskara Euskal Herrian sortu den ala inondik etorri den jakiteko, beste hizkuntzekiko ahaidetasuna bilatu zaio, baina horrek ez du emaitzarik eman.
+
+
+=== Aitzineuskara ===
+
+Euskara Europan sustrairik luzeena duen hizkuntza delakoan daude euskalariak; duela 8.000 bat urte euskararen aurrekari zen hizkuntza bat hitz egiten bide zen Pirinioen inguruan, eta orduz geroztik etenik gabeko historia izan bide du gure hizkuntzak inguru honetan.
+Euskararen bilakaerari dagokionez, hizkuntzalariek gutxi gorabehera azken hiru mila urteko historia aztertu ahal izan dute. Aldi horren hasiera berreraikitze lanen bidez ezagutzen dugu:
+
+Aitzineuskara zaharra: zeltak iritsi baino lehenagoko euskal hizkuntzaren dedukziozko berreraiketa. Besteak beste Joseba Lakarra, Joaquín Gorrochategui eta Ivan Igartua euskalariek egin dute berreraiketa lan hori.
+Aitzineuskara: gutxi gorabehera Kristo aurreko V. mendetik lehenengo urteraino hitz egin zen euskal hizkuntzaren berreraiketa. Koldo Mitxelenak (eta, neurri txikiagoan, Ricardo Gómezek eta Larry Traskek) egin du berreraiketa lan hori.
+
+
+=== Euskara erromatarren garaian ===
+
+Erromatarrak iritsi zirenean, euskal hiztunen multzoa Demanda mendilerrotik Garona ibairaino eta Pirinioetan Kataluniako lurretaraino zabaltzen zen. Kristo ondorengo lehen milurtekoan eremu horrek atzerakada handia izan zuen Pirinioetan eta iparraldean, batez ere Erromatar Inperioaren eraginez. Erromatarrek latina ekarri zuten berekin eta beren menpeko lurralde guztietara zabaldu zuten.
+Orain arte, euskaraz ezagutzen diren lehen hitz idatziak, Akitaniako lurretan (Ipar Euskal Herria barne), Sorian, Errioxan, Zaragozan eta Huescan aurkitu dira. Gizaki izenak edo jainko-jainkosen izenak dira, eta hilarrietan eta aldaretan idatzi zituzten, K. o. I. mendetik III. mendera. Nafarroako Lerga herrian erromatarren garaiko hilarri bat idoro zuten, euskal gizaki izenekin, I. mendekoa. Bestalde, toponimiari begiratuta ere, euskararen bidez azaldu diren toponimoak daude aipatutako eremu osoan.
+Euskalarien artean nagusi den iritziak dioenez, garai hartan euskaraz honako tribu hauek mintzo ziren: akitaniarrak, baskoiak, barduliarrak, karistiarrak, iakatarrak eta, agian, autrigoiak. Beste ikerlari batzuek baskoitze berantiarraren teoria euskarritzen dute, alegia, euskaraz mintzo zirenak akitaniarrak eta baskoiak zirela, eta mendebalderagoko tribuek indoeuropar hizkuntza zutela.
+Hala ere, zaila da ulertzea nola inposatu ahal izan zieten beren hizkuntza baskoiek, Euskal Herriko leinu protohistorikoetan erromatartuena osatzen zutenek, beste gens-ei. Izan ere, gaztelaniazko vascongado hitzak ez du «baskoitua» esan nahi, baskoien zabalpenaren aldekoek adierazi ohi duten bezala, «euskalduna» baizik: XIX. mende arte nafar gehienak vascongadoak ziren, eta arabar eta enkartau asko ez ziren vascongadoak, romanzadoak edo latinadoak baizik.
+Honakoak dira euskararen eremuko lurretan bizi ziren tribu protohistorikoak:
+
+Akitaniarrak, Julio Zesarren arabera, Garona ibaiaren eta Pirinioen artean bizi ziren. Hizkuntza propioa zuten, eta antz handia zuten Pirinioez bestaldeko herriekin. Akitanieraz (euskararen arbaso —edo, beharbada, euskararen arbasoaren ahaide— den hizkuntza) mintzo ziren. Estrabon geografoaren esanetan, akitaniarrak ez zetozen bat galiar arrazako herriekin, ez gorpuzkeran ez mintzaturiko hizkuntzan, eta iberiarren tankera zuten.
+Autrigoiak gaur egungo Bizkaiko Enkarterrin eta Arabako, Kantabriako eta Burgosko zatietan bizi ziren. Oso litekeena da haien hizkuntza indoeuroparra izatea, zeltikoa ziurrenik; izan ere, haien lurralde eremuan, garai hartakoak izan daitezkeen euskarazko toki izenak oso-oso gutxi dira, askoz gehiago dira zelta jatorrikoak.
+Barduliarrak gaur egungo Gipuzkoan eta Arabako ekialdean bizi ziren. Herri euskalduna bide zen.
+Beroiak egungo Errioxan, Arabako hegoaldean eta Nafarroako Erriberaren zati batean bizi ziren. Zeltiberiar herria zen, zeltiberieraz mintzo ziren.
+Baskoiak gaur egungo Nafarroa Garaian eta Gipuzkoako, Huescako, Zaragozako eta Logroñoko probintzien zati banatan bizi ziren. Kostaldera heltzen ziren iparraldetik (Irun aldean), Ebroren eskuinaldeko lur zerrenda bat hartua zuten hegoaldetik, eta Aragoin barneratzen ziren ekialdetik. Euskaraz mintzo ziren; baina, erromatarrak heldu zirenerako, zeltiberiera eta iberiera erabiltzen hasiak ziren hegoaldeko mugetan.
+Karistiarrak gaur egungo Bizkaian eta Arabako mendebaldean bizi ziren. Herri euskalduna bide zen.
+Iakatarrak egungo Huescan eta Lleidako iparraldean bizi ziren, eta Iaca —egungo Jaka— zuten hiriburu.
+Ekialderago, baliteke andosinoak ere euskal hizkuntzaren batez mintzo izatea. Andosinoak gaur egungo Andorraren inguruan bizi ziren, eta oraingoz hipotesi onartuena da haien etnonimoak «handi» euskal hitzarekin zerikusia duela.
+Euskaldunek elkarrekintza anitz izan zituzten erromatarrekin, eta euskarak bai latinetik, bai haren ondorengo erromantzeetatik mailegu ugari hartu zituen, apurka-apurka bere sistema fonetikora egokituta. Hizkuntzaren egitura sintaktikoak, berriz, nortasun propioarekin dirau, eraginak gorabehera.
+Erromatarrek ekarritako latinaren ezarpenak eta zabalpenak garai hartan euskara inguratzen zuten gainerako hizkuntza guztiak desagerrarazi zituen: indoeuropar hizkuntzak (galiera, zeltiberiera eta lusitaniera) eta hizkuntza ez indoeuroparrak (iberiera eta tartesiera). Euskal Herriak eutsi egin zion bere hizkuntzari; hala ere, erromatarren kokaguneen ondoko lurraldeak latinizatu egin ziren, elebidun bihurtu ziren.
+
+
+=== Euskara Erdi Aroan ===
+
+Erdi Aroan latinak garapen ezberdina izan zuen eskualdearen arabera, eta hizkuntza erromanikoak sortu ziren. Hala ere, euskarak eutsi zion latinaren eta hizkuntza erromanikoen hedapenari.
+Erdi Aroan latinetik eratorritako hizkuntzek euskara inguratzen zuten:
+
+Gaztelania: Gaztelania Euskal Herriko hegoaldean eta mendebaldean hitz egiten zen.
+Nafarroako eta Aragoiko erromantzea: Nafarroako eta Aragoiko erromantzea Euskal Herriko hegoaldean eta ekialdean hitz egiten zen.
+Okzitaniera: hizkuntza hau ere entzuten eta idazten zen Euskal Herriko hiri nagusietan, Nafarroako Erresuman batez ere. Hiri horietan Okzitaniatik etorritako jende multzo handiak egokitu ziren, merkatariak gehien bat. Gaskoia Euskal Herriko Iparraldean mintzatzen zen: adibidez, Baionan hizkuntza nagusienetako bat zen. Bearneraz mintzatzen ziren familia eta talde okzitaniarrak ere bazeuden Zuberoako ekialdean. Urte askotan beren hizkuntzari eutsi eta testu asko idatzi zituzten.
+Arabieraz mintzo zen jende multzoa ere bizi zen Tuterako eskualdean. Hor musulmanek ia lau mendez botere politikoa izan zuten. Musulmanek 711tik aurrera penintsula ia osoa mende hartu zuten, Euskal Herriko mugaraino. Euskaldunen eremuan ez zuten kokapen iraunkorrik izan, nahiz eta hainbat razzia egin zituzten, Arabako lurretan adibidez. Nafarroan, hala ere, harreman onak izan zituzten euskaldunekin hainbat mendez.
+Hebreera ere hitz egiten zuten gutxi batzuek euskal lurraldeetan. Haatik, haren erabilera bestelakoa zen, erlijioari lotuta zegoen batez ere; nahiz eta gero juduen hizkuntza nagusia tokian tokikoa izan.
+Hala eta guztiz ere, Euskal Herriko hizkuntza nagusia euskara zen: ia Euskal Herri osoan mintzatzen zen garai hartan. Dena den, nagusitasun geografiko horri ez zegokion nagusitasun administratibo edo ofizialik. Inongo erakundeak ez zuen bere jardun administratiboan edo dokumentazio ofizialean erabiltzen. Hizkuntza erromanikoek hartu zioten euskarari zegokion funtzio hori. Garai goiztiar hartatik hizkuntza haiek idatziaren prestigioa bereganatu zuten, eta euskara, berriz, herri xehearekin lotuta zegoen.
+Aipatzekoa da Euskal Herriaren gaur egungo mugetatik at ere euskaraz egiten zela, Pirinioetako zenbait tokitan eta Errioxako nahiz Burgoseko gune jakin batzuetan, hain zuzen ere. Errioxa eta Burgos aldeko euskaldun haiek, Erdi Aroan musulmanak lur haietatik egotzi eta gero egindako birpopulaketen ondorio izan zirela dirudi.
+
+
+=== Beste hizkuntzekiko harremanak ===
+Euskarak inguruko hizkuntzekin milaka urteko harremana izan du. Kristo aurreko garaietan, iberierarekin eta zelta hizkuntzekin. Kristau aroa hastean, latinarekin —erromatartzeak eta kristautzeak ekarria— eta, handik berehala, arabierarekin eta Erdi Aroko erromantze jaioberriekin (okzitaniera/gaskoiera, aragoiera edo nafar erromantze eta gaztelaniarekin).
+Aro Moderno-Garaikideetan, auzoko lehiakide gogorrenak frantsesa (geroago hurbildua) eta gaztelania ofizialduak izan ditu. Berrikitan izan ezik, euskarak ez du izan historian legezko aitorpen ofizialik.
+
+
+== Hedadura ==
+
+
+=== Antzinako euskara ===
+
+Antzinako euskararen mugak zehazterakoan, kontuan hartzen dira Akitanian, Euskal Herrian, Errioxan eta Sorian aurkitu diren hilarrietako eta beste euskarri epigrafiko batzuetako euskal hitzak, toponimian gorde diren izenak eta geografo klasikoek euskararen eskualdeko tribuei buruz idatzitakoak. Aztarna horiek erakusten dute euskaraz mintzo zela Garona ibaiaren eta Demanda mendilerroaren arteko eskualdean, eta Bizkaitik Andorraraino. Luis Núñez Astrainek 2002an egindako lanak laburbiltzen ditu gaiari buruzko azken datuak.
+
+Kataluniako mendebaldeko toponimiak erakusten du han behiala euskaraz hitz egiten zela. Joan Corominesen ikerketen ondotik onartzen da Katalunia euskalduna Urgellen eta Andorran hasten zela eta Aran, Ribagortza eta Pallarsen barna hedatzen zela. Toponimiak edo toki izenek baieztatzen dute eskualde horren euskalduntasuna.
+Aragoi: Gaurko Huescako probintzia eta Zaragozako iparraldea ere euskaraz mintzo ziren. Latinak berak itzali zituen hango euskal hizkerak, baina leku batzuetan euskarak luzeago iraun zuen, Anso ibarrean, esate baterako. Aipagarria da Zaragozako Cinco Villas eskualdean (Ejea, Sádaba...) agertu den euskal pertsona izenen multzoa.
+Errioxako eta Soriako erromatarren garaiko hilarri batzuetan euskal izenak agertu ziren. Bestalde, Errioxan, batez ere, eta neurri apalagoan Burgosen, toponimo askok ere euskal jatorria dute, baina badirudi horren jatorria Erdi Aroan dela, hau da, Errekonkista garaian musulmanak lur horietatik egotzi eta gero Arabako eta Bizkaiko euskaldunekin egindako birpopulaketari zor zaizkiola euskal toponimo horiek.
+Akitanian aurkitutako hilarriak funtsezkoak izan dira euskararen historia ezagutzeko. Bertan agertu diren hitzek euskararen hedadura zehazteko balio izan dute batetik, eta bestetik, garai hartako euskara nolakoa zen jakiteko ere. Hona hemen horietako izen eta hitz batzuk: Bihos («bihotz»), Belex («beltz»), cison («gizon»), ilun («ilun»), losa («lotsa»), nescato («neskato»), sembe («seme»), andere («andre»), corri («gorri»).
+Nabari denez, euskara Euskal Herri osoa gainditzen zuen eremuan erabiltzen zen. Hala ere, badirudi Nerbiotik harago eta Ebro ibarrean oso goiz egin zuela atzera, eta zenbait tokitan ez zela hizkuntza bakarra, baizik eta beste hizkuntza batzuekin batera erabiltzen zela. Hasieran, zelta hizkuntzen aurrean atzera egin omen zuen, eta latinaren aurrean, geroago.
+
+
+=== Erromatar Inperioaren ondorengo aldaketak ===
+
+Kristo ondorengo III. mendean, Mendebaldeko Erromatar Inperioaren gainbehera hasi zen. Horrek euskal gizartea nekazaritzara bultzatu zuen mende batzuetan zehar. Horren ondorioz, latinaren eragina moteldu egin zen eta euskararen eremua sendoagotu zen bere bizi-espazioan.
+Hurrengo mendeetan, latinak, beste hainbat lekutan bezala, tokian tokiko hizkuntza erromanikoak eman zituen. Geroago, latin arruntaren aldaera horien bilakaerak gaskoi bihurtu ziren Pirinioen iparraldean eta gaztelania, nafar-erromanikoa eta aragoiera hegoaldean. VI. mendean, euskararen eremuko iparraldera frankoak eta hegoaldera bisigodoak iritsi ziren. Iparraldean euskarak atzerakada geografikoa jasan zuen, baina hegoaldean bisigodoen eragina askoz txikiagoa izan zen. Bisigodoak eurak ere latinizatu egin ziren eta VII menderako penintsulan ia galdua zuten euren hizkuntza. Hala ere, herri germaniarrek zenbait hitz utzi zituzten: gerra, xaboi, sala, harpa, gisa edo arropa.
+VIII. mendean, arabiarrak iritsi ziren Nafarroaren eta euskararen eremuaren hegoaldera. Geroago, X. mende inguruan, erreinu kristauek arabiarrak hegoalderantz bultzatzen hasi zirenean, hutsik geratutako lurren birpopulatzeak gertatu ziren, eta euskarari dagokionez zenbait ondorio izan zituen. Batetik, badirudi euskaldunak hegoaldean ugaritu zirela Arabako hegoaldean, Errioxan, Burgosen eta Sorian eta Nafarroa Garaiko erdialdetik hegoaldera. Hala ere, eztabaida dago zenbateraino ziren agirietan agertzen diren herritar horiek edo zenbateraino iparraldetik etorriak. Bestetik, Bizkaiko mendebaldean, Enkarterrian, hiztun erromanikoak sartu zirenez, bertako hainbat tokitako euskara galdu egin zen.
+XI. eta XII. mendeen artean, Gaztelako Erresumak Bizkaia (1180), Araba (1199) eta Gipuzkoa (1200) bereganatu zituen. Sarritan uste da gertaera horiek ekarri zutela Euskal Herriko administrazioetan hizkuntza ofiziala gaztelania izatea. Izan ere, garai hartan garatzen ari zen gaztelania. Euskararen mugetan jaio zen eta Errekonkistan lortutako botere politikoaren bidez, Gaztelak menderatuz joan zen lurraldeetan ezarri zuen, beste erromantze batzuk zokoratuz. Nafarroako Erresumari dagokionez, Nafarroako errege Antso Azkarraren garaian euskara lingua navarrorum izendatu zen (1167) alegia, «nafarren hizkuntza».
+XIII–XVI mendeen artean, Gaztelako Erresumak Nafarroako Erresuma konkistatzea amaitu zuen (1200–1512). Beraz, botere politikoaren hizkuntza idatzia (gutxi batzuek zerabiltena) erromantze nafarra izatetik gaztelania izatera pasatu zen.
+XVI–XVII. mendeek euskarazko literatura idatziaren hasiera markatu zuten. Izan ere, 1545ean argitaratu zen lehen liburua euskaraz, «Linguae Vasconum Primitiae» izenekoa. Olerki liburua da eta haren egilea, Bernart Etxepare, Nafarroa Behereko herri txiki bateko apaiza izan zen. Hala ere, gogoratu behar da 1539an Frantzisko I. Frantziako erregeak latinaren beharrean administrazioan frantsesa erabiltzeko agindua ezarri zuela eta Ipar Euskal Herriko hizkuntza gaskoia izatetik frantsesa izatera pasatu zen. Hala bada, ez agirietan, ez testu teknikoetan euskarak ez zuen zabalkunderik izan. Hegoaldean, hizkuntza mintzatuari dagokionez, Arabako hegoaldeko hainbat eskualdetan eta Nafarroa Garaiko hegoaldean gaztelaniak euskarari gaina hartzen jarraitu zuen pixkanaka. Euskarak eusten zion, nola edo hala, baina galdua zuen prestigioaren eremua. Euskara ezin zen erabili erakundeetan, ez eskolan... eta galtzeko atea zabalik zegoen.
+XVIII. mendean, euskarak atzerakada handia izan zuen Arabako lautadan, beteak beste, Gasteiz hiria (mendebaldeko euskararen sorgune nagusia izan zena) ordurako erabat erdaldundua zelako, eta handik eragin erdaltzailea zetorrelako inguruko lurretara. Ipar Euskal Herrian, Iraultza Frantsesaren garaipenak (1789) foruak deuseztatu zituen; geroago, 1793an frantsesa nahitaez erabiltzeko betebeharra ezarri zen legez. Bestalde, euskarak lurralde zati handi bat eta hiztun kopuru handi bat galdu zuen Nafarroa Garaian. Euskaldunen Amerikarako joerak ere Euskal Herriko landagune askotan (euskaldunenetan, beraz) eragin handia izan zuen. Mendearen amaiera aldean, gainera, euskal herriaren historia garaikidea markatuko zuten gertakari erabakigarriak izan ziren: foruak deuseztatzea, industrializazioaren hasiera eta euskal nazionalismoaren eta sozialismoaren hastapenak.
+1800erako Arabako euskararen galtzea ia erabat gauzatu zen, iparraldeko hainbat ibarretan izan ezik, eta Nafarroa Garaian atzerapena nabarmena egin zen. Nafarroa Garaiko erdialde guztian, Iruñerrian eta Pirinioetako ibar batzuetan euskara desagertzen edo ahultzen ari zen garai hartan. Mende hartan Euskal Herriak pairatu zituen etengabeko gerrek eta haien ondorioz gertatu zen foruen edo lege zaharren galerak bizkortu egin zuten euskararen atzerakada.
+
+
+=== Gaur egungo euskararen mugak ===
+
+Euskara Araba, Bizkaia, Gipuzkoa, Lapurdi, Nafarroa eta Zuberoa herrialdeetan hitz egiten da. Euskal Herritik kanpo, Nafarroa Beherearekin muga egiten duten Gaskoniako herrietan eta Zuberoarekin muga egiten duen Biarnoko mugaldean (Oloroeko kantonamenduan: Eskiula edo Jeruntze herrietan...) entzun daiteke halaber. Hala ere, Euskal Herriko eskualde horietaz gain, euskara nonahi entzun eta erabil daiteke. Haur eta gazte gehienenek euskaraz ikasten dute eta hiztunen kopurua etengabe igotzen ari da. Euskara, aspaldiko partez, muga estuak puskatzen ari da.
+Euskal diasporan ere, euskara milaka lagunek gorde edo berreskuratu dute, besteak beste, tokian tokiko euskal etxeei esker. Oro har, milioi bat lagun inguruk hitz egiten duten hizkuntza dugu.
+Euskal Herrian bertan euskararen hedadura ez da berdina lurralde guztietan.
+
+
+== Euskararen lege estatusa ==
+
+
+==== Askotariko jurisdikzioak eta onarpen partziala ====
+Euskarak, historian, ia ez du onarpen ofizialik izan. Herriaren hizkuntza izan da beti, baina inoiz ez da erabili idatziz administrazioan. Gaur egun, Euskal Herriko eremu batzuetan hizkuntza koofiziala da.
+Gaur egun, euskaraz hitz egiten den lurraldeak ez dauka batasun politikorik, Euskal Herria politikoki hiru administraziotan banatuta baitago. Administrazioak honako hauek dira:
+
+Espainian: Euskal Autonomia Erkidegoa (Araba, Bizkaia eta Gipuzkoa) eta Nafarroako Foru Erkidegoa (Nafarroa Garaia).
+Frantzian: Ipar Euskal Herria (Lapurdi, Zuberoa eta Nafarroa Beherea), Pirinio Atlantikoetako Euskal Hirigune Elkargoan.
+
+Administrazio bakoitzak euskararen erabilerari tratamendu ezberdina ematen dio eta, horren ondorioz, euskara arautzen duten bost araudi ezberdin daude. Egoera nahasi hau ez da batere mesedegarria euskararentzat.
+
+Euskara ofiziala da, gaztelaniarekin batera, Euskal Autonomia Erkidegoan. Bertan, legez nahitaezkoa da gaztelania, Espainiako Konstituzioaren arabera, baina ez euskara. Euskararen legea 1982. urtean onartu zen. EAEko lege horretan ezarri bezala, euskaldun orok du administrazioarekin euskaraz komunikatzeko eskubidea, erdaldun orok erdaraz duen bezala (6.1 artikulua).
+Nafarroako Foru Erkidegoan hiru eremutan banatuta dago. Ofizialtasun partziala izendatu izan zaio Nafarroa Garaian euskarari eman zaion estatusari, bai eta bere baitan hartzen dituen hiru erregimenei ere. Nafarroako Garaiko euskararen legea 1986. urtean onartu zen eta horren arabera herrialdea hiru eremutan banatu zen, euskarak hartzen zuen babesaren arabera.
+Eremu euskalduna (iparraldea): euskara ofiziala da, gaztelaniarekin batera, Nafarroako Foru Erkidegoko eremu euskaldunean. Eremu horretan lurraldearen iparraldea bakarrik sartzen da. Nafarroa Garaiko biztanleen % 10 bizi da eremu horretan.
+Euskara ez da ofiziala Eremu mistoan. Hala ere, Nafarroako euskararen legeak eremu mistoko herritar guztiei ezagutzen die Nafarroako herri-administrazioarekiko harremanetan euskara erabiltzeko eskubidea. Era berean, legean aurreikusten da herri-administrazioek zehaztu behar dutela zein lanpostu publikotarako izango den beharrezkoa euskaraz jakitea. Eremu mistoko eskoletan euskaraz ikas daiteke eta euskara ikasgaiaren irakaskuntza jaso daiteke, horrela nahi izanez gero. Hegoaldeko nafarren % 53 bizi dira eremu horretan.
+Eremu ez-euskalduna (hegoaldea): euskara ez da ofiziala eremu ez euskaldunean. Nafarroako eskualderik zabalena da hau, lurraldeko erdialde eta hegoalde gehiena hemen kokatuta dago. Hizkuntza ofizial bakarra gaztelania da. Hegoaldeko nafarren % 37 hor bizi da.
+Ipar Euskal Herria: euskara ez da hizkuntza ofiziala hemen. Ipar Euskal Herriko hizkuntza ofizial bakarra frantsesa da, Frantzian ofizial den hizkuntza bakarra. Euskara ofizial edo koofizial ezin izendatu eta Euskal Elkargoak, euskarari aitortza ofiziala egin zion 2018. urtean.
+Trebiñu eta Turtzioz enklabeetan euskarak ez du batere onarpen ofizialik.
+
+
+==== Legediaren gauzapen arazotsua ====
+Egungo lege antolamenduak, EAEko kasu onenean ere, ez du bermatzen administrazioko askotariko maila eta erakundeekin euskaraz komunikatu ahal izatea. Ofizialtasun erreal baten faltak askotariko kontraesanak eragin ditu espazio publikoan euskara erabiltzearen praktikan. 2020ko otsailean plazaratu zenez, euskara % 0,6tan zen lanpostuetarako betekizuna Nafarroa Garaiko administrazioan hezkuntza arloaz kanpora; aldiz, gutxienez biztanleriaren % 13 zen elebiduna. Nafarroa Garaiko Osasunbidea osasun zerbitzuan hizkuntzen balorazioa ez zegoen argi, eta 2021eko urtarrilean arartekoak gomendioa eman zuen Osasunbideko lanpostuetarako euskararen eta atzerriko hizkuntzen ezagutzak zenbat puntu ematen duten adierazteko eta euskarak atzerriko hizkuntzek baino gutxiago balio ez izateko. EAEn, 2023ko martxoan, ELA sindikatuak salatu zuen euskaraz EAEko ikastetxeetan irakatsi nahi duten Ipar Euskal Herriko irakasleek gaztelaniaren ezagutza gorena egiaztatu behar dutela.   
+Justiziak, hala egoitza bertan duenak nola estatu osoan hedatuak, postu edo/eta kontratu publiko batzuetan euskararen ezagutza mugatzearen alde ebatzi du. 2021eko maiatzaren 10ean, Euskal Autonomia Erkidegoko Auzitegi Nagusiak baliogabetu egin zuen Irungo udaltzain postu baterako euskararen ezagutza eskatzea, euskal eragile batzuen haserrea eta Behatokiaren zein Kontseiluaren kritika piztuz. Uda horretan, Auzitegi horrek berriz jo zuen EAEko udal administrazioan euskaraz funtzionatzearen kontra, uztailean Espainiako Konstituzioaren aurkakoa izan daitekeela adieraziz eta irailean legez kanpokotzat joaz. 2022ko otsailaren 1ean, ezohiko argumentu bat entzun zen euskara udal lanpostuetako eskakizunetatik kanpo uzteko: "euskara zaila izatea"; hala ebatzi zuen Gasteizko epaile batek Arabako Laudiorako, baita gehitu ere euskararen betekizuna diskriminatzailea zela. 2022ko irailaren 19an, Arabako Administrazio Auzitegiak ontzat eman zuen UGT sindikatuaren helegitea, B2 euskara eskakizunera heltzen ez ziren hautagaiak Araba, Bizkai eta Gipuzkoako udaltzain lan poltsetan onartuak izan zitezen.      
+Ia aldi berean, 2021eko maiatzaren 13an, 165 familia euskarazko eredurik gabe geratu ziren beren haurrentzat 2021-2022 urtetik aurrera Iruñean eta, HE Haur Eskoletako Gurasoak taldeak adierazi ere egin zuen ordurako familia kopuru batek gaztelaniara jotzen zuela "etsipenak jota". Iruñean 2019ko urriaren 1ean, Nafarroako Auzitegi Nagusiak baliogabetu egin zuen euskara meritu bat izatea lanpostu baterako Nafarroa Garaiko eremu mistoan eta ez-euskaldunean, baita Nafarroako administrazio orokorrean ere lehiaketa-oposizioz egiten denean. Euskararen presentzia publikoa oztopatzen duen beste erabaki batean, 2021eko abenduaren 4an, Burgosko Administrazioarekiko Auzien Epaitegiak Trebiñuko Udalak erabaki euskararen normalizazio plana baliogabetu zuen, eskumenik ez duelakoan. Nafarroan, 2022ko martxoan, Ezkerreko Alderdi Independenteak salatu zuen Alesbesko udalak kartel bat,  Emakumeen Zinegotzigoak diseinatua, elebidun zegoelako zentsuratu zuela, argudiatuz Alesbes eremu ez euskaldunean zegoela. 
+2021eko maiatzaren 21ean, Frantziako Nazio Biltzarrak hizkuntza gutxituen aldeko Molac legea onartu ondoren, Frantziako Konstituzio Kontseiluak Konstituzioaren aurkakotzat jo zuen legea eta hezkuntzako murgiltze eredua, inpaktu handikoa Euskal Herrian. Jean-René Etxegarai Euskal Hiri Elkargoko lehendakariak eta Eneritz Zabaleta zuzenbidean doktoreak (hizkuntza eskubideen kontrako) "gerla deklaraziotzat" hartu zuten; Zabaletaren iritziko, ataka estuan jarri zen Seaska eta hizkuntza gutxituen Frantziako itunpeko hezkuntza sarearen jarraipena. Euskaltzaindiak ere erabakia salatu zuen, beste eragile batzuen artean. NBEk kezka adierazi zion Frantziari Konstituzio Kontseiluaren ebazpenagatik 2022ko uztailean. Ildo beretik, 2021eko urriaren 8an, Nafarroako Administrazio Auzitegiak baliogabetu egin zuen Lizarrako udalak edozein postutan euskara meritutzat hartu izana eta ahal izatea. Egun berean, Nafarroako Parlamentuan PSNk eta Navarra Sumak bat egin zuten Kontratu Publikoen 2/2018 Foru Legetik enpresetako euskara planei buruzko puntua kentzeko. 2023ko urtarrilean, Nafarroa Garaiko Mañeruko udalbatzak aho batez udalerria eremu mistoan sartzeko eskatu ondoren, PSN eta Navarra Sumaren Parlamentuko botoek ukatu egin zuten sartzea, eta eremu ez euskaldunean geratu zen.
+
+
+==== Espainiako Diputatuen Kongresuan ====
+2023ko irailaren 19tik aurrera aukera egon zen Espainiako Diputatuen Kongresuan euskaraz aritzeko, lehenago Senatuan posible zen bezala. Lehen hitzartzeak Mertxe Aizpuruak eta Joseba Agirretxeak egin zituzten. Pleno berberean Borja Sémperrek euskaraz egin zuen, eskubidearen aurka jarduteko.
+
+
+== Euskarak pairatutako erasoak ==
+Joan Mari Torrealdai euskaltzainak bi liburutan jorratu zituen azken mendeetan euskarak pairatutako erasoak: El Libro Negro del Euskera (Ttarttalo, 1998) eta Asedio al Euskera: Más alla del libro negro (Txertoa, 2018). Saiakera horietan euskarak XVIII. mendetik pairatutako erasoak eta errepresioa landu zituen, zazpiehun baino erreferentzia bibliografiko gehiagotan oinarrituta. Liburu horietan argi ikus daiteke Torrealdai kezkatuta zegoela aurreko hamarraldietan espainiar intelektual batzuek hartutako jarrerengatik: euskarak pairatutako errepresioa (garai frankistaren aurrekoa, frankista eta ondorengoa) ukatu egiten zuten, eta euskaldunen gainean jarri euskararen ahuleziaren ardura. Torrealdaik liburu horietan negazionista linguistikoen iritziei aurre egiteko  aurkeztu zituen. Jakin kultur aldizkariko zuzendari eta Euskaldunon Egunkaria-ko Administrazio Kontseiluko presidenteak, araudi edo pentsamendu errepresiboa eta, nolanahi ere, negatiboa identifikatu zuen; eta euskararen trataera sozial edo administratiboari dagokionez, hainbat argudio intelektual eta, halaber, moral plazaratu zituen.
+Garai askotan pairatu dira eraso horiek. Euskararen aurkako neurri administratibo eta justifikazio teoriko oparoak sortu zituzten Ilustrazioaren programa berritzaileek (1766…), Frantziako Iraultzak (1789…), gerra kolonialen ondorengo krisiak (1898), Berrezarkuntzaren urteetakoek (1916-1923), edo garai autoritarioetako programek (Primo de Rivera, 1923-1929; Espainiako Gerra Zibila, 1936…).
+Instituzioen erasoez gain, eraso ideologikoak ere izan dira. Torrealdaik bildutako literatura-testu asko honako hauetatik datoz: batetik Euskal Herriko gaztelaniazko idazleen luma (Unamuno, Baroja, Maeztu edo Madinabeitia), eta bestetik horiekin batera J. A. Primo de Rivera, Onésimo Redondo, E. Giménez Caballero, eta laurogeiko eta laurogeita hamarreko unibertsitate- eta kazetaritza-lumak ere.
+
+
+== Demografia ==
+
+
+=== Hiztun kopurua ===
+
+Euskaraz dakien pertsona kopuruari buruzko azken azterketa 2016. urtean egin zen. Eusko Jaurlaritzak, Nafarroako Gobernuak eta Ipar Euskal Herriko Euskararen erakunde publikoak egin zuten, elkarlanean. Datuak 16 urtetik gorako pertsonenak dira; beraz, kontuan izanda euskararen ezagutza handiagoa dela 16 urtetik beherakoen artean, euskaldunen egiazko ehuneko handiagoa da.
+Euskal Autonomia Erkidegoari dagokionez, 2016an 16 urtetik gorako biztanleen % 33,9 elebiduna zen (631.000 biztanle) eta % 19,1 elebidun hartzailea, alegia, euskara ulertzen zuten, baina ez zuten egoki hitz egiten (356.000 pertsona). Erdaldun elebakarrak % 47 ziren (877.000 pertsona). Gipuzkoa zen euskaldunen ehuneko handiena zuena (% 50,6 elebidun eta % 20,4 elebidun hartzaile); Bizkaian % 27,6 ziren elebidun eta % 17,8 elebidun hartzaile; eta Araban % 19,2 ziren elebidun eta % 18,4 elebidun hartzaile. Azken urteetako joera euskararen ezagutzaren igoera da, bai elebidun osoen kasuan bai elebidun hartzaileen kasuan. Nabarmena da gazteen arteko igoera (% 71,4 elebidun dago 16 eta 25 urte arteko tartean), eta Arabako aldaketa (% 7 elebidun zegoen 1991 eta % 19,2 ziren 2016an).
+
+Trebiñuko barrendegian, 2022an egindako azterketaren datuak hartuta, biztanleen % 30,6 elebiduna zen eta % 12 elebidun hartzailea. Adin tarteka, elebitasuna handiagoa da adin txikiagoetan: 15 urtetik beherakoen artean, % 80,4k euskara ezagutzen dute. 2012tik 2022ra, lau hizkuntza-trebetasunetan izan da hobekuntza: euskara ondo edo
+nahiko ondo ulertzeko gaitasunean 7,3 puntu, euskara ondo edo nahiko ondo hitz egitekoan 8,7 puntu, ondo edo nahiko ondo irakurtzekoan 11,3 puntu, eta ondo edo nahiko ondo idazteko gaitasunean 11,7 puntu. Euskadiko Autonomia Erkidegoan jaioak diren Trebiñuko enklabeko biztanleen artean euskaldunen portzentajea  % 39,6) altuxeagoa da enklabean bertan jaioak direnen artean baino (biztanleen % 36,3 da euskalduna), eta askoz ere altuagoa, beste lekuetan jaiotakoekin alderatuta (% 5,2 besterik ez da euskalduna).
+Villaverde Turtzioz barrendegian, berriz, 2002ko datuak ikusita, biztanleen % 20,70 elebiduna zen eta % 16,9 elebidun hartzailea. Kontuan izanda 1986an euskaldunak % 3,4 besterik ez zirela, eta Enkarterrietako joera bera erakutsi dutela euskalduntzeari dagokionez, gaur egun euskaldunen ehunekoa askoz handiagoa izango da.
+Nafarroari dagokionez, 2018ko azterlanak erakutsi zuen 16 urtetik gorakoen artean elebidunen kopurua % 14koa zela (69.000 pertsona), eta % 8 (55.000 pertsona) elebidun hartzailea zela. Elebidunen kopuruak gora egin du azken urteetan (1991n baino 3,4 puntu gehiago), bai eta elebidun hartzaileen kopuruak ere. 16 eta 25 urte arteko gazteen artean elebidunak % 26 dira.
+Ipar Euskal Herrian, 2016an, % 28,4 elebidunak ziren eta % 16,4 elebidun hartzaileak. Joera beheranzkoa da. Hala ere, azken urteetan joera hori moteldu egin da. Nolanahi ere, euskarak erabilera urria du kalean (2016): % 13,1 eta 14,5 artekoa zen Nafarroa Behere eta Zuberoan, % 5,4koa Lapurdi barnealdean, eta % 1,6koa Baiona Angelun eta Miarritzen (BAM).
+Euskal Herritik kanpo, badaude oraindik ere euskaraz aritzen diren komunitateak Amerikan.[erreferentzia behar]
+
+
+=== Erabilera ===
+
+Egungo egitura instituzionala hasi zenetik (1979), hainbat ahalegin egin dira euskararen ezagutza eta erabilera zenbatesteko eta neurketa arautu bat lortzeko. 1982ko SIADECOren lehendabiziko kale neurketa baten ondoren (Euskaltzaindiaren mandatuz), 1989an egin zen lehendabiziko kale neurketa estandarizatua. Euskararen erabilera neurtzen duten bi azterlan egiten dira periodikoki, bata inkesta soziolinguistikoaren baitan herritarrei galdetuta osatzen dena, eta bestea egiazko kaleko erabilera behatuta osatzen dena.
+2016ko inkesta soziolinguistikoak zioenez, 16 urte edo gehiagoko biztanleen % 25,7k euskara erabiltzen zuen neurri batean ala bestean:
+
+% 16,5ek euskararen erabilera trinkoa egiten zuen, hau da, euskara erdara beste edo gehiago erabiltzen zuen eguneroko jardunean.
+% 9,2k euskara erabiltzen zuen, baina erdara baino gutxiago.
+Gainerako % 74,3k erdara erabiltzen zuten beti edo ia beti. Kontuan hartu behar da, hala ere, azken hauen artean bazela multzo txiki bat (% 5,2) oso gutxitan bada ere euskara ere erabiltzen zuena.
+Erabileraren ehunekoak, ezagutzaren kasuan bezala, ezberdinak ziren lurraldez lurralde. Euskararen erabilera trinkoa egiten zutenak % 20,1 ziren EAEn, % 6,6 Nafarroan eta % 8,1 Ipar Euskal Herrian.
+
+Bestalde, kalean neurtutako erabilerari dagokionez, 2016an euskararen erabilera % 12,6koa izan zen, gaztelaniaren erabilera % 76,4koa, frantsesaren erabilera % 8,3koa eta beste hizkuntzen erabilera % 2,7koa. Lurraldeka, Gipuzkoan jaso zen erabilera-mailarik garaiena, % 31,1ekoa; Bizkaian % 8,8; Nafarroan % 6,7, Ipar Euskal Herrian % 5,3, eta azkenik, gutxien erabiltzen zen lurraldea Araba zen, % 4,6ko erabilerarekin.
+
+
+== Euskalkiak eta euskara batua ==
+
+
+=== Euskalkiak ===
+
+Euskalkiak euskararen dialektoak dira. Sortzen lehena mendebalekoa izan zen, VIII. mendearen inguruan, Asturiasko erresumak Araba-Bizkaietan zuen eraginagatik segur aski; eta hurrengo mendeetan eratu ziren gainerako euskalkiak. Aurretik, euskarak batasun handia zuen eta Euskal Herriak izandako zatiketa politikoen eraginez sortu ziren euskalkiak bost sorgunetan.
+1729an, Manuel Larramendi jesuitak El Imposible Vencido. Arte de la Lengua Vascongada izeneko euskararen gramatika bat argitaratu zuen Salamancan. Bertan hainbat dialekto edo euskalki bereizi zituen: gipuzkera, bizkaiera, nafarrera eta lapurtera, eta azken bi horiek bat bera zirela jo zitekeela adierazi zuen.
+Luis Luziano Bonapartek euskalkien beste banaketa bat egin zuen, egundaino indar handiz iritsi dena. Euskaltzaindiko lehen presidente Resurreccion Maria Azkuek (1864–1951) Bonaparteren banaketa berrikusi zuen. Besteak beste, erronkariera (1991n hil zen azken hiztuna) euskalki berezitzat jo zuen, Bonapartek zubereraren barnean sailkatu arren.
+1997an Koldo Zuazok eginiko sailkapen berriaren arabera, berriz, euskalkiak honela izendatu dira:
+
+mendebaleko euskara (izendapen zaharrean, bizkaiera);
+erdialdeko euskara (gipuzkera);
+nafarrera;
+nafar-lapurtera;
+ekialdeko nafarrera: zaraitzuera eta Aezkoako hizkera;
+zuberera.
+Tradizioan, gipuzkera, bizkaiera, lapurtera eta zuberera izan dira euskalki literarioak, hau da, euskal literatura egiteko, aldaera horiexek erabili izan dira. Mendeetan zehar, lapurtera (Ipar Euskal Herrian) eta gipuzkera (Hego Euskal Herrian) izan dira euskalki erabilienak, maila jasoan. Bizkaierak, era berean, erabilera handia izan zuen XX. mendearen hasieran, Bizkaian Sabin Aranaren abertzaletasunak izan zuen indarrak bultzaturik.
+
+
+=== Euskara batua ===
+
+1960ko hamarkadan, euskara batuaren sortze prozesuari ekin zitzaion, euskalkien arteko zatiketa gainditzeko eredu estandarizatuari, alegia. Bizitzaren esparru guztietara zabaltzeko eta, finean, egungo gizartean aise moldatzeko oinarriak eman zizkion batuak hizkuntzari. 1963an hainbat euskalarik Euskal Idazkaritza izenekoa sortu zuten Baionan eta euskara batuaren arauak erabakitzeko lanean jardun zuten urtebetez Txillardegiren gidaritzapean. 1964an jendaurreko ekitaldian aurkeztu zituzten Baionako Biltzarraren erabakiak. Data hori mugarritzat hartzen dute askok ondorengo bilakaera kontutan izanda. Zehazkiago, 1968an Euskaltzaindiak Arantzazuko santutegian (Oñati, Gipuzkoa) egin zuen batzarrean abiatu zen batasun prozesutik sortu zen euskara batua. Baionako erabakiak abiapuntu eta oinarri izan ziren Arantzazuko batzarrean.
+Euskaltzainek Arantzazuko batzarrean euskara bateratzeko lehenengo arau multzoak finkatu zituzten, idatzian erabili beharreko ortografia, morfologia, deklinabidea eta neologismoei buruzko arauak emanez. Hizkuntzaren batasunerako, gipuzkera eta lapurtera euskalkiak hartu ziren oinarritzat, baina gainerako euskalkien berezitasunak eta aldaerak ere kontuan hartuta.
+Batasuna ez da bat-bateko gauza izan, eta, nahiz eta neurri handi batean egina dagoen, aurrera doan langintza da oraindik ere. Izan ere, Euskaltzaindiak pixkanaka onartu eta argitaratu ditu euskararen alorrak finkatzeko arauak eta gomendioak, eta jardun horretan segitzen du gaur egun ere.
+
+
+== Idazkera ==
+
+Euskarak, XVI. mendean idazten hasi zenetik, alfabeto latindarra darabil, bere kokaleku geografikoaren eraginez. Gaur egun, euskal alfabetoak bost bokal ditu:
+
+a, e, i, o, u. Zubererak seigarrena ere badu: ü.
+eta ondorengo kontsonante hauek:
+
+b, d, f, g, h (mutua, mendebaldeko euskalkietan; hasperendua, ekialdekoetan), j (gipuzkeraz eta aldameneko hainbat hizkeratan, ahoskera belarra du, gaztelaniaz bezala; zubereraz eta Bizkaiko zenbait hizkeratan, frantsesezko <j> bezalakoa da, hots, /ʒ/ Igurzkari hobiosteko ahostuna); eta gainerako euskalkietan eta euskara batuan, sabaikaria), k, l, m, n, ñ, p, r, s, t, x, z.
+Gainera, beste bost kontsonante ere baditu, beste hizkuntzetatiko maileguak idazteko:
+
+c (eta haren aldaera ç), q, v, w, y.
+Kontsonante horietako batzuk konbinatuz edo bikoiztuz, digrafo hauek sortzen dira:
+
+dd, ll, rr, tt, ts, tx, tz.
+Azentuari dagokionez, ez da idazkeran adierazten.
+
+
+== Hizkuntzaren egitura ==
+Morfologikoki hizkuntza eranskaria delako ezaugarria azpimarratu izan da euskararako, deklinabidea monemak banan-banan erantsita sortu dela uste izanda. Ikerketa berriagoek erakutsi dute, ordea, hori baino konplexuagoa dela kontua; esaterako, deklinabide mugatua ez da ulertu behar etxe+a+n > etxean edo etxe+a+ri > etxeari, baizik eta etxe+han > etxean eta etxe+hari > etxeari; hau da, erakusleen gramatikalizazioz, ez eredu eranskari kanoniko baten bidez.
+Tipologia ergatibokoa edo aktibokoa (deskribatzailearen ikuspegi teorikoaren arabera). Hitzen ordena neutroan subjektua objektuaren aurretik doa, eta objektua aditzaren aurretik (SOV ordena).
+
+
+=== Ezaugarri fonologikoak ===
+
+Euskararen sistema fonologikoak bost bokal ditu: /a/, /e/, /i/, /o/, /u/ (horiei zubereraren /y/ gehitu behar zaie). Munduan hedatuen dagoen tipo bokalikoa da. Beraz, euskara batez bestekoaren barruan dago. Diptongoekin ez da berdin gertatzen: euskarak bost dauzka (goitik beherakoak deritzen motakoak), /ai/, /ei/, /oi/, /au/ eta /eu/. Horrek nolabaiteko konplexutasuna ematen dio bokalismoari, eskuarki gaztelaniarenaren oso antzekoa denari (ekialdean /ui/ diptongoa ere bada, baina haren erabilera mugatua da oso).
+Kontsonanteei dagokienez, euskarak, aldaera estandarrean, 21 fonema kontsonantiko dauzka. Sistemaren oinarriak hauexek dira: alde batetik, ahostun / ahoskabe oposizioa (kontsonante ahoskabeak alde batean eta ahostunak bestean, baina bakarrik herskarien artean) eta, bestetik, artikulazio moduen zatiketa hirukuna: badaude kontsonante herskariak (/p/, /t/, /k/, /b/, /d/, /g/), frikariak (/s/, /z/, /x/, /j/) eta afrikatuak (/tz/, /ts/, /tx/). Ozenek osatzen dute kontsonantismoa (sudurkariek eta urkariek, dardarkari bakunen eta anizkunen artean oposizioa dagoela) eta, ekialdeko eskualde batzuetan, aspirazioak (/h/), frikari glotala bera. Oro har, sistema kontsonantikoak ez dauka ezaugarri bereziki deigarririk, salbu eta, agian, fonema frikari eta afrikatuen kopuru handi samarrean.
+Euskararen azentua intentsiboa izan ohi da. Ezin da errazki azaldu zertan datzan, zubereraz izan ezik, euskalki horretan azentuazioa finkoa baita, hitzeko azkenaurreko silaban. Beste euskalkietan, arau hauek dute indarra:
+
+hitzaren erroa monosilabikoa denean, hitzak berak silaba gehiago izanik ere, azentua lehen silaban doa: lúrra < lurr-a, lúrretan < lurr-etan;
+erroa bisilabikoa bada eta bokalez bukatzen bada, kasu horretan ere lehen silaban doa azentua: méndi, áte;
+beste kasuetan, silaba anitzetako hitzetan, azentua azkenaurreko silaban doa (gizón, gizóna) eta bigarren mailako azentu bat gehitu dezakete hitzaren amaieran, hitzak lau silaba edo gehiago dituenean (gizónarentzàt).
+
+
+=== Ezaugarri morfologikoak ===
+Egitura morfologikoaren aldetik, euskara hizkuntza eranskarien barruan dago, finladiera (eta uraldar hizkuntzekin orokorrean) edo turkierarekin (eta turkiar hizkuntzekin orokorrean) batera, adibidez. Hizkuntza multzo horretan, morfemen arteko mugak argi eta garbi azaltzen dira, eta segmentu morfologikoetan esanahi bana adierazten da. Ezaugarri hori, morfemen arteko bereizketa gardena, euskarari aplikatu dakioke eskuarki. Hala ere, zenbait alor gramatikaletan, osagai morfologikoen arteko zatiketa eta esanahia duten unitateekiko lotura ez dira hain begi-bistakoak.
+
+
+==== Izen morfologia ====
+Izen morfologiari dagokionez, euskara, beste hizkuntza eraskariak bezala, genero gramatikalik gabeko hizkuntza da. Haren ezaugarrietako bat da izenen flexio aberatsa: izenek, izenordainek eta adjektiboek osatutako sintagmek kasuak hartzen dituzte: postposizio sintagmak dira (euskarak deklinabidea duela esan izan den arren, ez baita oso zehatza hori; berez, postposizioak dira, eta ez deklinabide kasuak). Postposizio sintagma horiek, deskripzioen arabera, 16 edo 18 dira. Egia esan, hamar kasu daude atzizki bakuna dutenak. Horien artean hauexek: absolutiboa (etxea, singularrean), ergatiboa (etxeak), datiboa (etxeari), genitiboa (etxearen), instrumentala (etxeaz), lokatibo edo inesiboa (etxean), ablatiboa (etxetik), adlatiboa (etxera), lokatibo adnominala (etxeko) eta prolatiboa (etxetzat). Absolutiboaren ukoak partitiboaren erabilera dakar berekin (etxerik ez du). Horren funtzionamendua paradigma numeral mugagabera mugatua dago eta, batzuetan, ez da sisteman egoteko eskubide osoa duen kasutzat hartzen.
+Atzizki bakunean oinarritzen diren postposizio sintagma hauetaz gain badira atzizki konposatu itsatsia duten beste postposizio batzuk. Horiek sortzeko, genitiboaren edo adlatiboaren forma ondoren doan beste atzizki batekin lotzen da. Kasu konposatu horiek hauexek dira: soziatiboa edo komitatiboa (etxearekin), hurbiltze adlatiboa edo direkzionala (etxerantz), muga adlatiboa (teliko edo terminatibo ere deitua; etxeraino), destinatiboa (edo benefaktiboa; etxearentzat, etxerako) eta motibatiboa (edo kausala; etxearengatik). Postposizio horietan guztietan, bereizten ahal dira, alde batetik, oinarrizko atzizkia (genitiboa edo adlatiboa) eta, bestetik, berariazko atzizkia. Adibidez, etxe-a-ren-tzat (artikuluari dagokion -a- bat barne) edo etxe-ra-ino. Ikuspegi historikotik, zenbait formaren kasuan, gaur egun duten itxura bi atzizki batzearen ondorio da, aurreko adibideetan bezala, edo paradigmaz kanpoko osagaiei esker gorpuztu da, kausalean edo, kasu konposatuen artean, lokatibo adnominalean gertatu den moduan.
+Lekua adierazten duten postposizioetan (lokatiboa, ablatiboa, adlatiboa eta azken honen oinarrian eratzen diren kasu konposatuetan) erreferentzia biziduna duten izenek atzizki osagarri bat erakusten dute (-ga(n)-), gehienetan genitiboarekin konbinatuta agertzen dena: ablatiboaren kasuan honako forma hauek konpara daitezke, etxe-tik eta gizon-a-ren-gan-dik, edo lokatiboaren kasuan beste hauek, etxe-a-n eta gizon-a-ren-gan.
+Horiek guztiak postposizio itsatsiak dira. Badira beste gisa bateko batzuk, postposizio askeak deitzen ditugunak. Horrela osatzen dira postposizio askeko paradigmak: etxe ondoan, herritik hurbil, maldan behera, eta abar.
+Postposizio sistema horrek hiru forma edo paradigma multzo dauzka: bat singularrerako, beste bat pluralerako eta beste bat numero marka gaberako (mugagabe deitu izan da gramatiketan), hots, artikulurik ez daukan eta, numero gramatikalari dagokionez, indiferentea den horretarako. Ikus bedi lagin hau, liburu izenerako:
+
+Absolutiboa (etxea, singularrean), ergatiboa (etxeak), datiboa (etxeari), genitiboa (etxearen), instrumentala (etxeaz), lokatibo edo inesiboa (etxean), ablatiboa (etxetik), adlatiboa (etxera), lokatibo adnominala (etxeko) eta prolatiboa (etxetzat). Absolutiboaren ukoak partitiboaren. 
+Euskal kasuak antolatzeko sistema dela eta, aipatu behar da haren funtsezko ezaugarri bat: izaera sintagmatikoa da, alegia, kasua markatzen duen atzizkia sintagma edo talde nominalaren azken osagaiari gehitzen zaio, ez osatzen duten guztiei:
+
+Liburuan irakurri zuen, liburu hartan irakurri zuen, liburu erosi berrian irakurri zuen.
+Berezitasun hori numero pluralaren adierazpenera ere zabaltzen da: sintagmako azken osagaia bakarrik agertzen da markaturik plural gisa: 
+
+Liburu berriak, liburu berri horiek.
+Sistemaren beste bereizgarri bat, hizkuntza aglutinatzaileetan gertatu ohi dena, forma nominaletan desinentzien markak metatzeko aukera da (elipsiaren ondorio gisa): 
+
+Lagunarenetik, genitiboko -ren- atzizkia eta ablatiboko -tik atzizkia metaturik.
+
+
+==== Aditz morfologia ====
+
+Euskarazko aditzaren morfologia konplexuagoa da izenarena baino. Kategoria unibertsalak ez ezik (tenpusa edo aldia, aspektua, modua, numeroa eta pertsona), euskaraz forma sistema jori bat dago: aditz batzuetan (dozena bat, aditz laguntzaileak barne) forma analitiko edo perifrastikoak (eramaten dut), alde batetik, eta, bestetik, forma sintetikoak edo trinkoak (daramat, eraman aditz berekoa) bereizten dira; horrez gain, konjugazio orokor bat dago, pluripertsonala deritzona, non aditzaren ekintzan diharduen edo parte hartzen duen bakoitzarentzat markak ageri baitira; eta gainera konjugazio alokutibo bat ere bada, formak modu batean edo bestean osatzerakoan entzulearen sexua kontuan hartzen duena (hiketa).
+Forma sintetikoen bidez, aspektuaren esanahi progresiboa adierazten da, forma perifrastikoen esanahi puntualaren kontrakoa: dator alde batetik, eta etortzen da bestetik; darama alde batetik, eramaten du bestetik (aditz estatiboetan, ordea, erlazio hori ez da gertatzen: daki, dakusa). 
+Adibideotan ikus daitekeenez, forma perifrastikoen aditz laguntzailea (da / du) aldatzen ahal da eta aditzaren izaera semantikoaren arabera benetan aldatzen: aditza iragangaitzen taldekoa bada (edo, hobe, adituek «inakusatiboak» deitzen dieten horretakoa) laguntzaileak izan-eko formak hartzen ditu. Aitzitik, aditza iragankorra bada edo iragangaitza baina aktiboa bada, laguntzailea *edun paradigmatik hartzen da (forma hori ez dago dokumentatua, horregatik izartxo batekin markatzen da):
+
+*edun-etik datorren laguntzailearekin osaturiko aditz multzoetako subjektuek ergatiboaren marka daukate (-k singularrean). Esan den bezala, ezaugarri hori egitura iragankorrei (Anek liburua irakurri du) ez ezik, esanahi aktiboko egitura iragangaitzek osaturiko azpitalde txiki bati ere badagokio (Anek ondo dantzatzen du, emanaldiak luze iraun du). Horregatik, egile batek baino gehiagok pentsatzen du euskara ez dela zehazki hizkuntza ergatibo bat, kontzeptua ezaugarri morfologiko eta sintaktikoetatik abiaturik definitu ohi den moduan, egitura aktiboko hizkuntza bat baizik.
+Konjugazio edo aditz komunztadura pluripertsonalak adizki bakar batean partaide batzuk biltzen ahal ditu: subjektua, osagarri zuzena (gehienetan, markatu gabe) eta zeharkako osagarria. Darama adizkia daramakio adizkiarekin alderatuz gero, berehala atzematen da ekintzako hirugarren partaidea, zeharkako osagaiarena egiten duena.
+Ikus ditzagun beste adibide batzuk:
+
+ekarri d-i-da-zu: laguntzaileko d- orainaldiaren adierazlea da, -i- artizki bat da, -da- singularreko lehen pertsonaren adierazlea, eta -zu singularreko bigarren pertsonarena;
+ekarri d-i-o-zu: laguntzaileko d- orainaldiaren adierazlea da, -i- artizki bat da, -o- singularreko hirugarren pertsonaren adierazlea, eta -zu singularreko bigarren pertsonarena;
+ekarri d-i-gu-te: laguntzaileko d- orainaldiaren adierazlea da, -i- artizki bat da, -gu- pluraleko lehen pertsonaren adierazlea, eta -te pluraleko hirugarren pertsonarena;
+ekarri z-i-z-ki-gu-te-n: laguntzaileko z- lehenaldiaren adierazlea da, -i- artizki bat da, -z- pluralaren adierazlea, -ki- beste artizki bat (datibozko markarekin lotua), -gu- pluraleko lehen pertsonaren adierazlea, -te- pluraleko hirugarren pertsonarena, eta -n lehenaldiaren marka da.
+Adizkiak, bereziki konjugazio pluripertsonalaren barruan, oso modu ikusgarrian zailtzen ahal dira, adibide hauek frogatu bezala (egiazko kasuak dira, baina gutxi erabiliak): ziezazkiguketen, z-ieza-z-ki-gu-ke-te-n morfemetan zatitua, edo generamazkionan (emakume bati hika hitz egiten zaionean), ge-ne-ram(a)-z-ki-o-na-n morfemetan zatitua.
+Azkenik, konjugazio alokutiboak solaskidearen sexuaren arabera bereizten diren adizki-paradigmak biltzen ditu. Adizki horiek orokorrei buruz diferenteak dira, ez bakarrik hizlariak espresuki bere solaskidea aipatzen duenean (ikusi duk [mask.], ikusi dun [fem.]), hori beste aditz pertsona bati baitagokie, baizik eta solaskideak ekintzan esku hartzen ez duenean ere bai: liburu hau irakurri diat (gizon bati hitz egiten zaionean), liburu hau irakurri dinat (emakume bati hitz egiten zaionean); adizki markatugabea, solasaldiaren erreferentziarik egiten ez duena, liburu hau irakurri dut esaldian dago. 
+Forma berezi horien erabilera harreman eta egoera jakin batzuetara mugatuta dago: erabiltzen diren barietateetan, aditz-joko alokutiboa arrunta da anai-arreben artean eta adin bertsuko adiskideen artean; ohikoagoa, dena den, gizonezkoen artean emakumezkoen artean eta harreman mistoetan baino. Bestelako egoeretan forma alokutiboen erabilera urria da, edo ez da gertatzen.
+
+
+=== Ezaugarri sintaktikoak (joskera) ===
+Euskaraz, hitzen ordena SOV (subjektua – objektua – aditza) izan ohi da, marka ergatiboa duten hizkuntzetan oso zabaldua dagoena. Hala ere, euskarak malgutasun sintaktiko nabarmena du. Esaldien mailako ordenarik ohikoena (Jonek(S) auto berria(O) erosi du(V)) izenen eta postposizioen arteko harremanarekin bat dator (euskaraz ez dago preposiziorik): aulkiaren atzean, iritzi horren aurka. Gaztelaniatik harturiko preposizioak, euskarak onartu eta gero, beste postposizioak bezala portatzen dira: iritzi horren aurka. Izen sintagmaren eta haren genitibozko osagarriaren arteko ordena (aitaren etxea) bat dator tipologikoki hitzen oinarrizko ordenarekin. Gauza bera esan daiteke egitura konparatiboez: hauetan, konparazioaren bigarren osagaia adjektiboaren –hau dagokion graduan– aurretik agertzen da (zu baino gazteagoa).
+Mendeko perpaus erlatibodunak laguntzen duten substantiboaren aurretik joan ohi dira ([erosi berri dudan](Rel) liburua). Hala ere, hori ez da modu bakarra klausula erlatibodunak sortzeko: maila batzuetan zeina izenordaina erabiltzen da, erromantzearen egituraren antzera, hots, erlatiboa substantiboaren ondoren. Gaurdaino ia-ia iraun ez duten eraikuntza zaharretan, erlatiboa erreferentearen atzetik ere bazihoan, hala nola: monument ageri eztiradenak (Rel) bezala zarete (Leizarraga, 1571, Lukas XI, 44). Joskera hori oraingoarekin alderatzen ahal da (ageri ez diren (Rel) monumentuak bezala(koak) zarete). Barne erlatiboko klausulak dira, seguru asko. Horrenbestez, euskarak izan litezkeen aukera tipologiko guztiak dauzka mendeko esaldi erlatiboak osatzeko.
+
+
+=== Ezaugarri lexikoak ===
+Euskararen lexikoa da hizkuntzaren gainean gutxien ezagutzen den kontuetako bat eta horrek bide eman die balizko iritzi etimologiko guztiei, fundamentuarekin edo gabe. Zoritxarrez, azken hauek izan dira nagusi historian zehar.
+Gaur egungo ikerketek (Joseba A. Lakarraren eskutik) adierazten dute, antza, jatorrizko lexikoaren multzoaren muina erro laburretan, monosilabikoetan, oinarritzen zela eta, hortik abiaturik, hizkuntzaren bilakaeraren ondorengo urratsetan, bi silaba edo gehiagoko erroak sortuz joan zirela. Euskarak hiztegi etimologiko on baten behar gorria du. Gaur egun euskarazko hitz jator gutxi zehazki ezagutzen ditugu; esan dezakegu hainbat hitzak jatorrak direla zehazki, adibidez, aditz osagarririk gabe (hau da, «izan» edo «egon») erabiltzen diren aditz guztiak («dakar», «dabil», «dator» eta bezalakoak), soin baten zati ia guztiak («esku», «begi», «buru» eta bezalakoak), zenbakiak adierazten dituzten hitzak «mila» zenbakiraino («mila» eta handiagoak diren zenbakiak latinetik eratorri ziren), ahaidetasuna adierazten duten hitzak («aita», «neba», «arreba», «osaba» eta bezalakoak) eta izenordain guztiak («gu», «hau», «ezer», «nor», «zerbait» eta bezalakoak).
+Jatorri ezezagun edo zalantzakoa duten hitzak ere ditugu, adibidez, «alai» eta «jai» hitzak ez direla jatorrak dirudi, baina ezin dugu esan nondik eratorri ziren.
+Euskarazko hitzekin lotura duten hitzak beste Eurasiako hizkuntzetan aurkitzen ditugu Eurasiako hizkuntza zaharrenetako bat delako: ele — uraldar kel «hizkuntza» eta mongoliera хэл (hel) esanahi berdinarekin, gutxi (antzineuskaran — guti) — dravidar guti «txiki», etb.
+Maileguei dagokionez, badakigu euskara latinezko eta erromantzezko hitzez elikatu dela lotsarik gabe. Mailegu batzuk begi-bistakoak dira (bake < lat. pace(m), ohore < lat. (h)onore(m), liburu < lat. libru(m), herren, herrenka < esp. renco, rengo), baina beste batzuk ez hainbeste (aizkora < lat. asciola, begiratu < lat. vigila edo euskaratik begi, aitortu < aragoiera zaharreko aytorgar).
+Askoz gutxiago izanik ere, litekeena da antzinako hizkuntza zeltetatik harturiko lexikoa ere izatea (mando, gori, maite, lur, agian izokin, baina azken hitz horren jatorria latin berantiarreko esocina izan liteke, Asturietako esguín «izokin gaztea» kide izanik) eta germaniar hizkuntzetatik ere bai (agian urki). Arabieratik harturiko hitzak ere badira (alkandora, azoka, erraz), baina gehienak erromantzeak iragazirik etorri dira.
+
+
+==== Hitz berriak sortzea ====
+
+Euskarak hainbat era erabiltzen ditu hitz berriak sortzeko eta hiztegia aberasteko; horien artean hizkiak (aurrizkiak eta atzizkiak gehienbat) gehitzea, hitz-elkarketak sortzea eta beste hizkuntzetatik hartzea (mailegatzea) era hedatuenak dira.
+Ohikoak diren atzizkiak eta aurrizkiak honako hauek dira:
+
+«-tsu», «zerbaitez betetako» esan nahi duena: «harritsu, euritsu, eztitsu, zoriontsu, gutiziatsu»;
+«-tu / -du», aditzak sortzeko: «euskaratu, uzkurtu, leundu, izenpetu, lokartu»;
+aditzak sortzeko erabiltzen den beste atzizki bat «-tsi» da, «-tu» baino gutxiago ikusten dena: «goretsi, gaitzetsi, esetsi, miretsi»;
+«-txo, -xka» txikigarriak: «amatxo, hankatxo, zuhaixka, herrixka»;
+«-kuntza»: «hizkuntza, hezkuntza, hazkuntza, sorkuntza»;
+«-(t)ar», norbaiten jatorrizko herria edo bizitokia adierazteko: «euskotar, hiritar, herritar, bilbotar, txinatar»;
+«-lari / -ari, -tzaile, -le», gehienetan jarduera adierazteko erabiltzen direnak: «gudari, hizkuntzalari, egile, eragile, sortzaile»;
+«-zale / -tzale», zaletasuna adierazteko: «txangozale, euskaltzale, ederzale»;
+«-tasun», «-era», «-keta» eta «-pen» substantibazioaren atzizki nagusiak dira:
+«argitasun, moteltasun, menpekotasun, ahalguztiduntasun»;
+«zabalera, garaiera, jarrera, sarrera»;
+«azterketa, irakurketa, elkarketa»;
+«ekoizpen, eragozpen, hitz-eratorpen»;
+«-dun» atzizkiak zerbait edukitzea esan nahi du: «euskaldun» (hau da, euskara duena), «dirudun», «hostodun»;
+«-kor» atzizkiak zerbait egiteko joera adierazten du: «aldakor, iheskor, leherkor»;
+«-keria»-k tasun txar edo kaltegarri baten esanahia gehitzen du eskuarki: «handikeria, burugogorkeria, umekeria»;
+«-ko» eta «-tako» adjektibo ugari eta hainbat izen sortzeko gai da: «etengabeko, ohiko, euskarazko, euritako, betaurreko»;
+«-berr / -ber» aurrizkiak berregitea esan nahi du gehienetan: «berresan, berrezarri, berrirakurri, berpizkunde».
+Horrez gain, iraganean hainbat aditz berri kausatiboaren («zerbait egitera behartu» esan nahi du) bitartez sortu ziren, «-ra» osagaia gehituz: «egon – iraun, ikusi – erakutsi, ekarri – erakarri» eta abar. Gaur egun «-(t)arazi» erabil daiteke horretarako.
+Hitz-elkarketetan sarri erabiltzen diren osagaien artean honako hauek dira, adibidez:
+
+«-aldi», denborarekin (une jakin batekin) lotuta dauden izenak sortzeko: «emanaldi, ilunaldi, argialdi, goraldi, jaialdi»;
+«-alde», izen ugari, sarritan leku batekin lotuta daudenak, sortzeko: «goizalde, sukalde, herrialde, lurralde, etxalde»;
+«-gailu (-kailu)», gailu eta makina ugari adierazten dituzten izenak sortzeko: «igogailu, ibilgailu, hozkailu»;
+«-exte» eta «-tegi / -degi» osagaiek eraikinak edo zerbait edukitzeko erabiltzen diren lekuak adierazten dituzte:
+«ikastetxe, erietxe, sortetxe»;
+«lantegi, hiztegi, oihaltegi, artegi, ehundegi»;
+Hitz-elkarketak eraikitzeko mota askotako erroak eta hitzak erabiltzen dira:
+
+izen + izen: «bidelagun, harri-jasotzaile, sumendi»;
+aditz + izen: «etorbide, jaurtigai, egongela»;
+aditz + aditz: «harreman (hartu + eman), joan-etorri»;
+izen + adjektibo: «eskuzabal, burugogor»;
+adjektibo + adjektibo: «zuri-beltzeko».
+
+
+=== Euskarazko garbizaletasuna (purismoa) ===
+
+
+== Literatura ==
+
+
+=== Ahozko literatura ===
+
+Ahozko literaturak aipamen berezia behar du. Euskararen idatzizko garapen mugatua dela eta, ahozko literaturaren agerpenek indar berezia izan dute. Horrela, atsotitzak, baladak eta kopla zaharrekin batera, besteak beste, berebiziko munta du bertsolaritzak.
+
+Nahiz eta lehenagoko aztarnak ere badiren, bertsolaritza XIX. mendetik aurrera garatu zen Euskal Herrian. Ez zen lurralde guztietan indar berarekin hedatu, ordea. Gipuzkoako eskualde batzuek eman zituzten bertsolaririk ezagunenak. XIX. mendeko gerra eta gatazka ugariek eskaini zuten bertsotarako gairik. Hori dela eta, frantsesen aurkako, karlisten garaiko eta Kubako gerrei buruzko bertso mordoxkak iritsi zaizkigu: ahoz aho banaka batzuk, idatziz gehienak. Kanta paperen bidez zabaldutako bertsoak oso modan egon ziren, eta zenbait kasutan orduko gertaera eta albisteak jakinarazteko modurik herrikoienetako bat zen.
+Mende hartako bertsolari zaharrenen artean Xenpelar errenteriarra dugu ospetsuena. Haren bertso-sorta askok bizirik diraute euskal kantutegian: Betroiarenak, Pasaiako zezenarenak edo Ia guriak egin du, esaterako. Bat-bateko bertsolari moduan nabarmendu ez baziren ere, Jose Mari Iparragirre eta eta Bilintxen bertsoak ere aipagarriak dira. Lehenaren Ume eder bat eta Gernikako arbola edo bigarrenaren Bein batian Loiolan eta Loriak udan intza bezela, oso ezagunak dira. Azpimarratzekoak dira Iparraldeko koblakariak ere, hala nola Zuberoako Piarres Topet «Etxahun» barkoxtarra (Ürx'aphal bat badügü, Maria Solt eta Kastero...) eta Nafarroa Behereko Joanes Oxalde bidarraitarra (Lurreko ene bizia, Iruñeko ferietan...).
+
+
+=== Euskara idatziaren lehen urratsak ===
+
+Euskaraz idatzitako lehenengo hitzak Akitania eta Pirinio inguruetan aurkitutako erromatarren garaiko hilarrietakoak dira ( I. mendea) Jainko eta Jainkosen izenak izan litezke: sembe > seme; anderexo > andereño; cison > gizon...
+Gaur egun ezagutzen den euskara ez da antzinaro hartakoa bera. Horregatik aitzineuskara deritzo garai hartako euskaldunen mintzairari; eta aitzineuskaratik gaur egungo euskarara, garai hartako latinetik gaur egungo gaztelaniara dagoen antzeko aldea edo handiagoa legoke.
+Orain arte euskaraz idatzita aurkitu diren esaldirik zaharrenak Donemiliagako glosak dira (X. mendea). Horren zergatia hauxe da, herri literatura eta tradizioa ahoz transmititu izan direla batez ere.
+Glosak, latinezko testuak ulertzeko monje kopistek idazten zituzten oharrak dira, hau da, zatirik zailenei buruzko ohar batzuk "Guec ajutuezdugu" (ez dugu laguntzarik) eta "Içioki dugu" («piztu dugu») dira.
+
+Bernart Etxepareren Linguae vasconum primitiae liburua euskaraz argitaratutako lehena da, 1545ekoa. Izenburua latinez dago, baina liburu osoa euskaraz. Idazleak idazterakoan ez zuen eredurik izan. Horregatik, grafia asmatu behar izan zuen eta euskararen soinuak, hotsak, paperean emateko erdaran erabiltzen ziren letrez baliatu zen: apeza izanik, baitzekien erdaraz idazten.
+Jesus Krist Gure Jaunaren Testamentu Berria (1571) Joanes Leizarragak idatzi zuen. Apaiz katolikoa zen, baina garaiko Nafarroako erregina protestante bihurtu zenean higanot bihurtu zen, beste kristau asko bezala. Erreginak Itun Berriaren itzulpena euskarara egitea eskatu zion Leizarragari, dotrina kalbinista zabaltzeko. Horrela, Jesus Krist Gure Jaunaren Testamentu Berria argitaratu zuen 1571. urtean. Liburua Vulgatatik itzulia bada ere, baditu itzulpena ez diren beste atal batzuk: horien artean, Nafarroako erreginari zuzendutako gomendio gutuna, non Euskal Herria izenari lurraldea zehazten zaion, baita euskara eta euskalkien izan zituen arazoak azaltzen dituen «Heuscalduney» deritzon atala ere.
+
+Gero (1643) euskal prosaren gorengo emaitza da, eta aszetika deritzon azpijeneroko obra unibertsala, nolabait 1643. urtean azaldu zen, Bordelen inprimaturik. Haren egile Pedro Agerre Azpilkueta (Axular) Nafarroa Garaiko Urdazubi herrixkan jaio zen. Axular goitizena bere jaiotzeko baserritik datorkio. Iparraldeko Saran eman zituen Axularrek bere urterik gehienak, hango errektore edo parroko. Liburuaren hizkuntza eredua, geroago lapurtera klasikoa deitu zena da. Eredu horretara heltzeko, Axularrek herriak ulertzeko moduko hitzak eta adierazpideak bilatzen ditu, baina horretan aberastasunik batere galdu gabe. Horregatik esaten da Axular dela euskal prosaren benetako sortzailea, Leizarragak bidea nolabait jorratu bazuen ere.
+Eguna (1937) euskara hutsean idatzitako lehenengo egunkaria da. 1921ean sortutako Donostiako Argia astekaria bilakatzeko ahalegin guztiek lur jo bazuten ere, hazia ereinik zegoen euskaltzaleen artean. Egunkaria gerra hasi arte, hala ere, ez zen gauzatu, Eusko Jaurlaritzak 1937. urtearen hasieran Eguna plazaratu zuen arte. Sei hilabete eskas iraun zuen lehenengo euskal egunkariak, militarrek ekainean Bizkai osoa kontrolatu bitartean, alegia.
+
+
+=== Literatura idatzia ===
+
+Euskarak lapurtera idatziaren bidez, batik bat, bizi zuen berpizkundea. Ondokoak izan ziren euskal literaturari hasiera ematen zioten autoreak:
+
+Bernart Etxepare (1480(?)–?): Linguae Vasconum Primitiae (1545);
+Joan Perez Lazarraga (1548(?)–1605): Lazarragaren eskuizkribua (1567);
+Joanes Leizarraga (1506–1601): Jesus Christ Gure Jaunaren Testamentu Berria (1571)
+Hurrengo mendeetan gainerako euskalkiek idatzizko garapen handiagoa izan zuten. Euskalki literarioak lapurtera, bizkaiera, gipuzkera eta, apalkiago, zuberera izan ziren. Berpizkunde osasuntsu baten ondoren, hegoaldean XVIII. mendean geldiune bat jazo zen, non erlijio-testuen itzulpen txepelen erdian Agustin Kardaberazen Eusqueraren berri onac nabarmendu zen. Era berean, egile handirik izan zen: Axular XVII. mendean, Juan Antonio Mogel eta Pedro Antonio Añibarro XIX.enean eta Estepan Urkiaga Lauaxeta, Txomin Agirre, Xabier Lizardi eta Gabriel Aresti besteak beste, XX.enean.
+1968tik aurrera, euskara batuaren garapenarekin, euskarazko literatura azkar hazi zen, eta gaur egun asko dira euskal idazleak, besteak beste:
+
+Joxe Azurmendi (1941–)
+Ramon Saizarbitoria (1944–)
+Arantxa Urretabizkaia (1947–)
+Joan Mari Irigoien (1948–)
+Anjel Lertxundi (1948–)
+Mariasun Landa (1949–)
+Bernardo Atxaga (1951–)
+Koldo Izagirre (1953–)
+Xabier Montoia (1955–)
+Lourdes Oñederra Olaizola (1958–)
+Joseba Sarrionandia (1958–)
+Unai Elorriaga (1973–)
+Harkaitz Cano (1975–)
+
+
+== Euskara munduan ==
+
+
+=== Euskal Herriaren inguruan ===
+Euskara Bearnoko hainbat herri eta auzunetan mintzatua da. Herri eta auzune horiek Zuberoaren inguruan daude. Honako hauek dira: Aramitze, Arriba, Arribalda, Azpilda, Ereta, Hagoeta, Jeruntze, Lixoze, Nabarzi, Orin eta Tabaila-Uzkaine. Batzuek zerrenda horretan sartzen dituzte Eskiula, Jeztaze eta Ozaraine-Erribareita ere, baina gehienetan Zuberoako herritzat hartzen dira.
+
+
+=== Aspaldiko bisitariak: Donejakue bidea ===
+
+Euskal Herria igaroleku zelako beste froga bat Donejakue bidea da. Erdi Aroan hasi zen, eta denbora luzez (X. mendetik XIX.eraino) erromes asko heldu ziren Europa osotik Compostelara, Done Jakue apostoluarena omen zen hilobia ikustera, ortzia irabazteko bidea zelakoan. Bideko pausaleku handienetakoa zen Orreagako monasterioak, alderatzeko eran, oraindik XVII. mendean urteko 20.000 janari ematen zituen. Euskarak harridura pizten zuen bidaiarien artean. «Itsaso erromaniko»aren barnean euskararen «uharte» ikusgarria ageri zen. Horregatik, bidaiariek hiztegitxoak osatu zituzten, batzuk oso zaharrak, XII. mendekoak.
+Beilarien artean Aymeric Picaud frantsesa dugu ospetsuena gure historian. Picaud frantziar erromesak Done Jakue bidea egin zuen XII. mendean eta ikusitakoaren gida bat latinez idatzi. Bertan euskaldunak eta lurraldea deskribatzen ditu eta kexu ageri da eman dioten tratuaz. Hala ere, euskarazko hitzen zerrenda bat bildu zuen, ezagutzen den lehen euskal hiztegitxoa bilduz. Codex Calixtinus (1132–1135) latinezko liburuan Pirinio hegoaldeko biztanleak «nafarrak» (nauarri) deitzen ditu; iparraldekoak, ordea, «baskoak» (bascli). Hala ere, ez direla bereizten dio: berdin jan, jantzi eta hitz egiten dutela.
+Arnold von Harff alemaniar zalduna, 1496–1499 urteen artean egindako erromesaldietan, Euskal Herrian ere izan zen, eta erromesaldi horien berri eman zuenean, euskarazko hiztegitxo bat jaso zuen.
+
+
+=== Euskara bidaiari ===
+Euskalduna euskaraz hitz egiten duen pertsona da, non jaio zen edo non bizi den berdin dio. Beraz, euskaldun guztiak ez dira Euskal Herrian bizi, Euskal Herritik at ere euskaldunak bizi dira eta horren froga bizia dira munduan zehar idoro daitezkeen Euskal Etxeak edo Euskara edo Euskal Kultura irakasgai dituzten zenbait Unibertsitate.
+Historian zehar ez dira gutxi herria utziz mundu zabalera abiatu zirenak. XVI. mendeaz geroztik, Amerikarako bidea izan zen norabide nagusia. Ameriketan egiten zituzten lanbideak ezberdinak dira, baina zenbait garaitan artzaintza nagusia zen. Argentinan, Buenos Aires hiriburuan esne ekoizpena XIX. mendean euskaldunen eskuetan zen, hala nola, gazitegiak (haragia kontserbatzeko industria, alegia); bi lan horiek «euskaldunen lanak» izendatzeraino heldu ziren. Horretaz gain, euskaldunak aritu ziren Ameriketako hainbat eta hainbat jardueratan: Kaliforniako urre-meatzeak, ostatuak eta merkataritza, Argentinako Pampa ordekan, unai gisa...
+
+
+==== Euskal etxeak ====
+
+Euskal etxeak atzerrira joandako euskaldunak batzen diren tokiak dira. Elkarte horien helburua elkarren arteko laguntza eta euskal nortasuna babestea dira. Horretarako ekintza ezberdinak antolatzen dira: euskarazko klaseak, abesti eta dantza taldeak, aldizkariak, liburuak, jaiak, bertsolari txapelketak, eta abar.
+Munduan zehar dauden euskal etxeetatik zaharrena Montevideoko (Uruguai) Laurak Bat euskal etxea da, 1876. urtekoa. Urte berean, Argentinan Laurak Bat izena duen beste euskal etxe bat zabaldu zuten halaber.
+Gaur egun, guztira 162 euskal etxe ofizial daude mundu osoan zehar eta beste 30 bat inguru oraindik ofizialak ez direnak.
+
+
+==== Euskara munduko unibertsitateetan ====
+Euskarak eta euskal kulturak interesa sortzen dute Euskal Herritik at. Horren oinarrian zergati ezberdinak daude, zientifikoak eta sentimentalak.
+Zergati zientifikoek mugiarazten dituztenentzat, euskara ikasgai edo ikergai da. Horientzat, euskal hizkuntzaren eta kulturaren ezaugarri bereziak dira interes-sortzaile; adibidez, euskara lurralde berean sustraituta gutxienez hogei mendetik gora egin duen hizkuntza izatea, eta ahaide ezagunik gabeko hizkuntza izatea.
+Zergati sentimentalak dituztenak, ordea, garai bateko egoera sozio-ekonomikoak bultzatuta, bizimodua ateratzera atzerrira joan behar izan zutenak edo horien ondorengoak dira. Migrazioaren ondorioz, euskotarren komunitateak sortu dira han-hemenka, eta euskaldunak dira haietako hainbat.
+Edonola ere, zergatia bata ala bestea izanik, interes horri esker euskararen eta euskal kulturaren presentzia asko hedatu da munduan zehar.
+
+
+=== Euskara Interneten ===
+
+Euskal Herriko «zortzigarren lurraldea» izendatu izan zaio Internetari. Interneten hainbat eduki eskura daude daitezke euskaraz: testuak, audioak, bideoak... Milaka webgune eskura daude euskaraz, batzuk euskara hutsean eta beste batzuk aukeren artean euskara ere eskaintzen dutenak. Hainbat aplikazio informatiko ere euskaraz lokalizaturik daude. Badago software librea euskaraz lokalizatzen dabilen komunitate bat ere.
+Euskarak Interneten badu domeinu bat ere, .EUS domeinua, euskara eta euskal kulturaren komunitatearen Interneteko goi mailako domeinu orokorra. Domeinuaren helburua euskara eta euskal kultura sustatzea da eta euskara eta euskal kulturaren komunitatea kohesionatzea.
+
+
+=== Euskal pidginak Islandian eta Kanadan ===
+
+Euskal Herriko baleazaleek pidgin bi sortu zituzten Ipar Atlantikoan egindako bidaietan: Islandian euskara-islandiera pidgina, eta Ternua eta Labradorren algonkin-euskara pidgina. XVIII. mendearen inguruan galdu ziren, baina idatzizko lekukotasun apur batzuk gorde dira.
+
+
+== Euskararen aldeko gizarte mugimendua ==
+Euskara, hizkuntza gutxitua izanik, ez da egoera arrunta bizitzen ari bere lurraldean. 1980ko hamarkadatik hainbat aurrerapauso eman badira ere (hizkuntza koofiziala da Euskal Autonomia Erkidegoan eta Nafarroako iparraldean), zenbait esparrutan oso presentzia urria du. Horri aurre egiteko, frankismo amaieratik talde ugari sortu dira euskararen alde lan egiteko, zeregin horretan jada ziharduten taldeei gehituz.
+
+
+=== Erakundeak ===
+Euskaltzaindia: erakunde araugile, iradokitzaile eta zuzentzailea.
+Eusko Ikaskuntza: erakunde zientifiko-kulturala.
+Euskararen Etxea: euskarari buruzko gune espezializatua. Erakusketa, mediategia, liburutegia... ditu.
+Helduen Alfabetatze eta Berreuskalduntzerako Erakundea (HABE).
+
+
+=== Elkarteak ===
+Hauek dira euskararen alde diharduten elkarte nabarmenenak:
+
+Euskal Herrian Euskaraz (EHE)
+Euskararen Gizarte Erakundeen Kontseilua (Kontseilua izenaz ezagunagoa)
+Topagunea, Euskara Elkarteen Federazioa.
+Alfabetatze Euskalduntze Koordinakundea (AEK)
+Hizkuntz Eskubideen Behatokia
+
+
+== Hedabideak ==
+Egunkariak: Berria eta hainbat eskualdetako Hitza.
+Aldizkariak: Argia, Gaztezulo, Galtzaundi, Ttipi-Ttapa, Aldaize...
+Irratiak: Euskadi Irratia, Euskadi Gaztea, Segura irratia,Info7, Arrate irratia, Irulegi irratia, Gure Irratia...
+Telebistak: ETB 1, ETB 3, Hamaika telebista eta tokiko hainbat telebista.
+
+
+== Oharrak ==
+
+
+== Erreferentziak ==
+
+
+== Ikus, gainera ==
+Europako hizkuntza gutxituak
+Euskal Herriko hizkuntzak
+Euskarazko hiztegigintza
+Zerrenda:Euskal hiztegiak
+Euskarazko entziklopediak
+Euskarazko testu-corpusak
+Morfologia konputazional
+Hizkuntzaren prozesamendua
+Euskararen debekua
+Euskararen historia
+Euskararen Etxea
+Euskararen jatorria
+Euskararen bilakaera XX eta XXI. mendeetan
+Euskara Nafarroako Erriberan
+Zerrenda:Hego Euskal Herriko euskaldunen ehunekoak
+Zerrenda:Ipar Euskal Herriko euskaldunen ehunekoak
+Euskararen hotsak
+ZerNonIkusi.eus
+Munduan arriskuan dauden hizkuntzen atlasa
+
+
+== Kanpo estekak ==
+
+Euskaltzaindia
+Euskararen etxea
+Hiztegia.net ataria
+2001eko mapa linguistikoa (Eusko Jaurlaritza)
+Mapa linguistikoa (Muturzikin)
+Euskara Kultur Elkargoa-Basque Cultural Foundation
+Lore Agirrezabal, Erromintxela, euskal ijitoen hizkera, Argia astekarian
+Bai Euskarari Ziurtagiria
+Euskarazko "webtv" bat iparraldean

@@ -1,0 +1,22 @@
+{
+  "csr": {
+    "macro_csr": 0.24904766666666664,
+    "micro_csr": 0.24570539294906324,
+    "ci_lower": 0.23635924166666666,
+    "ci_upper": 0.26213031666666664,
+    "n_tests": 300,
+    "total_chars": 16707,
+    "total_saved": 4105,
+    "by_category": {
+      "heldout_long": {
+        "macro_csr": 0.2153825396825397
+      },
+      "heldout_short": {
+        "macro_csr": 0.26865069444444445
+      },
+      "heldout_medium": {
+        "macro_csr": 0.2415
+      }
+    }
+  }
+}

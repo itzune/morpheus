@@ -1,0 +1,50 @@
+========================================
+  GGUF Next-Word CSR Evaluation (GPU)
+========================================
+
+========================================
+  Testing: step_0032000.Q5_K_M.gguf
+========================================
+  Starting llama-server (GPU, -ngl 99)...
+  llama-server ready (PID=38943)
+  Keyboard endpoint: 5 candidates for 'Euskal'
+  Running typing simulation (30 CSR tests)...
+  Done. Results saved.
+  NW-CSR:     0.362
+  Word Acc:   149/149 (100.0%)
+  Acceptance: 127/149 (85.2%)
+  Confidence: 0.372
+  Manual:     22/149 (14.8%)
+  Breakdown:  111 comp, 16 nw, 22 manual
+
+========================================
+  Testing: step_0054000.Q5_K_M.gguf
+========================================
+  Starting llama-server (GPU, -ngl 99)...
+  llama-server ready (PID=38986)
+  Keyboard endpoint: 5 candidates for 'Euskal'
+  Running typing simulation (30 CSR tests)...
+  Done. Results saved.
+  NW-CSR:     0.390
+  Word Acc:   149/149 (100.0%)
+  Acceptance: 125/149 (83.9%)
+  Confidence: 0.413
+  Manual:     24/149 (16.1%)
+  Breakdown:  108 comp, 17 nw, 24 manual
+
+========================================
+  Testing: step_0074000.Q5_K_M.gguf
+========================================
+  Starting llama-server (GPU, -ngl 99)...
+  llama-server ready (PID=39089)
+  Keyboard endpoint: 5 candidates for 'Euskal'
+  Running typing simulation (30 CSR tests)...
+  Done. Results saved.
+  NW-CSR:     0.389
+  Word Acc:   149/149 (100.0%)
+  Acceptance: 127/149 (85.2%)
+  Confidence: 0.381
+  Manual:     22/149 (14.8%)
+  Breakdown:  111 comp, 16 nw, 22 manual
+
+Done. All results in /root/morpheus-mamba/eval/gguf_nw_csr/

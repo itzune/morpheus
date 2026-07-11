@@ -1,0 +1,126 @@
+{
+  "n_prompts": 20,
+  "max_tokens": 15,
+  "pairs": [
+    {
+      "n": 1,
+      "prompt": "Atzizki horrek, zenbait egileren",
+      "completion_A": "arabera, 1990eko hamarkadan 1990",
+      "completion_B": "arabera, kokagunea adierazten du, eta, beraz, "
+    },
+    {
+      "n": 2,
+      "prompt": "Gainera, plazaren konposaketa",
+      "completion_A": "eta antolamendua ere aldatu egin da.",
+      "completion_B": "eta kokapena ere aldatu egin da."
+    },
+    {
+      "n": 3,
+      "prompt": "Merkatu berri horretan, monopolioen presentzia",
+      "completion_A": "k eta komertzioen komertzioen ",
+      "completion_B": "k eta komertzializazioak eragin handia izan dute."
+    },
+    {
+      "n": 4,
+      "prompt": "Masami Kurumadak, hasiera batean, zalantza egin zuen Geminisko zalduna izaera bikoitzeko",
+      "completion_A": "izaki bat zela, eta, beraz, Geminisko za",
+      "completion_B": "pertsonaia gisa deskribatzen zuen, baina, azkenean, Gemini"
+    },
+    {
+      "n": 5,
+      "prompt": "Oso funtzio garrantzitsua betetzen du bandetan,",
+      "completion_A": "eta, beraz, oso garrantzitsua da taldeen arteko harremanak sendotzea.",
+      "completion_B": "eta, beraz, zaleek ere parte har dezakete."
+    },
+    {
+      "n": 6,
+      "prompt": "Eta esaten zaien egunetan",
+      "completion_A": ", 100.000 biztanleko 100",
+      "completion_B": ", 100.000 biztanleko 100"
+    },
+    {
+      "n": 7,
+      "prompt": "Komorbilitateari, haren bilakaerari eta aldi berean gaixotasun ugari",
+      "completion_A": "ri aurre egiteko.",
+      "completion_B": "ri aurre egiteko."
+    },
+    {
+      "n": 8,
+      "prompt": "Bizitza arriskuan duela adieraziko dion bizilagunetik hasi eta etxean hartuko duen prostitutaraino, sostengatuko duen",
+      "completion_A": "bizilagunak bizilagunaren bizi-kalitatea hobetuko du.",
+      "completion_B": "bizilaguna izango da."
+    },
+    {
+      "n": 9,
+      "prompt": "Material ugari landu",
+      "completion_A": "da, eta, beraz, ez da erraza izan.",
+      "completion_B": "ko da, eta, horretarako, hainbat material eta teknika erabiliko dira."
+    },
+    {
+      "n": 10,
+      "prompt": "Erromatartze garaian, Junonekin parekatu zuten, eta ez Venusekin, Astarterekin parekatuz gero",
+      "completion_A": ".",
+      "completion_B": "."
+    },
+    {
+      "n": 11,
+      "prompt": "Akademiko gisa, La Pazko San Andres Unibertsitate Nagusiako eta",
+      "completion_A": "La Pazkoko Unibertsitateko irakaslea izan zen.",
+      "completion_B": "La Pazkoko Unibertsitateko irakaslea izan zen."
+    },
+    {
+      "n": 12,
+      "prompt": "Album hori NGSk argitaratu",
+      "completion_A": "zuen 2016an, eta 2017an",
+      "completion_B": "zuen 2013an, eta 2014an"
+    },
+    {
+      "n": 13,
+      "prompt": "Hasiera batean lur horien kolektibizazioa lortu nahi zen, eta honekin batera bertako lurralde batzuk",
+      "completion_A": ", hala nola, kolektibitatearen kolektibitate",
+      "completion_B": ", hala nola, Aragoi, Gaztela eta Leon, Gazte"
+    },
+    {
+      "n": 14,
+      "prompt": "Borroketan hildako asko izateaz gain, frantziar soldaduen artean izurrite bubonikoa agertu zen, eta",
+      "completion_A": ", ondorioz, 1939ko uztailean, Frantziako",
+      "completion_B": "1940ko hamarkadan 1.000 hil"
+    },
+    {
+      "n": 15,
+      "prompt": "Jugoslaviako Errepublika Federala osatzen zuten sei errepubliken artean Mazedonia zen",
+      "completion_A": "lehena.",
+      "completion_B": "1914an."
+    },
+    {
+      "n": 16,
+      "prompt": "Zis-Golgi zonaldea nukleo eta erretikulu endoplasmatikotik gertuen",
+      "completion_A": "dagoen gunea da.",
+      "completion_B": "dagoena da."
+    },
+    {
+      "n": 17,
+      "prompt": "Parte hartzen duen errebonbillo bakoitzak neska",
+      "completion_A": "bat izango du, eta mutil bat, neska bat.",
+      "completion_B": "bat du buruan."
+    },
+    {
+      "n": 18,
+      "prompt": "Ikergazte kongresua eta",
+      "completion_A": "2019ko urtarrilean EHUko Udako Ikas",
+      "completion_B": "2019ko edizioa"
+    },
+    {
+      "n": 19,
+      "prompt": "José Lopesen biloba",
+      "completion_A": ", 1936ko uztailaren 18an jaioa.",
+      "completion_B": ", 1936ko irailaren 11n hil zen,"
+    },
+    {
+      "n": 20,
+      "prompt": "Pradojikoki, komunikabideen influentzia komunikazio",
+      "completion_A": "an.",
+      "completion_B": "aren kodeen eta kodeen kodeen artean"
+    }
+  ]
+}

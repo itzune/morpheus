@@ -1,0 +1,1374 @@
+Simulating typing on http://localhost:9090
+Sentences: 15 (5 Basque, 5 English, 5 Spanish)
+Algorithm: frontend-faithful (sticky merge, top-3 display, acceptance semantics)
+Delay: 0.0s
+
+  Typing [Basque]: "Gaur eguraldi ona egiten du eta kalean paseatzera ..." → ✅  CSR=37.1%  taps=9/10
+
+  Typing [Basque]: "Euskara ikasten ari naiz baina oraindik zaila irud..." → ✅  CSR=8.3%  taps=6/9
+
+  Typing [Basque]: "Bihar goizean lanera joan beharko dut goiz..." → ✅  CSR=23.8%  taps=6/7
+
+  Typing [Basque]: "Lagunekin afaria egitea asteburuan plangarria da..." → ✅  CSR=12.5%  taps=4/6
+
+  Typing [Basque]: "Musika entzutea gustuko dut lanean ari naizenean..." → ✅  CSR=12.5%  taps=5/7
+
+  Typing [English]: "The weather is nice today and I will go for a walk..." → ✅  CSR=20.0%  taps=6/12
+
+  Typing [English]: "I am learning a new language but it is still diffi..." → ✅  CSR=40.7%  taps=8/11
+
+  Typing [English]: "Tomorrow morning I have to go to work early..." → ✅  CSR=20.9%  taps=8/9
+
+  Typing [English]: "Having dinner with friends this weekend sounds gre..." → ✅  CSR=28.8%  taps=8/8
+
+  Typing [English]: "I like to listen to music while I am working..." → ✅  CSR=18.2%  taps=4/10
+
+  Typing [Spanish]: "El tiempo está bueno hoy y voy a salir a caminar..." → ✅  CSR=18.8%  taps=8/11
+
+  Typing [Spanish]: "Estoy aprendiendo un idioma nuevo pero todavía es ..." → ✅  CSR=36.8%  taps=6/9
+
+  Typing [Spanish]: "Mañana por la mañana tengo que ir a trabajar tempr..." → ✅  CSR=37.7%  taps=8/10
+
+  Typing [Spanish]: "Cenar con amigos este fin de semana suena genial..." → ✅  CSR=29.2%  taps=5/9
+
+  Typing [Spanish]: "Me gusta escuchar música mientras estoy trabajando..." → ✅  CSR=30.0%  taps=5/7
+
+
+======================================================================
+  Basque: "Gaur eguraldi ona egiten du eta kalean paseatzera aterako naiz"
+======================================================================
+     🔍 chips: (none)
+  ⌨  'G'            → "G"
+     🔍 chips:   Gregorio(0.09) |   G.(0.08) |   Gan(0.06)
+  ⌨  'a'            → "Ga"
+     🔍 chips:   Gaua(0.18) |   Gan(0.06) |   Gaz(0.08)
+  ⌨  'u'            → "Gau"
+     🔍 chips:   Gaua(0.18) |   Gauenti(0.05) |   Gauber(0.04)
+  ⌨  'r'            → "Gaur"
+     🔍 chips:   egun(0.31) |   Gaurko(0.16) |   Gaur,(0.10)
+  ✅ ACCEPT (→ 'Gaur,')  prob=0.099 
+     🔍 chips:   S(0.03) |   A(0.03) |   eta(0.02)
+  ⌨  'e'            → "Gaur, e"
+     🔍 chips:   eta(0.02) |   eco(0.04) |   edi(0.04)
+  ⌨  'g'            → "Gaur, eg"
+     🔍 chips:   egg(0.06) |   egre(0.06) |   egü(0.05)
+  ⌨  'u'            → "Gaur, egu"
+     🔍 chips:   eguerdiko(0.41) |   egua(0.12) |   egura(0.06)
+  ⌨  'r'            → "Gaur, egur"
+     🔍 chips:   egurra(0.25) |   egurrezko(0.17) |   egura(0.06)
+  ⌨  'a'            → "Gaur, egura"
+     🔍 chips:   eguratsaren(0.48) |   eguraldi(0.11) |   eguraldia(0.09)
+  ✅ ACCEPT (→ 'eguraldi')  prob=0.112 
+     🔍 chips:   txarra(0.23) |   ona(0.12) |   aren(0.11)
+  ✅ ACCEPT (→ 'ona')  prob=0.117 
+     🔍 chips:   egiten(0.12) |   ,(0.09) |   eginez(0.07)
+  ✅ ACCEPT (→ 'egiten')  prob=0.122 
+     🔍 chips:   badu(0.46) |   duen(0.31) |   ba(0.04)
+  ⌨  'd'            → "Gaur, eguraldi ona egiten d"
+     🔍 chips:   duen(0.31) |   dún(0.15) |   duela(0.03)
+  ⌨  'u'            → "Gaur, eguraldi ona egiten du"
+     🔍 chips:   duen(0.31) |   du,(0.20) |   eta(0.17)
+  ✅ ACCEPT (→ 'du,')  prob=0.196 
+     🔍 chips:   baina(0.35) |   eta(0.24) |   eguzki(0.03)
+  ✅ ACCEPT (→ 'eta')  prob=0.236 
+     🔍 chips:   euriak(0.04) |   eu(0.04) |   hori(0.02)
+  ⌨  'k'            → "Gaur, eguraldi ona egiten du, eta k"
+     🔍 chips:   kriston(0.57) |   ken(0.08) |   kres(0.06)
+  ⌨  'a'            → "Gaur, eguraldi ona egiten du, eta ka"
+     🔍 chips:   kazkabarra(0.29) |   kaska(0.08) |   kas(0.06)
+  ⌨  'l'            → "Gaur, eguraldi ona egiten du, eta kal"
+     🔍 chips:   kalkuluak(0.22) |   kalder(0.21) |   kalba(0.07)
+  ⌨  'e'            → "Gaur, eguraldi ona egiten du, eta kale"
+     🔍 chips:   kalean(0.35) |   kalera(0.14) |   kaleak(0.09)
+  ✅ ACCEPT (→ 'kalean')  prob=0.351 
+     🔍 chips:   ere(0.06) |   jende(0.05) |   ,(0.04)
+  ⌨  'p'            → "Gaur, eguraldi ona egiten du, eta kalean p"
+     🔍 chips:   praka(0.38) |   pistak(0.18) |   pra(0.10)
+  ⌨  'a'            → "Gaur, eguraldi ona egiten du, eta kalean pa"
+     🔍 chips:   paseoak(0.69) |   pasi(0.07) |   pasia(0.06)
+  ⌨  's'            → "Gaur, eguraldi ona egiten du, eta kalean pas"
+     🔍 chips:   paseoak(0.69) |   paseo(0.69) |   pasean(0.33)
+  ⌨  'e'            → "Gaur, eguraldi ona egiten du, eta kalean pase"
+     🔍 chips:   paseoak(0.69) |   paseo(0.69) |   pasea(0.46)
+  ⌨  'a'            → "Gaur, eguraldi ona egiten du, eta kalean pasea"
+     🔍 chips:   pasea(0.46) |   pasean(0.33) |   paseatzen(0.27)
+  ⌨  't'            → "Gaur, eguraldi ona egiten du, eta kalean paseat"
+     🔍 chips:   paseatzen(0.27) |   paseatzeko(0.21) |   paseatu(0.16)
+  ⌨  'z'            → "Gaur, eguraldi ona egiten du, eta kalean paseatz"
+     🔍 chips:   paseatzten(0.45) |   paseatzen(0.27) |   paseatzeko(0.21)
+  ⌨  'e'            → "Gaur, eguraldi ona egiten du, eta kalean paseatze"
+     🔍 chips:   paseatzen(0.27) |   paseatzeko(0.21) |   paseatzera(0.14)
+  ✅ ACCEPT (→ 'paseatzera')  prob=0.143 
+     🔍 chips:   ateratzen(0.34) |   atera(0.17) |   joaten(0.06)
+  ⌨  'a'            → "Gaur, eguraldi ona egiten du, eta kalean paseatzera a"
+     🔍 chips:   ateratzen(0.34) |   abiatzen(0.41) |   atera(0.17)
+  ⌨  't'            → "Gaur, eguraldi ona egiten du, eta kalean paseatzera at"
+     🔍 chips:   atleta(0.56) |   ateratzen(0.34) |   atera(0.17)
+  ⌨  'e'            → "Gaur, eguraldi ona egiten du, eta kalean paseatzera ate"
+     🔍 chips:   ateratzen(0.34) |   atea(0.33) |   atera(0.17)
+  ⌨  'r'            → "Gaur, eguraldi ona egiten du, eta kalean paseatzera ater"
+     🔍 chips:   ateratzen(0.34) |   atera(0.17) |   atertu(0.23)
+  ⌨  'a'            → "Gaur, eguraldi ona egiten du, eta kalean paseatzera atera"
+     🔍 chips:   ateratzen(0.34) |   atera(0.17) |   ateratzeko(0.27)
+  ⌨  'k'            → "Gaur, eguraldi ona egiten du, eta kalean paseatzera aterak"
+     🔍 chips:   ateraket(0.06) |   aterak,(0.06) |   dira(0.05)
+  ⌨  'o'            → "Gaur, eguraldi ona egiten du, eta kalean paseatzera aterako"
+     🔍 chips:   gara(0.23) |   naiz(0.13) |   dira(0.10)
+     🔍 chips:   gara(0.23) |   naiz(0.13) |   dira(0.10)
+  ✅ ACCEPT (next-word → 'naiz')  prob=0.133 
+
+  📊 Result: 10/10 words correct
+     Completions: 8  Next-words: 1  Manual: 1
+     Keystrokes: 39 (chars: 30, taps: 9)
+     Simulated CSR: 37.1%
+     Avg prob of accepted: 0.168
+
+======================================================================
+  Basque: "Euskara ikasten ari naiz baina oraindik zaila iruditzen zait"
+======================================================================
+     🔍 chips: (none)
+  ⌨  'E'            → "E"
+     🔍 chips:   Estrategias(0.05) |   Eki(0.05) |   Ema(0.04)
+  ⌨  'u'            → "Eu"
+     🔍 chips:   Europear(0.25) |   Euzko(0.24) |   Eugen(0.05)
+  ⌨  's'            → "Eus"
+     🔍 chips:   Eusquets(0.20) |   Eusk(0.11) |   Eusc(0.07)
+  ⌨  'k'            → "Eusk"
+     🔍 chips:   Eusk(0.11) |   Eusk-ek(0.15) |   Eusk,(0.11)
+  ⌨  'a'            → "Euska"
+     🔍 chips:   Euskattiako(0.22) |   Euska.(0.06) |   Euskamp(0.04)
+  ⌨  'r'            → "Euskar"
+     🔍 chips:   Euskarazko(0.15) |   Euskarria(0.10) |   Euskarri(0.05)
+  ⌨  'a'            → "Euskara"
+     🔍 chips:   Euskarazko(0.15) |   Euskararen(0.22) |   Euskaran(0.03)
+     🔍 chips:   Euskararen(0.22) |   Euskarazko(0.15) |   Euskaraz(0.10)
+  ⌨  [space]        → "Euskara "
+  ⌨  'i'            → "Euskara i"
+     🔍 chips:   t(0.19) |   igu(0.02) |   iv(0.02)
+  ⌨  'k'            → "Euskara ik"
+     🔍 chips:   t(0.19) |   ikt(0.09) |   ikurra(0.07)
+  ⌨  'a'            → "Euskara ika"
+     🔍 chips:   ikaragarrizko(0.47) |   t(0.19) |   ikatz(0.06)
+  ⌨  's'            → "Euskara ikas"
+     🔍 chips:   ikasgaia(0.21) |   ikasketak(0.11) |   ikasgel(0.10)
+  ⌨  't'            → "Euskara ikast"
+     🔍 chips:   ikastaldia(0.16) |   ikastaldi(0.11) |   ikast.(0.09)
+  ⌨  'e'            → "Euskara ikaste"
+     🔍 chips:   ikastean(0.12) |   ikasteak(0.08) |   ikastearen(0.05)
+  ⌨  'n'            → "Euskara ikasten"
+     🔍 chips:   ikasten,(0.08) |   ari(0.06) |   da(0.03)
+  ✅ ACCEPT (→ 'ikasten,')  prob=0.077 
+     🔍 chips:   eta(0.11) |   baina(0.02) |   A(0.01)
+  ⌨  'a'            → "Euskara ikasten, a"
+     🔍 chips:   A(0.01) |   asmatu(0.05) |   asti(0.04)
+  ⌨  'r'            → "Euskara ikasten, ar"
+     🔍 chips:   arkitekturan(0.12) |   ara(0.08) |   ardi(0.06)
+  ⌨  'i'            → "Euskara ikasten, ari"
+     🔍 chips:   ariketa(0.17) |   arin(0.09) |   arian(0.05)
+     🔍 chips:   ariketa(0.17) |   arin(0.09) |   arian(0.05)
+  ⌨  [space]        → "Euskara ikasten, ari "
+  ⌨  'n'            → "Euskara ikasten, ari n"
+     🔍 chips:   nintzala(0.62) |   nen(0.16) |   n(0.09)
+  ⌨  'a'            → "Euskara ikasten, ari na"
+     🔍 chips:   nak(0.03) |   natzaizuen(0.13) |   naz(0.11)
+  ⌨  'i'            → "Euskara ikasten, ari nai"
+     🔍 chips:   nai,(0.06) |   nain(0.05) |   naien(0.04)
+  ⌨  'z'            → "Euskara ikasten, ari naiz"
+     🔍 chips:   naizenean(0.26) |   naiz(0.04) |   naiz.(0.12)
+  ✅ ACCEPT (→ 'naiz')  prob=0.038 
+     🔍 chips:   enean(0.23) |   en(0.23) |   .(0.12)
+  ⌨  'b'            → "Euskara ikasten, ari naiz b"
+     🔍 chips:   blaitzen(0.14) |   bru(0.08) |   br(0.07)
+  ⌨  'a'            → "Euskara ikasten, ari naiz ba"
+     🔍 chips:   ba,(0.12) |   ba.(0.05) |   e(0.05)
+  ⌨  'i'            → "Euskara ikasten, ari naiz bai"
+     🔍 chips:   bai,(0.18) |   e(0.05) |   baiet(0.03)
+  ⌨  'n'            → "Euskara ikasten, ari naiz bain"
+     🔍 chips:   baineran(0.13) |   bainen(0.08) |   bain,(0.04)
+  ⌨  'a'            → "Euskara ikasten, ari naiz baina"
+     🔍 chips:   ez(0.09) |   baina,(0.05) |   nire(0.03)
+  ✅ ACCEPT (→ 'baina,')  prob=0.046 
+     🔍 chips:   tira(0.05) |   ez(0.05) |   nire(0.02)
+  ⌨  'o'            → "Euskara ikasten, ari naiz baina, o"
+     🔍 chips:   otoi(0.14) |   oa(0.05) |   oler(0.05)
+  ⌨  'r'            → "Euskara ikasten, ari naiz baina, or"
+     🔍 chips:   orai(0.21) |   ori(0.05) |   orra(0.12)
+  ⌨  'a'            → "Euskara ikasten, ari naiz baina, ora"
+     🔍 chips:   orai(0.21) |   oran(0.05) |   orakulu(0.03)
+  ⌨  'i'            → "Euskara ikasten, ari naiz baina, orai"
+     🔍 chips:   orai(0.21) |   oraiko(0.03) |   ez(0.04)
+  ⌨  'n'            → "Euskara ikasten, ari naiz baina, orain"
+     🔍 chips:   arte(0.12) |   dela(0.06) |   oraintxe(0.04)
+  ⌨  'd'            → "Euskara ikasten, ari naiz baina, oraind"
+     🔍 chips:   arte(0.12) |   dela(0.06) |   ez(0.05)
+  ⌨  'i'            → "Euskara ikasten, ari naiz baina, oraindi"
+     🔍 chips:   oraindino(0.77) |   arte(0.12) |   dela(0.06)
+  ⌨  'k'            → "Euskara ikasten, ari naiz baina, oraindik"
+     🔍 chips:   oraindik,(0.19) |   ere(0.15) |   ez(0.13)
+  ✅ ACCEPT (→ 'oraindik,')  prob=0.191 
+     🔍 chips:   ez(0.11) |   nire(0.02) |   ezin(0.02)
+  ⌨  'z'            → "Euskara ikasten, ari naiz baina, oraindik, z"
+     🔍 chips:   zaldiak(0.54) |   zurrun(0.20) |   zaldia(0.04)
+  ⌨  'a'            → "Euskara ikasten, ari naiz baina, oraindik, za"
+     🔍 chips:   zaldiak(0.54) |   zapatuan(0.17) |   zaldia(0.04)
+  ⌨  'i'            → "Euskara ikasten, ari naiz baina, oraindik, zai"
+     🔍 chips:   nago(0.10) |   zai,(0.06) |   gaude(0.03)
+  ⌨  'l'            → "Euskara ikasten, ari naiz baina, oraindik, zail"
+     🔍 chips:   zaila(0.80) |   nago(0.10) |   zailagoa(0.07)
+  ✅ ACCEPT (→ 'zaila')  prob=0.799 
+     🔍 chips:   da(0.52) |   egiten(0.09) |   izango(0.05)
+  ⌨  'i'            → "Euskara ikasten, ari naiz baina, oraindik, zaila i"
+     🔍 chips:   irizten(0.35) |   izango(0.05) |   ikusten(0.03)
+  ⌨  'r'            → "Euskara ikasten, ari naiz baina, oraindik, zaila ir"
+     🔍 chips:   irizten(0.35) |   irla(0.07) |   irte(0.06)
+  ⌨  'u'            → "Euskara ikasten, ari naiz baina, oraindik, zaila iru"
+     🔍 chips:   iruitzen(0.40) |   iruzki(0.11) |   irun(0.09)
+  ⌨  'd'            → "Euskara ikasten, ari naiz baina, oraindik, zaila irud"
+     🔍 chips:   irudí(0.07) |   irud-(0.07) |   irud.(0.06)
+  ⌨  'i'            → "Euskara ikasten, ari naiz baina, oraindik, zaila irudi"
+     🔍 chips:   iruditu(0.68) |   irudituko(0.08) |   iruditen(0.07)
+  ⌨  't'            → "Euskara ikasten, ari naiz baina, oraindik, zaila irudit"
+     🔍 chips:   iruditu(0.68) |   irudituko(0.08) |   iruditen(0.07)
+  ⌨  'z'            → "Euskara ikasten, ari naiz baina, oraindik, zaila iruditz"
+     🔍 chips:   iruditzten(0.78) |   zaidan(0.13) |   iruditze(0.01)
+  ⌨  'e'            → "Euskara ikasten, ari naiz baina, oraindik, zaila iruditze"
+     🔍 chips:   iruditzet(0.34) |   iruditzeen(0.28) |   zaidan(0.13)
+  ⌨  'n'            → "Euskara ikasten, ari naiz baina, oraindik, zaila iruditzen"
+     🔍 chips:   zait(0.93) |   arren(0.03) |   za(0.02)
+     🔍 chips:   zait(0.93) |   arren(0.03) |   za(0.02)
+  ✅ ACCEPT (next-word → 'zait')  prob=0.932 
+
+  📊 Result: 9/9 words correct
+     Completions: 5  Next-words: 1  Manual: 3
+     Keystrokes: 55 (chars: 49, taps: 6)
+     Simulated CSR: 8.3%
+     Avg prob of accepted: 0.347
+
+======================================================================
+  Basque: "Bihar goizean lanera joan beharko dut goiz"
+======================================================================
+     🔍 chips: (none)
+  ⌨  'B'            → "B"
+     🔍 chips:   Bankuak(0.12) |   Ben(0.06) |   Bur(0.06)
+  ⌨  'i'            → "Bi"
+     🔍 chips:   Bihar(0.06) |   Bida(0.04) |   Biko(0.04)
+  ✅ ACCEPT (→ 'Bihar')  prob=0.057 
+     🔍 chips:   assen(0.05) |   a(0.05) |   ma(0.04)
+  ⌨  'g'            → "Bihar g"
+     🔍 chips:   giltzapetuaren(0.13) |   gha(0.11) |   gla(0.07)
+  ⌨  'o'            → "Bihar go"
+     🔍 chips:   gosea(0.12) |   gomen(0.07) |   gotor(0.07)
+  ⌨  'i'            → "Bihar goi"
+     🔍 chips:   goitizena(0.34) |   goiko(0.20) |   goi-(0.13)
+  ⌨  'z'            → "Bihar goiz"
+     🔍 chips:   goizeko(0.26) |   goizetik(0.06) |   goizti(0.05)
+  ⌨  'e'            → "Bihar goize"
+     🔍 chips:   goizeko(0.26) |   goizetik(0.06) |   goizea(0.15)
+  ⌨  'a'            → "Bihar goizea"
+     🔍 chips:   goizea(0.15) |   goizeat(0.10) |   goizeatik(0.09)
+  ⌨  'n'            → "Bihar goizean"
+     🔍 chips:   goizean.(0.07) |   goiz(0.03) |   iritsi(0.03)
+  ✅ ACCEPT (→ 'goizean.')  prob=0.068 
+     🔍 chips:   A(0.01) |   ((0.01) |   .(0.01)
+  ⌨  'l'            → "Bihar goizean. l"
+     🔍 chips:   lurrunetan(0.10) |   l'(0.08) |   l.(0.04)
+  ⌨  'a'            → "Bihar goizean. la"
+     🔍 chips:   laur(0.06) |   lapur(0.04) |   laru(0.04)
+  ⌨  'n'            → "Bihar goizean. lan"
+     🔍 chips:   landatu(0.10) |   lankide(0.09) |   lanera(0.08)
+  ✅ ACCEPT (→ 'lanera')  prob=0.081 
+     🔍 chips:   joan(0.23) |   joateko(0.12) |   ,(0.06)
+  ✅ ACCEPT (→ 'joan')  prob=0.230 
+     🔍 chips:   behar(0.10) |   aurretik(0.09) |   nintzen(0.08)
+  ⌨  'b'            → "Bihar goizean. lanera joan b"
+     🔍 chips:   behar(0.10) |   bc(0.05) |   bs(0.05)
+  ⌨  'e'            → "Bihar goizean. lanera joan be"
+     🔍 chips:   bezperan(0.34) |   behar(0.10) |   bea(0.06)
+  ⌨  'h'            → "Bihar goizean. lanera joan beh"
+     🔍 chips:   behar(0.10) |   beh(0.06) |   behrko(0.11)
+  ⌨  'a'            → "Bihar goizean. lanera joan beha"
+     🔍 chips:   behar(0.10) |   behako(0.17) |   beha,(0.07)
+  ⌨  'r'            → "Bihar goizean. lanera joan behar"
+     🔍 chips:   behar(0.10) |   izan(0.11) |   dut(0.08)
+  ⌨  'k'            → "Bihar goizean. lanera joan behark"
+     🔍 chips:   beharkero(0.21) |   izan(0.11) |   dut(0.08)
+  ⌨  'o'            → "Bihar goizean. lanera joan beharko"
+     🔍 chips:   dute(0.18) |   du(0.16) |   beharko(0.11)
+  ✅ ACCEPT (→ 'beharko')  prob=0.107 
+     🔍 chips:   dute(0.18) |   du(0.16) |   da(0.09)
+  ⌨  'd'            → "Bihar goizean. lanera joan beharko d"
+     🔍 chips:   dute(0.18) |   du(0.16) |   da(0.09)
+  ⌨  'u'            → "Bihar goizean. lanera joan beharko du"
+     🔍 chips:   dute(0.18) |   du(0.16) |   du.(0.22)
+  ⌨  't'            → "Bihar goizean. lanera joan beharko dut"
+     🔍 chips:   dute(0.18) |   dut.(0.23) |   eta(0.09)
+  ✅ ACCEPT (→ 'dut.')  prob=0.232 
+     🔍 chips:   A(0.01) |   Beste(0.01) |   .(0.01)
+  ⌨  'g'            → "Bihar goizean. lanera joan beharko dut. g"
+     🔍 chips:   gri(0.04) |   g-(0.03) |   gil(0.02)
+  ⌨  'o'            → "Bihar goizean. lanera joan beharko dut. go"
+     🔍 chips:   gosaltzera(0.23) |   gosa(0.17) |   gose(0.10)
+  ⌨  'i'            → "Bihar goizean. lanera joan beharko dut. goi"
+     🔍 chips:   goiko(0.28) |   goian(0.28) |   goitik(0.12)
+  ⌨  'z'            → "Bihar goizean. lanera joan beharko dut. goiz"
+     🔍 chips:   goizeko(0.43) |   goizero(0.04) |   goiza(0.04)
+
+  📊 Result: 7/7 words correct
+     Completions: 6  Next-words: 0  Manual: 1
+     Keystrokes: 32 (chars: 26, taps: 6)
+     Simulated CSR: 23.8%
+     Avg prob of accepted: 0.129
+
+======================================================================
+  Basque: "Lagunekin afaria egitea asteburuan plangarria da"
+======================================================================
+     🔍 chips: (none)
+  ⌨  'L'            → "L"
+     🔍 chips:   LH(0.07) |   L'(0.05) |   LG(0.03)
+  ⌨  'a'            → "La"
+     🔍 chips:   Larunbatean(0.05) |   Larri(0.03) |   Lazka(0.03)
+  ⌨  'g'            → "Lag"
+     🔍 chips:   Lagb(0.10) |   Lag.(0.07) |   Lag-(0.06)
+  ⌨  'u'            → "Lagu"
+     🔍 chips:   Lagusek(0.35) |   Laguz(0.06) |   Lagusi(0.05)
+  ⌨  'n'            → "Lagun"
+     🔍 chips:   Laguntza-taldeak(0.27) |   Lagundu(0.05) |   Laguntzen(0.05)
+  ⌨  'e'            → "Lagune"
+     🔍 chips:   Laguneorian(0.22) |   Lagunele(0.17) |   Lagunea(0.14)
+  ⌨  'k'            → "Lagunek"
+     🔍 chips:   Laguneknologiaren(0.38) |   Laguneknik(0.29) |   Lagunekniko(0.20)
+  ⌨  'i'            → "Laguneki"
+     🔍 chips:   Lagunekiloren(0.14) |   Lagunekilari(0.12) |   Lagunekipo(0.06)
+  ⌨  'n'            → "Lagunekin"
+     🔍 chips:   Lagunekinako(0.18) |   Laguneking(0.06) |   Lagunekingo(0.05)
+     🔍 chips:   Lagunekinako(0.18) |   Laguneking(0.06) |   Lagunekingo(0.05)
+  ⌨  [space]        → "Lagunekin "
+  ⌨  'a'            → "Lagunekin a"
+     🔍 chips:   ako(0.18) |   astronauta(0.18) |   at(0.07)
+  ⌨  'f'            → "Lagunekin af"
+     🔍 chips:   afaria(0.44) |   afa(0.15) |   afal(0.07)
+  ✅ ACCEPT (→ 'afaria')  prob=0.439 
+     🔍 chips:   ,(0.14) |   .(0.13) |   eta(0.06)
+  ⌨  'e'            → "Lagunekin afaria e"
+     🔍 chips:   edariarekin(0.38) |   etzi(0.19) |   eta(0.06)
+  ⌨  'g'            → "Lagunekin afaria eg"
+     🔍 chips:   egre(0.05) |   egí(0.04) |   egn(0.04)
+  ⌨  'i'            → "Lagunekin afaria egi"
+     🔍 chips:   egitteko(0.20) |   egita(0.06) |   egion(0.04)
+  ⌨  't'            → "Lagunekin afaria egit"
+     🔍 chips:   egitteko(0.20) |   egitten(0.23) |   egita(0.06)
+  ⌨  'e'            → "Lagunekin afaria egite"
+     🔍 chips:   egiterik(0.36) |   egitetik(0.13) |   egiteki(0.05)
+  ⌨  'a'            → "Lagunekin afaria egitea"
+     🔍 chips:   egitea,(0.08) |   erabaki(0.06) |   egiteaz(0.06)
+  ✅ ACCEPT (→ 'egitea,')  prob=0.078 
+     🔍 chips:   eta(0.16) |   A(0.01) |   baina(0.01)
+  ⌨  'a'            → "Lagunekin afaria egitea, a"
+     🔍 chips:   A(0.01) |   askariak(0.11) |   ater(0.09)
+  ⌨  's'            → "Lagunekin afaria egitea, as"
+     🔍 chips:   askariak(0.11) |   asper(0.14) |   asan(0.13)
+  ⌨  't'            → "Lagunekin afaria egitea, ast"
+     🔍 chips:   astrologiaren(0.64) |   astro(0.09) |   astaldia(0.05)
+  ⌨  'e'            → "Lagunekin afaria egitea, aste"
+     🔍 chips:   asteartean(0.30) |   astean(0.11) |   asteko(0.10)
+  ⌨  'b'            → "Lagunekin afaria egitea, asteb"
+     🔍 chips:   astebruan(0.19) |   astebete(0.06) |   astebak(0.07)
+  ⌨  'u'            → "Lagunekin afaria egitea, astebu"
+     🔍 chips:   astebukaeran(0.85) |   astebur(0.05) |   asteburako(0.01)
+  ⌨  'r'            → "Lagunekin afaria egitea, astebur"
+     🔍 chips:   astebur(0.05) |   asteburkoan(0.11) |   asteburako(0.01)
+  ⌨  'u'            → "Lagunekin afaria egitea, asteburu"
+     🔍 chips:   asteburuan(0.39) |   asteburuko(0.14) |   asteburua(0.08)
+  ✅ ACCEPT (→ 'asteburuan')  prob=0.388 
+     🔍 chips:   .(0.29) |   ,(0.12) |   eta(0.03)
+  ⌨  'p'            → "Lagunekin afaria egitea, asteburuan p"
+     🔍 chips:   praktiketan(0.20) |   pho(0.18) |   pr(0.09)
+  ⌨  'l'            → "Lagunekin afaria egitea, asteburuan pl"
+     🔍 chips:   plu(0.07) |   plz(0.06) |   plentzia(0.05)
+  ⌨  'a'            → "Lagunekin afaria egitea, asteburuan pla"
+     🔍 chips:   plater(0.77) |   plate(0.09) |   plaz(0.05)
+  ⌨  'n'            → "Lagunekin afaria egitea, asteburuan plan"
+     🔍 chips:   plana(0.17) |   bikaina(0.09) |   planak(0.08)
+  ⌨  'g'            → "Lagunekin afaria egitea, asteburuan plang"
+     🔍 chips:   plangye-ren(0.15) |   bikaina(0.09) |   plangekin(0.07)
+  ⌨  'a'            → "Lagunekin afaria egitea, asteburuan planga"
+     🔍 chips:   plangadaren(0.14) |   bikaina(0.09) |   plangado(0.08)
+  ⌨  'r'            → "Lagunekin afaria egitea, asteburuan plangar"
+     🔍 chips:   plangarinak(0.28) |   plangarra(0.16) |   plangaren(0.05)
+  ⌨  'r'            → "Lagunekin afaria egitea, asteburuan plangarr"
+     🔍 chips:   plangarra(0.16) |   plangarretatik(0.17) |   plangarretxe(0.16)
+  ⌨  'i'            → "Lagunekin afaria egitea, asteburuan plangarri"
+     🔍 chips:   plangarrien(0.05) |   plangarriekin(0.04) |   plangarriko(0.04)
+  ⌨  'a'            → "Lagunekin afaria egitea, asteburuan plangarria"
+     🔍 chips:   izan(0.10) |   den(0.09) |   plangarria,(0.08)
+  ✅ ACCEPT (→ 'plangarria,')  prob=0.079 
+     🔍 chips:   eta(0.14) |   baina(0.02) |   ez(0.01)
+  ⌨  'd'            → "Lagunekin afaria egitea, asteburuan plangarria, d"
+     🔍 chips:   dj-ak(0.15) |   dru(0.10) |   dri(0.06)
+  ⌨  'a'            → "Lagunekin afaria egitea, asteburuan plangarria, da"
+     🔍 chips:   dastatzea(0.27) |   data(0.14) |   dan(0.09)
+
+  📊 Result: 6/6 words correct
+     Completions: 4  Next-words: 0  Manual: 2
+     Keystrokes: 42 (chars: 38, taps: 4)
+     Simulated CSR: 12.5%
+     Avg prob of accepted: 0.246
+
+======================================================================
+  Basque: "Musika entzutea gustuko dut lanean ari naizenean"
+======================================================================
+     🔍 chips: (none)
+  ⌨  'M'            → "M"
+     🔍 chips:   Mendebaldeko(0.24) |   M.(0.13) |   MAR(0.05)
+  ⌨  'u'            → "Mu"
+     🔍 chips:   Murgiako(0.15) |   MU(0.04) |   Mugi(0.10)
+  ⌨  's'            → "Mus"
+     🔍 chips:   Musentine(0.05) |   Musp(0.05) |   Musak(0.04)
+  ⌨  'i'            → "Musi"
+     🔍 chips:   Musiprasek(0.60) |   Musili(0.03) |   Musit(0.03)
+  ⌨  'k'            → "Musik"
+     🔍 chips:   Musikeneko(0.22) |   Musikhanovsk(0.12) |   Musiks(0.12)
+  ⌨  'a'            → "Musika"
+     🔍 chips:   Eskolako(0.12) |   Musikari(0.08) |   Musikaren(0.06)
+     🔍 chips:   Musikari(0.08) |   Musikaren(0.06) |   Musika-(0.06)
+  ⌨  [space]        → "Musika "
+  ⌨  'e'            → "Musika e"
+     🔍 chips:   Eskolako(0.12) |   r(0.11) |   equi(0.07)
+  ⌨  'n'            → "Musika en"
+     🔍 chips:   r(0.11) |   el(0.08) |   la(0.04)
+  ⌨  't'            → "Musika ent"
+     🔍 chips:   entiendo(0.34) |   entr(0.14) |   entra(0.02)
+  ⌨  'z'            → "Musika entz"
+     🔍 chips:   entzü(0.10) |   el(0.08) |   la(0.04)
+  ⌨  'u'            → "Musika entzu"
+     🔍 chips:   entzuleak(0.33) |   entzumen(0.23) |   entzuketa(0.03)
+  ⌨  't'            → "Musika entzut"
+     🔍 chips:   entzut(0.02) |   entzut.(0.03) |   entzutle(0.03)
+  ⌨  'e'            → "Musika entzute"
+     🔍 chips:   entzuteko(0.44) |   entzuten(0.18) |   entzutean(0.07)
+  ⌨  'a'            → "Musika entzutea"
+     🔍 chips:   entzutean(0.07) |   entzutea(0.05) |   entzutea.(0.15)
+  ✅ ACCEPT (→ 'entzutea')  prob=0.054 
+     🔍 chips:   ,(0.18) |   .(0.15) |   eta(0.05)
+  ⌨  'g'            → "Musika entzutea g"
+     🔍 chips:   giltzarria(0.22) |   galdatu(0.08) |   gri(0.07)
+  ⌨  'u'            → "Musika entzutea gu"
+     🔍 chips:   gustagarria(0.17) |   gusto(0.14) |   gura(0.14)
+  ⌨  's'            → "Musika entzutea gus"
+     🔍 chips:   gustura(0.86) |   gustagarria(0.17) |   gusto(0.14)
+  ⌨  't'            → "Musika entzutea gust"
+     🔍 chips:   gustura(0.86) |   gustetan(0.88) |   gustagarria(0.17)
+  ⌨  'u'            → "Musika entzutea gustu"
+     🔍 chips:   gustura(0.86) |   gustuko(0.04) |   gustua(0.10)
+  ✅ ACCEPT (→ 'gustuko')  prob=0.038 
+     🔍 chips:   a(0.12) |   dutenek(0.12) |   duten(0.12)
+  ⌨  'd'            → "Musika entzutea gustuko d"
+     🔍 chips:   dutenek(0.12) |   duten(0.12) |   düt(0.20)
+  ⌨  'u'            → "Musika entzutea gustuko du"
+     🔍 chips:   du,(0.25) |   dutenek(0.12) |   duten(0.12)
+  ⌨  't'            → "Musika entzutea gustuko dut"
+     🔍 chips:   dut.(0.29) |   dutenek(0.12) |   duten(0.12)
+  ✅ ACCEPT (→ 'dut.')  prob=0.294 
+     🔍 chips:   .(0.01) |   Ez(0.00) |   A(0.00)
+  ⌨  'l'            → "Musika entzutea gustuko dut. l"
+     🔍 chips:   l.(0.05) |   l'(0.04) |   ls(0.04)
+  ⌨  'a'            → "Musika entzutea gustuko dut. la"
+     🔍 chips:   laz(0.03) |   lai(0.03)
+  ⌨  'n'            → "Musika entzutea gustuko dut. lan"
+     🔍 chips:   lanbidea(0.07) |   lankide(0.06) |   kristal(0.05)
+  ⌨  'e'            → "Musika entzutea gustuko dut. lane"
+     🔍 chips:   lanea(0.14) |   laneko(0.04) |   lane-(0.05)
+  ⌨  'a'            → "Musika entzutea gustuko dut. lanea"
+     🔍 chips:   lanea(0.14) |   lanea.(0.06) |   laneas(0.04)
+  ⌨  'n'            → "Musika entzutea gustuko dut. lanean"
+     🔍 chips:   lanean.(0.14) |   ari(0.05) |   ere(0.02)
+  ✅ ACCEPT (→ 'lanean.')  prob=0.138 
+     🔍 chips:   A(0.01) |   Eta(0.01) |   Lan(0.01)
+  ⌨  'a'            → "Musika entzutea gustuko dut. lanean. a"
+     🔍 chips:   A(0.01) |   a.(0.07) |   asmatu(0.06)
+  ⌨  'r'            → "Musika entzutea gustuko dut. lanean. ar"
+     🔍 chips:   art(0.11) |   ara(0.09) |   arti(0.07)
+  ⌨  'i'            → "Musika entzutea gustuko dut. lanean. ari"
+     🔍 chips:   ariketa(0.24) |   arin(0.09) |   naiz(0.05)
+     🔍 chips:   ariketa(0.24) |   arin(0.09) |   arina(0.04)
+  ⌨  [space]        → "Musika entzutea gustuko dut. lanean. ari "
+  ⌨  'n'            → "Musika entzutea gustuko dut. lanean. ari n"
+     🔍 chips:   nintzaion(0.45) |   naiz(0.05) |   n(0.09)
+  ⌨  'a'            → "Musika entzutea gustuko dut. lanean. ari na"
+     🔍 chips:   natzaizu(0.55) |   nak(0.08) |   naiz(0.05)
+  ⌨  'i'            → "Musika entzutea gustuko dut. lanean. ari nai"
+     🔍 chips:   naiz(0.05) |   nai.(0.11) |   nain(0.10)
+  ⌨  'z'            → "Musika entzutea gustuko dut. lanean. ari naiz"
+     🔍 chips:   naizenean(0.25) |   naiz.(0.17) |   naiz(0.05)
+  ✅ ACCEPT (→ 'naizenean')  prob=0.247 
+
+  📊 Result: 7/7 words correct
+     Completions: 5  Next-words: 0  Manual: 2
+     Keystrokes: 42 (chars: 37, taps: 5)
+     Simulated CSR: 12.5%
+     Avg prob of accepted: 0.154
+
+======================================================================
+  English: "The weather is nice today and I will go for a walk"
+======================================================================
+     🔍 chips: (none)
+  ⌨  'T'            → "T"
+     🔍 chips:   Trinkoa(0.09) |   Txo(0.07) |   Tek(0.07)
+  ⌨  'h'            → "Th"
+     🔍 chips:   Thyssen-(0.25) |   Thre(0.21) |   Thé(0.09)
+  ⌨  'e'            → "The"
+     🔍 chips:   shadow(0.10) |   W(0.04) |   B(0.02)
+     🔍 chips:   shadow(0.10) |   W(0.04) |   B(0.02)
+  ⌨  [space]        → "The "
+  ⌨  'w'            → "The w"
+     🔍 chips:   with(0.14) |   W(0.04) |   wor(0.11)
+  ⌨  'e'            → "The we"
+     🔍 chips:   we(0.11) |   have(0.15) |   w(0.09)
+  ⌨  'a'            → "The wea"
+     🔍 chips:   weasleep(0.22) |   weat(0.17) |   weapon(0.17)
+  ⌨  't'            → "The weat"
+     🔍 chips:   weathered(0.99) |   weat(0.17) |   have(0.15)
+  ⌨  'h'            → "The weath"
+     🔍 chips:   weathered(0.99) |   weathen(0.11) |   the(0.06)
+  ⌨  'e'            → "The weathe"
+     🔍 chips:   weathered(0.99) |   weathen(0.11) |   weathe.(0.09)
+  ⌨  'r'            → "The weather"
+     🔍 chips:   weathered(0.99) |   weather,(0.07) |   weather.(0.07)
+  ✅ ACCEPT (→ 'weather,')  prob=0.068 
+     🔍 chips:   w(0.16) |   she(0.13) |   the(0.07)
+  ⌨  'i'            → "The weather, i"
+     🔍 chips:   if(0.84) |   its(0.03) |   w(0.01)
+  ⌨  's'            → "The weather, is"
+     🔍 chips:   there(0.11) |   a(0.10) |   w(0.10)
+     🔍 chips:   there(0.11) |   a(0.10) |   w(0.10)
+  ⌨  [space]        → "The weather, is "
+  ⌨  'n'            → "The weather, is n"
+     🔍 chips:   number(0.51) |   night(0.27) |   no(0.05)
+  ⌨  'i'            → "The weather, is ni"
+     🔍 chips:   nice(0.87) |   night(0.27) |   nine(0.03)
+  ✅ ACCEPT (→ 'nice')  prob=0.873 
+     🔍 chips:   to(0.19) |   for(0.17) |   ,(0.12)
+  ⌨  't'            → "The weather, is nice t"
+     🔍 chips:   that(0.80) |   to(0.19) |   tw(0.11)
+  ⌨  'o'            → "The weather, is nice to"
+     🔍 chips:   to(0.19) |   start(0.18) |   be(0.07)
+  ⌨  'd'            → "The weather, is nice tod"
+     🔍 chips:   toddlers(0.83) |   start(0.18) |   be(0.07)
+  ⌨  'a'            → "The weather, is nice toda"
+     🔍 chips:   today(1.00) |   start(0.18) |   be(0.07)
+  ✅ ACCEPT (→ 'today')  prob=0.996 
+     🔍 chips:   .(0.20) |   ,(0.19) |   w(0.09)
+  ⌨  'a'            → "The weather, is nice today a"
+     🔍 chips:   as(0.28) |   and(0.06) |   at(0.10)
+  ✅ ACCEPT (→ 'and')  prob=0.057 
+     🔍 chips:   w(0.14) |   there(0.09) |   the(0.09)
+  ⌨  'I'            → "The weather, is nice today and I"
+     🔍 chips:   will(0.23) |   am(0.07) |   ha(0.06)
+     🔍 chips:   will(0.23) |   am(0.07) |   ha(0.06)
+  ✅ ACCEPT (next-word → 'will')  prob=0.232 
+     🔍 chips:   be(0.11) |   ha(0.07) |   w(0.04)
+  ⌨  'g'            → "The weather, is nice today and I will g"
+     🔍 chips:   grow(0.34) |   grea(0.18) |   gla(0.13)
+  ⌨  'o'            → "The weather, is nice today and I will go"
+     🔍 chips:   to(0.21) |   w(0.13) |   on(0.11)
+     🔍 chips:   to(0.21) |   w(0.13) |   on(0.11)
+  ⌨  [space]        → "The weather, is nice today and I will go "
+  ⌨  'f'            → "The weather, is nice today and I will go f"
+     🔍 chips:   from(0.66) |   fight(0.07) |   fur(0.04)
+  ⌨  'o'            → "The weather, is nice today and I will go fo"
+     🔍 chips:   following(0.33) |   foo(0.17) |   four(0.14)
+  ⌨  'r'            → "The weather, is nice today and I will go for"
+     🔍 chips:   forward(0.12) |   y(0.07) |   forth(0.06)
+     🔍 chips:   forward(0.12) |   forth(0.06) |   y(0.07)
+  ⌨  [space]        → "The weather, is nice today and I will go for "
+  ⌨  'a'            → "The weather, is nice today and I will go for a"
+     🔍 chips:   space(0.24) |   w(0.11) |   lo(0.08)
+     🔍 chips:   small(0.25) |   w(0.11) |   lo(0.08)
+  ⌨  [space]        → "The weather, is nice today and I will go for a "
+  ⌨  'w'            → "The weather, is nice today and I will go for a w"
+     🔍 chips:   we(0.22) |   w(0.11) |   woman(0.14)
+  ⌨  'a'            → "The weather, is nice today and I will go for a wa"
+     🔍 chips:   way(0.71) |   wal(0.10) |   wa(0.09)
+  ⌨  'l'            → "The weather, is nice today and I will go for a wal"
+     🔍 chips:   walk(0.92) |   wal(0.10) |   wall(0.05)
+  ✅ ACCEPT (→ 'walk')  prob=0.915 
+
+  📊 Result: 12/12 words correct
+     Completions: 5  Next-words: 1  Manual: 6
+     Keystrokes: 40 (chars: 34, taps: 6)
+     Simulated CSR: 20.0%
+     Avg prob of accepted: 0.523
+
+======================================================================
+  English: "I am learning a new language but it is still difficult"
+======================================================================
+     🔍 chips: (none)
+  ⌨  'I'            → "I"
+     🔍 chips:   Iri(0.05) |   Is(0.05) |   Ida(0.04)
+     🔍 chips:   Iri(0.05) |   Is(0.05) |   Ida(0.04)
+  ⌨  [space]        → "I "
+  ⌨  'a'            → "I a"
+     🔍 chips:   r(0.17) |   as(0.04) |   ag(0.02)
+  ⌨  'm'            → "I am"
+     🔍 chips:   ampliada(0.23) |   r(0.17) |   amba(0.06)
+     🔍 chips:   ampliada(0.23) |   r(0.17) |   amba(0.06)
+  ⌨  [space]        → "I am "
+  ⌨  'l'            → "I am l"
+     🔍 chips:   t(0.16) |   l'(0.09) |   i(0.05)
+  ⌨  'e'            → "I am le"
+     🔍 chips:   t(0.16) |   leaders(0.08) |   i(0.05)
+  ⌨  'a'            → "I am lea"
+     🔍 chips:   leaders(0.08) |   t(0.16) |   lead(0.09)
+  ⌨  'r'            → "I am lear"
+     🔍 chips:   learning(0.76) |   learna(0.02) |   lears(0.01)
+  ✅ ACCEPT (→ 'learning')  prob=0.762 
+     🔍 chips:   thanks(0.11) |   ,(0.09) |   .(0.09)
+  ⌨  'a'            → "I am learning a"
+     🔍 chips:   at(0.29) |   abo(0.18) |   agai(0.06)
+     🔍 chips:   at(0.29) |   abo(0.18) |   agai(0.06)
+  ⌨  [space]        → "I am learning a "
+  ⌨  'n'            → "I am learning a n"
+     🔍 chips:   number(0.48) |   ny(0.06) |   night(0.06)
+  ⌨  'e'            → "I am learning a ne"
+     🔍 chips:   new(0.92) |   neces(0.02) |   net(0.01)
+  ✅ ACCEPT (→ 'new')  prob=0.919 
+     🔍 chips:   school(0.18) |   w(0.06) |   and(0.05)
+  ⌨  'l'            → "I am learning a new l"
+     🔍 chips:   light(0.91) |   lt(0.01) |   lli(0.00)
+  ⌨  'a'            → "I am learning a new la"
+     🔍 chips:   label(0.19) |   law(0.14) |   labo(0.09)
+  ⌨  'n'            → "I am learning a new lan"
+     🔍 chips:   language(0.99) |   land(0.00) |   langun(0.00)
+  ✅ ACCEPT (→ 'language')  prob=0.993 
+     🔍 chips:   ,(0.13) |   .(0.12) |   in(0.06)
+  ⌨  'b'            → "I am learning a new language b"
+     🔍 chips:   blocked(0.55) |   bla(0.07) |   br(0.06)
+  ⌨  'u'            → "I am learning a new language bu"
+     🔍 chips:   but(0.82) |   bui(0.15) |   buil(0.01)
+  ✅ ACCEPT (→ 'but')  prob=0.823 
+     🔍 chips:   it(0.16) |   no(0.14) |   al(0.12)
+  ✅ ACCEPT (→ 'it')  prob=0.159 
+     🔍 chips:   is(0.40) |   w(0.11) |   ha(0.09)
+  ✅ ACCEPT (→ 'is')  prob=0.404 
+     🔍 chips:   very(0.22) |   a(0.10) |   no(0.06)
+  ⌨  's'            → "I am learning a new language but it is s"
+     🔍 chips:   stricted(0.10) |   slo(0.07) |   sy(0.06)
+  ⌨  't'            → "I am learning a new language but it is st"
+     🔍 chips:   stylistic(0.39) |   stres(0.27) |   stricted(0.10)
+  ⌨  'i'            → "I am learning a new language but it is sti"
+     🔍 chips:   still(0.93) |   stille(0.02) |   stick(0.01)
+  ✅ ACCEPT (→ 'still')  prob=0.932 
+     🔍 chips:   very(0.20) |   a(0.11) |   in(0.06)
+  ⌨  'd'            → "I am learning a new language but it is still d"
+     🔍 chips:   driven(0.29) |   dres(0.18) |   dy(0.16)
+  ⌨  'i'            → "I am learning a new language but it is still di"
+     🔍 chips:   different(0.35) |   dif(0.27) |   divi(0.09)
+  ⌨  'f'            → "I am learning a new language but it is still dif"
+     🔍 chips:   difficult(0.95) |   different(0.35) |   dif(0.27)
+  ✅ ACCEPT (→ 'difficult')  prob=0.953 
+
+  📊 Result: 11/11 words correct
+     Completions: 8  Next-words: 0  Manual: 3
+     Keystrokes: 32 (chars: 24, taps: 8)
+     Simulated CSR: 40.7%
+     Avg prob of accepted: 0.743
+
+======================================================================
+  English: "Tomorrow morning I have to go to work early"
+======================================================================
+     🔍 chips: (none)
+  ⌨  'T'            → "T"
+     🔍 chips:   Trinkoa(0.09) |   Txo(0.07) |   Tek(0.07)
+  ⌨  'o'            → "To"
+     🔍 chips:   Torturaren(0.12) |   Topa(0.11) |   Torre(0.08)
+  ⌨  'm'            → "Tom"
+     🔍 chips:   Toma(0.06) |   Tom(0.04) |   Tom-(0.10)
+  ⌨  'o'            → "Tomo"
+     🔍 chips:   Tomorty(0.20) |   Tomod(0.11) |   Tomovi(0.06)
+  ⌨  'r'            → "Tomor"
+     🔍 chips:   Tomorty(0.20) |   Tomore(0.03) |   Tomorka(0.07)
+  ⌨  'r'            → "Tomorr"
+     🔍 chips:   Tomorr.(0.05) |   Tomorr�(0.05) |   Tomorró(0.04)
+  ⌨  'o'            → "Tomorro"
+     🔍 chips:   Tomorrowski(0.25) |   Tomorror(0.18) |   Tomorroi(0.07)
+  ⌨  'w'            → "Tomorrow"
+     🔍 chips:   Tomorrowski(0.25) |   Tomorrow,(0.05) |   Tomorrow-(0.04)
+  ✅ ACCEPT (→ 'Tomorrow,')  prob=0.050 
+     🔍 chips:   S(0.03) |   W(0.03) |   A(0.02)
+  ⌨  'm'            → "Tomorrow, m"
+     🔍 chips:   my(0.14) |   md(0.06) |   ms(0.03)
+  ⌨  'o'            → "Tomorrow, mo"
+     🔍 chips:   morphosyn(0.07) |   most(0.06) |   motor(0.06)
+  ⌨  'r'            → "Tomorrow, mor"
+     🔍 chips:   morphosynta(0.18) |   morphosyn(0.07) |   more(0.04)
+  ⌨  'n'            → "Tomorrow, morn"
+     🔍 chips:   morning(0.33) |   morn,(0.04) |   morns(0.04)
+  ✅ ACCEPT (→ 'morning')  prob=0.330 
+     🔍 chips:   ,(0.11) |   shot(0.11) |   w(0.08)
+  ⌨  'I'            → "Tomorrow, morning I"
+     🔍 chips:   in(0.05) |   I,(0.14) |   Island(0.08)
+  ✅ ACCEPT (→ 'I,')  prob=0.140 
+     🔍 chips:   mo(0.08) |   Mo(0.05) |   w(0.04)
+  ⌨  'h'            → "Tomorrow, morning I, h"
+     🔍 chips:   ht(0.18) |   hy(0.17) |   h,(0.02)
+  ⌨  'a'            → "Tomorrow, morning I, ha"
+     🔍 chips:   has(0.38) |   have(0.20) |   had(0.12)
+  ✅ ACCEPT (→ 'have')  prob=0.202 
+     🔍 chips:   been(0.20) |   be(0.20) |   a(0.10)
+  ⌨  't'            → "Tomorrow, morning I, have t"
+     🔍 chips:   tw(0.49) |   thought(0.25) |   that(0.15)
+  ⌨  'o'            → "Tomorrow, morning I, have to"
+     🔍 chips:   be(0.32) |   to(0.04) |   re(0.03)
+  ✅ ACCEPT (→ 'to')  prob=0.039 
+     🔍 chips:   be(0.32) |   re(0.03) |   w(0.03)
+  ⌨  'g'            → "Tomorrow, morning I, have to g"
+     🔍 chips:   grow(0.37) |   grea(0.26) |   gla(0.13)
+  ⌨  'o'            → "Tomorrow, morning I, have to go"
+     🔍 chips:   on(0.12) |   to(0.11) |   a(0.07)
+     🔍 chips:   on(0.12) |   to(0.11) |   a(0.07)
+  ✅ ACCEPT (next-word → 'to')  prob=0.113 
+     🔍 chips:   the(0.30) |   a(0.04) |   hi(0.02)
+  ⌨  'w'            → "Tomorrow, morning I, have to go to w"
+     🔍 chips:   with(0.25) |   wa(0.13) |   w(0.01)
+  ⌨  'o'            → "Tomorrow, morning I, have to go to wo"
+     🔍 chips:   woo(0.40) |   women(0.34) |   wor(0.11)
+  ⌨  'r'            → "Tomorrow, morning I, have to go to wor"
+     🔍 chips:   work(0.62) |   wor(0.11) |   word(0.09)
+  ✅ ACCEPT (→ 'work')  prob=0.616 
+     🔍 chips:   .(0.23) |   ,(0.19) |   s(0.06)
+  ⌨  'e'            → "Tomorrow, morning I, have to go to work e"
+     🔍 chips:   everything(0.59) |   ea(0.08) |   eit(0.08)
+  ⌨  'a'            → "Tomorrow, morning I, have to go to work ea"
+     🔍 chips:   each(0.56) |   ea(0.08) |   eat(0.16)
+  ⌨  'r'            → "Tomorrow, morning I, have to go to work ear"
+     🔍 chips:   earn(0.32) |   earlier(0.22) |   ear(0.05)
+  ⌨  'l'            → "Tomorrow, morning I, have to go to work earl"
+     🔍 chips:   earlier(0.22) |   early(0.12) |   earls(0.16)
+  ✅ ACCEPT (→ 'early')  prob=0.117 
+
+  📊 Result: 9/9 words correct
+     Completions: 7  Next-words: 1  Manual: 1
+     Keystrokes: 34 (chars: 26, taps: 8)
+     Simulated CSR: 20.9%
+     Avg prob of accepted: 0.201
+
+======================================================================
+  English: "Having dinner with friends this weekend sounds great"
+======================================================================
+     🔍 chips: (none)
+  ⌨  'H'            → "H"
+     🔍 chips:   Hankaz(0.19) |   HE(0.08) |   Haren(0.05)
+  ⌨  'a'            → "Ha"
+     🔍 chips:   Hankaz(0.19) |   Haren(0.05) |   Hamaikagarrena(0.10)
+  ⌨  'v'            → "Hav"
+     🔍 chips:   Hav-en(0.12) |   Hav.(0.10) |   Hav,(0.06)
+  ⌨  'i'            → "Havi"
+     🔍 chips:   Havinnner(0.08) |   Havino(0.05) |   Havisi(0.04)
+  ⌨  'n'            → "Havin"
+     🔍 chips:   Havinnner(0.08) |   Havino(0.05) |   Havin,(0.04)
+  ⌨  'g'            → "Having"
+     🔍 chips:   Having-ek(0.07) |   Having,(0.05) |   Havingek(0.04)
+  ✅ ACCEPT (→ 'Having,')  prob=0.046 
+     🔍 chips:   S(0.05) |   A(0.03) |   C(0.03)
+  ⌨  'd'            → "Having, d"
+     🔍 chips:   d'(0.12) |   d’(0.06) |   dy(0.02)
+  ⌨  'i'            → "Having, di"
+     🔍 chips:   diagnostiko(0.18) |   dip(0.12) |   dina(0.06)
+  ⌨  'n'            → "Having, din"
+     🔍 chips:   dina(0.06) |   dink(0.08) |   dinero(0.07)
+  ⌨  'n'            → "Having, dinn"
+     🔍 chips:   dinner(0.26) |   dinn(0.05) |   dinning(0.14)
+  ✅ ACCEPT (→ 'dinner')  prob=0.259 
+     🔍 chips:   ,(0.28) |   .(0.05) |   s(0.03)
+  ⌨  'w'            → "Having, dinner w"
+     🔍 chips:   with(0.35) |   wor(0.07) |   wa(0.07)
+  ✅ ACCEPT (→ 'with')  prob=0.353 
+     🔍 chips:   the(0.12) |   a(0.11) |   re(0.02)
+  ⌨  'f'            → "Having, dinner with f"
+     🔍 chips:   friends(0.15) |   fre(0.13) |   fro(0.08)
+  ✅ ACCEPT (→ 'friends')  prob=0.150 
+     🔍 chips:   ,(0.33) |   .(0.17) |   and(0.10)
+  ⌨  't'            → "Having, dinner with friends t"
+     🔍 chips:   that(0.87) |   tw(0.04) |   tho(0.02)
+  ⌨  'h'            → "Having, dinner with friends th"
+     🔍 chips:   that(0.87) |   thanks(0.48) |   thro(0.21)
+  ⌨  'i'            → "Having, dinner with friends thi"
+     🔍 chips:   thickness(0.34) |   this(0.11) |   thig(0.12)
+  ✅ ACCEPT (→ 'this')  prob=0.107 
+     🔍 chips:   year(0.12) |   y(0.12) |   w(0.08)
+  ⌨  'w'            → "Having, dinner with friends this w"
+     🔍 chips:   way(0.23) |   w(0.08) |   wor(0.16)
+  ⌨  'e'            → "Having, dinner with friends this we"
+     🔍 chips:   we(0.11) |   week(0.17) |   w(0.12)
+  ⌨  'e'            → "Having, dinner with friends this wee"
+     🔍 chips:   weeps(0.29) |   week(0.17) |   w(0.12)
+  ⌨  'k'            → "Having, dinner with friends this week"
+     🔍 chips:   week(0.17) |   week,(0.16) |   w(0.12)
+  ⌨  'e'            → "Having, dinner with friends this weeke"
+     🔍 chips:   weekepan(0.24) |   weeketh(0.16) |   weeket(0.10)
+  ⌨  'n'            → "Having, dinner with friends this weeken"
+     🔍 chips:   weekend(0.99) |   and(0.08) |   weeken(0.06)
+  ✅ ACCEPT (→ 'weekend')  prob=0.985 
+     🔍 chips:   ,(0.21) |   .(0.19) |   and(0.06)
+  ⌨  's'            → "Having, dinner with friends this weekend s"
+     🔍 chips:   shows(0.14) |   star(0.10) |   scho(0.07)
+  ⌨  'o'            → "Having, dinner with friends this weekend so"
+     🔍 chips:   w(0.14) |   somewhere(0.11) |   soon(0.09)
+  ⌨  'u'            → "Having, dinner with friends this weekend sou"
+     🔍 chips:   south(0.52) |   sought(0.24) |   w(0.14)
+  ⌨  'n'            → "Having, dinner with friends this weekend soun"
+     🔍 chips:   sounds(0.98) |   w(0.14) |   the(0.03)
+  ✅ ACCEPT (→ 'sounds')  prob=0.981 
+     🔍 chips:   ,(0.16) |   .(0.15) |   w(0.09)
+  ⌨  'g'            → "Having, dinner with friends this weekend sounds g"
+     🔍 chips:   grew(0.39) |   gro(0.15) |   grea(0.09)
+  ⌨  'r'            → "Having, dinner with friends this weekend sounds gr"
+     🔍 chips:   grew(0.39) |   gro(0.15) |   grèves(0.23)
+  ⌨  'e'            → "Having, dinner with friends this weekend sounds gre"
+     🔍 chips:   grew(0.39) |   green(0.48) |   grea(0.09)
+  ⌨  'a'            → "Having, dinner with friends this weekend sounds grea"
+     🔍 chips:   great(0.73) |   greater(0.22) |   grea(0.09)
+  ✅ ACCEPT (→ 'great')  prob=0.730 
+
+  📊 Result: 8/8 words correct
+     Completions: 8  Next-words: 0  Manual: 0
+     Keystrokes: 37 (chars: 29, taps: 8)
+     Simulated CSR: 28.8%
+     Avg prob of accepted: 0.451
+
+======================================================================
+  English: "I like to listen to music while I am working"
+======================================================================
+     🔍 chips: (none)
+  ⌨  'I'            → "I"
+     🔍 chips:   Iri(0.05) |   Is(0.05) |   Ida(0.04)
+     🔍 chips:   Iri(0.05) |   Is(0.05) |   Ida(0.04)
+  ⌨  [space]        → "I "
+  ⌨  'l'            → "I l"
+     🔍 chips:   l'action(0.13) |   e(0.08) |   lé(0.06)
+  ⌨  'i'            → "I li"
+     🔍 chips:   lit(0.09) |   e(0.08) |   liga(0.06)
+  ⌨  'k'            → "I lik"
+     🔍 chips:   likes(0.24) |   lik.(0.10) |   liken(0.09)
+  ⌨  'e'            → "I like"
+     🔍 chips:   likes(0.24) |   that(0.21) |   liken(0.09)
+     🔍 chips:   likes(0.24) |   that(0.21) |   liken(0.09)
+  ⌨  [space]        → "I like "
+  ⌨  't'            → "I like t"
+     🔍 chips:   that(0.21) |   tw(0.15) |   the(0.05)
+  ⌨  'o'            → "I like to"
+     🔍 chips:   start(0.15) |   be(0.06) |   w(0.04)
+     🔍 chips:   start(0.15) |   be(0.06) |   w(0.04)
+  ⌨  [space]        → "I like to "
+  ⌨  'l'            → "I like to l"
+     🔍 chips:   light(0.66) |   lt(0.08) |   l'(0.02)
+  ⌨  'i'            → "I like to li"
+     🔍 chips:   light(0.66) |   like(0.28) |   live(0.17)
+  ⌨  's'            → "I like to lis"
+     🔍 chips:   lists(0.97) |   list(0.05) |   lising(0.00)
+  ⌨  't'            → "I like to list"
+     🔍 chips:   lists(0.97) |   list(0.05) |   list.(0.08)
+  ⌨  'e'            → "I like to liste"
+     🔍 chips:   listed(0.96) |   and(0.06) |   the(0.04)
+  ⌨  'n'            → "I like to listen"
+     🔍 chips:   to(0.38) |   listen,(0.08) |   listen.(0.06)
+  ✅ ACCEPT (→ 'listen,')  prob=0.079 
+     🔍 chips:   that(0.11) |   and(0.09) |   w(0.06)
+  ⌨  't'            → "I like to listen, t"
+     🔍 chips:   that(0.11) |   the(0.05) |   tw(0.08)
+  ⌨  'o'            → "I like to listen, to"
+     🔍 chips:   show(0.16) |   the(0.07) |   re(0.04)
+     🔍 chips:   show(0.16) |   the(0.07) |   re(0.04)
+  ⌨  [space]        → "I like to listen, to "
+  ⌨  'm'            → "I like to listen, to m"
+     🔍 chips:   my(0.79) |   might(0.08) |   mistak(0.07)
+  ⌨  'u'            → "I like to listen, to mu"
+     🔍 chips:   must(0.59) |   musi(0.16) |   much(0.07)
+  ⌨  's'            → "I like to listen, to mus"
+     🔍 chips:   must(0.59) |   muscle(0.37) |   musi(0.16)
+  ⌨  'i'            → "I like to listen, to musi"
+     🔍 chips:   music(0.94) |   musi(0.16) |   musical(0.05)
+  ✅ ACCEPT (→ 'music')  prob=0.941 
+     🔍 chips:   ,(0.22) |   and(0.13) |   .(0.06)
+  ⌨  'w'            → "I like to listen, to music w"
+     🔍 chips:   with(0.19) |   wor(0.15) |   wa(0.14)
+  ⌨  'h'            → "I like to listen, to music wh"
+     🔍 chips:   when(0.96) |   why(0.04) |   wh-(0.00)
+  ⌨  'i'            → "I like to listen, to music whi"
+     🔍 chips:   which(0.47) |   while(0.26) |   white(0.13)
+  ✅ ACCEPT (→ 'while')  prob=0.259 
+     🔍 chips:   that(0.16) |   the(0.15) |   ,(0.07)
+  ⌨  'I'            → "I like to listen, to music while I"
+     🔍 chips:   think(0.14) |   w(0.14) |   ha(0.08)
+     🔍 chips:   think(0.14) |   w(0.14) |   ha(0.08)
+  ⌨  [space]        → "I like to listen, to music while I "
+  ⌨  'a'            → "I like to listen, to music while I a"
+     🔍 chips:   asks(0.46) |   at(0.12) |   ag(0.05)
+  ⌨  'm'            → "I like to listen, to music while I am"
+     🔍 chips:   starting(0.16) |   amer(0.03) |   a(0.10)
+     🔍 chips:   starting(0.16) |   amer(0.03) |   a(0.10)
+  ⌨  [space]        → "I like to listen, to music while I am "
+  ⌨  'w'            → "I like to listen, to music while I am w"
+     🔍 chips:   working(0.15) |   wi(0.12) |   what(0.08)
+  ✅ ACCEPT (→ 'working')  prob=0.149 
+
+  📊 Result: 10/10 words correct
+     Completions: 4  Next-words: 0  Manual: 6
+     Keystrokes: 36 (chars: 32, taps: 4)
+     Simulated CSR: 18.2%
+     Avg prob of accepted: 0.357
+
+======================================================================
+  Spanish: "El tiempo está bueno hoy y voy a salir a caminar"
+======================================================================
+     🔍 chips: (none)
+  ⌨  'E'            → "E"
+     🔍 chips:   Estrategias(0.05) |   Eki(0.05) |   Ema(0.04)
+  ⌨  'l'            → "El"
+     🔍 chips:   Elgoibarko(0.07) |   Elorri(0.06) |   Elek(0.04)
+     🔍 chips:   Elgoibarko(0.07) |   Elorri(0.06) |   Elek(0.04)
+  ⌨  [space]        → "El "
+  ⌨  't'            → "El t"
+     🔍 chips:   &(0.28) |   tru(0.05) |   a(0.05)
+  ⌨  'i'            → "El ti"
+     🔍 chips:   &(0.28) |   tipikoa(0.23) |   tit(0.07)
+  ⌨  'e'            → "El tie"
+     🔍 chips:   &(0.28) |   tierrak(0.08) |   tiede(0.07)
+  ⌨  'm'            → "El tiem"
+     🔍 chips:   tiempo(0.83) |   tiempe(0.03) |   tiemda(0.02)
+  ✅ ACCEPT (→ 'tiempo')  prob=0.828 
+     🔍 chips:   de(0.14) |   ,(0.10) |   s(0.07)
+  ⌨  'e'            → "El tiempo e"
+     🔍 chips:   económico(0.14) |   equi(0.09) |   eje(0.04)
+  ⌨  's'            → "El tiempo es"
+     🔍 chips:   escribió(0.07) |   espa(0.05) |   la(0.05)
+  ⌨  't'            → "El tiempo est"
+     🔍 chips:   estrenas(0.14) |   estres(0.07) |   est�(0.07)
+  ⌨  'á'            → "El tiempo está"
+     🔍 chips:   están(0.73) |   la(0.05) |   que(0.03)
+     🔍 chips:   están(0.73) |   estás(0.01) |   la(0.05)
+  ⌨  [space]        → "El tiempo está "
+  ⌨  'b'            → "El tiempo está b"
+     🔍 chips:   básicamente(0.41) |   bru(0.09) |   blan(0.09)
+  ⌨  'u'            → "El tiempo está bu"
+     🔍 chips:   buscando(0.88) |   buen(0.08) |   bur(0.02)
+  ⌨  'e'            → "El tiempo está bue"
+     🔍 chips:   bueyendo(0.81) |   buen(0.08) |   bueo(0.03)
+  ⌨  'n'            → "El tiempo está buen"
+     🔍 chips:   bueno(0.50) |   buena(0.35) |   buen(0.08)
+  ✅ ACCEPT (→ 'bueno')  prob=0.503 
+     🔍 chips:   ,(0.33) |   .(0.08) |   y(0.06)
+  ⌨  'h'            → "El tiempo está bueno h"
+     🔍 chips:   hágase(0.54) |   hé(0.06) |   hí(0.05)
+  ⌨  'o'            → "El tiempo está bueno ho"
+     🔍 chips:   hoy(0.69) |   hombre(0.15) |   hola(0.04)
+  ✅ ACCEPT (→ 'hoy')  prob=0.692 
+     🔍 chips:   ,(0.11) |   .(0.10) |   en(0.10)
+  ⌨  'y'            → "El tiempo está bueno hoy y"
+     🔍 chips:   ya(0.09) |   no(0.08) |   yo(0.06)
+     🔍 chips:   ya(0.09) |   yo(0.06) |   y(0.06)
+  ⌨  [space]        → "El tiempo está bueno hoy y "
+  ⌨  'v'            → "El tiempo está bueno hoy y v"
+     🔍 chips:   vuelve(0.88) |   vá(0.02) |   vé(0.02)
+  ⌨  'o'            → "El tiempo está bueno hoy y vo"
+     🔍 chips:   voy(0.68) |   vosotros(0.22) |   vos(0.06)
+  ✅ ACCEPT (→ 'voy')  prob=0.683 
+     🔍 chips:   a(0.84) |   ,(0.01) |   y(0.01)
+  ✅ ACCEPT (→ 'a')  prob=0.841 
+     🔍 chips:   hacer(0.10) |   ha(0.10) |   de(0.05)
+  ⌨  's'            → "El tiempo está bueno hoy y voy a s"
+     🔍 chips:   sí(0.80) |   só(0.06) |   sé(0.04)
+  ⌨  'a'            → "El tiempo está bueno hoy y voy a sa"
+     🔍 chips:   sacar(0.66) |   saber(0.31) |   sati(0.01)
+  ⌨  'l'            → "El tiempo está bueno hoy y voy a sal"
+     🔍 chips:   salir(0.46) |   salu(0.43) |   saltar(0.05)
+  ✅ ACCEPT (→ 'salir')  prob=0.462 
+     🔍 chips:   a(0.24) |   de(0.10) |   .(0.07)
+  ✅ ACCEPT (→ 'a')  prob=0.243 
+     🔍 chips:   la(0.17) |   q(0.06) |   las(0.04)
+  ⌨  'c'            → "El tiempo está bueno hoy y voy a salir a c"
+     🔍 chips:   cambiar(0.37) |   cen(0.20) |   ca(0.04)
+  ⌨  'a'            → "El tiempo está bueno hoy y voy a salir a ca"
+     🔍 chips:   casa(0.81) |   cambiar(0.37) |   can(0.12)
+  ⌨  'm'            → "El tiempo está bueno hoy y voy a salir a cam"
+     🔍 chips:   cambiar(0.37) |   campeona(0.18) |   camina(0.04)
+  ⌨  'i'            → "El tiempo está bueno hoy y voy a salir a cami"
+     🔍 chips:   camión(0.17) |   camis(0.15) |   camina(0.04)
+  ⌨  'n'            → "El tiempo está bueno hoy y voy a salir a camin"
+     🔍 chips:   camino(0.89) |   camina(0.04) |   caminos(0.11)
+  ⌨  'a'            → "El tiempo está bueno hoy y voy a salir a camina"
+     🔍 chips:   caminar(0.95) |   camina(0.04) |   caminando(0.03)
+  ✅ ACCEPT (→ 'caminar')  prob=0.950 
+
+  📊 Result: 11/11 words correct
+     Completions: 8  Next-words: 0  Manual: 3
+     Keystrokes: 39 (chars: 31, taps: 8)
+     Simulated CSR: 18.8%
+     Avg prob of accepted: 0.650
+
+======================================================================
+  Spanish: "Estoy aprendiendo un idioma nuevo pero todavía es difícil"
+======================================================================
+     🔍 chips: (none)
+  ⌨  'E'            → "E"
+     🔍 chips:   Estrategias(0.05) |   Eki(0.05) |   Ema(0.04)
+  ⌨  's'            → "Es"
+     🔍 chips:   Esan(0.25) |   Estrategias(0.05) |   Esko(0.10)
+  ⌨  't'            → "Est"
+     🔍 chips:   Este(0.08) |   Estrategias(0.05) |   Estt(0.14)
+  ⌨  'o'            → "Esto"
+     🔍 chips:   Estos(0.09) |   Estop(0.07) |   Estori(0.07)
+  ⌨  'y'            → "Estoy"
+     🔍 chips:   Estoyk(0.09) |   Estoy-(0.06) |   ((0.05)
+     🔍 chips:   Estoyk(0.09) |   Estoy-(0.06) |   Estoyren(0.05)
+  ⌨  [space]        → "Estoy "
+  ⌨  'a'            → "Estoy a"
+     🔍 chips:   atleta(0.21) |   as(0.11) |   abo(0.06)
+  ⌨  'p'            → "Estoy ap"
+     🔍 chips:   apaizak(0.70) |   apez(0.08) |   apal(0.04)
+  ⌨  'r'            → "Estoy apr"
+     🔍 chips:   après(0.98) |   apr�(0.00)
+  ⌨  'e'            → "Estoy apre"
+     🔍 chips:   aprecia(0.51) |   aprezia(0.24) |   apreta(0.05)
+  ⌨  'n'            → "Estoy apren"
+     🔍 chips:   aprendió(0.72) |   aprend(0.12) |   aprende(0.09)
+  ⌨  'd'            → "Estoy aprend"
+     🔍 chips:   aprendió(0.72) |   aprendiendo(0.56) |   aprend(0.12)
+  ✅ ACCEPT (→ 'aprendiendo')  prob=0.558 
+     🔍 chips:   a(0.22) |   de(0.14) |   en(0.06)
+  ⌨  'u'            → "Estoy aprendiendo u"
+     🔍 chips:   utilizando(0.54) |   util(0.09) |   umo(0.05)
+  ⌨  'n'            → "Estoy aprendiendo un"
+     🔍 chips:   tema(0.13) |   po(0.07) |   unos(0.06)
+     🔍 chips:   unos(0.06) |   tema(0.13) |   po(0.07)
+  ⌨  [space]        → "Estoy aprendiendo un "
+  ⌨  'i'            → "Estoy aprendiendo un i"
+     🔍 chips:   idioma(0.48) |   ico(0.18) |   itin(0.14)
+  ✅ ACCEPT (→ 'idioma')  prob=0.477 
+     🔍 chips:   en(0.12) |   ,(0.09) |   de(0.06)
+  ⌨  'n'            → "Estoy aprendiendo un idioma n"
+     🔍 chips:   nunca(0.34) |   nó(0.22) |   ná(0.21)
+  ⌨  'u'            → "Estoy aprendiendo un idioma nu"
+     🔍 chips:   nuestro(0.68) |   nunca(0.34) |   num(0.07)
+  ⌨  'e'            → "Estoy aprendiendo un idioma nue"
+     🔍 chips:   nueve(0.89) |   nuestro(0.68) |   nue(0.05)
+  ⌨  'v'            → "Estoy aprendiendo un idioma nuev"
+     🔍 chips:   nueve(0.89) |   nuevo(0.02) |   nuevidad(0.10)
+  ✅ ACCEPT (→ 'nuevo')  prob=0.021 
+     🔍 chips:   ,(0.17) |   .(0.14) |   en(0.08)
+  ⌨  'p'            → "Estoy aprendiendo un idioma nuevo p"
+     🔍 chips:   prácticamente(0.22) |   pá(0.17) |   pr(0.10)
+  ⌨  'e'            → "Estoy aprendiendo un idioma nuevo pe"
+     🔍 chips:   pequeño(0.55) |   peli(0.05) |   peda(0.05)
+  ⌨  'r'            → "Estoy aprendiendo un idioma nuevo per"
+     🔍 chips:   pero(0.88) |   perfect(0.02) |   perio(0.01)
+  ✅ ACCEPT (→ 'pero')  prob=0.878 
+     🔍 chips:   que(0.15) |   no(0.12) |   a(0.04)
+  ⌨  't'            → "Estoy aprendiendo un idioma nuevo pero t"
+     🔍 chips:   tambien(0.48) |   tú(0.31) |   tí(0.03)
+  ⌨  'o'            → "Estoy aprendiendo un idioma nuevo pero to"
+     🔍 chips:   todavía(0.58) |   todas(0.19) |   toma(0.05)
+  ✅ ACCEPT (→ 'todavía')  prob=0.582 
+     🔍 chips:   no(0.46) |   se(0.05) |   está(0.04)
+  ⌨  'e'            → "Estoy aprendiendo un idioma nuevo pero todavía e"
+     🔍 chips:   ejerce(0.18) |   echa(0.15) |   está(0.04)
+  ⌨  's'            → "Estoy aprendiendo un idioma nuevo pero todavía es"
+     🔍 chips:   está(0.04) |   tan(0.09) |   mu(0.07)
+     🔍 chips:   esto(0.05) |   esc(0.04) |   está(0.04)
+  ⌨  [space]        → "Estoy aprendiendo un idioma nuevo pero todavía es "
+  ⌨  'd'            → "Estoy aprendiendo un idioma nuevo pero todavía es d"
+     🔍 chips:   dónde(0.56) |   dé(0.22) |   dó(0.06)
+  ⌨  'i'            → "Estoy aprendiendo un idioma nuevo pero todavía es di"
+     🔍 chips:   difícil(0.61) |   dig(0.29) |   difer(0.05)
+  ✅ ACCEPT (→ 'difícil')  prob=0.606 
+
+  📊 Result: 9/9 words correct
+     Completions: 6  Next-words: 0  Manual: 3
+     Keystrokes: 36 (chars: 30, taps: 6)
+     Simulated CSR: 36.8%
+     Avg prob of accepted: 0.520
+
+======================================================================
+  Spanish: "Mañana por la mañana tengo que ir a trabajar temprano"
+======================================================================
+     🔍 chips: (none)
+  ⌨  'M'            → "M"
+     🔍 chips:   Mendebaldeko(0.24) |   M.(0.13) |   MAR(0.05)
+  ⌨  'a'            → "Ma"
+     🔍 chips:   MAR(0.05) |   Madrid(0.07) |   Materia(0.05)
+  ⌨  'ñ'            → "Mañ"
+     🔍 chips:   Mañt(0.09) |   Mañé(0.09) |   Mañ�(0.05)
+  ⌨  'a'            → "Maña"
+     🔍 chips:   Mañavicico(0.12) |   Mañaño(0.08) |   Maña.(0.04)
+  ⌨  'n'            → "Mañan"
+     🔍 chips:   Mañankoko(0.15) |   Mañanga(0.15) |   Mañangu(0.13)
+  ⌨  'a'            → "Mañana"
+     🔍 chips:   Mañanako(0.32) |   Mañana,(0.12) |   Mañana.(0.07)
+  ✅ ACCEPT (→ 'Mañana,')  prob=0.123 
+     🔍 chips:   A(0.02) |   B(0.02) |   Ar(0.02)
+  ⌨  'p'            → "Mañana, p"
+     🔍 chips:   página(0.16) |   p.(0.10) |   pra(0.10)
+  ⌨  'o'            → "Mañana, po"
+     🔍 chips:   poeta(0.08) |   popu(0.06) |   posta(0.06)
+  ⌨  'r'            → "Mañana, por"
+     🔍 chips:   portugesez(0.13) |   la(0.10) |   el(0.10)
+     🔍 chips:   portugesez(0.13) |   la(0.10) |   el(0.10)
+  ✅ ACCEPT (next-word → 'la')  prob=0.105 
+     🔍 chips:   que(0.17) |   no(0.04) |   ca(0.03)
+  ⌨  'm'            → "Mañana, por la m"
+     🔍 chips:   música(0.44) |   má(0.41) |   mí(0.06)
+  ⌨  'a'            → "Mañana, por la ma"
+     🔍 chips:   maña(0.27) |   magnífica(0.24) |   mad(0.17)
+  ⌨  'ñ'            → "Mañana, por la mañ"
+     🔍 chips:   mañuela(0.79) |   maña(0.27) |   mañá(0.09)
+  ⌨  'a'            → "Mañana, por la maña"
+     🔍 chips:   mañana(0.99) |   maña(0.27) |   mañan(0.01)
+  ✅ ACCEPT (→ 'mañana')  prob=0.988 
+     🔍 chips:   ,(0.15) |   .(0.13) |   en(0.08)
+  ⌨  't'            → "Mañana, por la mañana t"
+     🔍 chips:   tú(0.29) |   tambi(0.27) |   trá(0.10)
+  ⌨  'e'            → "Mañana, por la mañana te"
+     🔍 chips:   digo(0.10) |   ha(0.07) |   temp(0.05)
+  ⌨  'n'            → "Mañana, por la mañana ten"
+     🔍 chips:   tenemos(0.42) |   tengo(0.21) |   tend(0.15)
+  ✅ ACCEPT (→ 'tengo')  prob=0.205 
+     🔍 chips:   un(0.16) |   que(0.10) |   el(0.09)
+  ✅ ACCEPT (→ 'que')  prob=0.100 
+     🔍 chips:   ver(0.23) |   ha(0.08) |   de(0.05)
+  ⌨  'i'            → "Mañana, por la mañana tengo que i"
+     🔍 chips:   irse(0.43) |   irte(0.35) |   ig(0.07)
+  ⌨  'r'            → "Mañana, por la mañana tengo que ir"
+     🔍 chips:   irse(0.43) |   irte(0.35) |   a(0.35)
+     🔍 chips:   irse(0.43) |   irte(0.35) |   a(0.36)
+  ✅ ACCEPT (next-word → 'a')  prob=0.358 
+     🔍 chips:   la(0.17) |   las(0.04) |   ca(0.03)
+  ⌨  't'            → "Mañana, por la mañana tengo que ir a t"
+     🔍 chips:   tú(0.30) |   tí(0.29) |   trá(0.16)
+  ⌨  'r'            → "Mañana, por la mañana tengo que ir a tr"
+     🔍 chips:   trónico(0.27) |   trá(0.16) |   tró(0.17)
+  ⌨  'a'            → "Mañana, por la mañana tengo que ir a tra"
+     🔍 chips:   través(0.68) |   tragar(0.09) |   tras(0.06)
+  ⌨  'b'            → "Mañana, por la mañana tengo que ir a trab"
+     🔍 chips:   trabá(0.50) |   trabés(0.15) |   trabla(0.09)
+  ⌨  'a'            → "Mañana, por la mañana tengo que ir a traba"
+     🔍 chips:   trabajar(0.53) |   trabas(0.10) |   trabaje(0.09)
+  ✅ ACCEPT (→ 'trabajar')  prob=0.526 
+     🔍 chips:   .(0.15) |   ,(0.13) |   en(0.13)
+  ⌨  't'            → "Mañana, por la mañana tengo que ir a trabajar t"
+     🔍 chips:   tú(0.62) |   tambi(0.13) |   trá(0.06)
+  ⌨  'e'            → "Mañana, por la mañana tengo que ir a trabajar te"
+     🔍 chips:   temprano(0.19) |   tem(0.11) |   en(0.05)
+  ✅ ACCEPT (→ 'temprano')  prob=0.189 
+
+  📊 Result: 10/10 words correct
+     Completions: 6  Next-words: 2  Manual: 2
+     Keystrokes: 33 (chars: 25, taps: 8)
+     Simulated CSR: 37.7%
+     Avg prob of accepted: 0.324
+
+======================================================================
+  Spanish: "Cenar con amigos este fin de semana suena genial"
+======================================================================
+     🔍 chips: (none)
+  ⌨  'C'            → "C"
+     🔍 chips:   Centro(0.05) |   Chi(0.05) |   Ci(0.04)
+  ⌨  'e'            → "Ce"
+     🔍 chips:   Ceorian(0.22) |   Cele(0.17) |   Centro(0.05)
+  ⌨  'n'            → "Cen"
+     🔍 chips:   Centsioa(0.16) |   Centro(0.05) |   Cenp(0.07)
+  ⌨  'a'            → "Cena"
+     🔍 chips:   Cenako(0.10) |   Cena,(0.05) |   Cenare(0.05)
+  ⌨  'r'            → "Cenar"
+     🔍 chips:   Cenare(0.05) |   la(0.08) |   en(0.06)
+     🔍 chips:   Cenar,(0.05) |   Cenare(0.05) |   la(0.08)
+  ⌨  [space]        → "Cenar "
+  ⌨  'c'            → "Cenar c"
+     🔍 chips:   Cenar,(0.05) |   Cenare(0.05) |   charcos(0.11)
+  ⌨  'o'            → "Cenar co"
+     🔍 chips:   corresponde(0.13) |   cor(0.07) |   copi(0.05)
+  ⌨  'n'            → "Cenar con"
+     🔍 chips:   ganas(0.13) |   el(0.07) |   cons(0.06)
+     🔍 chips:   cons(0.06) |   ganas(0.13) |   el(0.07)
+  ⌨  [space]        → "Cenar con "
+  ⌨  'a'            → "Cenar con a"
+     🔍 chips:   arreglo(0.26) |   afect(0.05) |   agu(0.05)
+  ⌨  'm'            → "Cenar con am"
+     🔍 chips:   amparo(0.20) |   ambo(0.17) |   amba(0.17)
+  ⌨  'i'            → "Cenar con ami"
+     🔍 chips:   amigos(0.87) |   amiga(0.11) |   amig(0.02)
+  ✅ ACCEPT (→ 'amigos')  prob=0.867 
+     🔍 chips:   ,(0.16) |   .(0.12) |   y(0.10)
+  ⌨  'e'            → "Cenar con amigos e"
+     🔍 chips:   intentar(0.18) |   hi(0.07) |   inc(0.06)
+  ⌨  's'            → "Cenar con amigos es"
+     🔍 chips:   intentar(0.18) |   verdad(0.07) |   un(0.07)
+  ⌨  't'            → "Cenar con amigos est"
+     🔍 chips:   estáis(0.23) |   estren(0.20) |   ideas(0.18)
+  ⌨  'e'            → "Cenar con amigos este"
+     🔍 chips:   testigo(0.19) |   un(0.06) |   una(0.06)
+     🔍 chips:   testigo(0.19) |   un(0.06) |   una(0.06)
+  ⌨  [space]        → "Cenar con amigos este "
+  ⌨  'f'            → "Cenar con amigos este f"
+     🔍 chips:   fen(0.15) |   frío(0.14) |   fru(0.08)
+  ⌨  'i'            → "Cenar con amigos este fi"
+     🔍 chips:   fiesta(0.16) |   fir(0.16) |   figur(0.15)
+  ⌨  'n'            → "Cenar con amigos este fin"
+     🔍 chips:   de(0.93) |   a(0.01) |   del(0.01)
+     🔍 chips:   de(0.93) |   finde(0.01) |   a(0.01)
+  ✅ ACCEPT (next-word → 'de')  prob=0.928 
+     🔍 chips:   semana(0.95) |   se(0.95) |   Se(0.01)
+  ✅ ACCEPT (→ 'semana')  prob=0.950 
+     🔍 chips:   ,(0.20) |   .(0.10) |   en(0.07)
+  ⌨  's'            → "Cenar con amigos este fin de semana s"
+     🔍 chips:   sólo(0.56) |   sí(0.16) |   sé(0.10)
+  ⌨  'u'            → "Cenar con amigos este fin de semana su"
+     🔍 chips:   surge(0.15) |   sue(0.03) |   ca(0.03)
+  ⌨  'e'            → "Cenar con amigos este fin de semana sue"
+     🔍 chips:   sueña(0.45) |   suele(0.23) |   suelo(0.15)
+  ⌨  'n'            → "Cenar con amigos este fin de semana suen"
+     🔍 chips:   suena(0.77) |   suenan(0.18) |   ca(0.03)
+  ✅ ACCEPT (→ 'suena')  prob=0.768 
+     🔍 chips:   a(0.14) |   en(0.09) |   el(0.08)
+  ⌨  'g'            → "Cenar con amigos este fin de semana suena g"
+     🔍 chips:   gente(0.63) |   gri(0.17) |   glo(0.06)
+  ⌨  'e'            → "Cenar con amigos este fin de semana suena ge"
+     🔍 chips:   gente(0.63) |   gestos(0.19) |   gesti(0.16)
+  ⌨  'n'            → "Cenar con amigos este fin de semana suena gen"
+     🔍 chips:   gente(0.63) |   gentileza(0.65) |   gentes(0.06)
+  ⌨  'i'            → "Cenar con amigos este fin de semana suena geni"
+     🔍 chips:   genial(0.48) |   genid(0.14) |   genio(0.10)
+  ✅ ACCEPT (→ 'genial')  prob=0.479 
+
+  📊 Result: 9/9 words correct
+     Completions: 4  Next-words: 1  Manual: 4
+     Keystrokes: 34 (chars: 29, taps: 5)
+     Simulated CSR: 29.2%
+     Avg prob of accepted: 0.799
+
+======================================================================
+  Spanish: "Me gusta escuchar música mientras estoy trabajando"
+======================================================================
+     🔍 chips: (none)
+  ⌨  'M'            → "M"
+     🔍 chips:   Mendebaldeko(0.24) |   M.(0.13) |   MAR(0.05)
+  ⌨  'e'            → "Me"
+     🔍 chips:   Mendebaldeko(0.24) |   Memoria(0.12) |   Mexi(0.06)
+     🔍 chips:   Mendebaldeko(0.24) |   Memoria(0.12) |   Mexi(0.06)
+  ⌨  [space]        → "Me "
+  ⌨  'g'            → "Me g"
+     🔍 chips:   r(0.16) |   gr(0.08) |   gri(0.08)
+  ⌨  'u'            → "Me gu"
+     🔍 chips:   gurutzatuen(0.40) |   r(0.16) |   guar(0.07)
+  ⌨  's'            → "Me gus"
+     🔍 chips:   gustura(0.82) |   r(0.16) |   o(0.05)
+  ⌨  't'            → "Me gust"
+     🔍 chips:   gustura(0.82) |   gustó(0.23) |   gustetan(0.05)
+  ⌨  'a'            → "Me gusta"
+     🔍 chips:   gustaría(0.24) |   gustatzen(0.03) |   gustaria(0.03)
+     🔍 chips:   gustaría(0.24) |   gustatzen(0.03) |   gustaria(0.03)
+  ⌨  [space]        → "Me gusta "
+  ⌨  'e'            → "Me gusta e"
+     🔍 chips:   quienes(0.14) |   equi(0.05) |   evi(0.05)
+  ⌨  's'            → "Me gusta es"
+     🔍 chips:   quienes(0.14) |   escuelas(0.12) |   esc(0.08)
+  ⌨  'c'            → "Me gusta esc"
+     🔍 chips:   escribir(0.93) |   escuelas(0.12) |   esc(0.08)
+  ⌨  'u'            → "Me gusta escu"
+     🔍 chips:   escuelas(0.12) |   escucha(0.19) |   la(0.07)
+  ⌨  'c'            → "Me gusta escuc"
+     🔍 chips:   escucha(0.19) |   escuch(0.03) |   escucariana(0.11)
+  ⌨  'h'            → "Me gusta escuch"
+     🔍 chips:   escucha(0.19) |   escuchando(0.26) |   escuché(0.21)
+  ⌨  'a'            → "Me gusta escucha"
+     🔍 chips:   escuchar(0.92) |   escuchando(0.26) |   escucha(0.19)
+  ✅ ACCEPT (→ 'escuchar')  prob=0.915 
+     🔍 chips:   a(0.15) |   me(0.10) |   .(0.05)
+  ⌨  'm'            → "Me gusta escuchar m"
+     🔍 chips:   música(0.85) |   me(0.10) |   mí(0.03)
+  ✅ ACCEPT (→ 'música')  prob=0.848 
+     🔍 chips:   ,(0.17) |   y(0.15) |   .(0.12)
+  ⌨  'm'            → "Me gusta escuchar música m"
+     🔍 chips:   música(0.62) |   mí(0.15) |   mó(0.05)
+  ⌨  'i'            → "Me gusta escuchar música mi"
+     🔍 chips:   mientras(0.63) |   mis(0.06) |   mito(0.02)
+  ✅ ACCEPT (→ 'mientras')  prob=0.627 
+     🔍 chips:   no(0.12) |   se(0.09) |   que(0.06)
+  ⌨  'e'            → "Me gusta escuchar música mientras e"
+     🔍 chips:   echamos(0.35) |   evi(0.09) |   eje(0.07)
+  ⌨  's'            → "Me gusta escuchar música mientras es"
+     🔍 chips:   escuchan(0.70) |   esc(0.09) |   esté(0.09)
+  ⌨  't'            → "Me gusta escuchar música mientras est"
+     🔍 chips:   esté(0.09) |   estrenamos(0.18) |   está(0.18)
+  ⌨  'o'            → "Me gusta escuchar música mientras esto"
+     🔍 chips:   estoy(0.57) |   esto(0.01) |   no(0.11)
+  ✅ ACCEPT (→ 'estoy')  prob=0.575 
+     🔍 chips:   en(0.26) |   con(0.08) |   y(0.03)
+  ⌨  't'            → "Me gusta escuchar música mientras estoy t"
+     🔍 chips:   tú(0.39) |   tru(0.10) |   tambi(0.10)
+  ⌨  'r'            → "Me gusta escuchar música mientras estoy tr"
+     🔍 chips:   tru(0.10) |   trófaga(0.13) |   trá(0.03)
+  ⌨  'a'            → "Me gusta escuchar música mientras estoy tra"
+     🔍 chips:   tranquila(0.34) |   traduc(0.21) |   tray(0.13)
+  ⌨  'b'            → "Me gusta escuchar música mientras estoy trab"
+     🔍 chips:   trabándome(0.75) |   trabá(0.08) |   en(0.04)
+  ⌨  'a'            → "Me gusta escuchar música mientras estoy traba"
+     🔍 chips:   trabajándome(0.83) |   trabaja(0.07) |   trabaje(0.06)
+  ⌨  'j'            → "Me gusta escuchar música mientras estoy trabaj"
+     🔍 chips:   trabajándome(0.83) |   trabaja(0.07) |   trabaje(0.06)
+  ⌨  'a'            → "Me gusta escuchar música mientras estoy trabaja"
+     🔍 chips:   trabajando(0.99) |   trabaja(0.07) |   trabajado(0.00)
+  ✅ ACCEPT (→ 'trabajando')  prob=0.991 
+
+  📊 Result: 7/7 words correct
+     Completions: 5  Next-words: 0  Manual: 2
+     Keystrokes: 35 (chars: 30, taps: 5)
+     Simulated CSR: 30.0%
+     Avg prob of accepted: 0.791
+
+======================================================================
+  AGGREGATE ANALYSIS (frontend-faithful)
+======================================================================
+
+  Basque:
+    Words correct:     39/39 (100%)
+    Total keystrokes:  210 (of 260 chars)
+    Simulated CSR:     19.2%
+    Acceptances:       30/39 words (77%)
+      Completions:     28
+      Next-words:      2
+      Manual:          9
+    Avg prob (accepted): 0.204
+    Max prob:            0.932
+
+  English:
+    Words correct:     50/50 (100%)
+    Total keystrokes:  179 (of 243 chars)
+    Simulated CSR:     26.3%
+    Acceptances:       34/50 words (68%)
+      Completions:     32
+      Next-words:      2
+      Manual:          16
+    Avg prob (accepted): 0.463
+    Max prob:            0.996
+
+  Spanish:
+    Words correct:     46/46 (100%)
+    Total keystrokes:  177 (of 256 chars)
+    Simulated CSR:     30.9%
+    Acceptances:       32/46 words (70%)
+      Completions:     29
+      Next-words:      3
+      Manual:          14
+    Avg prob (accepted): 0.590
+    Max prob:            0.991
+
+  OVERALL:
+    Words correct:     135/135 (100%)
+    Total keystrokes:  566 (of 759 chars)
+    Simulated CSR:     25.4%
+    Acceptances:       96/135 words (71%)
+    Avg prob (accepted): 0.424
+
+  Full results saved to eval/sim_typing_results.json
+
+======================================================================

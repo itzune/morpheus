@@ -1,0 +1,304 @@
+{
+  "version": "v3",
+  "description": "Three-strategy evaluation targets for agglutinative autocomplete (Basque)",
+  "strategies": [
+    {
+      "name": "csr",
+      "description": "Character Savings Rate — 15 Wikipedia sentences × 2 context depths (short + long)",
+      "tests": [
+        {
+          "category": "wikipedia_csr_short",
+          "input": "Euskal Herriko",
+          "target_completion": "Unibertsitatea hezkuntza publikoko erakunde bat da."
+        },
+        {
+          "category": "wikipedia_csr_long",
+          "input": "Euskal Herriko Unibertsitatea hezkuntza publikoko",
+          "target_completion": "erakunde bat da."
+        },
+        {
+          "category": "wikipedia_csr_short",
+          "input": "Gainera, ikerketa",
+          "target_completion": "zentroak nazioarteko lankidetza hitzarmenak sinatu ditu."
+        },
+        {
+          "category": "wikipedia_csr_long",
+          "input": "Gainera, ikerketa zentroak nazioarteko lankidetza",
+          "target_completion": "hitzarmenak sinatu ditu."
+        },
+        {
+          "category": "wikipedia_csr_short",
+          "input": "Azken urteotan, teknologiaren",
+          "target_completion": "garapenak eragin handia izan du gizartean."
+        },
+        {
+          "category": "wikipedia_csr_long",
+          "input": "Azken urteotan, teknologiaren garapenak eragin handia",
+          "target_completion": "izan du gizartean."
+        },
+        {
+          "category": "wikipedia_csr_short",
+          "input": "Ikasleek eskolara",
+          "target_completion": "joateko autobusa goizeko zazpietan hartzen dute."
+        },
+        {
+          "category": "wikipedia_csr_long",
+          "input": "Ikasleek eskolara joateko autobusa goizeko",
+          "target_completion": "zazpietan hartzen dute."
+        },
+        {
+          "category": "wikipedia_csr_short",
+          "input": "Etxebizitza berrien eraikuntzak",
+          "target_completion": "ingurumenaren gaineko eragina aztertu behar da."
+        },
+        {
+          "category": "wikipedia_csr_long",
+          "input": "Etxebizitza berrien eraikuntzak ingurumenaren gaineko eragina",
+          "target_completion": "aztertu behar da."
+        },
+        {
+          "category": "wikipedia_csr_short",
+          "input": "Hizkuntzaren normalizazio",
+          "target_completion": "prozesuak aurrerapauso garrantzitsuak eman ditu."
+        },
+        {
+          "category": "wikipedia_csr_long",
+          "input": "Hizkuntzaren normalizazio prozesuak aurrerapauso",
+          "target_completion": "garrantzitsuak eman ditu."
+        },
+        {
+          "category": "wikipedia_csr_short",
+          "input": "Gurasoek seme-alabei",
+          "target_completion": "irakurtzeko ohitura transmititu behar diete."
+        },
+        {
+          "category": "wikipedia_csr_long",
+          "input": "Gurasoek seme-alabei irakurtzeko ohitura",
+          "target_completion": "transmititu behar diete."
+        },
+        {
+          "category": "wikipedia_csr_short",
+          "input": "Osasun sistemaren kudeaketak",
+          "target_completion": "lurralde historikoetako erakundeen arteko koordinazioa eskatzen du."
+        },
+        {
+          "category": "wikipedia_csr_long",
+          "input": "Osasun sistemaren kudeaketak lurralde historikoetako erakundeen arteko",
+          "target_completion": "koordinazioa eskatzen du."
+        },
+        {
+          "category": "wikipedia_csr_short",
+          "input": "Itsasertzeko herrietako",
+          "target_completion": "arrantzaleek antzinako teknikak mantentzen jarraitzen dute."
+        },
+        {
+          "category": "wikipedia_csr_long",
+          "input": "Itsasertzeko herrietako arrantzaleek antzinako teknikak",
+          "target_completion": "mantentzen jarraitzen dute."
+        },
+        {
+          "category": "wikipedia_csr_short",
+          "input": "Donostia Zinemaldia irailaren",
+          "target_completion": "amaieran ospatzen den nazioarteko zinema jaialdia da."
+        },
+        {
+          "category": "wikipedia_csr_long",
+          "input": "Donostia Zinemaldia irailaren amaieran ospatzen den nazioarteko",
+          "target_completion": "zinema jaialdia da."
+        },
+        {
+          "category": "wikipedia_csr_short",
+          "input": "Aralar mendilerroan dagoen",
+          "target_completion": "San Migel santutegia erromeslekua izan da mendeetan zehar."
+        },
+        {
+          "category": "wikipedia_csr_long",
+          "input": "Aralar mendilerroan dagoen San Migel santutegia erromeslekua",
+          "target_completion": "izan da mendeetan zehar."
+        },
+        {
+          "category": "wikipedia_csr_short",
+          "input": "Mendiko txirrindularitza txirrindularitza modalitate",
+          "target_completion": "bat da, mendian zehar ibiltzeko diseinatutako bizikletekin praktikatzen dena."
+        },
+        {
+          "category": "wikipedia_csr_long",
+          "input": "Mendiko txirrindularitza txirrindularitza modalitate bat da, mendian zehar ibiltzeko",
+          "target_completion": "diseinatutako bizikletekin praktikatzen dena."
+        },
+        {
+          "category": "wikipedia_csr_short",
+          "input": "Euskal dantzak herri bakoitzeko",
+          "target_completion": "tradizioen arabera aldatzen dira eta jaietan ikus daitezke."
+        },
+        {
+          "category": "wikipedia_csr_long",
+          "input": "Euskal dantzak herri bakoitzeko tradizioen arabera aldatzen dira",
+          "target_completion": "eta jaietan ikus daitezke."
+        },
+        {
+          "category": "wikipedia_csr_short",
+          "input": "Literatura lehiaketa honek",
+          "target_completion": "euskaraz idatzitako lanak saritzen ditu hainbat kategoriatan."
+        },
+        {
+          "category": "wikipedia_csr_long",
+          "input": "Literatura lehiaketa honek euskaraz idatzitako lanak saritzen",
+          "target_completion": "ditu hainbat kategoriatan."
+        },
+        {
+          "category": "wikipedia_csr_short",
+          "input": "Itsaspeko arrantzak ekosistema hauskorrak",
+          "target_completion": "kaltetu ditzake eta horregatik araudi zorrotzak ezarri dira."
+        },
+        {
+          "category": "wikipedia_csr_long",
+          "input": "Itsaspeko arrantzak ekosistema hauskorrak kaltetu ditzake eta horregatik",
+          "target_completion": "araudi zorrotzak ezarri dira."
+        }
+      ]
+    },
+    {
+      "name": "morphacc",
+      "description": "Morpheme Boundary Accuracy — 50 tests covering diverse roots, cases, and contexts",
+      "tests": [
+        {"category": "morphacc_bare", "input": "etxe", "valid_suffixes": ["ra", "tik", "an", "ko"], "notes": "house + locative cases"},
+        {"category": "morphacc_bare", "input": "mendi", "valid_suffixes": ["ra", "tik", "an", "ko"], "notes": "mountain + locative"},
+        {"category": "morphacc_bare", "input": "herri", "valid_suffixes": ["ra", "tik", "an", "ko"], "notes": "town + locative"},
+        {"category": "morphacc_bare", "input": "kale", "valid_suffixes": ["ra", "tik", "an", "ko"], "notes": "street + locative"},
+        {"category": "morphacc_bare", "input": "baso", "valid_suffixes": ["ra", "tik", "an", "ko"], "notes": "forest + locative"},
+        {"category": "morphacc_bare", "input": "itsaso", "valid_suffixes": ["ra", "tik", "an", "ko"], "notes": "sea + locative"},
+        {"category": "morphacc_bare", "input": "etxe", "valid_suffixes": ["a", "ak", "aren", "arekin", "arentzat"], "notes": "house + grammatical cases"},
+        {"category": "morphacc_bare", "input": "mendi", "valid_suffixes": ["a", "ak", "aren", "arekin", "arentzat"], "notes": "mountain + grammatical"},
+        {"category": "morphacc_bare", "input": "lagun", "valid_suffixes": ["a", "ak", "aren", "arekin", "ekin", "arentzat"], "notes": "friend + grammatical (animate)"},
+        {"category": "morphacc_bare", "input": "gizon", "valid_suffixes": ["a", "ak", "aren", "arekin", "arentzat"], "notes": "man + grammatical (animate)"},
+        {"category": "morphacc_bare", "input": "ikasle", "valid_suffixes": ["a", "ak", "aren", "arekin", "arentzat"], "notes": "student + grammatical"},
+        {"category": "morphacc_bare", "input": "etxe", "valid_suffixes": ["etan", "en", "etara", "etatik", "etako"], "notes": "house + plural locatives"},
+        {"category": "morphacc_bare", "input": "mendi", "valid_suffixes": ["etan", "en", "etara", "etatik", "etako"], "notes": "mountain + plural locatives"},
+        {"category": "morphacc_bare", "input": "liburu", "valid_suffixes": ["a", "ak", "aren", "an", "tik", "ra", "ko"], "notes": "book + diverse cases"},
+        {"category": "morphacc_bare", "input": "eskola", "valid_suffixes": ["ra", "tik", "an", "ko", "a", "ak"], "notes": "school + diverse"},
+        {"category": "morphacc_context", "input": "Bihar goizean, nire etxera etorriko", "valid_suffixes": ["naiz", "gara", "zara"], "notes": "I will come to my house tomorrow morning"},
+        {"category": "morphacc_context", "input": "Gaur arratsaldean, mendira joango", "valid_suffixes": ["naiz", "gara", "zara"], "notes": "I will go to the mountain this afternoon"},
+        {"category": "morphacc_context", "input": "Zinemara joan eta gero, kalera aterako", "valid_suffixes": ["naiz", "gara", "zara"], "notes": "After cinema, I'll go to the street"},
+        {"category": "morphacc_context", "input": "Euskal Herrian bizi", "valid_suffixes": ["naiz", "gara", "zara", "da"], "notes": "I/we/you/he live in Basque Country"},
+        {"category": "morphacc_context", "input": "Donostian bizi", "valid_suffixes": ["naiz", "gara", "zara", "da"], "notes": "Live in Donostia"},
+        {"category": "morphacc_context", "input": "Bilbora joan", "valid_suffixes": ["naiz", "gara", "zara", "da"], "notes": "Go to Bilbao"},
+        {"category": "morphacc_context", "input": "Gasteiztik etorri", "valid_suffixes": ["naiz", "gara", "zara", "da"], "notes": "Come from Gasteiz"},
+        {"category": "morphacc_context", "input": "Iru\u00f1eko alde zaharrean", "valid_suffixes": ["ibili", "egon", "bizi", "dago"], "notes": "Old town of Iru\u00f1ea"},
+        {"category": "morphacc_verb", "input": "Atzo ikusi nuen pelikula", "valid_suffixes": ["polita", "ederra", "luzea"], "notes": "The movie I saw yesterday was beautiful/long"},
+        {"category": "morphacc_verb", "input": "Gaur ikusi dudan", "valid_suffixes": ["filma", "pelikula", "etxea"], "notes": "The film/house I saw today"},
+        {"category": "morphacc_verb", "input": "Atzo erosi", "valid_suffixes": ["nuen", "zuen", "genuen"], "notes": "I/he/we bought yesterday"},
+        {"category": "morphacc_verb", "input": "Bihar erosiko", "valid_suffixes": ["dut", "duzu", "du", "dugu"], "notes": "I/you/he/we will buy tomorrow"},
+        {"category": "morphacc_verb", "input": "Gaur goizean, ikasleei", "valid_suffixes": ["eskatu", "eman", "azaldu"], "notes": "This morning, to the students (verb expected)"},
+        {"category": "morphacc_verb", "input": "Atzo lagunei", "valid_suffixes": ["eskatu", "esan", "eman", "bidali"], "notes": "Yesterday to friends (verb expected)"},
+        {"category": "morphacc_verb", "input": "Gurasoei opari bat", "valid_suffixes": ["erosi", "egin", "eman", "bidali"], "notes": "Bought/made/gave/sent a gift to parents"},
+        {"category": "morphacc_possessive", "input": "Nire izebaren", "valid_suffixes": ["etxea", "kotxea", "liburua"], "notes": "My aunt's house/car/book"},
+        {"category": "morphacc_possessive", "input": "Gure herriko", "valid_suffixes": ["jaiak", "plaza", "eliza", "festak"], "notes": "Our town's festivals/square/church"},
+        {"category": "morphacc_possessive", "input": "Zure amaren", "valid_suffixes": ["izena", "etxea", "laguna"], "notes": "Your mother's name/house/friend"},
+        {"category": "morphacc_possessive", "input": "Haurren", "valid_suffixes": ["jolasak", "eskola", "liburuak", "jostailuak"], "notes": "Children's games/school/books/toys"},
+        {"category": "morphacc_compound", "input": "Udalerri", "valid_suffixes": ["ak", "ko", "an", "tik", "ra", "a"], "notes": "municipality + case suffixes"},
+        {"category": "morphacc_compound", "input": "Unibertsitate", "valid_suffixes": ["a", "an", "ko", "tik", "ra", "ak"], "notes": "university + cases"},
+        {"category": "morphacc_compound", "input": "Gizarte", "valid_suffixes": ["a", "an", "aren", "tik", "ra", "ko"], "notes": "society + cases"},
+        {"category": "morphacc_compound", "input": "Ekonomi", "valid_suffixes": ["a", "aren", "an", "ko", "tik"], "notes": "economy + cases"},
+        {"category": "morphacc_context", "input": "Euskara ikasten ari", "valid_suffixes": ["naiz", "gara", "zara", "da"], "notes": "I am/we are/you are learning Basque"},
+        {"category": "morphacc_context", "input": "Liburu hau irakurri", "valid_suffixes": ["dut", "duzu", "dugu", "du"], "notes": "I/you/we/he read this book"},
+        {"category": "morphacc_context", "input": "Autoa gidatzen", "valid_suffixes": ["dakit", "dakizu", "daki"], "notes": "I/you/he know how to drive"},
+        {"category": "morphacc_context", "input": "Bihar etorriko", "valid_suffixes": ["naiz", "gara", "zara", "da"], "notes": "I/we/you/he will come tomorrow"},
+        {"category": "morphacc_context", "input": "Gaur lanera joan", "valid_suffixes": ["naiz", "gara", "zara", "da"], "notes": "I/we/you/he went to work today"},
+        {"category": "morphacc_context", "input": "Etxean geratu", "valid_suffixes": ["naiz", "gara", "zara", "da"], "notes": "I/we/you/he stayed home"},
+        {"category": "morphacc_context", "input": "Kalea zeharkatu eta elizara iritsi", "valid_suffixes": ["naiz", "gara", "zara", "da"], "notes": "Crossed street and arrived at church"},
+        {"category": "morphacc_context", "input": "Dirua bankuan sartu", "valid_suffixes": ["dut", "duzu", "dugu"], "notes": "I/you/we put money in the bank"},
+        {"category": "morphacc_context", "input": "Atea itxi eta giltza poltsikoan gorde", "valid_suffixes": ["nuen", "zuen", "genuen"], "notes": "Closed door and kept key in pocket (past)"},
+        {"category": "morphacc_verb", "input": "Ikasleak azterketa gainditu", "valid_suffixes": ["du", "dute", "zuen", "zuten"], "notes": "Student passed exam (present/past)"},
+        {"category": "morphacc_verb", "input": "Haurrak parkean jolasten", "valid_suffixes": ["dira", "ziren", "ari dira"], "notes": "Children play/were playing in the park"},
+        {"category": "morphacc_verb", "input": "Abestia entzun eta negar egin", "valid_suffixes": ["nuen", "zuen", "genuen"], "notes": "Heard song and cried (past)"}
+      ]
+    },
+    {
+      "name": "paradigm",
+      "description": "Case Paradigm Completion — systematic coverage of Basque case system",
+      "roots": [
+        "etxe",
+        "mendi",
+        "lagun",
+        "herri",
+        "kale",
+        "ikasle"
+      ],
+      "cases": [
+        {
+          "case": "absolutive",
+          "suffix": "a",
+          "indefinite": "",
+          "description": "Absolutive singular (-a)"
+        },
+        {
+          "case": "ergative",
+          "suffix": "ak",
+          "description": "Ergative singular (-ak)"
+        },
+        {
+          "case": "dative",
+          "suffix": "ari",
+          "description": "Dative singular (-ari)"
+        },
+        {
+          "case": "genitive",
+          "suffix": "aren",
+          "description": "Genitive singular (-aren)"
+        },
+        {
+          "case": "comitative",
+          "suffix": "arekin",
+          "description": "Comitative singular (-arekin)"
+        },
+        {
+          "case": "benefactive",
+          "suffix": "arentzat",
+          "description": "Benefactive singular (-arentzat)"
+        },
+        {
+          "case": "causal",
+          "suffix": "arengatik",
+          "description": "Causal singular (-arengatik)"
+        },
+        {
+          "case": "inessive",
+          "suffix": "an",
+          "description": "Inessive singular (-an)"
+        },
+        {
+          "case": "elative",
+          "suffix": "tik",
+          "description": "Elative singular (-tik)"
+        },
+        {
+          "case": "allative",
+          "suffix": "ra",
+          "description": "Allative singular (-ra)"
+        },
+        {
+          "case": "directional_genitive",
+          "suffix": "ko",
+          "description": "Directional genitive (-ko)"
+        },
+        {
+          "case": "instrumental",
+          "suffix": "z",
+          "description": "Instrumental (-z)"
+        },
+        {
+          "case": "inessive_plural",
+          "suffix": "etan",
+          "description": "Inessive plural (-etan)"
+        },
+        {
+          "case": "genitive_plural",
+          "suffix": "en",
+          "description": "Genitive plural (-en)"
+        }
+      ],
+      "test_construction": "For each root + case pair, construct prompt 'root' and check if case_suffix ranks in top-K of model predictions."
+    }
+  ]
+}
