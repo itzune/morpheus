@@ -1,0 +1,23 @@
+{
+    "step": 74000,
+    "valid_loss": 1.9638,
+    "valid_ppl": 7.13,
+    "corpus_loss": 2.2853,
+    "corpus_ppl": 9.83,
+    "corpus_files": {
+        "berria_0.txt": {"tokens": 1340, "windows": 2, "loss": 2.6021, "ppl": 13.49},
+        "berria_1.txt": {"tokens": 756, "windows": 1, "loss": 2.2098, "ppl": 9.11},
+        "berria_2.txt": {"tokens": 949, "windows": 1, "loss": 2.4409, "ppl": 11.48},
+        "berria_3.txt": {"tokens": 747, "windows": 1, "loss": 2.5240, "ppl": 12.48},
+        "berria_4.txt": {"tokens": 1655, "windows": 2, "loss": 2.4357, "ppl": 11.42},
+        "wiki_Bilbo.txt": {"tokens": 12746, "windows": 13, "loss": 2.1596, "ppl": 8.67},
+        "wiki_Donostia.txt": {"tokens": 17132, "windows": 17, "loss": 2.2575, "ppl": 9.56},
+        "wiki_Euskal_Herria.txt": {"tokens": 30459, "windows": 30, "loss": 2.2758, "ppl": 9.74},
+        "wiki_Euskara.txt": {"tokens": 21829, "windows": 22, "loss": 2.3499, "ppl": 10.48},
+        "wiki_Euskara_batua.txt": {"tokens": 6120, "windows": 6, "loss": 2.4183, "ppl": 11.23},
+        "wiki_Gipuzkoa.txt": {"tokens": 10149, "windows": 10, "loss": 2.1188, "ppl": 8.32},
+        "wiki_Hezkuntza.txt": {"tokens": 5833, "windows": 6, "loss": 2.4692, "ppl": 11.81},
+        "wiki_Musika.txt": {"tokens": 6867, "windows": 7, "loss": 2.4713, "ppl": 11.84},
+        "wiki_Nafarroa_Garaia.txt": {"tokens": 23349, "windows": 23, "loss": 2.2229, "ppl": 9.23}
+    }
+}
