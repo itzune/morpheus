@@ -1,6 +1,6 @@
 # Morpheus v2 Mamba — On-Device Basque Autocomplete
 
-> **20× capacity boost over v1.** Mamba-2 State Space Model, ~200M parameters.
+> **20× capacity boost over v1.** Mamba-2 State Space Model, ~91M (Small) / ~200M (Base) parameters.
 >
 > **Goal:** P90 ≤ 50ms inference latency on consumer CPU. On-device, zero network calls.
 >
@@ -24,9 +24,11 @@ Morpheus v2 replaces the v1 9.5M-parameter LSTM with a **~200M-parameter Mamba-2
 |----------|---------|
 | [`Morpheus_v2_Mamba.md`](./Morpheus_v2_Mamba.md) | **Full implementation guide** — architecture, training, deployment |
 | [`SETUP.md`](./SETUP.md) | Environment, dependencies, and first-run instructions |
-| [`DATA.md`](./DATA.md) | Corpus strategy, data pipeline, and tokenizer reuse from v1 |
+| [`DATA.md`](./DATA.md) | Corpus strategy, cleaning, and split policy |
+| [`docs/tokenizer-pipeline.md`](./docs/tokenizer-pipeline.md) | **Canonical end-to-end tokenizer/training pipeline** |
+| [`docs/tokenizer-fieldwork.md`](./docs/tokenizer-fieldwork.md) | 4K vs 8K vs 16K vs 32K tokenizer ablation results |
 | [`DECISIONS.md`](./DECISIONS.md) | Architecture Decision Records for v2 |
-| [`PLAN.md`](./PLAN.md) | Phased execution plan with milestones and acceptance criteria |
+| [`START.md`](./PLAN.md) | Phased execution plan with milestones and acceptance criteria + current status |
 
 ## Architecture at a Glance
 
@@ -37,7 +39,7 @@ User Keystrokes
  Trigger Heuristic (≥50ms pause OR spacebar)
       │
       ▼
- SentencePiece Unigram Tokenizer ←── Reused from v1 (32k vocab)
+ SentencePiece Unigram Tokenizer ←── Current canonical setup: 4K vocab
       │
       ▼
  Mamba-2 Language Model (200M params, Q5_K_M GGUF ~145 MB)
@@ -64,6 +66,13 @@ User Keystrokes
 | v1 valid PPL (epoch 2) | 120 | Target: < 50 |
 | Deployment format | ONNX `.onnx` | GGUF `.gguf` |
 
+## Evaluation Logs
+
+| Date | Step | PPL | Findings |
+|------|------|-----|----------|
+| [2026-07-01](./logs/cpu-vs-gpu-generation-2026-07-01.md) | 14K | ~30 | Early checkpoint: repetition dominant, Q4_K_M quality-neutral at this PPL |
+| [2026-07-02](./logs/cpu-vs-gpu-generation-2026-07-02.md) | 36.5K | ~25.5 | Clear improvement: longer coherent runs, news strongest, Q4_K_M still equal to FP16 |
+
 ## Repository Relationship
 
 ```
@@ -73,41 +82,200 @@ itzune/
 ```
 
 **Reused from v1:**
-- SentencePiece tokenizer: `tokenizer/basque_unigram_32k.model`
-- Data splits: `data/splits/{train,valid,test}/`
-- Documentation: `DATA.md` corpus strategy, `RESEARCH.md` linguistic analysis
+- Corpus acquisition/cleaning strategy
+- Some split conventions and documentation context
+- Research framing around Basque autocomplete constraints
 
 **Not reused:**
+- The old 32K tokenizer as the canonical setup (it is now a preserved baseline only)
 - All model code (LSTM → Mamba)
 - All training scripts
 - ONNX export/quantization pipeline (replaced by llama.cpp GGUF)
 - Inference server (ONNX Runtime → llama.cpp)
 
-## Quick Start
+## Canonical Reproduction Pipeline (Current 4K Setup)
+
+If you want to reproduce the project from raw cleaned text to demo deployment, follow these steps **in order**. The authoritative detailed version lives in [`docs/tokenizer-pipeline.md`](./docs/tokenizer-pipeline.md).
+
+### 0. Preconditions
+
+- Corpus acquisition and cleaning have been completed as documented in [`DATA.md`](./DATA.md)
+- Clean corpus (Phase 3) is present in `data/clean-v3/` as **11** `.txt` files (hplt-v1, BERnaT BSM, BOG, and aldizkariak excluded; Phase 2 + Phase 3 deep-cleaned)
+- **Corpus size: 140M lines, 15 GB → 4,769,132,775 tokens (8.9 GB uint16 .npy)**
+- Training budget: ~36.4K steps per epoch (1024 seq × 128 effective batch)
+- `config/small.yaml` is the 4K config (`vocab_size: 4000`, `seq_len: 1024`)
+- You have enough disk for token arrays + checkpoints
+- **Gates 1 & 2 passed** (LLM audit: 11 clean sources; proxy overfit: 57.7% canary accuracy)
+- If you want experiment tracking, export `WANDB_API_KEY`
+- Keep `baseline_32k/` if you want future 32K vs 4K comparison
+
+### 0.25 Exclude hplt-v1
+
+The full-corpus fast audit (2026-07-03) found `HiTZ_latxa-corpus-v2_hplt-v1.txt` to be the worst-quality source:
+- 83.80% duplicate cluster rate
+- 4.9% Basque heuristic signal
+- 9.4% clearly non-EU lines
 
 ```bash
-# 1. Set up environment
-# See SETUP.md for full Docker-based GPU training setup
-
-# 2. Pre-tokenize corpus (reusing v1 tokenizer + data)
-python scripts/pretokenize.py \
-    --sp-model tokenizer/basque_unigram_32k.model \
-    --input-dir ../morpheus/data/splits/train \
-    --output data/train_tokens.npy
-
-# 3. Train Morpheus-Small (130M) for fast iteration
-python train.py --config config/small.yaml
-
-# 4. Train Morpheus-Base (200M) for production
-python train.py --config config/base.yaml
-
-# 5. Export to GGUF for CPU inference
-python scripts/export_hf.py --checkpoint checkpoints/best.pt
-# Then use llama.cpp: convert_hf_to_gguf.py → llama-quantize
-
-# 6. Run inference server
-./llama-server -m exports/morpheus-v2-Q5_K_M.gguf --host 127.0.0.1 --port 8080
+# Move hplt-v1 out of the clean directory
+mkdir -p data/excluded
+mv data/clean/HiTZ_latxa-corpus-v2_hplt-v1.txt data/excluded/
 ```
+
+### 0.5 Phase 2 deep-clean (recommended)
+
+After excluding hplt-v1, apply a deeper structural cleaning to the remaining 14 sources. This removes HTML entities, splits concatenated social-media lines, suppresses repeated boilerplate, and handles very long lines.
+
+```bash
+# Run a source-stratified audit first to see what needs cleaning:
+python scripts/pipeline/audit_corpus.py \
+    --input data/clean \
+    --output-json reports/corpus_quality_fast_audit.clean.json \
+    --output-md reports/corpus_quality_fast_audit.clean.md
+
+# Then apply Phase 2 deep-cleaning:
+python scripts/pipeline/clean_phase2.py \
+    --input data/clean \
+    --output data/clean-v2
+
+# Then apply Phase 3 digit/noise filtering:
+python scripts/pipeline/clean_phase2.py \
+    --input data/clean-v2 \
+    --output data/clean-v3 \
+    --no-split --digits  # re-process with digit+orphan filters on already-split text
+
+# (Phase 2+3 can also be combined in one pass on new data:
+#  python scripts/pipeline/clean_phase2.py --input data/clean --output data/clean-v3 --digits)
+
+# Optionally spot-check the output with a dry-run first:
+python scripts/pipeline/clean_phase2.py \
+    --input data/clean/HiTZ_BERnaT-Diverse_BSMauthor.txt \
+    --output /tmp/test.txt \
+    --dry-run-lines 200
+```
+
+What Phase 2 adds on top of Phase 1:
+- **HTML entity & escape cleanup** (decodes `&amp;`, strips tags)
+- **Sentence splitting** for social-media feed lines
+- **Long-line heuristics** (>2048 chars discarded, >512 flagged)
+- **Repeated-line suppression** (within-document exact duplicates)
+
+Measured on a BERnaT/BSM sample: HTML residue -98.7%, duplicate clusters eliminated, long-line burden -37%.
+
+> If you skip Phase 2, the tokenizer will be trained on text that still has HTML entities, concatenated feed lines, and repeated boilerplate. The model may reproduce these at inference time.
+
+### 1. Train the 4K tokenizer
+
+```bash
+python3 scripts/pipeline/train_tokenizer.py \
+    --input-dir data/clean-v3 \
+    --output-dir tokenizer \
+    --vocab-size 4000
+```
+
+Expected artifact:
+- `tokenizer/basque_unigram_4000.model`
+
+### 2. Create or verify validation split
+
+The training run assumes both train and validation token arrays exist. If you do not already have a held-out split, create one before pretokenization.
+
+```bash
+mkdir -p data/splits/valid
+cp data/clean-v3/HiTZ_latxa-corpus-v2_wikipedia.txt data/splits/valid/
+```
+
+### 3. Pre-tokenize the full training corpus
+
+The pre-tokenization script uses a two-pass approach (count → allocate → fill) to avoid OOM on large corpora. The first pass counts total tokens (no list accumulation), and the second pass fills a pre-allocated uint16 array.
+
+```bash
+python3 scripts/pipeline/pretokenize.py \
+    --sp-model tokenizer/basque_unigram_4000.model \
+    --input-dir data/clean-v3 \
+    --output data/train_tokens_4k.npy
+```
+
+**Output:** `data/train_tokens_4k.npy` — **4,769,132,775 tokens (8.9 GB uint16)** for the 11-source Phase-3-cleaned corpus.
+
+### 4. Pre-tokenize the validation corpus
+
+```bash
+python3 scripts/pipeline/pretokenize.py \
+    --sp-model tokenizer/basque_unigram_4000.model \
+    --input-dir data/splits/valid \
+    --output data/valid_tokens_4k.npy
+```
+
+**Expected output:** `data/valid_tokens_4k.npy` — 1,848,467 tokens (3.5 MB uint16).
+
+### 5. Launch training
+
+```bash
+PYTHONUNBUFFERED=1 \
+nohup python3 -u train.py \
+    --config config/small.yaml \
+    > logs/train_4k_$(date +%Y%m%d_%H%M%S).log 2>&1 &
+```
+
+### 6. Evaluate checkpoints
+
+```bash
+python3 eval.py \
+    --checkpoint checkpoints/best.pt \
+    --tokenizer tokenizer/basque_unigram_4000.model \
+    --targets eval/targets.json \
+    --device cuda \
+    --strategy all
+```
+
+### 7. Export to GGUF for CPU inference
+
+```bash
+python3 scripts/export/export_hf.py \
+  --checkpoint checkpoints/best.pt \
+  --tokenizer tokenizer/basque_unigram_4000.model \
+  --output-dir exports/step_best
+
+python /tmp/llama.cpp/convert_hf_to_gguf.py exports/step_best \
+  --outfile exports/step_best.f16.gguf \
+  --outtype f16
+
+/tmp/llama.cpp/build/bin/llama-quantize \
+  exports/step_best.f16.gguf \
+  exports/step_best.Q4_K_M.gguf \
+  Q4_K_M
+```
+
+### 8. Run the demo stack
+
+```bash
+/tmp/llama.cpp/build/bin/llama-server \
+  -m exports/step_best.Q4_K_M.gguf \
+  --host 127.0.0.1 --port 8080 -ngl 0
+
+cd demo
+uv sync
+uv run python server.py
+```
+
+Open `http://localhost:9090`.
+
+### Optional Phase E: morphology-aware pre-segmentation
+
+This is **not** part of the canonical 4K retraining path. Only do it after the 4K model is trained and evaluated.
+
+Use **Apertium Basque** for this phase, not Stanza or Morfessor:
+
+```bash
+sudo apt-get install -y apertium apertium-eu-es
+python3 scripts/segment_morphemes.py \
+    --input-dir data/clean \
+    --output-dir data/segmented \
+    --processes 4
+```
+
+Then retrain the tokenizer on `data/segmented/` and repeat pretokenization/training from scratch.
 
 ## Tech Stack
 
@@ -116,9 +284,10 @@ python scripts/export_hf.py --checkpoint checkpoints/best.pt
 | Model architecture | Mamba-2 (via `mamba-ssm` package) |
 | Training | PyTorch 2.4+ with CUDA 12.4 |
 | Data pipeline | Memory-mapped numpy arrays |
-| Tokenization | SentencePiece Unigram (reused from v1) |
-| Model export | PyTorch → HuggingFace safetensors → llama.cpp GGUF |
-| CPU inference | llama.cpp with Q5_K_M quantization |
+| Tokenization | SentencePiece Unigram, **canonical setup = 4K vocab** |
+| Optional morphology layer | Apertium Basque pre-segmentation (`lt-proc`) |
+| Model export | PyTorch checkpoint → HuggingFace export (`export_hf.py`) → llama.cpp `convert_hf_to_gguf.py` |
+| CPU inference | llama.cpp with Q4_K_M / Q5_K_M quantization |
 | Experiment tracking | W&B |
 | Training hardware | 1× NVIDIA L40 (48 GB VRAM) |
 | Inference hardware | Consumer x86-64 CPU (Intel i7-13700 / AMD Ryzen 7 7700 class) |
@@ -133,5 +302,5 @@ python scripts/export_hf.py --checkpoint checkpoints/best.pt
 | Hit@5 | — | > 50% |
 | Inference P90 (per token) | — | ≤ 50ms |
 | Post-quantization PPL degradation | — | ≤ 3% |
-| Model params | 9.5M | ~200M |
+| Model params | 9.5M | ~91M (Small) / ~200M (Base) |
 | Model size on disk | ~12 MB | ~145 MB |

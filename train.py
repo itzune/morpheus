@@ -2,26 +2,32 @@
 Morpheus v2 Mamba-2 training script.
 
 Trains a Mamba-2 language model on pre-tokenized Basque text for
-predictive autocomplete. Supports Small (130M), Base (200M), and
+predictive autocomplete. Supports Small (91M), Base (200M), and
 Large (370M) configurations via YAML config files.
 
 Usage:
     # Train with config file
-    python train.py --config config/base.yaml
+    python train.py --config config/small.yaml
 
     # Override specific settings
     python train.py --config config/small.yaml --batch-size 64 --seq-len 256
 
     # Resume from checkpoint
-    python train.py --config config/base.yaml --resume checkpoints/step_5000.pt
+    python train.py --config config/small.yaml --resume checkpoints/step_5000.pt
 
 Full implementation: Morpheus_v2_Mamba.md §5
 """
 
 import argparse
+import json
 import math
+import os
+import random
 import time
+import warnings
 import yaml
+import numpy as np
+import sentencepiece as spm
 import torch
 import torch.nn.functional as F
 from torch.utils.data import DataLoader
@@ -31,6 +37,7 @@ from mamba_ssm.models.mixer_seq_simple import MambaLMHeadModel
 from mamba_ssm.models.config_mamba import MambaConfig
 
 from src.dataset import MemmapTokenDataset
+from src.eval_utils import compute_autocomplete_metrics
 
 
 # ---------------------------------------------------------------------------
@@ -41,13 +48,14 @@ DEFAULT_CONFIG = {
     # Architecture
     "d_model": 960,
     "n_layer": 32,
+    "ssm_layer": "Mamba2",
     "d_state": 64,
     "d_conv": 4,
     "expand": 2,
     "headdim": 64,
     "chunk_size": 256,
     # Vocabulary
-    "vocab_size": 32000,
+    "vocab_size": 4000,
     "pad_vocab_size_multiple": 16,
     # Regularization
     "residual_in_fp32": True,
@@ -68,7 +76,9 @@ DEFAULT_CONFIG = {
     "total_tokens": 10_000_000_000,
     # Precision
     "dtype": "bfloat16",  # "bfloat16" or "float16"
-    "compile": True,
+    "compile": False,
+    # Reproducibility
+    "seed": 42,
     # Logging
     "log_interval": 50,
     "eval_interval": 1000,
@@ -109,6 +119,7 @@ def build_model(cfg: dict, device: torch.device) -> MambaLMHeadModel:
         vocab_size=cfg.get("padded_vocab_size",
                           _pad_vocab(cfg["vocab_size"], cfg["pad_vocab_size_multiple"])),
         ssm_cfg={
+            "layer": cfg["ssm_layer"],
             "d_state": cfg["d_state"],
             "d_conv": cfg["d_conv"],
             "expand": cfg["expand"],
@@ -122,9 +133,12 @@ def build_model(cfg: dict, device: torch.device) -> MambaLMHeadModel:
 
     model = MambaLMHeadModel(config, device=device, dtype=dtype)
 
-    if cfg["compile"]:
-        print("Compiling model with torch.compile...")
-        model = torch.compile(model)
+    if cfg.get("compile", False):
+        try:
+            print("Compiling model with torch.compile...")
+            model = torch.compile(model, mode="reduce-overhead")
+        except Exception as e:
+            print(f"torch.compile failed: {e}. Continuing without compile.")
 
     return model
 
@@ -140,7 +154,9 @@ def _pad_vocab(vocab_size: int, multiple: int) -> int:
 
 def get_lr_scheduler(optimizer, cfg, total_steps):
     """Create linear warmup + cosine decay LR schedule."""
-    warmup_steps = cfg["warmup_tokens"] // (cfg["seq_len"] * cfg["batch_size"])
+    accum = cfg.get("gradient_accumulation", 1)
+    effective_batch = cfg["seq_len"] * cfg["batch_size"] * accum
+    warmup_steps = cfg["warmup_tokens"] // effective_batch
     warmup_steps = min(warmup_steps, total_steps // 10)  # Cap warmup at 10%
 
     def lr_lambda(step):
@@ -165,7 +181,9 @@ def evaluate(model, loader, device, max_batches=100):
     total_loss = 0.0
     n = 0
 
-    dtype = torch.bfloat16 if model.config.residual_in_fp32 else torch.float16
+    dtype = torch.bfloat16
+    if hasattr(model, 'config') and hasattr(model.config, 'residual_in_fp32'):
+        dtype = torch.bfloat16 if model.config.residual_in_fp32 else torch.float16
 
     for i, (x, y) in enumerate(loader):
         if i >= max_batches:
@@ -177,6 +195,8 @@ def evaluate(model, loader, device, max_batches=100):
             loss = F.cross_entropy(
                 output.logits.view(-1, output.logits.size(-1)),
                 y.view(-1),
+                # ignore_index=0 (<unk>): safety net for any stray unknown chars.
+                # Separators are </s> (id=2), NOT id=0, so they ARE included in loss.
                 ignore_index=0,
             )
 
@@ -187,34 +207,56 @@ def evaluate(model, loader, device, max_batches=100):
     return total_loss / n
 
 
+
 # ---------------------------------------------------------------------------
 # Checkpointing
 # ---------------------------------------------------------------------------
 
-def save_checkpoint(model, optimizer, step, cfg, path):
-    """Save training checkpoint."""
+def save_checkpoint(model, optimizer, step, cfg, path, valid_loss=None):
+    """Save training checkpoint (atomic: write to .tmp, then os.replace).
+
+    os.replace is atomic on POSIX, so the checkpoint file only appears at
+    its final path once fully written. This prevents corruption if a stop
+    monitor (or crash) interrupts the write.
+    """
+    tmp_path = str(path) + ".tmp"
     torch.save(
         {
             "model": model.state_dict(),
             "optimizer": optimizer.state_dict(),
             "step": step,
             "config": cfg,
+            "valid_loss": valid_loss,
         },
-        path,
+        tmp_path,
     )
+    os.replace(tmp_path, path)
 
 
 # ---------------------------------------------------------------------------
 # Training Loop
 # ---------------------------------------------------------------------------
 
-def train(cfg: dict):
-    """Run the full training loop."""
+def train(cfg: dict, checkpoint_path: str = None):
+    """Run the full training loop.
+    
+    Args:
+        cfg: Training configuration dictionary.
+        checkpoint_path: If provided, resume from this checkpoint file.
+    """
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Device: {device}")
     if device.type == "cuda":
         print(f"GPU: {torch.cuda.get_device_name(0)}")
-        print(f"VRAM: {torch.cuda.get_device_properties(0).total_mem / 1e9:.1f} GB")
+        print(f"VRAM: {torch.cuda.get_device_properties(0).total_memory / 1e9:.1f} GB")
+
+    # Seed for reproducibility
+    seed = cfg.get("seed", 42)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    random.seed(seed)
+    np.random.seed(seed)
+    print(f"Seed: {seed}")
 
     output_dir = Path(cfg["output_dir"])
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -226,13 +268,15 @@ def train(cfg: dict):
     print(f"  Train: {len(train_ds):,} sequences")
     print(f"  Valid: {len(valid_ds):,} sequences")
 
+    # num_workers=2: server has 30 GB RAM; each worker is a full Python process (~3-4 GB).
+    # 4 workers + main process caused OOM. 2 workers + main fits in 30 GB.
     train_loader = DataLoader(
         train_ds, batch_size=cfg["batch_size"],
-        shuffle=True, num_workers=4, pin_memory=True, drop_last=True,
+        shuffle=True, num_workers=2, pin_memory=True, drop_last=True,
     )
     valid_loader = DataLoader(
         valid_ds, batch_size=cfg["batch_size"],
-        shuffle=False, num_workers=2, pin_memory=True,
+        shuffle=False, num_workers=1, pin_memory=True,
     )
 
     # Model
@@ -249,31 +293,94 @@ def train(cfg: dict):
     )
 
     # LR Schedule
-    total_steps = cfg["total_tokens"] // (cfg["seq_len"] * cfg["batch_size"])
+    accum = cfg.get("gradient_accumulation", 1)
+    effective_batch = cfg["seq_len"] * cfg["batch_size"] * accum
+    total_steps = cfg["total_tokens"] // effective_batch
     scheduler = get_lr_scheduler(optimizer, cfg, total_steps)
-    print(f"Total steps: {total_steps:,}")
+    print(f"Total steps: {total_steps:,} (accum={accum}, effective_batch={effective_batch})")
 
-    # Tracking
+    # Resume from checkpoint if provided
     dtype = torch.bfloat16 if cfg["dtype"] == "bfloat16" else torch.float16
     global_step = 0
     tokens_seen = 0
     best_valid_loss = float("inf")
+
+    if checkpoint_path:
+        print(f"Resuming from checkpoint: {checkpoint_path}")
+        # Load on CPU to avoid doubling GPU VRAM
+        ckpt = torch.load(checkpoint_path, map_location='cpu', weights_only=False)
+        model.load_state_dict(ckpt["model"])
+        optimizer.load_state_dict(ckpt["optimizer"])
+        global_step = ckpt["step"]
+        del ckpt  # Free CPU memory
+        # Advance scheduler to match global_step
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            for _ in range(global_step):
+                scheduler.step()
+        print(f"  Resumed at step {global_step:,}, LR: {optimizer.param_groups[0]['lr']:.2e}")
+        tokens_seen = global_step * effective_batch
+        # Restore best_valid_loss from best.pt if it has one
+        best_path = output_dir / "best.pt"
+        if best_path.exists():
+            best_ckpt = torch.load(best_path, map_location='cpu', weights_only=False)
+            best_valid_loss = best_ckpt.get("valid_loss", float("inf"))
+            print(f"  Found best.pt (step {best_ckpt.get('step', '?')}), best_valid_loss={best_valid_loss:.4f}")
+
+    tokens_at_start = tokens_seen
     t0 = time.time()
+
+    # Load autocomplete eval targets for CSR/MorphAcc logging
+    csr_tests = []
+    morphacc_tests = []
+    targets_path = Path(cfg.get("eval_targets", "eval/targets.json"))
+    if not targets_path.exists():
+        raise FileNotFoundError(f"Eval targets file not found: {targets_path}")
+    with open(targets_path) as f:
+        targets = json.load(f)
+    # targets.json nests tests under strategies
+    for strategy in targets.get("strategies", []):
+        if strategy.get("name") == "csr":
+            csr_tests.extend(strategy.get("tests", []))
+        elif strategy.get("name") == "morphacc":
+            morphacc_tests.extend(strategy.get("tests", []))
+    print(f"Loaded eval targets: {len(csr_tests)} CSR, {len(morphacc_tests)} MorphAcc")
+
+    # Load SentencePiece model for tokenization during eval
+    sp_model_path = cfg.get("sp_model", "tokenizer/basque_unigram_4000.model")
+    sp = spm.SentencePieceProcessor()
+    sp.Load(sp_model_path)
+    print(f"Loaded tokenizer: {sp_model_path}")
 
     # Initialize W&B
     try:
         import wandb
-        wandb.init(project="morpheus-v2-mamba", config=cfg)
+        wandb_run_id = os.environ.get("WANDB_RUN_ID")
+        wandb_resume = os.environ.get("WANDB_RESUME", "allow")
+        if wandb_run_id:
+            print(f"Resuming W&B run: {wandb_run_id}")
+        wandb.init(
+            project="morpheus-v2-mamba",
+            config=cfg,
+            id=wandb_run_id or None,
+            resume=wandb_resume if wandb_run_id else None,
+        )
         use_wandb = True
     except ImportError:
         print("wandb not installed — skipping experiment tracking")
         use_wandb = False
 
-    print(f"\nStarting training... ({total_steps:,} steps, ~{cfg['total_tokens']/1e9:.0f}B tokens)\n")
+    if checkpoint_path:
+        print(f"\nResuming training from step {global_step:,}/{total_steps:,} "
+              f"(~{cfg['total_tokens']/1e9:.0f}B tokens)\n")
+    else:
+        print(f"\nStarting training... ({total_steps:,} steps, ~{cfg['total_tokens']/1e9:.0f}B tokens)\n")
 
     # Training loop
     for epoch in range(100):
         model.train()
+        micro_step = 0
+
         for x, y in train_loader:
             if tokens_seen >= cfg["total_tokens"]:
                 break
@@ -287,65 +394,87 @@ def train(cfg: dict):
                 loss = F.cross_entropy(
                     logits.view(-1, logits.size(-1)),
                     y.view(-1),
+                    # ignore_index=0 (<unk>): safety net for stray unknown chars.
+                    # Separators are </s> (id=2), NOT id=0, so they ARE in loss.
                     ignore_index=0,
-                )
+                ) / accum  # Scale loss for gradient accumulation
 
             # Backward
             loss.backward()
-            grad_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), cfg["grad_clip"])
-            optimizer.step()
-            scheduler.step()
-            optimizer.zero_grad(set_to_none=True)
+            micro_step += 1
 
-            tokens_seen += x.numel()
-            global_step += 1
+            # Only step optimizer after accumulation steps
+            if micro_step % accum == 0:
+                grad_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), cfg["grad_clip"])
+                optimizer.step()
+                scheduler.step()
+                optimizer.zero_grad(set_to_none=True)
 
-            # Logging
-            if global_step % cfg["log_interval"] == 0:
-                ppl = math.exp(min(loss.item(), 20))
-                elapsed = time.time() - t0
-                tps = tokens_seen / elapsed if elapsed > 0 else 0
-                lr = optimizer.param_groups[0]["lr"]
+                tokens_seen += x.numel() * accum
+                global_step += 1
 
-                msg = (f"step={global_step:>6d}  loss={loss.item():.4f}  ppl={ppl:.1f}  "
-                       f"lr={lr:.2e}  grad_norm={grad_norm:.2f}  tok/s={tps:.0f}")
-                print(msg)
+                # Logging
+                if global_step % cfg["log_interval"] == 0:
+                    ppl = math.exp(min(loss.item() * accum, 20))
+                    elapsed = time.time() - t0
+                    tps = (tokens_seen - tokens_at_start) / elapsed if elapsed > 0 else 0
+                    lr = optimizer.param_groups[0]["lr"]
 
-                if use_wandb:
-                    wandb.log({
-                        "train/loss": loss.item(),
-                        "train/ppl": ppl,
-                        "train/lr": lr,
-                        "train/grad_norm": grad_norm,
-                        "train/tokens_per_sec": tps,
-                        "train/tokens_seen": tokens_seen,
-                        "step": global_step,
-                    })
+                    msg = (f"step={global_step:>6d}  loss={loss.item() * accum:.4f}  ppl={ppl:.1f}  "
+                           f"lr={lr:.2e}  grad_norm={grad_norm:.2f}  tok/s={tps:.0f}")
+                    print(msg)
 
-            # Validation
-            if global_step % cfg["eval_interval"] == 0:
-                valid_loss = evaluate(model, valid_loader, device)
-                valid_ppl = math.exp(min(valid_loss, 20))
-                print(f"  [VALID] step={global_step}  loss={valid_loss:.4f}  ppl={valid_ppl:.1f}")
+                    if use_wandb:
+                        wandb.log({
+                            "train/loss": loss.item() * accum,
+                            "train/ppl": ppl,
+                            "train/lr": lr,
+                            "train/grad_norm": grad_norm,
+                            "train/tokens_per_sec": tps,
+                            "train/tokens_seen": tokens_seen,
+                            "step": global_step,
+                        })
 
-                if use_wandb:
-                    wandb.log({
+                # Validation
+                if global_step % cfg["eval_interval"] == 0:
+                    valid_loss = evaluate(model, valid_loader, device)
+                    valid_ppl = math.exp(min(valid_loss, 20))
+                    print(f"  [VALID] step={global_step}  loss={valid_loss:.4f}  ppl={valid_ppl:.1f}")
+
+                    wandb_metrics = {
                         "valid/loss": valid_loss,
                         "valid/ppl": valid_ppl,
                         "step": global_step,
-                    })
+                    }
 
-                if valid_loss < best_valid_loss:
-                    best_valid_loss = valid_loss
-                    save_checkpoint(model, optimizer, global_step, cfg,
-                                    output_dir / "best.pt")
-                    print(f"  [BEST] New best valid loss: {valid_loss:.4f} (ppl: {valid_ppl:.1f})")
+                    # Add CSR and MorphAcc if tests are available
+                    if csr_tests and sp is not None:
+                        ac_metrics = compute_autocomplete_metrics(
+                            model, sp, csr_tests, morphacc_tests, device
+                        )
+                        wandb_metrics.update(ac_metrics)
+                        print(f"  [AUTOCOMPLETE] CSR={ac_metrics['valid/csr']:.3f}  "
+                              f"MorphAcc={ac_metrics['valid/morphacc']:.3f}")
+                        print(f"  [NEXT-WORD]    NW-CSR={ac_metrics['valid/nw_csr']:.3f}  "
+                              f"WordAcc={ac_metrics['valid/nw_word_accuracy']:.3f}  "
+                              f"Accept={ac_metrics['valid/nw_acceptance_rate']:.3f}  "
+                              f"AvgPrefix={ac_metrics['valid/nw_avg_prefix_before_accept']:.1f}  "
+                              f"AvgConf={ac_metrics['valid/nw_avg_confidence']:.3f}")
 
-            # Checkpoint
-            if global_step % cfg["save_interval"] == 0:
-                ckpt_path = output_dir / f"step_{global_step:07d}.pt"
-                save_checkpoint(model, optimizer, global_step, cfg, ckpt_path)
-                print(f"  Saved: {ckpt_path}")
+                    if use_wandb:
+                        wandb.log(wandb_metrics)
+
+                    if valid_loss < best_valid_loss:
+                        best_valid_loss = valid_loss
+                        save_checkpoint(model, optimizer, global_step, cfg,
+                                        output_dir / "best.pt", valid_loss=valid_loss)
+                        print(f"  [BEST] New best valid loss: {valid_loss:.4f} (ppl: {valid_ppl:.1f})")
+
+                # Checkpoint
+                if global_step % cfg["save_interval"] == 0:
+                    ckpt_path = output_dir / f"step_{global_step:07d}.pt"
+                    save_checkpoint(model, optimizer, global_step, cfg, ckpt_path)
+                    print(f"  Saved: {ckpt_path}")
 
         if tokens_seen >= cfg["total_tokens"]:
             break
@@ -364,7 +493,7 @@ def train(cfg: dict):
 
 def main():
     parser = argparse.ArgumentParser(description="Train Morpheus v2 Mamba-2")
-    parser.add_argument("--config", default="config/base.yaml", help="YAML config file")
+    parser.add_argument("--config", default="config/small.yaml", help="YAML config file")
     parser.add_argument("--batch-size", type=int, help="Override batch size")
     parser.add_argument("--seq-len", type=int, help="Override sequence length")
     parser.add_argument("--learning-rate", type=float, help="Override learning rate")
@@ -397,7 +526,7 @@ def main():
         print(f"  {k}: {v}")
     print()
 
-    train(cfg)
+    train(cfg, checkpoint_path=args.resume)
 
 
 if __name__ == "__main__":

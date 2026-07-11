@@ -6,23 +6,23 @@ __pycache__/
 .venv/
 venv/
 
-# Training artifacts
+# Training artifacts (large, on GPU server)
 checkpoints/
 exports/
 logs/
+wandb/
 
 # Data (large files)
 data/train_tokens.npy
 data/valid_tokens.npy
 data/test_tokens.npy
 data/splits/
+data/corpus_sample.txt
+data/corpus_sample.txt.gz
 
-# Tokenizer (symlinked from v1, but ignore copies)
+# Tokenizer model files (large, published to HuggingFace)
 tokenizer/*.model
 tokenizer/*.vocab
-
-# W&B
-wandb/
 
 # Docker
 *.log
@@ -47,3 +47,13 @@ Thumbs.db
 # Environment
 .env
 .env.local
+
+# Demo venv
+demo/.venv/
+demo/__pycache__/
+
+# Stale cache
+scripts/__pycache__/
+
+# Reports (generated, not version-controlled)
+reports/

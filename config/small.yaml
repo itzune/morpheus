@@ -1,17 +1,19 @@
-# Morpheus-Small — ~130M parameters
+# Morpheus-Small — ~91M parameters with 4K tokenizer
+# v2.1: 4K Unigram tokenizer (MorphAcc 66.7% vs 28.6% at 32K)
 # Fast iteration, baseline experiments
 
 # Architecture
 d_model: 768
 n_layer: 24
+ssm_layer: Mamba2
 d_state: 64
 d_conv: 4
 expand: 2
 headdim: 64
 chunk_size: 256
 
-# Vocabulary
-vocab_size: 32000
+# Vocabulary (4K Unigram — confirmed optimal for MorphAcc via fieldwork)
+vocab_size: 4000
 pad_vocab_size_multiple: 16
 
 # Regularization
@@ -19,9 +21,10 @@ residual_in_fp32: true
 fused_add_norm: true
 
 # Training
-seq_len: 512
-batch_size: 128
-gradient_accumulation: 1
+# 1024 seq_len compensates for 39% fertility increase (2.58 vs 1.85)
+seq_len: 1024
+batch_size: 64
+gradient_accumulation: 2
 
 # Optimization
 learning_rate: 2.0e-3
@@ -31,19 +34,28 @@ beta1: 0.9
 beta2: 0.95
 grad_clip: 1.0
 
-# Schedule
+# Schedule (adjusted: fewer tokens needed with better tokenizer)
 warmup_tokens: 50_000_000
 total_tokens: 10_000_000_000
 
 # Precision
 dtype: bfloat16
-compile: true
+compile: false
 
 # Logging
-log_interval: 50
-eval_interval: 1000
-save_interval: 5000
+log_interval: 10
+eval_interval: 500
+save_interval: 2000
 
-# Estimated params: ~130M
-# Estimated VRAM: ~12-15 GB
-# Training time: ~2-3 days
+# Paths
+train_data: data/train_tokens_4k.npy
+valid_data: data/valid_tokens_4k.npy
+output_dir: checkpoints
+
+# Tokenizer & eval
+sp_model: tokenizer/basque_unigram_4000.model
+eval_targets: eval/targets.json
+
+# Estimated params: ~91M (77M Mamba blocks + 3M embeddings + 0.04M norms)
+# Estimated VRAM: ~20-25 GB (1024 seq_len × 4K vocab)
+# Training time: ~3-4 days (longer sequences from 39% fertility increase)
