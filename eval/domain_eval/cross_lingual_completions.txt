@@ -1,0 +1,77 @@
+Cross-Lingual Greedy Completions (step 74K, greedy)
+======================================================================
+
+
+======================================================================
+LANGUAGE: ENGLISH (8 samples)
+======================================================================
+
+PROMPT:     The weather is nice today and I will go for a
+PREDICTION: small space.
+AVG LOGPROB: -1.338
+
+PROMPT:     I am learning a new language but it is still
+PREDICTION: that it is still still still still still still
+AVG LOGPROB: -0.815
+
+PROMPT:     Tomorrow morning I have to go to work
+PREDICTION: .
+AVG LOGPROB: -1.708
+
+PROMPT:     Having dinner with friends this weekend sounds
+PREDICTION: , they were shown in the streets of the streets.
+AVG LOGPROB: -1.128
+
+PROMPT:     I like to listen to music while I am
+PREDICTION: starting to start to start to start to start
+AVG LOGPROB: -0.745
+
+PROMPT:     Thank you very
+PREDICTION: much.
+AVG LOGPROB: -0.644
+
+PROMPT:     The United States of America is a country in
+PREDICTION: the 19th century.
+AVG LOGPROB: -0.811
+
+PROMPT:     In recent years, the development of technology has
+PREDICTION: been found in the Basque Country.
+AVG LOGPROB: -0.589
+
+
+======================================================================
+LANGUAGE: SPANISH (8 samples)
+======================================================================
+
+PROMPT:     El tiempo está bueno hoy y voy a salir a
+PREDICTION: la calle.
+AVG LOGPROB: -0.684
+
+PROMPT:     Estoy aprendiendo un idioma nuevo pero todavía es
+PREDICTION: toy aprendiendo euskera.
+AVG LOGPROB: -0.601
+
+PROMPT:     Mañana por la mañana tengo que ir a trabajar
+PREDICTION: en la carpa de la carpa de la carpa de la carpa de la carpa
+AVG LOGPROB: -1.357
+
+PROMPT:     Cenar con amigos este fin de semana suena
+PREDICTION: a la tarde.
+AVG LOGPROB: -1.580
+
+PROMPT:     Me gusta escuchar música mientras estoy
+PREDICTION: en directo.
+AVG LOGPROB: -1.080
+
+PROMPT:     Los Estados
+PREDICTION: Unidos, 1990.
+AVG LOGPROB: -0.940
+
+PROMPT:     La República Francesa es un país de
+PREDICTION: gran calidad, ya que la gran mayoría de la población vas
+AVG LOGPROB: -1.053
+
+PROMPT:     En los últimos años, el desarrollo de la tecnología ha
+PREDICTION: ido creciendo, ya que la tecnología ha sido uno de los
+AVG LOGPROB: -0.912
+

@@ -952,7 +952,62 @@ Example 1:
 - Prompt: *Baigorri eta Baztan arteko korrespondentzia fazeria erlazioez (1804)*
 - Prediction: *eta 1805eko korrespondentziaz (1806) ari gara.*
 
+**Cross-Lingual Completions (English & Spanish)**
+
+The model was trained on Basque-focused corpora, but web-crawled sources contain incidental English and Spanish (<1% each). These completions illustrate the weak cross-lingual transfer documented in §6.11.
+
+**English**
+
+Example 1:
+
+- Prompt: *Thank you very*
+- Prediction: *much.*
+
+Example 2:
+
+- Prompt: *In recent years, the development of technology has*
+- Prediction: *been found in the Basque Country.*
+
+Example 3:
+
+- Prompt: *The United States of America is a country in*
+- Prediction: *the 19th century.*
+
+Example 4:
+
+- Prompt: *I like to listen to music while I am*
+- Prediction: *starting to start to start to start to start*
+
+**Spanish**
+
+Example 1:
+
+- Prompt: *El tiempo está bueno hoy y voy a salir a*
+- Prediction: *la calle.*
+
+Example 2:
+
+- Prompt: *En los últimos años, el desarrollo de la tecnología ha*
+- Prediction: *ido creciendo, ya que la tecnología ha sido uno de los*
+
+Example 3:
+
+- Prompt: *Me gusta escuchar música mientras estoy*
+- Prediction: *en directo.*
+
+Example 4:
+
+- Prompt: *Los Estados*
+- Prediction: *Unidos, 1990.*
+
+Example 5:
+
+- Prompt: *La República Francesa es un país de*
+- Prediction: *gran calidad, ya que la gran mayoría de la población vas*
+
 **Observations.** Wikipedia completions are frequently perfect — the model reproduces encyclopedic prose with high fidelity, which is both a strength (accurate continuations) and a corpus-induced artifact (§6.10). News completions are often grammatically correct and contextually relevant, including multi-token continuations that add new information. Legal text produces structurally plausible completions. Education prompts yield mixed results: real prose sentences receive coherent continuations, but title/header lines produce empty or degenerate outputs (the model predicts EOS). Literature is the weakest domain — the archaic Basque orthography (17th–19th century) is out-of-distribution for the modern Batua-trained model, and completions are either empty or produce plausible-sounding but hallucinated content.
+
+Cross-lingual completions reveal the model's incidental transfer. High-frequency collocations are predicted correctly (*Thank you very* → *much*, *Los Estados* → *Unidos*, *El tiempo está bueno hoy y voy a salir a* → *la calle*). Longer continuations expose the Basque bias: *“the development of technology has”* → *“been found in the Basque Country”* (the model redirects to its dominant domain), and *“La República Francesa es un país de”* → *“gran calidad, ya que la gran mayoría de la población vas...”* (trails off into Basque mid-sentence). Repetition failures (*starting to start to start*) are common when the model lacks confident continuations in the non-dominant language.
 
 ---
 
