@@ -463,7 +463,7 @@ No single metric is sufficient for agglutinative autocomplete. In practice, **PP
 
 ### 6.2 Perplexity (PPL)
 
-PPL is computed on two text sets: (1) the held-out validation set (1.83M tokens, genuinely excluded from training), and (2) a real corpus of Wikipedia + Berria articles (140K tokens, **contaminated** — these articles appear in training sources, so absolute PPL is optimistic; the relative comparison remains valid as all checkpoints saw the same text).
+PPL is computed on two text sets: (1) the held-out validation set (1.83M tokens, genuinely excluded from training via line-level leakage prevention), and (2) a real corpus of Wikipedia + Berria articles (140K tokens, **partially contaminated** — 8 of 9 Wikipedia articles appear in the training corpus; the 5 Berria articles are genuinely held-out, published after the corpus freeze date; see §6.6). Absolute PPL on set (2) is optimistic; the relative comparison remains valid as all checkpoints saw the same text.
 
 | Metric | Step 32K | Step 54K | Step 74K | Trend |
 |--------|----------|----------|----------|-------|
@@ -536,7 +536,7 @@ Per-token perplexity (PPL) is tokenizer-dependent and cannot be compared across 
 | **Morpheus v2 (Mamba-2)** | **91M** | **4K** | **0.970** | **9.83** | **0.294** |
 | Latxa-Qwen3.5-2B | 1,882M | 248K | 0.822 | 4.89 | 0.359 |
 
-> **⚠ Corpus contamination caveat:** Wikipedia and Berria articles may appear in all three models' training data. Absolute BPC values are optimistic; the relative comparison is valid.
+> **⚠ Corpus contamination caveat:** The eval corpus is 14 files (475,750 chars): 9 Wikipedia articles (~455K chars) and 5 Berria news articles (~20K chars). We empirically verified contamination against the Latxa Corpus v2: **8 of 9 Wikipedia articles appear verbatim** in the `wikipedia` sub-corpus (stable encyclopedic articles overlap heavily with the training dump). The **5 Berria articles are genuinely held-out** — they were published July 8–9, 2026, after the Latxa Corpus v2 was frozen (Feb 13, 2026), and their exact text does not appear in any training sub-corpus. Since Wikipedia constitutes ~96% of the eval corpus by character count, absolute BPC values are optimistic for Morpheus and Latxa; the relative comparison remains valid.
 >
 > **Note on shared corpus:** Morpheus and Latxa-Qwen3.5-2B both derive their training data from the Latxa Corpus v2 (§4.2). Morpheus uses a curated subset (11 of 14 sub-corpora, with additional deep-cleaning) trained for ~2.16 epochs (~10B tokens seen); Latxa-Qwen3.5-2B uses the same corpus for continued pretraining of a Qwen3.5 base (~4.2B tokens). The BPC difference between them is therefore attributable to model size (91M vs 1,882M), architecture (Mamba-2 vs Transformer), and training regime (from-scratch vs instruct-tuned continued pretraining) — not to data source differences. GPT-2 eus-euscrawl, by contrast, was trained on EusCrawl only (~423M tokens), making the Morpheus–GPT-2 comparison a natural experiment in data volume (24× difference) at similar parameter scale.
 
