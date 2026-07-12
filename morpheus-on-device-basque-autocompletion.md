@@ -877,16 +877,39 @@ The effect does not replicate in GGUF: PyTorch CSR decreases monotonically (0.39
 
 Greedy completions from the step 74K checkpoint across five text domains. Prompts are the first ~9 words of each document. The model receives no system prompt or instruction — it simply continues the text.
 
-| Domain | Prompt | Completion |
-|--------|--------|------------|
-| Wikipedia | *Euskaltzaindia euskara zaindu, aztertu, zabaldu, batu eta hobetzea helburu* | *duen erakundea da.* |
-| Wikipedia | *Bertsolaritza abestuz, errimatuz eta neurtuz egiten den berbaldi bat* | *da.* |
-| Wikipedia | *Euskal literatura euskaraz egindakoa da, Euskal Herriko idazleek gaztelaniaz,* | *frantsesez eta ingelesez idatzitakoa.* |
-| News | *Berotik babesteko azpiegiturak, inoiz baino beharrezkoago Europan eta Euskal* | *Herrian.* |
-| News | *Gizon bat hil da Errenterian, arma zuriz egindako eraso* | *batean* |
-| Legal | *132. zk., 2025eko uztailaren 14a, astelehena Hemen ikusgai dauden* | *argazkiak:* |
-| Education | *Edukira salto egin \| Salto egin nabigazioara MARRAZKETA ETA* | *KOMUNIKAZIOA \| KOMUNIKAZIOA \|* |
-| Literature | *Hegoaldeko herri zehaztugaberen bateko erremateak (c. XIX. mendea) Baigorri* | *ko erremateak (c. 1840) Baigorriko erremateak (c.* |
+**Wikipedia**
+
+- Prompt: *Euskaltzaindia euskara zaindu, aztertu, zabaldu, batu eta hobetzea helburu*
+  Prediction: *duen erakundea da.*
+
+- Prompt: *Bertsolaritza abestuz, errimatuz eta neurtuz egiten den berbaldi bat*
+  Prediction: *da.*
+
+- Prompt: *Euskal literatura euskaraz egindakoa da, Euskal Herriko idazleek gaztelaniaz,*
+  Prediction: *frantsesez eta ingelesez idatzitakoa.*
+
+**News**
+
+- Prompt: *Berotik babesteko azpiegiturak, inoiz baino beharrezkoago Europan eta Euskal*
+  Prediction: *Herrian.*
+
+- Prompt: *Gizon bat hil da Errenterian, arma zuriz egindako eraso*
+  Prediction: *batean*
+
+**Legal**
+
+- Prompt: *132. zk., 2025eko uztailaren 14a, astelehena Hemen ikusgai dauden*
+  Prediction: *argazkiak:*
+
+**Education**
+
+- Prompt: *Edukira salto egin \| Salto egin nabigazioara MARRAZKETA ETA*
+  Prediction: *KOMUNIKAZIOA \| KOMUNIKAZIOA \|*
+
+**Literature**
+
+- Prompt: *Hegoaldeko herri zehaztugaberen bateko erremateak (c. XIX. mendea) Baigorri*
+  Prediction: *ko erremateak (c. 1840) Baigorriko erremateak (c.*
 
 **Observations.** Wikipedia completions are frequently perfect — the model reproduces encyclopedic prose with high fidelity, which is both a strength (accurate continuations) and a corpus-induced artifact (§6.10). News completions are shorter but grammatically correct. Legal text produces structurally plausible but content-light completions (the model predicts the document structure rather than legal content). Education and literature prompts expose failure modes: education pages contain navigation boilerplate that triggers repetition, and literature uses archaic Basque orthography (17th–19th century) that is out-of-distribution for the modern Batua-trained model.
 
