@@ -1,0 +1,11 @@
+.c-mainarticle__section.mahaigaina{ display: block; } .c-mainarticle__section.bertikala{ display: none; } @media screen and (max-width: 40em){ .c-mainarticle__section.mahaigaina{ display: none; } .c-mainarticle__section.bertikala{ display: block; } }
+
+Donibane Lohizuneko Santa Barbara lur muturretik eguzki sartzeak miresteko suertea dugu batzuetan. Oparia da, ehunka jenderen artean gauden arren. Sua baizik ez den astroaren desagertzeak geronen desagertzea irudikatzen du, baina segur gara, hatsa hartzen dugun ber, biharamunean bertan aterako garela kaosaren argitzera.
+
+Hiritar zenbaitek ez dute Donibaneko arrastiriekin aski eta Polinesiako lehorrez ametsez dabiltza, behialako Gauguin ospetsuaren antzera. Han ere dagoeneko, gain-turismoa eta funtsen espekulazioa islak eta lurraldeak zauritzen dituen gaitzak bilakatuak dira. Eta izurritea ez da gelditzen: Raiatea uharteko Horea motuko koral barreraren aldean, autoritateek baimendu duten hostal, jatetxe eta ongizate zentro multzo bat eraikitzeko proiektua dago... Maiatzaren 11z geroztik, ekologia aldetik bereziki zaurgarriak diren eremu horietako herritarrek xede animal horren kontra manifestatzen dute.
+
+Horeako sable zurizko hondartza luzeetako txaboletatik eguzki-sartzea ikustea, Donibanen bezala, mirakulua da, urruna eta hurbila, biak, lanjerrean direlako jada!
+
+Iruzkinak egiteko BERRIAlaguna izan behar duzu
+
+Zure babes ekonomikoari esker egiten dugu kazetaritza konprometitua. BABESTU BERRIA

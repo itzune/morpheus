@@ -1,0 +1,521 @@
+Edukira salto egin | Salto egin nabigazioara
+
+Enplegurako Ibilbide Pertsonala I modulurako materiala
+
+Fitxategiak deskargatzeko erregistroa beharrezkoa da. Sartu Erabilera kopurua: 32
+
+1. gaia. Lanbide Heziketa ikasgelatik enpresara
+
+2. gaia. Lana eta osasuna. Lan-arrisku faktoreak
+
+3. gaia. Enpresaren prebentzioaren antolaketa
+
+4.gaia. Prebentzioa eta babesa. Larrialdi-kasuan jardutea
+
+5.gaia. Lan harremana, ordezkaritza eta negoziazio kolektiboa
+
+6. gaia. Lan kontratua, sinatzetik azkentzera
+
+7. gaia. Lan denbora eta egungo lan-inguruneak
+
+Itzulpena: Garazi Uriondo Bilbao. Politeknika Txorierri Ikastegia.
+
+Dokumentu honekin erlazionatuta dauden...
+
+Estetika eta edergintza (erdi mailako zikloa) loe
+
+Zuraren eta kortxoaren eraldaketa (erdi mailako zikloa)
+
+Aho eta hortzen higienea (goi mailako zikloa)
+
+Estetika integrala eta ongizatea (goi mailako zikloa)
+
+Jatetxe arloko zerbitzuak (erdi mailako zikloa)
+
+Ile apainketa eta kosmetika (erdi mailako zikloa) loe
+
+Marketina eta publizitatea (goi mailako zikloa) loe
+
+Ile-apainketako estilismoa eta zuzendaritza (goi mailako zikloa)
+
+Dietetika eta elikadura (goi mailako zikloa)
+
+Irudi pertsonalaren eta korporatiboaren aholkularitza (goi mailako zikloa)
+
+Merkataritza jarduerak (erdi mailako zikloa) loe
+
+Karakterizazioko eta makillaje profesionaleko goi-mailako teknikaria
+
+Nekazaritza eta abere-hazkuntzako enpresen kudeaketa eta antolamendua (goi mailako zikloa)
+
+Larrialdien koordinazioko eta babes zibileko goi-mailako teknikaria
+
+Termalismoko eta ongizateko goi-mailako zikloa
+
+Galdaketa eta pulbimetalurgia bidezko produkzioa (goi mailako zikloa)
+
+Automatizazioa eta robotika industriala (goi mailako zikloa) loe
+
+3D animazioak, jokoak eta multimedia elkarreragileak (goi mailako zikloa)
+
+Arotzeria eta altzarigintza (erdi mailako zikloa)
+
+Ikus-entzunezko eta ikuskizunen produkzioa (goi mailako zikloa)
+
+Genero-berdintasuna Sustatzeko goi-mailako teknikaria
+
+Fabrikazio mekanikoko produkzioaren programazioa (goi mailako zikloa) loe
+
+Instalazioa eta altzari-hornikuntza (erdi mailako zikloa)
+
+Irudia argiztatu, hartu eta tratatzea (goi mailako zikloa)
+
+Plastiko eta kautxugintza (goi mailako zikloa)
+
+Mugikortasun seguru eta jasangarrirako prestakuntzako goi-mailako teknikaria
+
+Turismo gidaritza, informazioa eta laguntza (goi mailako zikloa)
+
+Jantzigintza eta moda (erdi mailako zikloa)
+
+Itsas garraioa eta alturako arrantza (GM-LOE)
+
+Patroigintza eta moda (goi mailako zikloa)
+
+Administrazioa eta finantzak (Goi mailako zikloa) loe
+
+Ardoen eta beste zenbait edarien elaborazioa (erdi mailako zikloa)
+
+Sukalde zuzendaritza (goi mailako zikloa) loe
+
+Arte grafikoen industrietako produkzioa (goi mailako zikloa)
+
+Ontzien eta itsasontzien zainketa antolatzea (GM-LOE)
+
+Baso eta natura ingurunearen kudeaketa (goi mailako zikloa)
+
+Nabigazioko eta itsasertzeko arrantza (EM-LOE)
+
+Egokitzapen fisikoko goi-mailako teknikaria
+
+Azaleko tratamenduak eta termikoak (erdi mailako zikloa)
+
+Gizarte- eta kirol-irakaskuntzako eta -animazioko goi-mailako teknikaria
+
+Argitalpen diseinua eta produkzioa(goi mailako zikloa)
+
+Sukaldaritza eta gastronomia (erdi mailako zikloa) loe
+
+Natura inguruneko eta astialdiko gidaritzako teknikaria
+
+Paisajismoa eta landa ingurunea (goi mailako zikloa)
+
+Aurreinprimaketa digitala (erdi mailako zikloa)
+
+Inprimaketa grafikoa (erdi mailako zikloa)
+
+Instalazio elektriko eta automatikoak (erdi mailako zikloa) loe
+
+Analisiko eta kalitate kontroleko laborategia (goi mailako zikloa)
+
+Nazioarteko merkataritza (goi mailako zikloa) loe
+
+Barnealdeetako,dekorazioko eta birgaitzeko obrak (erdi mailako zikloa)
+
+Elikagaien industriako prozesuak eta kalitatea (goi mailako zikloa)
+
+Zurgintza eta altzarigintza (goi mailako zikloa)
+
+Anatomia patologikoa eta zitodiagnosia (goi mailako zikloa) LOE
+
+Orearen eta paperaren prozesu-eragiketa (erdi mailako zikloa)
+
+Oregintza eta papergintza (goi mailako zikloa)
+
+Bidaia agentziak eta ospakizunen kudeaketa (goi mailako zikloa)
+
+Administrazio kudeaketa (erdi mailako zikoa) loe
+
+Beroa sortzeko instalazioak (erdi mailako zikloa)
+
+Kontsumitzaileentzako zerbitzuak (goi mailako zikloa)
+
+Plastikoaren eta kautxuaren transformazio-eragiketak (erdi mailako zikloa)
+
+Web aplikazioen garapena (goi mailako zikloa) loe
+
+Kontsumorako ekipo elektronikoak (erdi mailako zikloa)
+
+Makineriako elektromekanika (erdi mailako zikloa)
+
+Produktu farmazeutiko eta antzekoen fabrikazioa (goi mailako zikloa)
+
+Mantenimendu aeromekanikoa (goi mailako zikloa)
+
+Instalazio termikoak (gaikako sailkapena)
+
+Administrazio zerbitzuetako oinarrizko profesionala (oinarrizko mailako zikloa)
+
+Ibilgailu automobilen elektromekanika (erdi mailako zikloa) loe
+
+Lan arriskuen prebentzioa (goi mailako zikloa)
+
+Mantentze-lan elektromekanikoa (erdi mailako zikloa) loe
+
+Paper eta kartoiaren enkoadernaketa eta manipulazioa (erdi mailako zikloa)
+
+Garraio eta logistika (goi mailako zikloa)
+
+Metal-eraikuntzak (goi mailako zikloa) LOE
+
+Hozteko eta girotzeko instalazioak (erdi mailako zikloa)
+
+Turismo ostatuen kudeaketa (goi mailako zikloa)
+
+Soldadura eta galdaragintza (erdi mailako zikloa) loe
+
+Mekatronika industriala (goi mailako zikloa) loe
+
+Komunikazio-bitartekotzako goi-mailako teknikaria
+
+Zeinu mintzairaren interpretazioa (goi mailako zikloa)
+
+Mendekotasun-egoeran dauden pertsonentzako arreta (erdi mailako zikloa) loe
+
+Barazki-haragi- eta arrain kontserbagintza (erdi mailako zikloa)
+
+Hiltegia eta harategi-urdaigintza (erdi mailako zikloa)
+
+Diagnosi klinikoko laborategia (goi mailako zikloa)
+
+Mahastizaintza eta ardogintza (goi mailako zikloa)
+
+Urpeko Eragiketak eta Eragiketa Hiperbarikoak (EM-LOE)
+
+Baso-lanetako eta natur ingurunearen kontserbazioa (erdi mailako zikloa)
+
+Farmazia eta parafarmazia (erdi mailako zikloa) loe
+
+Okintza, gozogintza eta konfiteria (erdi mailako zikloa)
+
+Instalazio termiko eta fluidodunen mantenimendua (goi mailako zikloa)
+
+Nekazaritza ekologikoa (erdi mailako zikloa)
+
+Nekazaritza eta abeltzaintza produkzioa (erdi mailako zikloa)
+
+Lorezaintza eta loradenda (erdi mailako zikloa)
+
+Energi-eraginkortasuna eta eguzki energia termikoa (goi mailako zikloa)
+
+Ontzien eta itsasontzien makineria zaintzea eta kontrolatzea (EM) LOE
+
+Diseinua eta altzari-hornikuntza (goi mailako zikloa)
+
+Fabrikazio mekanikoko diseinua (goi mailako zikloa) loe
+
+Mikroinformatika sistemak eta sareak (erdi mailako zikloa) loe
+
+Telekomunikazio instalazioak (erdi mailako zikloa)
+
+Plataforma anitzeko aplikazioen garapena (goi mailako zikloa) loe
+
+Telekomunikabide eta informatika sistemak (goi mailako zikloa) loe
+
+Sare-informatika sistemen administrazioa (goi mailako zikloa) loe
+
+Salmentak eta merkataritza-espazioak kudeatzea
+
+Eraikuntza-maikineriaren erabilera eta mantenimendua (erdi mailako zikloa)
+
+Zuzendaritzari laguntza ematea (goi mailako zikloa)
+
+Osasun dokumentazioa eta administrazioa (GMHZ) LOE
+
+Eraikuntza proiektuak (goi mailako zikloa) loe
+
+Sistema elektroteknikoak eta automatizatuak (goi mailako zikloa) loe
+
+Obra burutzapen eta planak (goi mailako zikloa)
+
+Okintza eta gozogintza (erdi mailako zikloa) LOE
+
+Obra zibileko proiektuak (goi mailako zikloa)
+
+Mantentze-lan elektronikoa (goi mailako zikloa) loe
+
+Jatetxe arloko zerbitzuen zuzendaritza (goi mailako zikloa)
+
+Animazio soziokulturala eta turistikoa (goi mailako zikloa)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)
+
+Enplegurako Ibilbide Pertsonala I (Lan Prestakuntza eta Orientabidea barne)

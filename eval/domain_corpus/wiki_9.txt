@@ -1,0 +1,93 @@
+Zientzia unibertsoari buruzko azalpen eta iragarpen egiaztagarrien bidez ezagutza eraiki eta antolatzen duen ahalegin sistematikoa da.
+Zientzia giza espeziea bezain zaharra izan daiteke, eta arrazoibide zientifikoaren lehen proba arkeologikoetako batzuek dozenaka mila urte dituzte. Zientziaren historiako lehen erregistro idatziak Antzinako Egiptotik eta Mesopotamiatik datoz, K.a. 3000tik 1200era. Matematikari, astronomiari eta medikuntzari egindako ekarpenak Antzinate klasikoko Greziako filosofia naturalean sartu eta osatu ziren, eta bertan saiakera formalak egin ziren kausa naturaletan oinarritutako mundu fisikoko gertaeren azalpenak emateko. Mendebaldeko Erromatar Inperioa erori ondoren, munduaren ikuskera grekoen ezagutza hondatu egin zen Mendebaldeko Europan Erdi Aroko lehen mendeetan (400-1000 EB), baina mundu musulmanean gorde zen Urrezko Aro Islamiarrean, eta, geroago, Greziako inperio bizantziarrek Pizkundean egindako ahaleginengatik.
+X. mendetik XIII. mendera bitarteko Mendebaldeko Europan obra grekoak eta ikerketa islamikoak berreskuratzeak eta asimilatzeak berpiztu egin zuen "filosofia naturala"; gero, XVI. mendean hasi zen Iraultza Zientifikoak aldatu zuen, ideia eta aurkikuntza berriak aurreko ikuskera eta tradizio grekoetatik urrundu ahala. Metodo zientifikoak laster izan zuen garrantzi handiagoa ezagutzaren sorkuntzan, eta XIX. mendera arte ez ziren zientziaren ezaugarri instituzional eta profesional asko forma hartzen hasi, "filosofia naturala" izatetik "zientzia naturala" izatera igaro zirenean.
+Zientzia modernoa, oro har, hiru adar handitan banatzen da: natur zientziak (adibidez, biologia, kimika eta fisika), mundu fisikoa aztertzen dutenak; gizarte-zientziak (adibidez, ekonomia, psikologia eta soziologia), gizabanakoak eta gizarteak aztertzen dituztenak; eta zientzia formalak (adibidez, logika, matematika eta teoria informatikoa), axiomak eta arauak dituzten sistema formalak aztertzen dituztenak. Desadostasuna dago zientzia formalak zientziaren diziplinak diren jakiteko, ez baitaude ebidentzia enpirikoaren mende. Zientzia aplikatuak ezagutza zientifikoa helburu praktikoetarako erabiltzen duten diziplinak dira, hala nola ingeniaritza eta medikuntza.
+Zientziari buruzko ezagutza berriak aurrera egiten du munduari buruzko jakin-minak eta arazoak konpontzeko nahiak eragindako zientzialarien ikerketen bidez. Gaur egungo ikerketa zientifikoa oso lankidetzakoa da, eta, oro har, erakunde akademikoetako eta ikerketako taldeek, gobernu-agentziek eta enpresek egiten dute. Bere lanaren eragin praktikoaren ondorioz, zientzia-politikak sortu dira. Politika horiek enpresa zientifikoan eragina izatea dute helburu, eta lehentasuna ematen diote merkataritza-produktuen, armamentuen, osasun-zaintzaren, azpiegitura publikoaren eta ingurumen-babesaren garapen etiko eta moralari.
+
+
+== Hitza(k) ==
+"Zientzia" latinezko scientia hitzetik (euskaraz "ezagutza"), berau scire aditzetik eratorria ("jakin"). Euskaraz gutxienez 1715etik erabili izan da (szientzia formarekin). Hitz elkartuetan, lehen osagai gisa erruz erabiltzen da, eta "zientifiko"-ren baliokide-edo da ("zientzia-gai", "zientzia aurrerapen"). Erroa beste hitz batzuetan ere erabiltzen da, adibidez "kontzientzia" hitzean.
+Hipotesi asko daude hitz zientifikoaren azken jatorrirako. Michiel de Vaan-ek, hizkuntzalari neerlandar eta indoeuropeistak, dioenez, bere jatorria hizkuntza protoitalikoan izan dezake, skije edo *skije bezala. Horrek "jakintza" esan nahi du, eta protoindoeuropar hizkuntzan sor daiteke, *skh1-ie, *skh1-io, "eragin" esan nahi baitu. Lexikon der indogermanischen Verben proposaturiko sciskyk nescθr-en ondorengo prestakuntza bat adierazten du, "ez jakitea, ez ezagutzea" esan nahi duena, Proto-Indo-Europea-Chen secre delakotik erator daitekeena, edo *skh2-, "moztea" esan nahi duena.
+"Jakintza" hitza ere, beste esanahien artean, sinonimoa da, eta Ibon Sarasola hizkuntzalariak hura hobestearen alde agertu zen.
+
+
+== Historia ==
+
+Zientziak gizonaren arrazoitzeko gaitasunean eta behaketarako berezko jarreran du oinarria. Ingalaterrako Stonehengeko megalitoak (K.a. 2000-1500) adibidez, Europako lehen gizonak astronomia eta geometria ezagupenak zituela frogatzen dute, mendeetan uste izan dena baino askoz handiagoak. Baina lehen zientzia guneak Txinan, Indian eta Sortalde Hurbilean sortu ziren. Txinako zibilizazioaren jakituria batez ere alkimian, medikuntzan eta geografian gailendu zena, Sartaldeko zibilizazioaren aurretik izan zen Antzinako Aro guztian zehar. India, batez ere espiritualitatean oinarritutako bizimodua zuen arren, gero arabiarrek hobetu eta mundura zabaldu zuten zenbaki sistema aurreratuaren jabe zen. Egipton zientziari berari baino arazo teknikoen konponbideari eman zioten lehentasuna, eta, Mesopotamian, kaldearrek eta babiloniarrek astronomia eta matematikak landu eta ureztatze teknikak hobetu zituzten.
+
+
+=== Antzinatea ===
+Nolanahi ere, zientziaren oinarri arrazionalak, gaur egun ulertzen diren eran, greziarrek finkatu zituzten. Antzinako Grezian filosofiak goren maila jo zuen eta, haren mendean, zientzia teorikoa sortu zen, dedukzioan oinarritua; filosofia naturala deitu zitzaion. Tale Miletokoa mundua osatzen zuten oinarrizko elementuak aurkitzen saiatu zen, Pitagorasek gertaera fisikoen lehen neurketa kuantitatiboak egin zituen, Platonen ikasle Aristotelesek Pitagorasen esfera kontzentrikoen eredua ontzat hartu zuen, ordu arteko pentsamenduaren sintesia egin zuen eta Erdi Aroraino iraun zuten teoria fisikoak eman zituen, eta Euklides matematikari handiaren ikasle Arkimedesek hidrostatikaren eta palankaren legeak eman zituen, besteak beste. Baina Alexandro Handiak Mesopotamia konkistatu eta greziarrek kaldearren astronomiako kalkulu eta neurrien berri jakin zutenean, edertasuna eta perfekzioa helburu zuten Greziako teorietan akatsak eta zentzugabekeriak zeudela ohartu ziren, Aristotelesen eredu kosmikoa zalantzan jartzen zutenak; geroago, ordea, Ptolomeok geozentrismoa aho batez onar zedin lortu zuen. Bestalde, medikuntzan Hipokrates eta Galeno gailendu ziren, anatomian lehena eta fisiologian bigarrena.
+Erromatarrek ez zuten aurrerapenik egin zientzia hutsean baina greziarren ezagupenak gorde eta zabaldu zituzten, eta ingeniaritzako eta arkitekturako arazoen konponbideei eman zieten lehentasuna. Erromako Inperioaren gainbeherarekin batera desagertu zen greziar klasikoen hedapena Europan.
+
+
+=== Erdi Aroa ===
+
+Bestalde, kristautasunaren zabalkundeak munduari buruzko interpretazio espiritualen eta teologikoen berpiztea ekarri zuen. Bakar-bakarrik monasterioetan gorde zen antzinako jakituria, eta barbaroen erasoetatik gorde ziren liburuen iruzkinak eta kopiak egin ziren. Arabiarrek hartu zuten Greziako kulturaren ondarea. Aristotelesen eta beste filosofo batzuen obra itzuli zuten, medikuntza, astronomia eta alkimia landu zuten bereziki eta aljebra asmatu zuten; aipatzekoak dira, filosofian, Ibn Rushd eta, medikuntzan, Ibn Sina. XI. mendetik aurrera Europara zabaldu zuten arabiarrek beren jakintza, Iberiar Penintsulatik abiatuta. Erdi Aroko kristau kulturak ikuspegi teologiko baten bidez aztertu zuen jakintza osoa. Hala ere, espiritualtasunari lehentasuna eman arren, aurrerapen teknologikoak ere izan ziren, optikan eta arkitekturan batik bat.
+
+
+=== Aro Modernoa ===
+
+Klasikoak, Aristoteles batez ere, Europan berriro zabaldu zirenean, zientziak halako berpizkunde bat izan zuen, baina teologiaren mendean betiere. Geroago, lurralde berrien aurkikuntzak, demografiaren hazkundeak eta berrikuntza teknikoek zientziaren iraultza ekarri zuten (XVI-XVIII. m.). Izan ere, jakintza gero eta zabalagoak ordu arte indarrean egon ziren eskemak zapuztu zituen, eta oinarrizko eredu berri baten eta metodologia berri baten premia sortu zen. Besteak beste, Nikolas Kopernikok, Galileok eta Isaac Newtonek finkatu zituzten eredu berri horiek, behaketetan eta esperimentuetan oinarri hartuta. Zientzialari berritzaileek, nolanahi ere, bi oztopo nagusi gainditu behar izan zituzten: Erdi Aroan guztiz errotu ziren Aristotelesen ideia eta Elizaren hatsapen eztabaida ezinak. Hala, zientzialari horiei, eta behaketan, esperimentazioan, indukzioan eta matematizazioan oinarrituriko zientzia metodologia berri bati esker, munduaren ikuskera berria zabaldu zen: heliozentrismoa. Metodo hipotetiko-deduktiboak jakintza berrietara iristeko bideak jarri zituen, behatu ez ziren gertaerak aurreikustea eta frogatzea helburu zutenak. Bestalde, elkarren arteko lana ahalbideratu zuten zientzia elkarteak sortu ziren (1660an Londresko Royal Society, esate baterako), eta tokian tokiko hizkuntzak erabiltzen hasi ziren latinaren ordez.
+
+
+=== XIX. mendea eta Aro Garaikidea ===
+XIX. mendeetako industria iraultzak (makinismoa, lurrun makina...), zientziari bultzada handia eman ez ezik, aldatu ere egin zuen, harrezkero ekoizpenari eta gizartearen ondasun premiei lotu baitzitzaion. Horiek horrela, aurrerapen handia egin zuten kimikak, elektrizitateak, biologiak eta matematikak. Gainera, XIX. mendean zehar, mikroskopioa eta atomoa zatikiez osatua zela aurkitu izanak ikuspegi berria eman zion zientziari. Orobat, XIX. mendean hasi ziren indartzen gizarte zientziak (soziologia, ekonomia, psikologia, hizkuntzalaritza, etnologia), espekulazio filosofikotik ihes eginez eta zientzia fisikoen edo biologikoen metodoak eta bideak hartuz.
+Harrezkero zientziak izan duen aurrerabide etengabeak (erradioaktibitatea, espezien bilakaeraren teoria sendotzea eta unibertso osora zabaltzea, quantumen teoria, erlatibitatea, atomoen teoria, erregai berriak, gai erdi-eroaldeak, ingeniaritza genetikoa...), industriaren parte hartze handiarekin eta ikerketa zentro handien sorrerarekin batera, eta XX. mendeko bi Mundu Gerren eta horien ondorioen eraginpean, alor berrien sorrera ekarri du (biokimika, astrofisika, zibernetika, robotika, astronautika), teknologia gero eta berezituagoa eta zehatzagoaren beharra (mikroskopio elektronikoa, azeleragailu nuklearrak, konputagailuak, satelite artifizialak...), zientzia alorren arteko lankidetza gero eta estuagoa, eta aurkikuntza ikusgarrien lorpena ugariagoa.
+
+
+== Sailkapena ==
+Zientzialarien kezka nagusietako bat izan da zientzak sailkatzea. Aristotelesek egin zuen lehen sailkapena: zientzia teorikoak (fisika, matematika eta metafisika), zientzia praktikoak (logika eta morala) eta zientzia produktiboak (artea eta teknika). Historian zehar beste sailkapen asko egin izan dira, zer aztertzen den, zer horren zein atal eta nola, edo zer metodo erabiliz, aztertzen den kontuan hartuta. Sailkapen horien artean aipagarria da André-Marie Ampère frantses fisikariak XIX. mendearen hasieran egin zuena, 512 zientzia bilduz.
+Gaur egun, erabilpenaren eta praktikotasunaren arabera ezagutza teorikoa helburu duten zientzia soilak (matematika, fisika, kimika, biologia…) eta ezagutza horiek gauzatzea helburu duten zientzia aplikatuak (nekazaritza, ingeniaritza, medikuntza) bereizi izan dira. Metodologiaren arabera berriz zientzia deskriptiboak (astronomia, geografia, izadiaren zientziak edo natur zientziak, etnografia, geologia, paleontologa, historia…) eta zientzia deduktiboak (matematika, fisika eta kimika, biologia, psikologia, soziologia…) bereizten dira. Nolanahi ere, sailkapena oso lausoa da; astronomia, adibidez, ezin daiteke, besterik gabe, zientzia deskriptiboetan sartu, argizagien mugimenduak lege zehatz batzuen arabera deskribatzen baitira. Lege horiek erabiliz aurkitu ahal izan zuen Le Verrier-ek, kalkulu hutsen bidez, Neptuno planeta, eta, geroago, behaketen bidez planeta hura bazela frogatu zen. Hala berean, kimika adibidez, ezin da huts-hutsean zientzia deduktibotzat hartu, elementuen ezaugarriak ezagutzea kimikaren atal nagusia delako. Zientzia denek, beraz, badute alderdi teorikoa eta alderdi esperimentala, harremanetan jartzen dituena, eta sailkapen guztiak behin-behinekotzat bihurtzen dituena.
+
+
+=== Adar nagusiak ===
+Zientzia, hiru adar zientifiko handietan antolatu daiteke: zientzia formalak, natura-zientziak eta giza zientziak edo gizarte-zientziak. Horiek oinarrizko zientziak osatzen dituzte, eta horien gainean oinarritzen dira zientzia aplikatuak, ingeniaritza eta medikuntza esaterako. Adarrok ez dira beren metodo edo objektuengatik bakarrik bereizten, baizik eta baita instituzioengatik ere: aldizkariak, jakintza-elkarteak, irakaskuntza-katedra edo baita ere tituluak.
+
+Zientzia formalak: sistema formalen azterketa, adibidez logikaren eta matematikaren adarren azpian, a priori metodo enpirikoa erabiltzen dutenak. Horien artean daude matematika, logika, informatika etab.
+Natura zientziak: fenomeno naturalen azterketa (unibertsoaren faktore kosmologikoak, geologikoak, fisikoak, kimikoak eta biologikoak barne). Natura zientziak bi adar nagusitan bana daitezke: fisikoak (astronomia, fisika, kimika etab.) eta biologikoak (biologia, medikuntza etab.).
+Gizarte-zientziak: giza portaeraren azterketa, bere alderdi sozial eta kulturaletan. Horien artean daude: antropologia, historia, psikologia, soziologia, ekonomia, demografia, politika zientziak etab.
+
+
+== Ikerkuntza ==
+
+Ikerkuntza, ezagutza berriak lortzera bideratutako jarduera bat da, edo ezagutza horiek problema edo galdera zientifikoak konpontzeko aplikatzera bideratutakoa. Ikerkuntza zientifikoa prozesu konplexu hau lortzen duen izen orokorra da, non aurrerapen zientifikoak problemak ebazteko edo behaketa jakin batzuk azaltzen saiatzeko metodo zientifikoa aplikatzearen emaitza diren.
+
+
+=== Metodo zientifikoa ===
+
+Ezagutza ezin da zientifikotzat jo, baldin eta lorpen-prozesuen zientifikotasuna frogatzen ez bada. Horretarako, metodo zientifikoa aplikatu behar da. Lotura estua du bilatzen den xedearekin eta zientziaren historiarekin.
+Metodo zientifikoak bost urrats ditu:
+
+Esperimentazioa
+Behaketa
+Teoria eta eredua
+Simulazioa
+Argitaratzea eta baliozkotzea.
+
+
+== Zientzialariak ==
+
+Zientzialaria da zientzian edo zientzietako batean aritzen den pertsona, zientzia-ikertzailea.
+Zientzialariek errealitatearen inguruko jakin-min handia dute, eta batzuek ezagutza zientifikoa aplikatu nahi dute osasunaren, herrialdeen, ingurumenaren edo industriaren mesedetan. Beste motibazio batzuk izan daitezke lankideen arteko ospea eta prestigioa. Nobel Saria, ospe handikoa, urtero ematen zaie fisikako, kimikako eta ekonomiako alorretan aurrerapen zientifikoak lortu dituztenei.
+
+
+=== Emakumeak zientzian ===
+
+Zientzia, historikoki, gizonek menderatutako arloa izan da, salbuespen nabarmen batzuekin (Hipatia, Trota Salernokoa, Caroline Herschel, Henrietta Leavitt edo Marie Curie esaterako). Emakumeek diskriminazio handiari aurre egiten izan diete zientzian, gizonek menderatutako gizarteetako beste esparruetan bezala, hala nola, sarritan lan-aukerak ukatu edo beren lanen sinesgarritasuna ukatzen zietenean. XX. mende amaieratik, emakumeen enplegatze aktiboak eta sexuagatiko diskriminazio instituzionala ezabatzeak asko handitu du emakume zientzialarien kopurua, baina genero-desparekotasun handia dago oraindik ere alor batzuetan.
+
+
+== Erreferentziak ==
+
+
+== Ikus, gainera ==
+Zientziaren soziologia
+Zientzia-fikzio
+
+
+== Kanpo estekak ==
+Elhuyar Zientzia (Elhuyar fundazioa)
+Zientzia, Gizapedian.
+(Gaztelaniaz) (Ingelesez) "Basque Research" zientziaren inguruko berriak
+(Gaztelaniaz)(Frantsesez)(Ingelesez)"Inguma" Euskal Komunitate zientifikoaren datu-basea
+Aitor Ortiz de Pinedo (2025). "Ohiko galderak zientziaren inguruan". Zenodo.

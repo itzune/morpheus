@@ -1,0 +1,41 @@
+Edukira salto egin | Salto egin nabigazioara
+
+Sareak Administratzea eta Planifikatzea moduluko bideotutorialak
+
+Sareak Administratzea eta Planifikatzea moduluko bideotutorialak
+
+Sareak Administratzea eta Planifikatzea moduluko 64 bideotutorial daude. / Bideoen lizentzia: Aitortu + EzKomertzial + PartekatuBerdin (partekatzekotan, baldintzak mantendu) / Oharrak: 1-Falta diren bideoak 2024. urtean zehar egingo dira eta egin ahala igoko dira. 2-Argitaratutako bideoak EIMA onespenaren zain daude.
+
+Fitxategiak deskargatzeko erregistroa beharrezkoa da. Sartu Erabilera kopurua: 41
+
+1. bideoa: ACLak. ACL Estandarra 2. bideoa: ACLak. ACL Hedatua 3. bideoa: ACLak. ACL Erreflexiboa
+
+4. bideoa: NATaren konfigurazioa. NAT Estatikoa 5. bideoa: NATaren konfigurazioa. NAT Dinamikoa 6. bideoa: NATaren konfigurazioa.PATa
+
+8. bideoa: IP helbideratzea. IPv4 helbideratzea 9. bideoa: IP helbideratzea. Azpisarerik gabeko IP helbideratzearen adibideak 10. bideoa: IP helbideratzea. Azpisaredun IP helbideratzea
+
+03 - Markaketa-Lengoaiak- XPath eta XQuery_eus
+
+05 -Markaketa_lenguaia_boostrap_gridsystem_eus
+
+06 -Markaketa_lenguaia_boostrap_components_eus
+
+Copia de 05 -Markaketa_lenguaia_boostrap_gridsystem_eus
+
+07 - Sareko zerbitzuak - Windowsen DNS Slave zerbitzari bat konfiguratzea_eus
+
+08 - Sareko zerbitzuak - DNS Master zerbitzari bat konfiguratzea Windowsen
+
+09 - Sareko zerbitzuak - DNS cache zerbitzari bat instalatu eta konfiguratzea Windowsen
+
+01-sistemaEragileak_Birtualizaziora_sarrera_Proxmox_eus
+
+Jatorrizko bideoen egilea: Urko Dorronsoro
+
+11 bideo: ACLak, NATaren konfigurazioa, DHCParen konfigurazioa eta IP helbideratzea, / ETXANIZ ARAMENDI, IONE (Itzulpenaren egokitzapena, euskarazko bertsioaren lokuzioa, bideo-edizioa, muntaia eta argitalpena )/ IRALE-EIBAR: ERDOZIA LETURIA, OLATZ; ARENTZA ALVAREZ, SABIN (itzulpenaren egokitzapena eta lokuzioaren zuzenketa
+
+Esker bereziak: ZUBIRI-MANTEOKO Informatika Mintegiko irakasleei
+
+Dokumentu honekin erlazionatuta dauden...
+
+Sare-informatika sistemen administrazioa (goi mailako zikloa) loe

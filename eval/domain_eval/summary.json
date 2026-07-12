@@ -1,0 +1,322 @@
+{
+  "model_name": "Morpheus v2 (best.pt)",
+  "n_params": 91065792,
+  "vocab_size": 4000,
+  "load_time_s": 4.9,
+  "timestamp": "2026-07-12T16:54:53.408655",
+  "bpc": {
+    "bpc": 1.042057,
+    "ppl_per_token": 10.0209,
+    "total_nll_bits": 447223.60599900765,
+    "total_tokens": 134506,
+    "total_chars": 429174,
+    "tokens_per_char": 0.3134,
+    "files": [
+      {
+        "file": "education_0.txt",
+        "chars": 1521,
+        "tokens": 436,
+        "nll_bits": 1558.660812532607,
+        "bpc": 1.024761,
+        "tokens_per_char": 0.2867
+      },
+      {
+        "file": "education_1.txt",
+        "chars": 635,
+        "tokens": 236,
+        "nll_bits": 725.9609041470119,
+        "bpc": 1.143246,
+        "tokens_per_char": 0.3717
+      },
+      {
+        "file": "education_2.txt",
+        "chars": 1208,
+        "tokens": 431,
+        "nll_bits": 1188.2111731941861,
+        "bpc": 0.983619,
+        "tokens_per_char": 0.3568
+      },
+      {
+        "file": "education_3.txt",
+        "chars": 17727,
+        "tokens": 5485,
+        "nll_bits": 5586.402984458992,
+        "bpc": 0.315135,
+        "tokens_per_char": 0.3094
+      },
+      {
+        "file": "education_4.txt",
+        "chars": 2048,
+        "tokens": 806,
+        "nll_bits": 2708.578048009994,
+        "bpc": 1.322548,
+        "tokens_per_char": 0.3936
+      },
+      {
+        "file": "education_5.txt",
+        "chars": 1196,
+        "tokens": 381,
+        "nll_bits": 801.3038563330463,
+        "bpc": 0.669987,
+        "tokens_per_char": 0.3186
+      },
+      {
+        "file": "legal_1.txt",
+        "chars": 6984,
+        "tokens": 1821,
+        "nll_bits": 3184.1255203118462,
+        "bpc": 0.455917,
+        "tokens_per_char": 0.2607
+      },
+      {
+        "file": "legal_2.txt",
+        "chars": 7157,
+        "tokens": 1830,
+        "nll_bits": 3265.8695511906526,
+        "bpc": 0.456318,
+        "tokens_per_char": 0.2557
+      },
+      {
+        "file": "legal_3.txt",
+        "chars": 7199,
+        "tokens": 1834,
+        "nll_bits": 3241.1817140798157,
+        "bpc": 0.450227,
+        "tokens_per_char": 0.2548
+      },
+      {
+        "file": "literature_0.txt",
+        "chars": 6368,
+        "tokens": 2336,
+        "nll_bits": 8356.153340678642,
+        "bpc": 1.31221,
+        "tokens_per_char": 0.3668
+      },
+      {
+        "file": "literature_1.txt",
+        "chars": 5091,
+        "tokens": 2006,
+        "nll_bits": 6396.7551865157875,
+        "bpc": 1.256483,
+        "tokens_per_char": 0.394
+      },
+      {
+        "file": "literature_2.txt",
+        "chars": 5520,
+        "tokens": 2090,
+        "nll_bits": 6874.5268430240485,
+        "bpc": 1.245385,
+        "tokens_per_char": 0.3786
+      },
+      {
+        "file": "literature_3.txt",
+        "chars": 19747,
+        "tokens": 7190,
+        "nll_bits": 26548.509364485602,
+        "bpc": 1.344433,
+        "tokens_per_char": 0.3641
+      },
+      {
+        "file": "literature_4.txt",
+        "chars": 14216,
+        "tokens": 5177,
+        "nll_bits": 18678.139859460607,
+        "bpc": 1.313882,
+        "tokens_per_char": 0.3642
+      },
+      {
+        "file": "literature_5.txt",
+        "chars": 25720,
+        "tokens": 8670,
+        "nll_bits": 32256.557829746784,
+        "bpc": 1.254143,
+        "tokens_per_char": 0.3371
+      },
+      {
+        "file": "literature_6.txt",
+        "chars": 1105,
+        "tokens": 503,
+        "nll_bits": 1997.1691325383551,
+        "bpc": 1.807393,
+        "tokens_per_char": 0.4552
+      },
+      {
+        "file": "literature_7.txt",
+        "chars": 776,
+        "tokens": 369,
+        "nll_bits": 1514.2444025139885,
+        "bpc": 1.951346,
+        "tokens_per_char": 0.4755
+      },
+      {
+        "file": "news_0.txt",
+        "chars": 1616,
+        "tokens": 654,
+        "nll_bits": 1953.4104942455324,
+        "bpc": 1.208794,
+        "tokens_per_char": 0.4047
+      },
+      {
+        "file": "news_1.txt",
+        "chars": 5754,
+        "tokens": 1552,
+        "nll_bits": 5770.011794602802,
+        "bpc": 1.002783,
+        "tokens_per_char": 0.2697
+      },
+      {
+        "file": "news_10.txt",
+        "chars": 6586,
+        "tokens": 1948,
+        "nll_bits": 8313.363220620362,
+        "bpc": 1.262278,
+        "tokens_per_char": 0.2958
+      },
+      {
+        "file": "news_11.txt",
+        "chars": 4599,
+        "tokens": 1533,
+        "nll_bits": 5188.87161957862,
+        "bpc": 1.128261,
+        "tokens_per_char": 0.3333
+      },
+      {
+        "file": "news_12.txt",
+        "chars": 7408,
+        "tokens": 2103,
+        "nll_bits": 9519.798721154488,
+        "bpc": 1.28507,
+        "tokens_per_char": 0.2839
+      },
+      {
+        "file": "news_2.txt",
+        "chars": 2568,
+        "tokens": 965,
+        "nll_bits": 3341.853016299504,
+        "bpc": 1.301345,
+        "tokens_per_char": 0.3758
+      },
+      {
+        "file": "news_3.txt",
+        "chars": 6008,
+        "tokens": 1635,
+        "nll_bits": 6426.77071044022,
+        "bpc": 1.069702,
+        "tokens_per_char": 0.2721
+      },
+      {
+        "file": "news_4.txt",
+        "chars": 2932,
+        "tokens": 1050,
+        "nll_bits": 3813.9761461676103,
+        "bpc": 1.30081,
+        "tokens_per_char": 0.3581
+      },
+      {
+        "file": "news_5.txt",
+        "chars": 10058,
+        "tokens": 3112,
+        "nll_bits": 10682.2007413611,
+        "bpc": 1.06206,
+        "tokens_per_char": 0.3094
+      },
+      {
+        "file": "news_6.txt",
+        "chars": 10020,
+        "tokens": 3106,
+        "nll_bits": 11315.690057819756,
+        "bpc": 1.12931,
+        "tokens_per_char": 0.31
+      },
+      {
+        "file": "news_7.txt",
+        "chars": 2229,
+        "tokens": 878,
+        "nll_bits": 2952.891549663348,
+        "bpc": 1.324761,
+        "tokens_per_char": 0.3939
+      },
+      {
+        "file": "news_8.txt",
+        "chars": 2652,
+        "tokens": 1157,
+        "nll_bits": 3450.7225140997516,
+        "bpc": 1.301177,
+        "tokens_per_char": 0.4363
+      },
+      {
+        "file": "news_9.txt",
+        "chars": 1464,
+        "tokens": 491,
+        "nll_bits": 2195.282403608007,
+        "bpc": 1.49951,
+        "tokens_per_char": 0.3354
+      },
+      {
+        "file": "wiki_0.txt",
+        "chars": 83416,
+        "tokens": 25005,
+        "nll_bits": 90108.03538984891,
+        "bpc": 1.080225,
+        "tokens_per_char": 0.2998
+      },
+      {
+        "file": "wiki_1.txt",
+        "chars": 74964,
+        "tokens": 23350,
+        "nll_bits": 74873.56681083712,
+        "bpc": 0.998794,
+        "tokens_per_char": 0.3115
+      },
+      {
+        "file": "wiki_2.txt",
+        "chars": 13645,
+        "tokens": 3911,
+        "nll_bits": 12051.104295188492,
+        "bpc": 0.883188,
+        "tokens_per_char": 0.2866
+      },
+      {
+        "file": "wiki_3.txt",
+        "chars": 18847,
+        "tokens": 5538,
+        "nll_bits": 19683.80234008124,
+        "bpc": 1.0444,
+        "tokens_per_char": 0.2938
+      },
+      {
+        "file": "wiki_4.txt",
+        "chars": 22287,
+        "tokens": 7022,
+        "nll_bits": 23399.683027353163,
+        "bpc": 1.049925,
+        "tokens_per_char": 0.3151
+      },
+      {
+        "file": "wiki_5.txt",
+        "chars": 591,
+        "tokens": 213,
+        "nll_bits": 695.4944059396257,
+        "bpc": 1.176809,
+        "tokens_per_char": 0.3604
+      },
+      {
+        "file": "wiki_7.txt",
+        "chars": 11950,
+        "tokens": 3293,
+        "nll_bits": 11753.944867142967,
+        "bpc": 0.983594,
+        "tokens_per_char": 0.2756
+      },
+      {
+        "file": "wiki_9.txt",
+        "chars": 15362,
+        "tokens": 4389,
+        "nll_bits": 14850.781349733057,
+        "bpc": 0.966722,
+        "tokens_per_char": 0.2857
+      }
+    ],
+    "eval_time_s": 9.3
+  }
+}

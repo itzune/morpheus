@@ -1,0 +1,37 @@
+Dena has daiteke: arreta berreskuratzeko metodoa
+
+.c-mainarticle__section.mahaigaina{ display: block; } .c-mainarticle__section.bertikala{ display: none; } @media screen and (max-width: 40em){ .c-mainarticle__section.mahaigaina{ display: none; } .c-mainarticle__section.bertikala{ display: block; } }
+
+Esan zenezake ezetz, nahi izanez gero: uka zenezake munduaren eta zure begiradara ere jada horren ebidentea dena (izatez, ongi egiten duzu nagusikeriaren aurkako erresistentzia irmo horri heltzen), baina zer nahi duzu esatea: ez ote zabiltza azkenaldion disoziatu samar, ez ote duzu zailtasun gehiegitxo erraz gogoratu beharko zenituzkeen horiek ere gogoratzeko, ez ote duzu izango hain zatituta arreta ezen ezerekin sakonki konektatzea aldiro are nekezagoa zaizun. Ez ote da izango 2026ko abuztu hau dena berreskuratzen hasteko garaia.
+
+Zeren eta arreta baituzu, labur esanda, inguruneko estimulu esanguratsuak (bai, esanguratsuak , ongi irakurri duzu), hautatu, filtratu, kokatu eta haienganako jakin-min bat eragin dezakeen gaitasun hori. Zeren eta gaitasun horren portzentaje xume bat besterik ez da zure bizimina esnatzen hasteko behar duzun apurra.
+
+Pentsa zenezake akaso, honaino iritsita, iraganeko mundu adikor, patxadatsu eta bukoliko batera itzultzea proposatuko dizugula. Ez zaitzala nostalgiak irentsi: mundua aldatu egin da, eta haren eraldaketaren neurrian berritu zara zeu ere: ez dizugu iragan idealizatu bat itzuli nahi, orainaren promesa eta etorkizunaren aldaera posible bat baizik. Horixe da, bere pisu eta garrantzi zehatzean, jokoan duguna.
+
+Demagun, beraz, abuztu bete-betean, oporretan baina planik gabe (ezin izan dituzu egunak lagunekin koadratu), ordu eta erdiko scroll -aren ostean, desesperatuta eta eskuartean duzun testu hau paperean zein pantailan irakurtzen hasi zarelarik, zure gorputz izerditua sofatik desitsatsi, egongela gurutzatu, eta mugikorra etxean utzita ateratzen zarela kalera; demagun, apustua handitze aldera, ez duzula ezer berezirik egiteko, ez errekadurik ez hitzordurik, eta ibiltzeak berak ere ez duela osasunarekin loturiko helburu bat. Ondo dituzu belaunak eta bizkarra momentuz: gaztea zara oraindik, arazo handiagoez hitz egiten ari gara.
+
+Konturatuko zinenez, ezinegona sentitzen duzu, zuloa poltsikoan, ez dakizu eskuak nora eraman eta urduri zaude: kosta egiten zaizu begirada inguruko elementu zehatzetan mantentzea, eta logelan utzi duzun mugikorrean mundu oso bat gertatzen ari delako sentsazioa erraiak jaten ari zaizu. Hartu arnasa, ez zaitez zurekin gogorregia izan: garai eta belaunaldi guztiek izan dituzte haien adikzioak, eta zure ezinaren gordintasuna gogorarazi ohi dizutenek ere izan zituzten haienak, hemen aipatuko ez ditugunak belaunaldien arteko dialogo osasuntsu posible batekiko kontsiderazioz.
+
+Ez zaitez aitzitik autokonplazentzian edo biktimismoan erori: ez zaude gaixorik, ez daukazu tdh-rik, maiz arinkeriaz zeure buruari halakorik egotzi diozun arren; testuinguru soziologiko eta kultural baten nolabaiteko ondorio zara, baina ez iezaiozu uko egin ardura pertsonalari: garaiaren biktima izateak ez zaitu garaiaren partaide aktibo eta erantzule izatetik salbuesten. Ongiak irmotasuna exijitzen du, eta horixe da guk ere bularraldean duzun korapiloa askatzeko eskatuko dizuguna. Segi oinez, eutsi zure zentzumenek eskaintzen dizuten informazio olde hordigarriari.
+
+Horixe baita, hain zuzen ere, zure arretaren autonomia berreskuratze aldera eskaini diezazukegun ziurtasun bakarra: begiak ireki eta errepara diezaiekezula zeharkatzen ari zaren zuhaitz segidari edo begiradara azaltzen ari zaizkizun mendi-gailurrei, zeinen izenak ere jada ahaztu zaizkizun, edo atsegin hartu dezakezula irudimena pixka bat estutu hutsez; naturalki oroitzen eta sentitzen duzula, pizgarri dopaminiko merkerik gabe, eta harritu ere egiten zarela tarteka inguruak eskaintzen dizunarekin. Begira kalean zehar agertzen ari diren aurpegi horiei guztiei, irudikatu haien zimurretan ezkutatzen diren bizitzak. Erreparatu banketxe atariko eskalearen kartoiei, aztertu auzoko «Tourist go home» eta «Palestina aske» dioten pintaden kaligrafia, aditu telebistaren oharra, zerbitzariari ebakia eskatu bitartean: «Israelek 300 pertsona hil ditu Libanon»; saiatu ahoz gora kontatzen 300 arte, saiatu kalkulatzen zenbat tardatzen duzun: saiatu izen bat jartzen bakoitzari, euskal izenak ere izan daitezke, erosoagoa bazaizu.
+
+Ez da atsegina, noski, zer uste zenuen. Hauxe duzu une erabakigarria: eutsi iezaiozu munduaren deserosotasunari, egin ezazu zeure, digeritu ezazu gerora beste zerbaitetan eratortzeko aukera izan dezan, saiatu bularraldean sentitzen duzun anabasa guztiaren askatze-modu posible guztiak aztertzen.
+
+Zeren eta soilik horrela azaleratuko baitzaizu, akaso, haren aldaera eder eta tragikoenean, zure erabakimen askearen pisua. Eta kontuz!: kontzientzia-hartze horren euforiarekin neurriz jokatzea gomendatuko genizuke. Sinetsiguzu: ez duzu zertan maratoi bat egin, edo ateraldi bozkariotsu batean Cabo Verderako edo Thailandiarako bidaia bat prestatzen hasi; garbigailua jar dezakezu, hasteko, edo Obabakoak -i bigarren saiakera pendientea eman. Ez obsesionatu «zu zeu» edo antzeko zerbait izatearekin (kontuz fikzio autokontsolagarriekin), eta pixkanaka ezinegonaren aurrean itxaropen izpi bat ernaltzen hasten zaizun unean, bereziki, ez esan zeure buruarekin konektatzen ari zarela bezalakorik: sortu nahi dugun azkena entrenatzaile-guru espiritual potentzialki kriptofalangista bat da.
+
+Luzaketak egin, jarri interesa jendearen elkarrizketa itxuraz hutsaletan (eta ez hainbeste zure kontakizun pertsonal hipotetikoen distiran), enpatikoa izaten saiatu, jarri harremanetan inguruko etxebizitza sindikatuekin, entseatu zeure buruaren aldaera posible berriak. Begira nola irekitzen den abanikoa: ez al da moduren batean atsegina?
+
+Ikusten? Zuloa ez da jadanik hain sakona. Egin duzu jada okerrena.
+
+Segi ezazu oinez pixka bat gehiago, eta hala iritsiko zara kalerik kale plazara, non banku huts batean patxadaz eseriko zaren, eramateko eskaturiko ebakia eskuetan, eta orduantxe hasiko zara bizirik sentitzen, baloiarekin jostatzen ari diren umeei zein alokairuaren prezioaz kexatzen ari diren gurasoei begira, aditasun eskuzabal bat garatzen gainerakoen bizipenekiko. Hala hedatuko da zure bularraldeko korapiloa esparru zabalago batera, begirada beste zu batekin gurutzatzen duzun une horretantxe, hala eserita zauden parkean nola metroan edo supermerkatuan: berdinetik berdinera gurutzatzen diren bi begirada arretatsuren errekonozimenduan, non bat bi bihurtzen diren, giza zurrumurrua esaldi ulergarri, eta gu izateko posibilitatea irekitzen den.
+
+Begira zure atzean gelditzen ari den ke trinko horri: apatia deitzen diote. Eta begira nola hedatzen den mundua, bere kolore guztiekin, norabide guztietan. Dena has daitekeen norabideak dirudite.
+
+Euskal Ikasketetako gradua egin du EHU Euskal Herriko Unibertsitatean, eta Literatura Konparatua eta Literatur Ikasketak masterrak egin zituen unibertsitate horretan bertan.
+
+Donostia Kultura poesia lehiaketa irabazi zuen Postal bat desertuan poema liburuarekin (Balea Zuria, 2023). Hurrengo urtean, Ondarroako Udalak antolaturiko Augustin Zubikarai saria eskuratu zuen, eta, beka horren laguntzarekin, Sakelako bihotzak nobela argitaratu zuen iaz (Elkar).
+
+Iruzkinak egiteko BERRIAlaguna izan behar duzu
+
+Zure babes ekonomikoari esker egiten dugu kazetaritza konprometitua. BABESTU BERRIA

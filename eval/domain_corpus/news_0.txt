@@ -1,0 +1,17 @@
+Gizon bat hil da Errenterian, arma zuriz egindako eraso bat jasan ostean
+
+Ertzaintza hilketa izan den lekua ikertzen. JUAN HERRERO / EFE
+
+.c-mainarticle__section.mahaigaina{ display: block; } .c-mainarticle__section.bertikala{ display: none; } @media screen and (max-width: 40em){ .c-mainarticle__section.mahaigaina{ display: none; } .c-mainarticle__section.bertikala{ display: block; } }
+
+Eusko Jaurlaritzako Segurtasun Sailak jakinarazi duenez, gaur goizean gizon bat hil da Errenterian (Gipuzkoa), arma zuri batekin egin dizkioten zaurien ondorioz. Hildakoak 33 urte zituen. Ertzaintzak 23 urteko gizon bat atxilotu du, hilketarekin lotuta.
+
+Erasoa goizeko 09:00ak pasatu eta gutxira gertatu da, kalean, Errenteriako Sorginzulo kalean. Herritar batek ohartarazi ditu larrialdi zerbitzuak, pertsona batek labankada bat jaso duela eta lurrean zegoela esanez. Anbulantzia bat joan da pertsona hori artatzera, baina ezin izan dute ezer egin haren bizia salbatzeko.
+
+Ertzaintza ere joan da erasoa gertatu den lekura, eta lekukoei galdetu ostean, 23 urteko gizona atxilotu du. Atxilotuak Espainiako herritartasuna dauka. Gertatutakoa ikertzen ari dira, eta ingurua itxi egin dute.
+
+Iruzkinak egiteko BERRIAlaguna izan behar duzu
+
+.c-paywall:after{content:"";display: block;position:absolute;width:100%;height:450px;background:transparent;left:0;top:-450px;}@media(min-width:40em) and (max-width: 63.9375em){.c-paywall:after{height:580px;top:-580px;}}@media screen and (max-width: 39.9375em){.c-paywall:after{height:200px;top:-200px;}}
+
+Zure babes ekonomikoari esker egiten dugu kazetaritza konprometitua. BABESTU BERRIA

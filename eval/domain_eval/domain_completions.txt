@@ -1,0 +1,143 @@
+Domain-Stratified Greedy Completions (step 74K, greedy)
+======================================================================
+
+
+======================================================================
+DOMAIN: LEGAL (3 samples)
+======================================================================
+
+--- legal_1.txt ---
+PROMPT:     132. zk., 2025eko uztailaren 14a, astelehena Hemen ikusgai dauden
+PREDICTION: argazkiak:
+AVG LOGPROB: -1.613
+
+--- legal_2.txt ---
+PROMPT:     132. zk., 2025eko uztailaren 14a, astelehena Hemen ikusgai dauden
+PREDICTION: argazkiak:
+AVG LOGPROB: -1.613
+
+--- legal_3.txt ---
+PROMPT:     132. zk., 2025eko uztailaren 14a, astelehena Hemen ikusgai dauden
+PREDICTION: argazkiak:
+AVG LOGPROB: -1.613
+
+
+======================================================================
+DOMAIN: WIKI (8 samples)
+======================================================================
+
+--- wiki_0.txt ---
+PROMPT:     Euskal Herriko historia euskaldunen eta euskal herritarren iraganeko bilakaera
+PREDICTION: ren lekuko da.
+AVG LOGPROB: -1.313
+
+--- wiki_1.txt ---
+PROMPT:     Nafarroa Garaia —1982az geroztik, administratiboki Nafarroako Foru Erkidegoa edo
+PREDICTION: Euskal Autonomia Erkidegoa—, 1986tik 1991ra, Nafarroako Foru Erkidegoko Gobernuaren
+AVG LOGPROB: -0.988
+
+--- wiki_2.txt ---
+PROMPT:     Euskaltzaindia euskara zaindu, aztertu, zabaldu, batu eta hobetzea helburu
+PREDICTION: duen erakundea da.
+AVG LOGPROB: -0.826
+
+--- wiki_3.txt ---
+PROMPT:     Bertsolaritza abestuz, errimatuz eta neurtuz egiten den berbaldi bat
+PREDICTION: da.
+AVG LOGPROB: -0.582
+
+--- wiki_4.txt ---
+PROMPT:     Euskal literatura euskaraz egindakoa da, Euskal Herriko idazleek gaztelaniaz,
+PREDICTION: frantsesez eta ingelesez idatzitakoa.
+AVG LOGPROB: -0.691
+
+
+======================================================================
+DOMAIN: NEWS (13 samples)
+======================================================================
+
+--- news_0.txt ---
+PROMPT:     Gizon bat hil da Errenterian, arma zuriz egindako eraso
+PREDICTION: batean
+AVG LOGPROB: -0.781
+
+--- news_1.txt ---
+PROMPT:     Berotik babesteko azpiegiturak, inoiz baino beharrezkoago Europan eta Euskal
+PREDICTION: Herrian.
+AVG LOGPROB: -0.555
+
+--- news_10.txt ---
+PROMPT:     .c-mainarticle__section.mahaigaina{ display: block; } .c-mainarticle__section.bertikala{ display: none; } @media
+PREDICTION: ; } .c-mainarticle__section.mainarticle__
+AVG LOGPROB: -0.463
+
+--- news_11.txt ---
+PROMPT:     Abuztuaren 15era arte, bederatzi organo kontzertu egingo dituzte Busturialdeko
+PREDICTION: herrietan.
+AVG LOGPROB: -1.156
+
+--- news_12.txt ---
+PROMPT:     Dena has daiteke: arreta berreskuratzeko metodoa .c-mainarticle__section.mahaigaina{ display: block;
+PREDICTION: } } } } } } } } } } } } 
+AVG LOGPROB: -0.741
+
+
+======================================================================
+DOMAIN: EDUCATION (6 samples)
+======================================================================
+
+--- education_0.txt ---
+PROMPT:     Edukira salto egin | Salto egin nabigazioara “Harrera eta
+PREDICTION: kokapena” atalean.
+AVG LOGPROB: -1.076
+
+--- education_1.txt ---
+PROMPT:     Edukira salto egin | Salto egin nabigazioara Fitxategiak deskargatzeko
+PREDICTION: |
+AVG LOGPROB: -1.793
+
+--- education_2.txt ---
+PROMPT:     Edukira salto egin | Salto egin nabigazioara MARRAZKETA ETA
+PREDICTION: KOMUNIKAZIOA | KOMUNIKAZIOA | KOMUNIKAZIOA | 
+AVG LOGPROB: -0.548
+
+--- education_3.txt ---
+PROMPT:     Edukira salto egin | Salto egin nabigazioara Enplegurako Ibilbide
+PREDICTION: ak | Salto egin nabigazioa | Salto egin nabigazioa | Salto egin nabigazioa
+AVG LOGPROB: -0.451
+
+--- education_4.txt ---
+PROMPT:     Edukira salto egin | Salto egin nabigazioara Sareak Administratzea
+PREDICTION: |
+AVG LOGPROB: -1.178
+
+
+======================================================================
+DOMAIN: LITERATURE (8 samples)
+======================================================================
+
+--- literature_0.txt ---
+PROMPT:     Hegoaldeko herri zehaztugaberen bateko erremateak (c. XIX. mendea) Baigorri
+PREDICTION: ko erremateak (c. 1840) Baigorriko erremateak (c. 
+AVG LOGPROB: -0.634
+
+--- literature_1.txt ---
+PROMPT:     Hegoaldeko herri zehaztugaberen bateko erremateak (c. XIX. mendea) Baigorri
+PREDICTION: ko erremateak (c. 1840) Baigorriko erremateak (c. 
+AVG LOGPROB: -0.634
+
+--- literature_2.txt ---
+PROMPT:     Hegoaldeko herri zehaztugaberen bateko erremateak (c. XIX. mendea) Baigorri
+PREDICTION: ko erremateak (c. 1840) Baigorriko erremateak (c. 
+AVG LOGPROB: -0.634
+
+--- literature_3.txt ---
+PROMPT:     Hegoaldeko herri zehaztugaberen bateko erremateak (c. XIX. mendea) Baigorri
+PREDICTION: ko erremateak (c. 1840) Baigorriko erremateak (c. 
+AVG LOGPROB: -0.634
+
+--- literature_4.txt ---
+PROMPT:     Hegoaldeko herri zehaztugaberen bateko erremateak (c. XIX. mendea) Baigorri
+PREDICTION: ko erremateak (c. 1840) Baigorriko erremateak (c. 
+AVG LOGPROB: -0.634
+
