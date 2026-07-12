@@ -346,6 +346,18 @@ The export writes `add_bos_token: false` because the model was trained without B
 | Q5_K_M (GGUF) | 64 MB | 5.5 | High quality |
 | Q4_K_M (GGUF) | **55 MB** | 4.92 | **Deployment default** |
 
+To validate the Q4_K_M deployment choice, we compared Q4_K_M and Q5_K_M head-to-head on the same checkpoint (step 74K) using both multi-token CSR (30 sentences) and next-word keyboard simulation (15 sentences, Top-K metrics):
+
+| Metric | Q4_K_M | Q5_K_M | Δ |
+|--------|-------:|-------:|---|
+| Multi-token CSR (macro) | 27.31% | 27.05% | +0.26pp |
+| Multi-token CSR (micro) | 27.46% | 27.46% | 0.00pp |
+| Top-1 accuracy (next-word) | 43.0% | 48.9% | −5.9pp |
+| Top-3 accuracy (= acceptance) | 75.6% | 75.6% | 0.00pp |
+| Next-word CSR | 26.7% | 26.6% | +0.1pp |
+
+CSR and acceptance rate — the product metrics — are identical. Q5_K_M shows a modest Top-1 advantage (~6pp, consistent across all three languages), but this does not affect the deployed 3-chip UX: whether the correct word appears in the top 3 is the same for both quants. Given that Q4_K_M is 41% faster and 17% smaller (§5.3), the quality cost is zero on the metrics that matter.
+
 ### 5.3 Inference Performance
 
 We benchmarked the model across three hardware configurations using llama-server's built-in `/completion` timing endpoint, measuring decode speed (tok/s during generation), prefill speed (tok/s during prompt processing), and end-to-end autocomplete latency (wall-clock time for short-prompt, 3–5 token generation — the realistic autocomplete scenario).
