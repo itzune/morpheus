@@ -880,42 +880,50 @@ Greedy completions from the step 74K checkpoint across five text domains. Prompt
 **Wikipedia**
 
 Example 1:
+
 - Prompt: *Euskaltzaindia euskara zaindu, aztertu, zabaldu, batu eta hobetzea helburu*
 - Prediction: *duen erakundea da.*
 
 Example 2:
+
 - Prompt: *Bertsolaritza abestuz, errimatuz eta neurtuz egiten den berbaldi bat*
 - Prediction: *da.*
 
 Example 3:
+
 - Prompt: *Euskal literatura euskaraz egindakoa da, Euskal Herriko idazleek gaztelaniaz,*
 - Prediction: *frantsesez eta ingelesez idatzitakoa.*
 
 **News**
 
 Example 1:
+
 - Prompt: *Berotik babesteko azpiegiturak, inoiz baino beharrezkoago Europan eta Euskal*
 - Prediction: *Herrian.*
 
 Example 2:
+
 - Prompt: *Gizon bat hil da Errenterian, arma zuriz egindako eraso*
 - Prediction: *batean*
 
 **Legal**
 
 Example 1:
+
 - Prompt: *132. zk., 2025eko uztailaren 14a, astelehena Hemen ikusgai dauden*
 - Prediction: *argazkiak:*
 
 **Education**
 
 Example 1:
+
 - Prompt: *Edukira salto egin \| Salto egin nabigazioara MARRAZKETA ETA*
 - Prediction: *KOMUNIKAZIOA \| KOMUNIKAZIOA \|*
 
 **Literature**
 
 Example 1:
+
 - Prompt: *Hegoaldeko herri zehaztugaberen bateko erremateak (c. XIX. mendea) Baigorri*
 - Prediction: *ko erremateak (c. 1840) Baigorriko erremateak (c.*
 
