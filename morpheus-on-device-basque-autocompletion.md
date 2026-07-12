@@ -192,9 +192,9 @@ At 4K vocabulary, only 3.4% of parameters are in the embedding table (3.07M of ~
 
 **Validation leakage prevention:** 68,755 lines from the held-out validation set (`wiki_valid.txt`) are excluded from training pretokenization via `--exclude-lines-file`, ensuring zero overlap between training and evaluation data.
 
-**Tokenizer:** SentencePiece Unigram with **4,000-token vocabulary**, trained on 9 sources (all 11 except BOPV and BOTHA). See §4.5 for the vocabulary-size ablation that motivated this choice.
+**Tokenizer:** SentencePiece Unigram with **4,000-token vocabulary**, trained on 9 sources (all 11 except BOPV and BOTHA). See §4.4 for the vocabulary-size ablation that motivated this choice.
 
-**4K tokenizer quality** (verified 2026-07-04): fertility 2.52 tokens/word, 100% roundtrip fidelity, 99.95% character coverage, 107-character alphabet. All core agglutinative patterns split cleanly: `etxe+a` → `▁etxe a` (house + the), `etxe+tik` → `▁etxe tik` (house + from). Multi-layer morphology also resolves: `mendikoak` → `▁mendi ko ak` (mountain + of + the-plural), three distinct morphemes. Compare this to the 32K tokenizer which fused entire inflectional clusters into opaque tokens like `▁etxetik`, `▁etxera` — see §4.5 for the full comparison.
+**4K tokenizer quality** (verified 2026-07-04): fertility 2.52 tokens/word, 100% roundtrip fidelity, 99.95% character coverage, 107-character alphabet. All core agglutinative patterns split cleanly: `etxe+a` → `▁etxe a` (house + the), `etxe+tik` → `▁etxe tik` (house + from). Multi-layer morphology also resolves: `mendikoak` → `▁mendi ko ak` (mountain + of + the-plural), three distinct morphemes. Compare this to the 32K tokenizer which fused entire inflectional clusters into opaque tokens like `▁etxetik`, `▁etxera` — see §4.4 for the full comparison.
 
 ### 4.3 Training
 
@@ -223,51 +223,21 @@ Validation loss decreased monotonically throughout training (2.05 → 1.96), wit
 
 **Checkpoint integrity:** Checkpoints are saved atomically (write to `.tmp` then `os.replace()`) every 2,000 steps. A file-based stop monitor detects checkpoint completion via size-stability polling (3 consecutive unchanged polls + size ≥ 540MB) and sends SIGINT for clean W&B flush.
 
-### 4.4 Pre-Training Validation: The Three-Gate Protocol
-
-Perplexity is the standard language modeling metric, but it is insufficient as a sole quality gate for autocomplete: a model can achieve low PPL while producing degenerate suggestions if the training corpus contains systematic artifacts — for example, bare numbers in sentence position (decree IDs, budget amounts from official gazette texts) that bias the model toward numeric predictions instead of Basque words. This limitation is explored in detail in §6, where PPL improves while the multi-token autocomplete metrics lack the statistical power to confirm the improvement at current sample sizes.
-
-To ensure data and pipeline integrity before committing GPU resources, we designed and executed a three-gate pre-training validation protocol. **No training run may proceed to the L40 without passing all three gates.**
-
-**Gate 1: Corpus Content Audit (CPU, ~30 min).** An LLM-based quality audit (DeepSeek-V4-Pro, 40 random lines per source, 1–5 Basque quality scale) that identified the low-quality sub-corpora subsequently omitted from training (§4.2). The retained 11 sources scored an average of 4.6/5.
-
-**Gate 2: Proxy Overfit Test (GPU, ~20s).** A canary test: a 0.7M-parameter Mamba-2 model (128× smaller than target) attempts to memorize 5 hand-crafted Basque sentences not in the training corpus. If it can memorize novel Basque from the tokenized .npy format in 300 steps, the pipeline (tokenizer, serialization, architecture, training loop) is proven sound. Any downstream failure must then come from data quality or training scale, not infrastructure.
-
-| Metric | Value |
-|---|---|
-| Initial loss (step 0) | 8.30 (random initialization) |
-| Final loss (step 300) | 0.049 (170× reduction) |
-| Canary token accuracy | 57.7% (≥50% threshold) |
-| Runtime | 18.5 seconds |
-| NaN events | 0 |
-
-**Gate 3: Autocomplete Smoke Test (GPU, ~5 min).** Evaluates whether the full 91M model produces useful autocomplete suggestions on real Basque text. **Passed:** at step 32K, the model achieves CSR=24.9% on 300 held-out sentences and MorphAcc=70%, confirming the model produces coherent Basque completions.
-
-| Gate | Runtime | What it validates | clean-v3 result |
-|---|---|---|---|
-| 1: LLM audit | ~30 min CPU | Source quality, fragments, boilerplate | 11/14 sub-corpora retained |
-| 2: Proxy overfit | ~20s GPU | Tokenizer integrity, data format | ✅ 57.7% canary accuracy |
-| 3: Autocomplete smoke | ~5 min GPU | Autocomplete quality on real text | ✅ CSR=24.9%, MorphAcc=70% |
-
-Each gate targets a distinct failure class that PPL alone cannot detect: data contamination and source quality (Gate 1), pipeline and serialization integrity (Gate 2), and inference-time autocomplete behavior (Gate 3). Together they ensure that low PPL reflects genuine language modeling quality rather than artifacts of data or infrastructure.
-
----
-
-### 4.5 Tokenizer Strategy: Deep Research and Implications
+### 4.4 Tokenizer Strategy: Deep Research and Implications
 
 The choice of tokenizer is the single most consequential design decision for agglutinative language modeling. Our tokenizer research spanned seven recent papers (2024–2026) covering 70+ languages and multiple agglutinative language families.
 
-#### 4.5.1 Six Papers That Reshaped Our Understanding
+#### 4.4.1 Six Papers That Reshaped Our Understanding
 
 Our tokenizer research spanned six recent papers (2024–2026) covering 70+ languages and multiple agglutinative language families. Three findings converge:
 
-1. **Fertility is misleading for agglutinative tokenizers.** QuechuaTok (Contreras, 2026) — the most directly relevant work — evaluated BPE, Unigram, WordPiece, and morphology-aware PRPE on Southern Quechua (a suffixing agglutinative language structurally analogous to Basque). BPE achieves the lowest fertility (1.636) by memorizing entire polymorphemic words as single tokens, yet achieves only **6.67% MorphAcc**. Unigram at 4K achieves **66.67% MorphAcc**, dropping to 26.67% at 8K. We replicate this finding for Basque (§4.5.4) and extend it: **fertility is not just insufficient — it is a *confound* that rewards the very behavior that destroys morphological generalization.**
+1. **Fertility is misleading for agglutinative tokenizers.** QuechuaTok (Contreras, 2026) — the most directly relevant work — evaluated BPE, Unigram, WordPiece, and morphology-aware PRPE on Southern Quechua (a suffixing agglutinative language structurally analogous to Basque). BPE achieves the lowest fertility (1.636) by memorizing entire polymorphemic words as single tokens, yet achieves only **6.67% MorphAcc**. Unigram at 4K achieves **66.67% MorphAcc**, dropping to 26.67% at 8K. We replicate this finding for Basque (§4.4.4) and extend it: **fertility is not just insufficient — it is a *confound* that rewards the very behavior that destroys morphological generalization.**
 2. **Unigram > BPE for agglutinative languages.** Xu & Kim (2026) found Unigram consistently outperforms BPE on POS tagging across six Uralic languages. Stephen & Libovický (2026) confirmed Unigram > BPE > WordPiece for morphological alignment, with smaller vocabularies yielding better alignment.
 3. **Morphological pre-segmentation improves downstream performance.** García et al. (2025) showed that training BPE on morphologically pre-segmented text improved masked LM performance for Spanish. Hu (2025) found word-level tokenization outperformed BPE for morphologically rich languages under low-resource conditions.
 
 A notable counterpoint: Arnett et al. (2025) found that morphological alignment explains only a small fraction of variance (R² = 0.005–0.024) in downstream performance across 70 languages — for Basque specifically, MorphScore precision was 0.11–0.12, among the lowest of all languages evaluated. This suggests that while morphological alignment is necessary, it is not sufficient for downstream quality at scale.
 
-#### 4.5.2 What Basque LLMs Chose
+#### 4.4.2 What Basque LLMs Chose
 
 **Latxa (HiTZ, 2024):** The dominant Basque LLM family (7B–70B) uses Llama 2's BPE tokenizer (32K vocabulary) without modification. The Latxa paper does not discuss tokenizer choices.
 
@@ -275,7 +245,7 @@ A notable counterpoint: Arnett et al. (2025) found that morphological alignment 
 
 **The open question:** Neither Latxa nor Kimu has published an ablation study on tokenizer impact for Basque. At 7B-70B parameters, models overcome tokenizer deficiencies through scale — but our 91M model cannot afford a suboptimal tokenizer.
 
-#### 4.5.3 Retrospective on Our Decision
+#### 4.4.3 Retrospective on Our Decision
 
 Our v1 tokenizer decision chose SentencePiece Unigram at 32K based on fertility 1.71. The 2026 research reveals:
 
@@ -283,11 +253,11 @@ Our v1 tokenizer decision chose SentencePiece Unigram at 32K based on fertility 
 2. **32K vocabulary places us in the surface-form memorization regime.** At 32K, the tokenizer memorizes frequent wordforms as atomic units, fragmenting morphemes arbitrarily.
 3. **No morphological pre-segmentation was the critical omission.** The literature converges: high morpheme-boundary accuracy requires injecting morphology into tokenizer training.
 
-#### 4.5.3.1 The Morfessor Attempt and Pivot
+#### 4.4.3.1 The Morfessor Attempt and Pivot
 
 An initial Morfessor 2.0 pre-segmentation attempt failed due to poor segmentation quality on mixed-language text (the MDL objective cannot distinguish Basque morphology from arbitrary character sequences in foreign words). We pivoted to testing vocabulary size as the primary variable — a simpler experiment with a stronger literature basis. Details in Appendix A.
 
-#### 4.5.4 The Vocabulary Ablation Experiment
+#### 4.4.4 The Vocabulary Ablation Experiment
 
 We formulated a testable hypothesis:
 
@@ -324,9 +294,9 @@ The hypothesis was confirmed with striking precision:
 3. **Fertility is the mechanism, not the metric.** The 4K tokenizer has the worst fertility (2.58 vs 1.85 for 32K) because it is forced to decompose — and that forced decomposition is precisely what preserves morpheme boundaries.
 4. **4K is the sweet spot for Basque at 91M parameters.** At 4K, every root is a separate token from every case suffix, and verbal agreement morphemes are independently accessible.
 
-#### 4.5.4.1 Beyond Nominal Morphology: The Verbmorph Gap
+#### 4.4.4.1 Beyond Nominal Morphology: The Verbmorph Gap
 
-The MorphAcc consistency metric in §4.5.4 tests **nominal morphology** — root + case suffix. The decisive difference between 4K and 32K emerges even more starkly in **verbal morphology**, where Basque's polysynthetic verb structure encodes subject, object, indirect object, tense, and mood in a single word:
+The MorphAcc consistency metric in §4.4.4 tests **nominal morphology** — root + case suffix. The decisive difference between 4K and 32K emerges even more starkly in **verbal morphology**, where Basque's polysynthetic verb structure encodes subject, object, indirect object, tense, and mood in a single word:
 
 | Verb form | Gloss | 4K tokenization | 32K tokenization |
 |-----------|-------|----------------|-----------------|
@@ -338,11 +308,11 @@ The MorphAcc consistency metric in §4.5.4 tests **nominal morphology** — root
 
 This is the **fertility paradox**: lower fertility (fewer tokens per word) is achieved exactly by fusing morphemes into opaque units. The fertility metric favors the very behavior that destroys morphological generalization. **Low fertility is the *mechanism* of the surface-form memorization regime, not a desirable property.**
 
-#### 4.5.4.2 Where 4K Still Fails
+#### 4.4.4.2 Where 4K Still Fails
 
 The 4K tokenizer is not perfect: it struggles with (1) **multi-layer suffixes** where a case suffix itself decomposes into multiple morphemes (e.g., `etxearentzat` → `▁etxe a rentzat` instead of `etxe|arentzat`), and (2) **epenthetic vowels** where Basque inserts `e-` before consonant-initial suffixes (e.g., `lagunetik` → `▁lagun etik` instead of `lagun|tik`). These remaining failures motivate the Apertium pre-segmentation future work (§7.2). Full failure-mode table in Appendix B.
 
-#### 4.5.5 Downstream Perplexity Confirmation
+#### 4.4.5 Downstream Perplexity Confirmation
 
 The vocabulary ablation was further validated by downstream perplexity evidence from the QuechuaTok study: 4K Unigram achieves the lowest downstream perplexity among vocabulary sizes tested, confirming that the morphological alignment advantage translates to better language modeling, not just better MorphAcc.
 
@@ -549,7 +519,7 @@ MorphAcc improved from 32K to 54K (+6pp) but plateaus at 54K — step 74K shows 
 
 **Context matters:** Bare nouns (`etxe`, `mendi`) produce probability distributions dominated by punctuation and fragments — the model needs syntactic context to predict case suffixes. With full sentence context (`Bihar...nire etxe → ra`), the model correctly places significant probability mass on the correct suffix. This confirms the Mamba-2 architecture *can* learn morphology — it just needs sufficient context and training.
 
-**Comparison to old 32K-vocab model:** The old 32K-vocab model at step 30K achieved only 20% MorphAcc (1/5 tests). The 4K-vocab model's 70-76% MorphAcc represents a dramatic improvement, validating the vocabulary-size ablation (§4.5.4).
+**Comparison to old 32K-vocab model:** The old 32K-vocab model at step 30K achieved only 20% MorphAcc (1/5 tests). The 4K-vocab model's 70-76% MorphAcc represents a dramatic improvement, validating the vocabulary-size ablation (§4.4.4).
 
 ### 6.5 Case Paradigm Completion
 
@@ -854,15 +824,13 @@ Morpheus demonstrates that **State Space Models (Mamba-2) are a viable architect
 
 2. **Evaluation methodology: PPL is the only reliable metric; autocomplete metrics are fragile.** PPL improved monotonically (7.56 → 7.17 → 7.13, all 14 files agree) and is the only metric that unambiguously ranked checkpoints. CSR is fragile to implement (string prompts gave ~4% vs ~28% with token IDs due to BOS/tokenizer bugs) and saturates at small sample sizes (CIs overlap at n=300). Human A/B at n=30 is underpowered (p=0.82). The **CSR paradox** (§6.13) shows the model's native Basque achieves the *lowest* simulated CSR (19.2%) — below English/Spanish at <1% of training data — because agglutinative word length requires longer typed prefixes. The **CSR inversion** (§6.14) shows NW-CSR can actively *decrease* as PPL improves. **CSR penalizes the very language such systems are designed to serve and should not be used as a primary optimization target.** This is corroborated by GitHub's Copilot team, who found acceptance-rate optimization structurally misleading (Fu & Mogensen, 2026).
 
-3. **Three-gate pre-training validation protocol.** Corpus audit, proxy overfit test, and autocomplete smoke test that jointly validate data quality, pipeline integrity, and inference-time behavior before committing GPU resources.
+3. **Inference engineering for agglutinative keyboards.** Five strategies — retokenization fallback, sticky merge, top-k exceeding display-k, next-word candidate extraction, and completion logging with replay — that address failure modes unique to subword-tokenized keyboards. Inference engineering adds 3.9× CSR on top of the raw model, demonstrating it is a major contribution, not a marginal optimization. We also report a critical dependency: Mamba-2 models require `llama.cpp` ≥ commit `dc2187d48` to avoid silently incorrect greedy outputs.
 
-4. **Inference engineering for agglutinative keyboards.** Five strategies — retokenization fallback, sticky merge, top-k exceeding display-k, next-word candidate extraction, and completion logging with replay — that address failure modes unique to subword-tokenized keyboards. Inference engineering adds 3.9× CSR on top of the raw model, demonstrating it is a major contribution, not a marginal optimization. We also report a critical dependency: Mamba-2 models require `llama.cpp` ≥ commit `dc2187d48` to avoid silently incorrect greedy outputs.
+4. **Cross-model baseline comparison using BPC.** BPC is the correct tokenizer-independent metric. Morpheus (91M, BPC 0.970) matches GPT-2 eus-euscrawl (124M, BPC 0.981) — driven by 24× more training data, not architecture — and approaches Latxa-Qwen3.5-2B (1.88B, BPC 0.822) at 1/20th the parameters. Per-token PPL is misleading across vocabularies.
 
-5. **Cross-model baseline comparison using BPC.** BPC is the correct tokenizer-independent metric. Morpheus (91M, BPC 0.970) matches GPT-2 eus-euscrawl (124M, BPC 0.981) — driven by 24× more training data, not architecture — and approaches Latxa-Qwen3.5-2B (1.88B, BPC 0.822) at 1/20th the parameters. Per-token PPL is misleading across vocabularies.
+5. **On-device Smart Compose feasibility.** A Smart Compose–equivalent system can run entirely on-device (91M Mamba-2, 55 MB, ~10B tokens) for a morphologically complex language. Both Google and we chose recurrent architectures over Transformers to avoid KV-cache latency (§2.1). The data scale asymmetry (Google's 30–60× larger corpus) reflects the high-resource vs. low-resource divide (§6.8).
 
-6. **On-device Smart Compose feasibility.** A Smart Compose–equivalent system can run entirely on-device (91M Mamba-2, 55 MB, ~10B tokens) for a morphologically complex language. Both Google and we chose recurrent architectures over Transformers to avoid KV-cache latency (§2.1). The data scale asymmetry (Google's 30–60× larger corpus) reflects the high-resource vs. low-resource divide (§6.8).
-
-7. **Data scaling analysis for low-resource LM.** Our 110:1 tokens-to-parameters ratio is reasonable by modern small-model standards (below Mosaic 190:1, MiniCPM 192:1). However, the model converged at ~8.8B tokens — not because the budget was excessive, but because **data quality is the binding constraint**. ~20–30% corpus noise means effective high-quality data is ~7–8B tokens, matching the convergence point. For low-resource languages, aggressive quality filtering of a 2–5B token corpus would likely outperform maximizing raw token count.
+6. **Data scaling analysis for low-resource LM.** Our 110:1 tokens-to-parameters ratio is reasonable by modern small-model standards (below Mosaic 190:1, MiniCPM 192:1). However, the model converged at ~8.8B tokens — not because the budget was excessive, but because **data quality is the binding constraint**. ~20–30% corpus noise means effective high-quality data is ~7–8B tokens, matching the convergence point. For low-resource languages, aggressive quality filtering of a 2–5B token corpus would likely outperform maximizing raw token count.
 
 ### Limitations
 
