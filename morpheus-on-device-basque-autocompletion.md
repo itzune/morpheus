@@ -875,59 +875,84 @@ The effect does not replicate in GGUF: PyTorch CSR decreases monotonically (0.39
 
 ## Appendix E: Domain Completion Examples
 
-Greedy completions from the step 74K checkpoint across five text domains. Prompts are the first ~9 words of each document. The model receives no system prompt or instruction — it simply continues the text.
+Greedy completions from the step 74K checkpoint across five text domains. Prompts are prose sentences extracted from the body of each document (skipping navigation and boilerplate). The model receives no system prompt or instruction — it simply continues the text.
 
 **Wikipedia**
 
 Example 1:
 
-- Prompt: *Euskaltzaindia euskara zaindu, aztertu, zabaldu, batu eta hobetzea helburu*
-- Prediction: *duen erakundea da.*
+- Prompt: *Euskaltzaindia euskara zaindu, aztertu, zabaldu, batu eta hobetzea helburu duen*
+- Prediction: *erakundea da.*
 
 Example 2:
 
-- Prompt: *Bertsolaritza abestuz, errimatuz eta neurtuz egiten den berbaldi bat*
-- Prediction: *da.*
+- Prompt: *Euskal literatura euskaraz egindakoa da, Euskal Herriko idazleek gaztelaniaz, frantsesez*
+- Prediction: *eta ingelesez idatzitakoa.*
 
 Example 3:
 
-- Prompt: *Euskal literatura euskaraz egindakoa da, Euskal Herriko idazleek gaztelaniaz,*
-- Prediction: *frantsesez eta ingelesez idatzitakoa.*
+- Prompt: *Biodibertsitatea, bioaniztasuna edo dibertsitate biologikoa ekosistema batean, bioma batean edo*
+- Prediction: *gehiagotan biltzea da.*
+
+Example 4:
+
+- Prompt: *Nafarroa Garaia Iberiar penintsularen iparraldean dago. Mugakide hauek ditu: Lapurdi,*
+- Prediction: *Nafarroa Beherea, Zuberoa, Nafarroa Beherea eta Zuberoa.*
 
 **News**
 
 Example 1:
 
-- Prompt: *Berotik babesteko azpiegiturak, inoiz baino beharrezkoago Europan eta Euskal*
-- Prediction: *Herrian.*
+- Prompt: *Eusko Jaurlaritzako Segurtasun Sailak jakinarazi duenez, gaur goizean gizon bat*
+- Prediction: *atxilotu dute Gasteizen, bikotekide ohia jotzea egotzita.*
 
 Example 2:
 
-- Prompt: *Gizon bat hil da Errenterian, arma zuriz egindako eraso*
-- Prediction: *batean*
+- Prompt: *AEBek eta Iranek berriro egin diote eraso elkarri, eta Ormuzko*
+- Prediction: *itsasartea zeharkatu dute.*
+
+Example 3:
+
+- Prompt: *Volkswagen taldeak auto modelo gutxiago egingo ditu*
+- Prediction: *eta horrek eragina izango du automobilgintzaren sektorean.*
+
+Example 4:
+
+- Prompt: *Iranek Zipreko itsasontzi bat gerarazi du eta marinel bat desagertuta*
+- Prediction: *dago.*
 
 **Legal**
 
 Example 1:
 
-- Prompt: *132. zk., 2025eko uztailaren 14a, astelehena Hemen ikusgai dauden*
-- Prediction: *argazkiak:*
+- Prompt: *Hemen ikusgai dauden gainerako formatuen edukia PDF dokumentu elektroniko ofizial*
+- Prediction: *etan kontsultatu daiteke.*
 
 **Education**
 
 Example 1:
 
-- Prompt: *Edukira salto egin \| Salto egin nabigazioara MARRAZKETA ETA*
-- Prediction: *KOMUNIKAZIOA \| KOMUNIKAZIOA \|*
+- Prompt: *“Harrera eta Erreserbak” proiektuak turismo-ostatuen sektorean harrera-funtzioak eta erreserben kudeaketa*
+- Prediction: *integrala egiteko aukera ematen du.*
+
+Example 2:
+
+- Prompt: *Baserriberri. Egurrean eraikitzeko eta eraikinak zaharberritzeko zurezko lan-teknikei buruzko formakuntza*
+- Prediction: *jasoko dute ikasleek.*
+
+Example 3:
+
+- Prompt: *Sareak Administratzea eta Planifikatzea moduluko 64 bideotutorial daude. / Bideoen*
+- Prediction: *estekak:*
 
 **Literature**
 
 Example 1:
 
-- Prompt: *Hegoaldeko herri zehaztugaberen bateko erremateak (c. XIX. mendea) Baigorri*
-- Prediction: *ko erremateak (c. 1840) Baigorriko erremateak (c.*
+- Prompt: *Baigorri eta Baztan arteko korrespondentzia fazeria erlazioez (1804)*
+- Prediction: *eta 1805eko korrespondentziaz (1806) ari gara.*
 
-**Observations.** Wikipedia completions are frequently perfect — the model reproduces encyclopedic prose with high fidelity, which is both a strength (accurate continuations) and a corpus-induced artifact (§6.10). News completions are shorter but grammatically correct. Legal text produces structurally plausible but content-light completions (the model predicts the document structure rather than legal content). Education and literature prompts expose failure modes: education pages contain navigation boilerplate that triggers repetition, and literature uses archaic Basque orthography (17th–19th century) that is out-of-distribution for the modern Batua-trained model.
+**Observations.** Wikipedia completions are frequently perfect — the model reproduces encyclopedic prose with high fidelity, which is both a strength (accurate continuations) and a corpus-induced artifact (§6.10). News completions are often grammatically correct and contextually relevant, including multi-token continuations that add new information. Legal text produces structurally plausible completions. Education prompts yield mixed results: real prose sentences receive coherent continuations, but title/header lines produce empty or degenerate outputs (the model predicts EOS). Literature is the weakest domain — the archaic Basque orthography (17th–19th century) is out-of-distribution for the modern Batua-trained model, and completions are either empty or produce plausible-sounding but hallucinated content.
 
 ---
 
