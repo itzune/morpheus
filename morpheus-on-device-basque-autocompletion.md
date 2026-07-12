@@ -14,9 +14,9 @@
 
 ## Abstract
 
-We present **Morpheus**, an on-device predictive autocompletion system for Basque (Euskara), a low-resource agglutinative language with rich morphological inflection. The system supports two prediction paradigms: **multi-token continuation** (Smart Compose–style inline ghost text, accepted with Tab) and **next-word prediction** (smartphone keyboard–style discrete word chips, accepted with a tap). Traditional approaches—LSTMs and distilled Transformers—each present tradeoffs between inference latency, model quality, and engineering complexity for agglutinative languages. We evaluate three candidate architectures (xLSTM, distilled Transformer, Mamba-2 SSM) against a set of constraints: P90 latency ≤ 50ms on consumer CPU, zero network calls, and ≤ 300 MB on-disk. We select Mamba-2, a Selective State Space Model offering constant-memory O(1) per-step inference with no KV cache overhead.
+We present **Morpheus**, an on-device predictive autocompletion system for Basque (Euskara), a low-resource agglutinative language with rich morphological inflection. The research question is whether a Gmail Smart Compose–equivalent multi-token continuation system — which Google serves from Cloud TPUs using an ~80M-parameter LSTM — can run **entirely on a consumer laptop**, with zero network calls, for use in text editors and desktop applications. The system supports two prediction paradigms: **multi-token continuation** (Smart Compose–style inline ghost text, accepted with Tab) for the desktop use case, and **next-word prediction** (smartphone keyboard–style discrete word chips, accepted with a tap) for the mobile use case, where Gboard's 1.4M/1.4MB on-device model defines the target footprint. Traditional approaches—LSTMs and distilled Transformers—each present tradeoffs between inference latency, model quality, and engineering complexity for agglutinative languages. We evaluate three candidate architectures (xLSTM, distilled Transformer, Mamba-2 SSM) against a set of constraints: P90 latency ≤ 50ms on consumer CPU, zero network calls, and ≤ 300 MB on-disk. We select Mamba-2, a Selective State Space Model offering constant-memory O(1) per-step inference with no KV cache overhead — the same property (no KV cache) that led Google to choose LSTM over Transformer for Smart Compose, but achieved here with a modern architecture that runs on-device rather than requiring data-center TPUs.
 
-Our Morpheus-Small model (91M parameters, Q4_K_M quantization, 53 MB) is trained on 4.62B tokens of curated Basque text (11 sources, 128M lines) using a 4K-vocabulary SentencePiece Unigram tokenizer. **A controlled vocabulary-size ablation experiment** across 4K, 8K, 16K, and 32K reveals a categorical divide: at 4K, Basque verbal agreement morphemes (`zki`, `zu`, `te`) emerge as independent, reusable tokens (e.g., `dizkizut` → `di zki zu t`); at 32K, entire polysynthetic verbs are stored as opaque atomic units (e.g., `▁dizkizut` as a single token). The widely-used fertility metric favors the 32K tokenizer (1.50 vs 4K's 2.05), but this is achieved exactly by fusing morphemes — the mechanism that destroys morphological generalization. We argue that **fertility is a confound, not a quality metric, for agglutinative tokenizer evaluation**, and confirm the QuechuaTok finding that vocabulary size, not algorithm choice, is the primary driver.
+Our Morpheus-Small model (91M parameters, Q4_K_M quantization, 55 MB) is trained on 4.62B tokens of curated Basque text (11 sources, 128M lines) using a 4K-vocabulary SentencePiece Unigram tokenizer. **A controlled vocabulary-size ablation experiment** across 4K, 8K, 16K, and 32K reveals a categorical divide: at 4K, Basque verbal agreement morphemes (`zki`, `zu`, `te`) emerge as independent, reusable tokens (e.g., `dizkizut` → `di zki zu t`); at 32K, entire polysynthetic verbs are stored as opaque atomic units (e.g., `▁dizkizut` as a single token). The widely-used fertility metric favors the 32K tokenizer (1.50 vs 4K's 2.05), but this is achieved exactly by fusing morphemes — the mechanism that destroys morphological generalization. We argue that **fertility is a confound, not a quality metric, for agglutinative tokenizer evaluation**, and confirm the QuechuaTok finding that vocabulary size, not algorithm choice, is the primary driver.
 
 We introduce a multi-metric evaluation suite — Character Savings Rate (CSR) with bootstrap confidence intervals, Morpheme Boundary Accuracy (MorphAcc), Case Paradigm Completion, Perplexity (PPL), blinded human A/B evaluation, and completion logging with replay — designed specifically for agglutinative autocomplete and tagged to the prediction paradigm each measures. After full training (76K steps, ~10B tokens, 14.9 hours), the best checkpoint (step 74K) achieves **25.3% CSR** (95% CI [24.0%, 26.5%]) on 300 held-out sentences, **76% MorphAcc**, and **held-out PPL of 7.13**. A key methodological finding emerges: **PPL is the only metric that consistently produces coherent, reliable signal**, unambiguously confirming the later checkpoint is better (7.56 → 7.17 → 7.13, all 14 evaluation files agree). The autocomplete-specific metrics proved difficult to implement correctly and yielded weak data: CSR requires token-ID prompts to avoid BOS/tokenizer divergence bugs (string prompts gave ~4% vs ~28% with token IDs), and even correctly implemented produces overlapping confidence intervals that cannot distinguish competent models; the blinded human A/B (p=0.82) is underpowered at n=30. The next-word replay does favor 54K (Top-1 60→80%) but conflates model quality with inference engineering. **In practice, PPL is the metric we trust for checkpoint comparison; the autocomplete metrics serve as sanity checks rather than ranking tools at this scale.** We show that CSR is a **lower bound** for agglutinative autocomplete: exact-match gold cannot credit valid alternative continuations, causing the metric to saturate once models reach competence — confirmed by the fact that CSR barely moves from step 54K to the converged step 74K (25.23% → 25.26%) despite continued PPL improvement. Furthermore, a sentence-level typing simulation reveals a **CSR paradox**: the model's native Basque achieves the lowest simulated CSR (19.2%), below English (26.3%) and Spanish (30.9%) which represent <1% of training data — a structural artifact of agglutinative word length, not a model deficiency, confirming that CSR penalizes the very language such systems are designed to serve. Furthermore, we demonstrate that **unblinded qualitative assessment is subject to expectation bias** — the expert's unblinded impression that the later checkpoint was "much better" was not borne out by blinded evaluation. We further document five inference engineering strategies — retokenization fallback, sticky merge (candidate carry-forward), top-k exceeding display-k, next-word candidate extraction, and completion logging with replay — that address failure modes unique to deploying subword-tokenized models as interactive next-word keyboards in agglutinative languages. A cross-model baseline comparison using **Bits Per Character (BPC)** — a tokenizer-independent metric — shows that Morpheus (91M, BPC 0.970) outperforms GPT-2 eus-euscrawl (124M, BPC 0.981) despite having fewer parameters, and approaches the performance of Latxa-Qwen3.5-2B (1.88B, BPC 0.822) at 1/20th the parameter count and 1/22nd the deployment size (55 MB vs ~1.2 GB). These findings have implications for evaluation methodology in agglutinative language modeling.
 
@@ -24,13 +24,15 @@ We introduce a multi-metric evaluation suite — Character Savings Rate (CSR) wi
 
 ## 1. Introduction
 
-Predictive autocompletion—suggesting the next words as a user types—is a mature technology for high-resource languages. Google's Smart Compose (Chen et al., 2019) serves billions of suggestions daily, and Apple's QuickType has been integrated into iOS since 2014. However, these systems target languages with simple morphology (English, Spanish, Chinese) where next-word prediction is primarily a collocation problem.
+Predictive autocompletion—suggesting the next words as a user types—is a mature technology for high-resource languages. Google's Gmail Smart Compose (Chen et al., 2019) serves billions of suggestions daily from an ~80M-parameter LSTM running on Cloud TPUs in data centers. Gboard (Hard et al., 2018) provides on-device next-word prediction on smartphones with a 1.4M-parameter, 1.4 MB model. Apple's QuickType has been integrated into iOS since 2014. However, these systems target languages with simple morphology (English, Spanish, Chinese) where next-word prediction is primarily a collocation problem — and none of them run a Smart Compose–equivalent multi-token continuation system entirely on-device.
+
+**The research question.** Smart Compose demonstrates that multi-token ghost-text autocompletion is valuable and deployable at scale — but only from the cloud. Can an equivalent system run **entirely locally on a consumer laptop**, without any network calls, for use in text editors and desktop applications? This is the primary question Morpheus investigates. A secondary question — whether such a system can also power **mobile next-word prediction** (the Gboard paradigm) — requires a much smaller model than Smart Compose's 80M or our 91M; Gboard's 1.4M/1.4MB model defines the target footprint for mobile, and our current model serves as a starting point for that trajectory rather than a finished mobile solution.
 
 **Basque (Euskara) is fundamentally different.** As a language isolate with agglutinative morphology, a single Basque verb can encode subject, direct object, indirect object, tense, mood, and aspect through suffix chains (e.g., *ikusiko zenizkidakeen* — "you would have been able to see them to me"). A Basque noun takes 12+ case suffixes, plus number and definiteness marking (e.g., *etxeetaraino* — "up to the houses"). This means that predicting the next word is not just about collocations—it requires **morphological productivity**: the ability to generate grammatically correct suffix sequences that the model has never seen as a unit during training.
 
 Recent work on agglutinative language modeling confirms this challenge. QuechuaTok (Contreras, 2026) showed that standard BPE tokenizers achieve only 6.67% morpheme boundary accuracy on Quechua, while morphology-aware tokenization reaches 83.33%. Lane et al. (2022) demonstrated that morph-based word completion for Plains Cree requires explicit morphological segmentation to be usable.
 
-**Morpheus is designed for this challenge.** We aim to build an on-device predictive autocompletion system for Basque that supports two complementary prediction paradigms — **multi-token continuation** (Smart Compose–style inline ghost text, accepted with a single Tab) and **next-word prediction** (smartphone keyboard–style discrete word chips, accepted with a tap) — and that:
+**Morpheus is designed for this challenge.** We build an on-device predictive autocompletion system for Basque that supports two complementary prediction paradigms — **multi-token continuation** (Smart Compose–style inline ghost text for desktop/text-editor use, accepted with a single Tab) and **next-word prediction** (smartphone keyboard–style discrete word chips, accepted with a tap) — and that:
 
 1. Runs **entirely locally** on consumer hardware (no cloud dependency, privacy-first)
 2. Provides suggestions within **≤ 50ms P90 latency** on a standard x86-64 CPU
@@ -38,7 +40,9 @@ Recent work on agglutinative language modeling confirms this challenge. QuechuaT
 4. Handles **Basque morphology** — not just memorized collocations but productive case suffix prediction
 5. Supports **Euskañol** (Basque-Spanish code-switching), common in informal communication
 6. Fits within **≤ 300 MB** on disk (feasible for browser extensions and desktop applications)
-7. Supports **both prediction paradigms** — inline ghost text for desktop/email-style writing and discrete word chips for mobile keyboard-style input — with inference engineering tailored to each
+7. Supports **both prediction paradigms** — inline ghost text for desktop/text-editor writing and discrete word chips for mobile keyboard-style input — with inference engineering tailored to each
+
+The 91M model is sized for the **desktop multi-token continuation** use case: comparable to Smart Compose's 80M, but running on-device rather than on Cloud TPUs. The **mobile next-word prediction** use case requires a substantially smaller model to match Gboard's 1.4 MB footprint; we document the inference engineering strategies (§5.5) that would apply equally to such a distilled mobile variant.
 
 This paper documents our architecture selection process, training pipeline, evaluation methodology, and final results after complete training (76K steps, best checkpoint step 74K). A key finding is a **CSR paradox**: the model's native Basque achieves the lowest simulated keystroke savings, below non-target languages representing <1% of training data — a structural artifact of agglutinative word length that demonstrates CSR is a biased metric for the very languages such systems are built to serve.
 
@@ -48,7 +52,13 @@ This paper documents our architecture selection process, training pipeline, eval
 
 ### 2.1 Predictive Autocompletion
 
-Two prediction paradigms dominate real-world autocomplete systems. **Multi-token continuation**, exemplified by Google Smart Compose (Chen et al., 2019), generates a multi-word suggestion displayed inline as ghost text and accepted with a single keystroke (Tab). **Next-word prediction**, exemplified by Apple QuickType and Android keyboard suggestions, offers discrete word chips above the keyboard, each accepted with a tap. Both paradigms share the same underlying language model but differ in user experience, decoding strategy, and applicable evaluation metrics. Morpheus implements both: multi-token continuation for desktop/email-style writing (§5.4) and next-word prediction for mobile keyboard-style input (§5.5).
+Two prediction paradigms dominate real-world autocomplete systems, and they differ not only in user experience but also in deployment constraints, model scale, and the engineering challenges they impose:
+
+**Multi-token continuation**, exemplified by Google's Gmail Smart Compose (Chen et al., 2019), generates a multi-word suggestion displayed inline as ghost text and accepted with a single keystroke (Tab). Smart Compose is a **server-side** system: its production model is an LSTM-2-1024 at approximately **80M parameters**, served on Cloud TPUs to over 1.5 billion users with a P90 latency under 60ms (including network round-trip). The paper reports that despite Transformers achieving better perplexity, the LSTM was chosen for production because Transformer self-attention requires maintaining keys and values from all previous decoding steps, making per-step latency grow with context length — incompatible with the strict real-time constraint. This is precisely the KV-cache problem that motivates our use of Mamba-2 (§3.3): Google solved it with data-center TPUs; we solve it with a fundamentally linear-time architecture that runs **on-device**.
+
+**Next-word prediction**, exemplified by Gboard (Hard et al., 2018) and Apple QuickType, offers discrete word chips above the keyboard, each accepted with a tap. Gboard's on-device next-word prediction model is an LSTM variant with only **1.4M parameters**, quantized to **1.4 MB** — small enough to run on any smartphone with zero network calls. This extreme compression is necessary because mobile keyboards operate under far tighter resource constraints than desktop text editors: limited RAM, battery sensitivity, and the need to coexist with other running applications. Gboard uses a word-level vocabulary (50K English words) and federated learning to personalize on-device; it does not handle subword morphology.
+
+The scale difference between these two production systems — 80M server-side (Smart Compose) vs. 1.4M on-device (Gboard) — reflects the deployment context: desktop/email multi-token continuation can afford a larger model served from the cloud, while mobile next-word prediction demands an ultra-lightweight model running locally. Morpheus's research question sits at the intersection: **can a Smart Compose-equivalent multi-token continuation system run entirely on-device, on a consumer laptop, for use in text editors and desktop applications?** We position our 91M model (55 MB quantized) as answering this question for the desktop paradigm — comparable in scale to Smart Compose's 80M LSTM, but running locally rather than on Cloud TPUs. For the mobile next-word prediction paradigm, a much smaller model than 91M would be required to match Gboard's 1.4 MB footprint; our current model serves as a starting point for that trajectory, and the inference engineering strategies we document (§5.5) are equally applicable to a future distilled mobile variant.
 
 Trnka & McCoy (2008) defined the **Keystroke Savings Rate (KSR)** as the gold standard for word prediction evaluation: the percentage of keystrokes saved by accepting predictions. We adapt this as **Character Savings Rate (CSR)** — a simulation-based metric that does not require user studies, following the free-acceptance model where accepting a suggestion costs one keystroke (Tab). CSR measures the multi-token continuation paradigm; for next-word prediction, we introduce completion logging with replay (§5.5.6) as a complementary paradigm-specific evaluation.
 
@@ -134,6 +144,8 @@ We selected Mamba-2 for the following weighted scoring:
 | **Weighted Score** | | 3.80 | 3.70 | **4.00** |
 
 Mamba-2 combines the LSTM-like inference properties essential for on-device autocomplete (constant memory, no KV cache, predictable latency) with dramatically better language modeling capacity than recurrent architectures at the same scale. It is the "best of both worlds" between xLSTM's latency safety and the distilled Transformer's quality potential.
+
+This architectural choice is directly supported by Google's production experience with Smart Compose (Chen et al., 2019): despite Transformers achieving better perplexity, Google chose an LSTM for production because "the average decoding latency of Transformer is much worse than LSTM on both per-step and per-suggestion basis. This is due to keeping track of self-attention keys and values from all previous decoding steps." Google solved this latency problem with data-center Cloud TPUs; Mamba-2's O(1) per-step inference solves it at the architecture level, enabling the same Smart Compose paradigm to run **on-device** on a consumer laptop without a data center.
 
 The decision to not pursue Path B (distillation) was driven by practical concerns: the Gemma tokenizer's 256K vocabulary would require aggressive pruning for a 200M model (embedding table alone = 524 MB), and KV cache management on consumer CPU introduces latency variance that violates our 50ms P90 constraint.
 
@@ -427,7 +439,7 @@ The export script writes `tokenizer_config.json` with `add_bos_token: false` and
 | FP16 (GGUF) | **181 MB** | 16 | Reference quality |
 | Q8_0 (GGUF) | 97 MB | 8 | Near-lossless |
 | Q5_K_M (GGUF) | 64 MB | 5.5 | High quality |
-| Q4_K_M (GGUF) | **53 MB** | 4.92 | **Deployment default** |
+| Q4_K_M (GGUF) | **55 MB** | 4.92 | **Deployment default** |
 
 ### 5.3 Inference
 
@@ -451,19 +463,23 @@ The demo implements two distinct prediction paradigms, which we distinguish thro
 | | **Multi-token continuation** | **Next-word prediction** |
 |---|---|---|
 | **Metaphor** | Smart Compose (Gmail) | Predictive keyboard (smartphone) |
+| **Production reference** | Smart Compose: ~80M LSTM, **server-side** (Cloud TPU) | Gboard: 1.4M LSTM, 1.4 MB, **on-device** |
+| **Morpheus model** | 91M (55 MB Q4_K_M), **on-device** (consumer CPU) | 91M — too large for mobile; needs distillation to match Gboard's 1.4 MB |
 | **Output** | N tokens of gray inline text | 3 discrete word chips |
 | **Acceptance** | Tab accepts the entire continuation | Tap selects one word |
 | **Decoding** | Greedy, multi-token (up to 15) | Greedy, word-level with fallback |
 | **Failure mode** | Repetition loops, ghost-text jitter | Tokenization trap, prediction vanishing |
 | **Evaluated by** | CSR, Human A/B (§6) | Completion logging + replay (§5.5.6) |
 
-These paradigms share the same underlying model and tokenizer but require different inference engineering. Multi-token continuation is the simpler case: the model greedily extends the context and the result is displayed inline. Next-word prediction is harder because it must produce *whole words* as discrete options, which exposes the tokenization trap (§5.5.1): the subword path the user's partial input lands on may not reach the correct word. The strategies in §5.5 address this second paradigm specifically.
+These paradigms share the same underlying model and tokenizer but require different inference engineering and target different deployment contexts. **Multi-token continuation** is the primary research question of this work: can a Smart Compose–equivalent system run entirely on-device, on a consumer laptop, for text editors? Our 91M model (comparable to Smart Compose's 80M) answers this affirmatively — but runs locally rather than on Cloud TPUs. **Next-word prediction** is the mobile keyboard paradigm, where Gboard's 1.4M/1.4MB model defines the deployment target. Our 91M model is too large for that context; the strategies documented in §5.5 are the inference engineering that would carry over to a future distilled mobile model.
+
+Multi-token continuation is the simpler inference case: the model greedily extends the context and the result is displayed inline. Next-word prediction is harder because it must produce *whole words* as discrete options, which exposes the tokenization trap (§5.5.1): the subword path the user's partial input lands on may not reach the correct word. The strategies in §5.5 address this second paradigm specifically.
 
 This distinction also maps to our evaluation: CSR (§6.3) and the human A/B evaluation (§6.6) measure multi-token continuation quality, while completion logging (§5.5.6) measures next-word prediction quality. Conflating the two would obscure why, for example, PPL improvements are not confirmed by CSR (a multi-token, exact-match metric with overlapping CIs) while the keyboard experience benefits from candidate carry-forward (a next-word strategy) and the next-word replay shows 54K ahead (Top-1 60→80%).
 
 ### 5.5 Inference Engineering for Agglutinative Keyboards
 
-This section addresses the **next-word prediction** paradigm (§5.4.1): deploying a small language model as a real-time predictive keyboard that offers whole-word suggestion chips. This is the harder of the two paradigms because it must produce discrete, complete words — which exposes the tokenization trap, a structural failure mode of subword tokenization that does not appear in multi-token ghost-text continuation or in batch evaluation. Each strategy below is motivated by a concrete failure observed during development.
+This section addresses the **next-word prediction** paradigm (§5.4.1): deploying a language model as a real-time predictive keyboard that offers whole-word suggestion chips. This is the mobile keyboard paradigm exemplified by Gboard (1.4M params, 1.4 MB on-device). Our current 91M model (55 MB quantized) is sized for the desktop multi-token continuation use case and is too large for a production mobile keyboard; however, the inference engineering strategies documented here — retokenization fallback, sticky merge, top-k alternatives, next-word extraction — are architecture-agnostic and would carry over directly to a future distilled mobile model. We develop and validate them using the 91M model because it is large enough to produce meaningful predictions on which to observe and fix the failure modes unique to agglutinative next-word prediction. This is the harder of the two paradigms because it must produce discrete, complete words — which exposes the tokenization trap, a structural failure mode of subword tokenization that does not appear in multi-token ghost-text continuation or in batch evaluation. Each strategy below is motivated by a concrete failure observed during development.
 
 #### 5.5.1 The Tokenization Trap
 
@@ -702,15 +718,21 @@ To provide a fair raw-model comparison without our inference engineering advanta
 
 4. **Inference engineering adds 3.9× CSR.** Morpheus's simplified CSR of 0.094 increases to 0.362 with the full inference pipeline (retokenization fallback, sticky merge, top-k alternatives — see §5.5). This demonstrates that the engineering strategies documented in this paper are not marginal optimizations but a major contribution, nearly quadrupling the raw model's autocomplete utility.
 
-#### Deployment Efficiency
+#### Deployment Efficiency and Production Context
 
-| Model | Quantized Size | Architecture | On-Device Feasibility |
-|-------|---------------|--------------|----------------------|
-| **Morpheus v2** | **55 MB** (Q4_K_M) | Mamba-2 (linear-time, no KV cache) | ✅ Any device |
-| GPT-2 eus-euscrawl | ~50 MB (Q4) | Transformer (quadratic attention) | ✅ Most devices |
-| Latxa-Qwen3.5-2B | ~1.2 GB (Q4) | Qwen3.5 (instruct, multimodal) | ⚠ High-end only |
+Placing Morpheus in the context of production autocomplete systems reveals where it sits in the design space:
 
-Morpheus achieves BPC within 0.148 bits/char of a 20× larger model while being deployable on any device — including browser extensions and low-end smartphones — at 55 MB. Latxa's 1.2 GB quantized footprint restricts it to high-end hardware, and its instruct-tuning produces noisy completions for the autocomplete use case.
+| System | Params | Size | Deployment | Architecture | Paradigm |
+|--------|--------|------|-----------|--------------|----------|
+| Gboard (on-device NWP) | 1.4M | 1.4 MB | On-device (mobile) | LSTM | Next-word |
+| Gmail Smart Compose | ~80M | Server-side | Cloud TPU (data center) | LSTM | Multi-token |
+| GPT-2 eus-euscrawl | 124M | ~50 MB (Q4) | On-device (desktop) | Transformer | Multi-token |
+| **Morpheus v2** | **91M** | **55 MB** (Q4_K_M) | **On-device (desktop/laptop)** | **Mamba-2** | **Both** |
+| Latxa-Qwen3.5-2B | 1,882M | ~1.2 GB (Q4) | High-end only | Qwen3.5 (instruct) | Multi-token |
+
+**Morpheus occupies a novel position**: comparable in parameter count to Smart Compose's ~80M LSTM, but running **on-device** rather than on Cloud TPUs — and targeting a morphologically complex language that neither Smart Compose nor Gboard handles. For the **desktop multi-token continuation** use case (text editors, email clients), the 55 MB footprint is well within consumer hardware constraints. For the **mobile next-word prediction** use case, Gboard's 1.4 MB model defines the target; our 91M (55 MB) model is too large for that context and would require distillation to ~5-10M parameters to be viable on mobile. The inference engineering strategies documented in §5.5 are designed to carry over to such a distilled model.
+
+Morpheus achieves BPC within 0.148 bits/char of a 20× larger model (Latxa) while being deployable on consumer laptops at 55 MB. Latxa's 1.2 GB quantized footprint restricts it to high-end hardware, and its instruct-tuning produces noisy completions for the autocomplete use case.
 
 ### 6.8 The Reconciliation: PPL Improves, Multi-Token Metrics Lack Power
 
@@ -755,7 +777,7 @@ The expert's earlier **unblinded** impression that 54K was "much better" was NOT
 | MorphAcc | 76% | Strong morphological competence; saturated at 54K (tokenizer-bound) |
 | Paradigm Hit@5 | 27.4% | Partial case system; noisy across checkpoints |
 | Human A/B | Tie (p=0.82) | Statistical tie at n=30 (underpowered to distinguish) |
-| Q4_K_M size | 53 MB | Well within 300 MB budget |
+| Q4_K_M size | 55 MB | Well within 300 MB budget |
 
 **Key insight:** The model provides meaningful keystroke savings and strong morphological competence. PPL improved monotonically throughout training (7.56 → 7.17 → 7.13) and is the only metric that unambiguously tracks model quality. The autocomplete metrics (CSR, MorphAcc, Paradigm, A/B) all saturated or are noisy — they serve as sanity checks but cannot reliably rank the checkpoints. Crucially, the 54K→74K improvement is visible only in PPL (7.17 → 7.13): CSR barely moves (25.23% → 25.26%), MorphAcc is flat (76% → 76%), and Paradigm is noisy (Hit@1 actually drops). This confirms that once a model reaches competence, only PPL has the resolution to measure further improvement. The model is fully converged; no metric shows room for further gains without architectural or data changes.
 
@@ -922,6 +944,8 @@ Word accuracy remains perfect (1.000) in both backends at all checkpoints — th
 
 2. **Pre-segment corpus with surface-preserving morpheme boundaries** and retrain a morphology-aware tokenizer. Based on QuechuaTok results, this should increase MorphAcc from ~67% toward ~80%+.
 
+3. **Distill a mobile-variant model** for the next-word prediction paradigm (§5.4.1). The current 91M model (55 MB) is sized for the desktop multi-token continuation use case (comparable to Smart Compose's ~80M). For mobile next-word prediction, Gboard's 1.4M/1.4MB model defines the deployment target. A distilled Morpheus-Mobile (~5-10M parameters, ~5-10 MB) using the 91M model as teacher would bring the inference engineering strategies (§5.5) — retokenization fallback, sticky merge, top-k alternatives — into a model small enough for smartphone keyboards. The Mamba-2 architecture's O(1) memory (no KV cache) is a key advantage for this target, as it eliminates the memory management complexity that Transformer-based mobile LMs (e.g., HuoziIME) must handle.
+
 ### 7.3 Medium-term
 
 1. **Train Morpheus-Base (207M)** on the 4K tokenizer and compare against Morpheus-Small. A larger model may produce autocomplete improvements that are statistically detectable at current sample sizes — the 91M model's gains between 32K and 54K were directionally positive but too small for the multi-token metrics to confirm.
@@ -954,12 +978,12 @@ The primary model checkpoint (step 74K, fully trained) and all quantized GGUF va
 
 ## 9. Conclusion
 
-Morpheus demonstrates that **State Space Models (Mamba-2) are a viable architecture for on-device predictive autocompletion in agglutinative languages**. The system supports two complementary prediction paradigms — multi-token ghost-text continuation (Smart Compose–style) and next-word chip prediction (smartphone keyboard–style) — from a single 91M-parameter model. After full training (76K steps, ~10B tokens, 14.9 hours), the best checkpoint (step 74K) achieves:
+Morpheus demonstrates that **State Space Models (Mamba-2) are a viable architecture for on-device predictive autocompletion in agglutinative languages**. The central research question — whether a Gmail Smart Compose–equivalent multi-token continuation system (Google's ~80M LSTM served on Cloud TPUs) can run **entirely on a consumer laptop** for text editors — is answered affirmatively: our 91M Mamba-2 model (55 MB quantized) provides multi-token ghost-text autocompletion on-device with zero network calls, comparable in parameter scale to Smart Compose but without the data-center dependency. The system also supports a second paradigm — next-word chip prediction for mobile keyboards (the Gboard paradigm, where Gboard's 1.4M/1.4MB model defines the deployment target) — though the current 91M model is too large for mobile and would require distillation to match Gboard's footprint. The inference engineering strategies documented in §5.5 are designed to carry over to such a distilled mobile variant. After full training (76K steps, ~10B tokens, 14.9 hours), the best checkpoint (step 74K) achieves:
 
 - **25.3% character savings rate** (95% CI [24.0%, 26.5%]) on 300 held-out sentences
 - **76% morpheme boundary accuracy** — a dramatic improvement over the old 32K-vocab model's 20%, validating the vocabulary-size ablation
 - **Held-out PPL of 7.13** — converged (flat from step 67K onward)
-- **53 MB on-disk size** (Q4_K_M) — deployable in browsers, desktop apps, and mobile devices
+- **55 MB on-disk size** (Q4_K_M) — deployable on consumer laptops for the desktop multi-token continuation use case (comparable to Smart Compose's ~80M, but on-device rather than server-side); **too large for mobile** next-word prediction, where Gboard's 1.4 MB model defines the target
 
 ### Primary Contributions
 
@@ -977,6 +1001,7 @@ Morpheus demonstrates that **State Space Models (Mamba-2) are a viable architect
 
 7. **Inference engineering for agglutinative keyboards.** We document five strategies — retokenization fallback, sticky merge (candidate carry-forward), top-k exceeding display-k, next-word candidate extraction, and completion logging with replay — that address failure modes unique to deploying subword-tokenized models as interactive predictive keyboards. These strategies are validated on Basque but generalize to any agglutinative language where subword tokenization creates path-dependent prediction traps. We also report a critical inference engine dependency: Mamba-2 models require `llama.cpp` ≥ commit `dc2187d48` to avoid silently incorrect greedy outputs from an SSM scan bug.
 8. **Cross-model baseline comparison using BPC.** We introduce Bits Per Character (BPC) as the correct tokenizer-independent metric for comparing language models with different vocabulary sizes. Morpheus (91M, BPC 0.970) outperforms GPT-2 eus-euscrawl (124M, BPC 0.981) despite fewer parameters — driven by 24× more training data — and approaches Latxa-Qwen3.5-2B (1.88B, BPC 0.822) at 1/20th the parameter count and 1/22nd the deployment size. Per-token PPL is misleading across vocabularies (GPT-2's 29.21 vs Morpheus's 9.83 suggests a massive gap that BPC reveals to be negligible). We also show that inference engineering adds 3.9× CSR on top of the raw model, demonstrating that the engineering strategies are a major contribution, not a marginal optimization.
+9. **On-device Smart Compose feasibility for agglutinative languages.** We demonstrate that a Smart Compose–equivalent multi-token continuation system — which Google serves from Cloud TPUs using an ~80M LSTM — can run entirely on-device on a consumer laptop (91M Mamba-2, 55 MB, zero network calls) for a morphologically complex language. The key architectural insight is shared with Google's production decision: both chose recurrent architectures (LSTM, Mamba-2) over Transformers to avoid KV-cache latency growth — but where Google solved the latency problem with data-center TPUs, Mamba-2's O(1) per-step inference solves it at the architecture level, enabling on-device deployment. We also position the two deployment regimes clearly: the 91M model is sized for desktop/text-editor use (comparable to Smart Compose), while mobile next-word prediction (Gboard: 1.4M/1.4MB) requires a distilled variant that has not yet been trained.
 
 ### Limitations
 
@@ -987,10 +1012,11 @@ Morpheus demonstrates that **State Space Models (Mamba-2) are a viable architect
 - No morphological pre-segmentation (Apertium) has been applied yet; MorphAcc could improve from 76% toward 83%+
 - No user study; all evaluation is simulation-based or expert-judged
 - The real-corpus PPL is contaminated (articles appear in training); absolute numbers are optimistic
+- **The 91M model is too large for mobile deployment.** The desktop multi-token continuation use case (comparable to Smart Compose's ~80M) is well-served, but the mobile next-word prediction paradigm (Gboard: 1.4M/1.4MB) requires a distilled variant (~5-10M) that has not yet been trained
 
 ### The Path Forward
 
-The 4K tokenizer alone achieves 76% MorphAcc after full training — a 3.8× improvement over the 32K tokenizer's 20%, but still below the 83% that PRPE achieves on Quechua. The model has converged (PPL flat from step 67K), so further training will not close this gap. The next step is to integrate **Apertium Basque** and pre-segment the corpus with **surface-preserving morpheme boundaries**, pushing MorphAcc toward 83%. The evaluation methodology presented here — combining PPL, CSR with CIs, MorphAcc, paradigm completion, blinded human A/B, and completion logging with replay — provides a replicable framework for measuring progress in agglutinative autocomplete. A key practical lesson is that **PPL was the only metric that produced coherent, reliable signal for checkpoint ranking at this scale; the autocomplete metrics (CSR, human A/B) proved fragile to implement correctly and underpowered even when correct**. This has implications for how the community evaluates models for morphologically rich languages: autocomplete-specific metrics require much larger sample sizes and careful implementation to become statistically informative, and PPL should not be dismissed merely because it does not measure end-to-end utility directly.
+The 4K tokenizer alone achieves 76% MorphAcc after full training — a 3.8× improvement over the 32K tokenizer's 20%, but still below the 83% that PRPE achieves on Quechua. The model has converged (PPL flat from step 67K), so further training will not close this gap. The next step is to integrate **Apertium Basque** and pre-segment the corpus with **surface-preserving morpheme boundaries**, pushing MorphAcc toward 83%. For the mobile next-word prediction paradigm, a distilled Morpheus-Mobile (~5-10M) would bring the inference engineering strategies into a model matching Gboard's deployment footprint. The evaluation methodology presented here — combining PPL, CSR with CIs, MorphAcc, paradigm completion, blinded human A/B, and completion logging with replay — provides a replicable framework for measuring progress in agglutinative autocomplete. A key practical lesson is that **PPL was the only metric that produced coherent, reliable signal for checkpoint ranking at this scale; the autocomplete metrics (CSR, human A/B) proved fragile to implement correctly and underpowered even when correct**. This has implications for how the community evaluates models for morphologically rich languages: autocomplete-specific metrics require much larger sample sizes and careful implementation to become statistically informative, and PPL should not be dismissed merely because it does not measure end-to-end utility directly.
 
 ---
 
@@ -1004,17 +1030,18 @@ The 4K tokenizer alone achieves 76% MorphAcc after full training — a 3.8× imp
 6. Hu, J. F. (2025). *Tokenization Strategies for Low-Resource Agglutinative Languages in Word2Vec: Case Study on Turkish and Finnish*. ACDSA 2025.
 7. Etxaniz, J., Sainz, O., Perez, N., Aldabe, I., Rigau, G., Agirre, E., Ormazabal, A., Artetxe, M., & Soroa, A. (2024). *Latxa: An Open Language Model and Evaluation Suite for Basque*. arXiv:2403.20266.
 8. Chen, M. X., et al. (2019). *Gmail Smart Compose: Real-Time Assisted Writing*. arXiv:1906.00080.
-9. Gu, A., & Dao, T. (2023). *Mamba: Linear-Time Sequence Modeling with Selective State Spaces*. arXiv:2312.00752.
-10. Dao, T., & Gu, A. (2024). *Transformers are SSMs: Generalized Models and Efficient Algorithms through Structured State Space Duality*. arXiv:2405.21060.
-11. Beck, M., et al. (2024). *xLSTM: Extended Long Short-Term Memory*. NeurIPS 2024.
-12. Lane, W., Harrigan, A., & Arppe, A. (2022). *Interactive Word Completion for Plains Cree*. ACL 2022.
-13. Trnka, K., & McCoy, K. (2008). *Evaluating Word Prediction: Framing Keystroke Savings*. ACL 2008.
-14. Liquid AI (2026). *LFM-2.5-230M: On-Device State Space Models*. liquid.ai.
-15. Orai NLP (2026). *Kimu: Basque-Adapted Language Models*. orai.eus.
-16. ChaI-TeA (2024). *ChaI-TeA: A Benchmark for Chinese Input Method*. arXiv:2412.18377.
-17. Kosyak, A., & Tyers, F. (2022). *Predictive text for agglutinative languages*.
-18. WSTypist (2026). *Simulation-based mobile typing evaluation*. arXiv:2602.06489.
-19. Rust, P., et al. (2021). *How Good is Your Tokenizer? On the Monolingual Performance of Multilingual Language Models*. ACL 2021.
+9. Hard, A., et al. (2018). *Federated Learning for Mobile Keyboard Prediction*. arXiv:1811.03604.
+10. Gu, A., & Dao, T. (2023). *Mamba: Linear-Time Sequence Modeling with Selective State Spaces*. arXiv:2312.00752.
+11. Dao, T., & Gu, A. (2024). *Transformers are SSMs: Generalized Models and Efficient Algorithms through Structured State Space Duality*. arXiv:2405.21060.
+12. Beck, M., et al. (2024). *xLSTM: Extended Long Short-Term Memory*. NeurIPS 2024.
+13. Lane, W., Harrigan, A., & Arppe, A. (2022). *Interactive Word Completion for Plains Cree*. ACL 2022.
+14. Trnka, K., & McCoy, K. (2008). *Evaluating Word Prediction: Framing Keystroke Savings*. ACL 2008.
+15. Liquid AI (2026). *LFM-2.5-230M: On-Device State Space Models*. liquid.ai.
+16. Orai NLP (2026). *Kimu: Basque-Adapted Language Models*. orai.eus.
+17. ChaI-TeA (2024). *ChaI-TeA: A Benchmark for Chinese Input Method*. arXiv:2412.18377.
+18. Kosyak, A., & Tyers, F. (2022). *Predictive text for agglutinative languages*.
+19. WSTypist (2026). *Simulation-based mobile typing evaluation*. arXiv:2602.06489.
+20. Rust, P., et al. (2021). *How Good is Your Tokenizer? On the Monolingual Performance of Multilingual Language Models*. ACL 2021.
 
 ---
 
