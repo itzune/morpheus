@@ -184,13 +184,11 @@ The decision to not pursue Path B (distillation) was driven by practical concern
 
 At 4K vocabulary, only 3.4% of parameters are in the embedding table (3.07M of ~91M), compared to 27% at 32K. This parameter efficiency is a key advantage of the small-vocabulary approach for compact models.
 
-### 4.2 Data Pipeline
+### 4.2 Data Curation
 
-**Corpus:** 4.62 billion subword tokens (pre-tokenized as uint16 .npy, 9.24 GB) from 11 curated Basque text sources. The corpus is derived from the publicly available **Latxa Corpus v2** (`HiTZ/latxa-corpus-v2` on HuggingFace; Etxaniz et al., 2024), with HPLT v1 excluded (83.8% duplicates) and additional deep-cleaning (Phase 0.5 + Phase 3: normalization, deduplication, quality filtering). The 11 retained sources are EusCrawl v2 (web crawl, cleanest), HPLT v2 (web crawl, replaced v1), CulturaX, FineWeb2, FinePDFs, Colossal OSCAR, ZelaiHandi (news/blog), ParlEus (parliament transcriptions), Wikipedia Basque (used for validation split), and two official gazette sources (BOPV, BOTHA). The gazette sources are included for training but excluded from tokenizer training due to >60% duplicate rates that would bias the vocabulary toward gazette boilerplate. Training saw ~10B tokens total (~2.16 epochs over the 4.62B-token corpus).
+**Corpus:** 4.62 billion subword tokens (9.24 GB) from a curated subset of the publicly available **Latxa Corpus v2** (`HiTZ/latxa-corpus-v2`; Etxaniz et al., 2024). To maximize data quality, we omitted 3 of the 14 sub-corpora — `hplt-v1` (83.8% duplicates, replaced by `hplt-v2`), `BOG` (sentence-splitting destroyed legal text into fragments), and `Aldizkariak` (35% boilerplate) — retaining 11 sources with additional deep-cleaning (normalization, deduplication, quality filtering). An LLM-based audit rated the retained sources 4.6/5 on average. Training saw ~10B tokens total (~2.16 epochs over the 4.62B-token corpus).
 
 **Cleaning:** Four-phase data cleaning pipeline applied before tokenization: (1) document re-parsing (encoding normalization, corrupted document detection), (2) form regularity (punctuation boundaries, whitespace normalization), (3) content filtering (validation/test leakage removal, line length filters, outlier removal), (4) deduplication (exact + near-deduplication via MinHash LSH).
-
-**Corpus-quality audit (2026-07-03):** A full-source audit revealed quality disparities. Four sources were excluded: `hplt-v1` (83.8% duplicate rate, 4.9% Basque signal — replaced by `hplt-v2`), `BOG` (Phase 2 sentence splitting destroyed legal text into mid-sentence fragments), `Aldizkariak` (35% boilerplate), and `BERnaT BSM` (dialectal, non-standard orthography). The remaining 11 sources (128M lines, average quality 4.6/5 from LLM-based audit) proceed to training.
 
 **Validation leakage prevention:** 68,755 lines from the held-out validation set (`wiki_valid.txt`) are excluded from training pretokenization via `--exclude-lines-file`, ensuring zero overlap between training and evaluation data.
 
@@ -231,7 +229,7 @@ Perplexity is the standard language modeling metric, but it is insufficient as a
 
 To ensure data and pipeline integrity before committing GPU resources, we designed and executed a three-gate pre-training validation protocol. **No training run may proceed to the L40 without passing all three gates.**
 
-**Gate 1: Corpus Content Audit (CPU, ~30 min).** An LLM-based quality audit using DeepSeek-V4-Pro evaluates 40 random lines per source, classifying each by text type, flagging quality issues, and rating Basque quality on a 1–5 scale. The 2026-07-04 audit flagged BOG (2% clean) and aldizkariak (38% clean). Both were excluded. The remaining 11 sources scored an average quality of 4.6/5.
+**Gate 1: Corpus Content Audit (CPU, ~30 min).** An LLM-based quality audit (DeepSeek-V4-Pro, 40 random lines per source, 1–5 Basque quality scale) that identified the low-quality sub-corpora subsequently omitted from training (§4.2). The retained 11 sources scored an average of 4.6/5.
 
 **Gate 2: Proxy Overfit Test (GPU, ~20s).** A canary test: a 0.7M-parameter Mamba-2 model (128× smaller than target) attempts to memorize 5 hand-crafted Basque sentences not in the training corpus. If it can memorize novel Basque from the tokenized .npy format in 300 steps, the pipeline (tokenizer, serialization, architecture, training loop) is proven sound. Any downstream failure must then come from data quality or training scale, not infrastructure.
 
@@ -247,7 +245,7 @@ To ensure data and pipeline integrity before committing GPU resources, we design
 
 | Gate | Runtime | What it validates | clean-v3 result |
 |---|---|---|---|
-| 1: LLM audit | ~30 min CPU | Source quality, fragments, boilerplate | 11/13 sources pass |
+| 1: LLM audit | ~30 min CPU | Source quality, fragments, boilerplate | 11/14 sub-corpora retained |
 | 2: Proxy overfit | ~20s GPU | Tokenizer integrity, data format | ✅ 57.7% canary accuracy |
 | 3: Autocomplete smoke | ~5 min GPU | Autocomplete quality on real text | ✅ CSR=24.9%, MorphAcc=70% |
 
