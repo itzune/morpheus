@@ -60,7 +60,7 @@ Two prediction paradigms dominate real-world autocomplete systems. **Multi-token
 | Gmail Smart Compose | ~80M | Server-side | ~8B emails (~320B+ tokens est.) | Cloud TPU (data center) | LSTM | Multi-token |
 | GitHub Copilot | Multi-billion | Server-side | Proprietary code corpus | Cloud GPU (Azure) | Transformer (FIM) | Multi-token |
 | GPT-2 eus-euscrawl | 124M | ~50 MB (Q4) | ~423M tokens | On-device (desktop) | Transformer | Multi-token |
-| **Morpheus v2** | **91M** | **55 MB** (Q4_K_M) | **Latxa Corpus v2 (curated, ~10B tok seen†)** | **On-device (laptop)** | **Mamba-2** | **Both** |
+| **Morpheus v2** | **91M** | **55 MB** (Q4_K_M) | **Latxa Corpus v2 (curated, ~10B tok seen†)** | **On-device (laptop)** | **Mamba-2** | **Multi-token** |
 | Latxa-Qwen3.5-2B | 1,882M | ~1.2 GB (Q4) | Latxa Corpus v2 (public, ~4.2B tokens) | High-end only | Qwen3.5 (instruct) | Multi-token |
 
 †~10B tokens seen over ~2.16 epochs (4.62B unique tokens in the curated corpus); see §4.2.
