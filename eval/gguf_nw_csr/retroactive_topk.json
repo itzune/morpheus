@@ -1,0 +1,38 @@
+[
+  {
+    "checkpoint": "step_0032000",
+    "n_words": 149,
+    "nw_csr": 0.3623,
+    "top1_accuracy": 0.5369,
+    "top3_accuracy": 0.8523,
+    "top5_accuracy": 0.8591,
+    "acceptance_rate": 0.8523,
+    "avg_confidence": 0.3725,
+    "avg_prefix": 0,
+    "validation_ok": true
+  },
+  {
+    "checkpoint": "step_0054000",
+    "n_words": 149,
+    "nw_csr": 0.3898,
+    "top1_accuracy": 0.5436,
+    "top3_accuracy": 0.8389,
+    "top5_accuracy": 0.8523,
+    "acceptance_rate": 0.8389,
+    "avg_confidence": 0.4129,
+    "avg_prefix": 0,
+    "validation_ok": true
+  },
+  {
+    "checkpoint": "step_0074000",
+    "n_words": 149,
+    "nw_csr": 0.389,
+    "top1_accuracy": 0.5101,
+    "top3_accuracy": 0.8523,
+    "top5_accuracy": 0.8591,
+    "acceptance_rate": 0.8523,
+    "avg_confidence": 0.3809,
+    "avg_prefix": 0,
+    "validation_ok": true
+  }
+]
