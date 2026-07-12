@@ -140,8 +140,10 @@ def main():
         total_chars = sum(r["total_chars"] for r in nw_results)
         total_ks = sum(r["keystrokes"] for r in nw_results)
         total_words = sum(r["n_words"] for r in nw_results)
-        total_correct = sum(r["correct_words"] for r in nw_results)
         total_accepts = sum(r["taps"] for r in nw_results)
+        total_top1 = sum(r["top1_accuracy"] * r["n_words"] for r in nw_results)
+        total_top3 = sum(r["top3_accuracy"] * r["n_words"] for r in nw_results)
+        total_top5 = sum(r["top5_accuracy"] * r["n_words"] for r in nw_results)
         all_probs = [p for r in nw_results for w, m, p in r["completed_words"] if p > 0]
         prefix_lens = [e.get("prefix_len", 0) for r in nw_results
                        for e in r["events"] if e["type"] == "accept"]
@@ -162,8 +164,10 @@ def main():
             "nw_csr_macro": round(csr_point, 4),
             "nw_csr_ci_lower": round(csr_lo, 4),
             "nw_csr_ci_upper": round(csr_hi, 4),
-            "word_accuracy": round(total_correct / total_words, 4) if total_words > 0 else 0.0,
             "acceptance_rate": round(total_accepts / total_words, 4) if total_words > 0 else 0.0,
+            "top1_accuracy": round(total_top1 / total_words, 4) if total_words > 0 else 0.0,
+            "top3_accuracy": round(total_top3 / total_words, 4) if total_words > 0 else 0.0,
+            "top5_accuracy": round(total_top5 / total_words, 4) if total_words > 0 else 0.0,
             "avg_prefix_before_accept": round(sum(prefix_lens) / len(prefix_lens), 2) if prefix_lens else 0.0,
             "avg_confidence": round(sum(all_probs) / len(all_probs), 4) if all_probs else 0.0,
             "n_tests": len(nw_results),
@@ -176,7 +180,9 @@ def main():
 
         print(f"  Completed in {eval_time:.1f}s")
         print(f"  ┌─ Next-Word CSR:  {summary['nw_csr']:.3f} (macro {summary['nw_csr_macro']:.3f}, CI [{summary['nw_csr_ci_lower']:.3f}, {summary['nw_csr_ci_upper']:.3f}])")
-        print(f"  ├─ Word Accuracy:  {summary['word_accuracy']:.3f} ({total_correct}/{total_words})")
+        print(f"  ├─ Top-1 Acc:      {summary['top1_accuracy']:.3f}")
+        print(f"  ├─ Top-3 Acc:      {summary['top3_accuracy']:.3f}  (= acceptance)")
+        print(f"  ├─ Top-5 Acc:      {summary['top5_accuracy']:.3f}")
         print(f"  ├─ Acceptance:     {summary['acceptance_rate']:.3f} ({total_accepts}/{total_words})")
         print(f"  ├─ Avg Prefix:     {summary['avg_prefix_before_accept']:.1f} chars")
         print(f"  ├─ Avg Confidence: {summary['avg_confidence']:.3f}")
@@ -193,13 +199,13 @@ def main():
     print(f"\n{'='*70}")
     print(f"  COMPARISON: Next-Word CSR across checkpoints")
     print(f"{'='*70}")
-    print(f"\n  {'Checkpoint':<25s} {'Step':>6s} {'PPL':>6s} {'NW-CSR':>8s} {'WordAcc':>8s} {'Accept':>8s} {'Prefix':>7s} {'Conf':>6s}")
-    print(f"  {'-'*25} {'-'*6} {'-'*6} {'-'*8} {'-'*8} {'-'*8} {'-'*7} {'-'*6}")
+    print(f"\n  {'Checkpoint':<25s} {'Step':>6s} {'PPL':>6s} {'NW-CSR':>8s} {'Top1':>8s} {'Top3':>8s} {'Top5':>8s} {'Accept':>8s} {'Prefix':>7s} {'Conf':>6s}")
+    print(f"  {'-'*25} {'-'*6} {'-'*6} {'-'*8} {'-'*8} {'-'*8} {'-'*8} {'-'*8} {'-'*7} {'-'*6}")
     for r in all_results:
         s = r["summary"]
         ppl = f"{s['valid_ppl']:.2f}" if s['valid_ppl'] else "N/A"
         print(f"  {s['checkpoint']:<25s} {str(s['step']):>6s} {ppl:>6s} "
-              f"{s['nw_csr']:>8.3f} {s['word_accuracy']:>8.3f} {s['acceptance_rate']:>8.3f} "
+              f"{s['nw_csr']:>8.3f} {s['top1_accuracy']:>8.3f} {s['top3_accuracy']:>8.3f} {s['top5_accuracy']:>8.3f} {s['acceptance_rate']:>8.3f} "
               f"{s['avg_prefix_before_accept']:>7.1f} {s['avg_confidence']:>6.3f}")
 
     print(f"\n  CI ranges:")

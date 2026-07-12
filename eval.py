@@ -435,8 +435,10 @@ def main():
             nw_total_chars = sum(r["total_chars"] for r in nw_results)
             nw_total_ks = sum(r["keystrokes"] for r in nw_results)
             nw_total_words = sum(r["n_words"] for r in nw_results)
-            nw_total_correct = sum(r["correct_words"] for r in nw_results)
             nw_total_accepts = sum(r["taps"] for r in nw_results)
+            nw_total_top1 = sum(r["top1_accuracy"] * r["n_words"] for r in nw_results)
+            nw_total_top3 = sum(r["top3_accuracy"] * r["n_words"] for r in nw_results)
+            nw_total_top5 = sum(r["top5_accuracy"] * r["n_words"] for r in nw_results)
             nw_all_probs = [p for r in nw_results for w, m, p in r["completed_words"] if p > 0]
             nw_prefix_lens = [e.get("prefix_len", 0) for r in nw_results for e in r["events"] if e["type"] == "accept"]
             nw_macro_csrs = [r["csr"] for r in nw_results]
@@ -446,8 +448,10 @@ def main():
                 "nw_csr_macro": round(nw_point, 4),
                 "nw_csr_ci_lower": round(nw_lo, 4),
                 "nw_csr_ci_upper": round(nw_hi, 4),
-                "word_accuracy": round(nw_total_correct / nw_total_words, 4) if nw_total_words > 0 else 0.0,
                 "acceptance_rate": round(nw_total_accepts / nw_total_words, 4) if nw_total_words > 0 else 0.0,
+                "top1_accuracy": round(nw_total_top1 / nw_total_words, 4) if nw_total_words > 0 else 0.0,
+                "top3_accuracy": round(nw_total_top3 / nw_total_words, 4) if nw_total_words > 0 else 0.0,
+                "top5_accuracy": round(nw_total_top5 / nw_total_words, 4) if nw_total_words > 0 else 0.0,
                 "avg_prefix_before_accept": round(sum(nw_prefix_lens) / len(nw_prefix_lens), 2) if nw_prefix_lens else 0.0,
                 "avg_confidence": round(sum(nw_all_probs) / len(nw_all_probs), 4) if nw_all_probs else 0.0,
                 "n_tests": len(nw_results),
@@ -455,7 +459,7 @@ def main():
             }
             print(f"  Completed in {time.time() - t0:.1f}s")
             print(f"  NW-CSR: {nw_summary['nw_csr']:.3f} (macro {nw_summary['nw_csr_macro']:.3f}, CI [{nw_summary['nw_csr_ci_lower']:.3f}, {nw_summary['nw_csr_ci_upper']:.3f}])")
-            print(f"  Word accuracy: {nw_summary['word_accuracy']:.3f}  Acceptance: {nw_summary['acceptance_rate']:.3f}")
+            print(f"  Top-1: {nw_summary['top1_accuracy']:.3f}  Top-3: {nw_summary['top3_accuracy']:.3f}  Top-5: {nw_summary['top5_accuracy']:.3f}  Acceptance: {nw_summary['acceptance_rate']:.3f}")
             print(f"  Avg prefix before accept: {nw_summary['avg_prefix_before_accept']:.1f}  Avg confidence: {nw_summary['avg_confidence']:.3f}")
 
             with open(os.path.join(out_dir, "nw_csr_results.json"), "w") as f:

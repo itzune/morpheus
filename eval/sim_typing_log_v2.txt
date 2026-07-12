@@ -1,0 +1,95 @@
+Simulating typing on http://localhost:9090
+Sentences: 15 (5 Basque, 5 English, 5 Spanish)
+Algorithm: frontend-faithful (sticky merge, top-3 display, acceptance semantics)
+Delay: 0.0s
+
+  Typing [Basque]: "Gaur eguraldi ona egiten du eta kalean paseatzera ..." → ⚠️  8/10 accepted  CSR=38.7%  Top1=30%  Top5=80%
+
+  Typing [Basque]: "Euskara ikasten ari naiz baina oraindik zaila irud..." → ⚠️  8/9 accepted  CSR=16.7%  Top1=44%  Top5=89%
+
+  Typing [Basque]: "Bihar goizean lanera joan beharko dut goiz..." → ⚠️  5/7 accepted  CSR=23.8%  Top1=29%  Top5=71%
+
+  Typing [Basque]: "Lagunekin afaria egitea asteburuan plangarria da..." → ✅  CSR=10.4%  Top1=50%  Top5=100%
+
+  Typing [Basque]: "Musika entzutea gustuko dut lanean ari naizenean..." → ⚠️  4/7 accepted  CSR=4.2%  Top1=29%  Top5=57%
+
+  Typing [English]: "The weather is nice today and I will go for a walk..." → ⚠️  6/12 accepted  CSR=18.0%  Top1=33%  Top5=50%
+
+  Typing [English]: "I am learning a new language but it is still diffi..." → ⚠️  9/11 accepted  CSR=42.6%  Top1=73%  Top5=91%
+
+  Typing [English]: "Tomorrow morning I have to go to work early..." → ⚠️  7/9 accepted  CSR=16.3%  Top1=33%  Top5=78%
+
+  Typing [English]: "Having dinner with friends this weekend sounds gre..." → ⚠️  6/8 accepted  CSR=21.2%  Top1=38%  Top5=100%
+
+  Typing [English]: "I like to listen to music while I am working..." → ⚠️  8/10 accepted  CSR=27.3%  Top1=20%  Top5=100%
+
+  Typing [Spanish]: "El tiempo está bueno hoy y voy a salir a caminar..." → ⚠️  10/11 accepted  CSR=22.9%  Top1=55%  Top5=91%
+
+  Typing [Spanish]: "Estoy aprendiendo un idioma nuevo pero todavía es ..." → ⚠️  7/9 accepted  CSR=36.8%  Top1=56%  Top5=78%
+
+  Typing [Spanish]: "Mañana por la mañana tengo que ir a trabajar tempr..." → ⚠️  8/10 accepted  CSR=30.2%  Top1=40%  Top5=90%
+
+  Typing [Spanish]: "Cenar con amigos este fin de semana suena genial..." → ⚠️  4/9 accepted  CSR=27.1%  Top1=44%  Top5=56%
+
+  Typing [Spanish]: "Me gusta escuchar música mientras estoy trabajando..." → ⚠️  5/7 accepted  CSR=28.0%  Top1=71%  Top5=71%
+
+
+======================================================================
+  AGGREGATE ANALYSIS (frontend-faithful)
+======================================================================
+
+  Basque:
+    Top-1 accuracy:    35.9%
+    Top-3 accuracy:    79.5%  (= acceptance rate)
+    Top-5 accuracy:    79.5%
+    Total keystrokes:  209 (of 260 chars)
+    Simulated CSR:     19.6%
+    Acceptances:       31/39 words (79%)
+    Avg prefix before accept: 4.4 chars
+      Completions:     29
+      Next-words:      2
+      Manual:          8
+    Avg prob (accepted): 0.228
+    Max prob:            0.922
+
+  English:
+    Top-1 accuracy:    40.0%
+    Top-3 accuracy:    72.0%  (= acceptance rate)
+    Top-5 accuracy:    82.0%
+    Total keystrokes:  181 (of 243 chars)
+    Simulated CSR:     25.5%
+    Acceptances:       36/50 words (72%)
+    Avg prefix before accept: 2.7 chars
+      Completions:     36
+      Next-words:      0
+      Manual:          14
+    Avg prob (accepted): 0.416
+    Max prob:            0.997
+
+  Spanish:
+    Top-1 accuracy:    52.2%
+    Top-3 accuracy:    73.9%  (= acceptance rate)
+    Top-5 accuracy:    78.3%
+    Total keystrokes:  181 (of 256 chars)
+    Simulated CSR:     29.3%
+    Acceptances:       34/46 words (74%)
+    Avg prefix before accept: 3.1 chars
+      Completions:     31
+      Next-words:      3
+      Manual:          12
+    Avg prob (accepted): 0.554
+    Max prob:            0.998
+
+  OVERALL:
+    Top-1 accuracy:    43.0%
+    Top-3 accuracy:    74.8%  (= acceptance rate)
+    Top-5 accuracy:    80.0%
+    Total keystrokes:  571 (of 759 chars)
+    Simulated CSR:     24.8%
+    Acceptances:       101/135 words (75%)
+    Avg prefix before accept: 3.3 chars
+    Avg prob (accepted): 0.405
+
+  Full results saved to eval/sim_typing_results_v2.json
+
+======================================================================

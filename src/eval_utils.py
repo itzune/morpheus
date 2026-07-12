@@ -300,10 +300,10 @@ def bootstrap_mean_ci(values, n_bootstrap=1000, confidence=0.95, seed=42):
 #  actually experience in the deployed keyboard.
 #
 #  This is a SECONDARY metric. PPL remains primary for checkpoint ranking.
-#  The decomposed metrics (word_accuracy, acceptance_rate, avg_prefix)
-#  are more informative than raw CSR because they don't suffer from the
-#  CSR paradox (§6.14: agglutinative word length penalizes native-language
-#  keystroke savings).
+#  The decomposed metrics (top1_accuracy, top3_accuracy, top5_accuracy,
+#  acceptance_rate, avg_prefix) are more informative than raw CSR because
+#  they don't suffer from the CSR paradox (§6.14: agglutinative word length
+#  penalizes native-language keystroke savings).
 #
 #  Strategies ported (§5.5):
 #    1. Retokenization fallback (shorter-prefix queries)
@@ -642,8 +642,9 @@ def evaluate_next_word_csr(model, sp, tests, device="cuda"):
     the moment it matches the target word in the top-3 chips.
 
     Returns per-test result dicts with:
-      csr, word_accuracy, acceptance_rate, avg_prefix, avg_confidence,
-      completed_words, events, keystrokes, taps, n_words, correct_words
+      csr, acceptance_rate, top1_accuracy, top3_accuracy, top5_accuracy,
+      avg_prefix, avg_confidence,
+      completed_words, events, keystrokes, taps, n_words
     """
     model.eval()
     results = []
@@ -663,6 +664,13 @@ def evaluate_next_word_csr(model, sp, tests, device="cuda"):
         chars_typed = 0
         taps = 0
         completed_words = []
+        # Per-word tracking: was the target ever the #1 / #3 / #5 candidate?
+        was_top1 = False
+        was_top3 = False
+        was_top5 = False
+        top1_count = 0
+        top3_count = 0
+        top5_count = 0
 
         while word_idx < len(words):
             target_word = words[word_idx]
@@ -679,6 +687,23 @@ def evaluate_next_word_csr(model, sp, tests, device="cuda"):
                 "prefix": prefix[-60:],
                 "displayed": [{"text": c["text"], "prob": c["prob"]} for c in displayed],
             })
+
+            # ── Track Top-K accuracy at this keystroke ──
+            # Top-1: correct word is the #1 displayed chip (post-sticky-merge)
+            if displayed and len(displayed) > 0:
+                top1_cand = _nw_clean_word(displayed[0]["text"])
+                if top1_cand == target_c and len(top1_cand) > 0:
+                    was_top1 = True
+            # Top-3: correct word in top-3 displayed chips (= acceptance condition)
+            for c in displayed[:3]:
+                if _nw_clean_word(c["text"]) == target_c and len(_nw_clean_word(c["text"])) > 0:
+                    was_top3 = True
+                    break
+            # Top-5: correct word in the raw fetched pool (pre-sticky-merge ceiling)
+            for c in fresh[:5]:
+                if _nw_clean_word(c["text"]) == target_c and len(_nw_clean_word(c["text"])) > 0:
+                    was_top5 = True
+                    break
 
             accepted = False
             for c in displayed:
@@ -701,6 +726,14 @@ def evaluate_next_word_csr(model, sp, tests, device="cuda"):
                     keystrokes += 1
                     completed_words.append((c["text"], "next_word" if is_nw else "completion", c["prob"]))
                     sticky_pool = []
+                    # Tally per-word Top-K flags before resetting
+                    if was_top1:
+                        top1_count += 1
+                    if was_top3:
+                        top3_count += 1
+                    if was_top5:
+                        top5_count += 1
+                    was_top1 = was_top3 = was_top5 = False
                     word_idx += 1
                     char_idx = 0
                     accepted = True
@@ -723,12 +756,17 @@ def evaluate_next_word_csr(model, sp, tests, device="cuda"):
                 chars_typed += 1
                 keystrokes += 1
             else:
+                # Typed the whole word manually — tally per-word Top-K flags
+                if was_top1:
+                    top1_count += 1
+                if was_top3:
+                    top3_count += 1
+                if was_top5:
+                    top5_count += 1
+                was_top1 = was_top3 = was_top5 = False
                 completed_words.append((target_word, "manual", 0.0))
                 word_idx += 1
                 char_idx = 0
-
-        correct = sum(1 for i, (w, m, p) in enumerate(completed_words)
-                      if i < len(words) and _nw_clean_word(w) == _nw_clean_word(words[i]))
 
         total_chars = len(target)
         all_probs = [p for w, m, p in completed_words if p > 0]
@@ -739,8 +777,10 @@ def evaluate_next_word_csr(model, sp, tests, device="cuda"):
             "prompt": prompt,
             "target": target,
             "csr": round((total_chars - keystrokes) / total_chars, 4) if total_chars > 0 else 0.0,
-            "word_accuracy": round(correct / len(words), 4) if words else 0.0,
             "acceptance_rate": round(taps / len(words), 4) if words else 0.0,
+            "top1_accuracy": round(top1_count / len(words), 4) if words else 0.0,
+            "top3_accuracy": round(top3_count / len(words), 4) if words else 0.0,
+            "top5_accuracy": round(top5_count / len(words), 4) if words else 0.0,
             "avg_prefix": round(sum(prefix_lens) / len(prefix_lens), 2) if prefix_lens else 0.0,
             "avg_confidence": round(sum(all_probs) / len(all_probs), 4) if all_probs else 0.0,
             "completed_words": completed_words,
@@ -749,7 +789,6 @@ def evaluate_next_word_csr(model, sp, tests, device="cuda"):
             "chars_typed": chars_typed,
             "taps": taps,
             "n_words": len(words),
-            "correct_words": correct,
             "total_chars": total_chars,
         })
 
@@ -791,8 +830,10 @@ def compute_autocomplete_metrics(model, sp, csr_tests, morphacc_tests, device, k
     nw_total_chars = sum(r["total_chars"] for r in nw_results)
     nw_total_ks = sum(r["keystrokes"] for r in nw_results)
     nw_total_words = sum(r["n_words"] for r in nw_results)
-    nw_total_correct = sum(r["correct_words"] for r in nw_results)
     nw_total_accepts = sum(r["taps"] for r in nw_results)
+    nw_total_top1 = sum(r["top1_accuracy"] * r["n_words"] for r in nw_results)
+    nw_total_top3 = sum(r["top3_accuracy"] * r["n_words"] for r in nw_results)
+    nw_total_top5 = sum(r["top5_accuracy"] * r["n_words"] for r in nw_results)
     nw_all_probs = [p for r in nw_results for w, m, p in r["completed_words"] if p > 0]
     nw_prefix_lens = []
     for r in nw_results:
@@ -815,8 +856,10 @@ def compute_autocomplete_metrics(model, sp, csr_tests, morphacc_tests, device, k
         "valid/nw_csr_macro": round(nw_csr_point, 4),
         "valid/nw_csr_ci_lower": round(nw_csr_lo, 4),
         "valid/nw_csr_ci_upper": round(nw_csr_hi, 4),
-        "valid/nw_word_accuracy": round(nw_total_correct / nw_total_words, 4) if nw_total_words > 0 else 0.0,
         "valid/nw_acceptance_rate": round(nw_total_accepts / nw_total_words, 4) if nw_total_words > 0 else 0.0,
+        "valid/nw_top1_accuracy": round(nw_total_top1 / nw_total_words, 4) if nw_total_words > 0 else 0.0,
+        "valid/nw_top3_accuracy": round(nw_total_top3 / nw_total_words, 4) if nw_total_words > 0 else 0.0,
+        "valid/nw_top5_accuracy": round(nw_total_top5 / nw_total_words, 4) if nw_total_words > 0 else 0.0,
         "valid/nw_avg_prefix_before_accept": round(sum(nw_prefix_lens) / len(nw_prefix_lens), 2) if nw_prefix_lens else 0.0,
         "valid/nw_avg_confidence": round(sum(nw_all_probs) / len(nw_all_probs), 4) if nw_all_probs else 0.0,
     }

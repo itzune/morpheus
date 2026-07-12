@@ -224,6 +224,13 @@ def simulate_sentence(host, lang, sentence, delay=0.05, initial_text=""):
     chars_typed = 0
     taps = 0
     completed_words = []
+    # Per-word tracking: was the target ever the #1 / #3 / #5 candidate?
+    was_top1 = False
+    was_top3 = False
+    was_top5 = False
+    top1_count = 0   # aggregate across all words
+    top3_count = 0
+    top5_count = 0
 
     while word_idx < len(words):
         target = words[word_idx]
@@ -245,6 +252,23 @@ def simulate_sentence(host, lang, sentence, delay=0.05, initial_text=""):
             "sticky_pool": sticky_pool[:3],  # log top 3 of pool
         })
 
+        # ── Track Top-K accuracy at this keystroke ──
+        # Top-1: correct word is the #1 displayed chip (post-sticky-merge)
+        if displayed and len(displayed) > 0:
+            top1_cand = clean_word(displayed[0]["text"])
+            if top1_cand == target_c and len(top1_cand) > 0:
+                was_top1 = True
+        # Top-3: correct word in top-3 displayed chips (= acceptance condition)
+        for c in displayed[:DISPLAY_K]:
+            if clean_word(c["text"]) == target_c and len(clean_word(c["text"])) > 0:
+                was_top3 = True
+                break
+        # Top-5: correct word in the raw fetched pool (pre-sticky-merge ceiling)
+        for c in fresh[:FETCH_K]:
+            if clean_word(c["text"]) == target_c and len(clean_word(c["text"])) > 0:
+                was_top5 = True
+                break
+
         # ── Look for a matching candidate in DISPLAYED (top-3) ──
         accepted = False
         for c in displayed:
@@ -263,6 +287,7 @@ def simulate_sentence(host, lang, sentence, delay=0.05, initial_text=""):
                     "accepted": c["text"],
                     "prob": c["prob"],
                     "sticky": c.get("_sticky", False),
+                    "prefix_len": len(get_current_word(prefix)),
                     "editor_after": editor[:cursor],
                 })
                 completed_words.append((c["text"], method, c["prob"]))
@@ -278,6 +303,14 @@ def simulate_sentence(host, lang, sentence, delay=0.05, initial_text=""):
                 break
 
         if accepted:
+            # Tally per-word Top-K flags before resetting
+            if was_top1:
+                top1_count += 1
+            if was_top3:
+                top3_count += 1
+            if was_top5:
+                top5_count += 1
+            was_top1 = was_top3 = was_top5 = False
             continue
 
         # ── No match; type next character ──
@@ -301,16 +334,17 @@ def simulate_sentence(host, lang, sentence, delay=0.05, initial_text=""):
             if delay:
                 time.sleep(delay)
         else:
-            # Typed the whole word manually
+            # Typed the whole word manually — tally per-word Top-K flags
+            if was_top1:
+                top1_count += 1
+            if was_top3:
+                top3_count += 1
+            if was_top5:
+                top5_count += 1
+            was_top1 = was_top3 = was_top5 = False
             completed_words.append((target, "manual", 0.0))
             word_idx += 1
             char_idx = 0
-
-    # Compute correctness
-    correct = 0
-    for i, (word, method, prob) in enumerate(completed_words):
-        if i < len(words) and clean_word(word) == clean_word(words[i]):
-            correct += 1
 
     return {
         "lang": lang,
@@ -322,7 +356,9 @@ def simulate_sentence(host, lang, sentence, delay=0.05, initial_text=""):
         "chars_typed": chars_typed,
         "taps": taps,
         "n_words": len(words),
-        "correct_words": correct,
+        "top1_accuracy": round(top1_count / len(words), 4) if words else 0.0,
+        "top3_accuracy": round(top3_count / len(words), 4) if words else 0.0,
+        "top5_accuracy": round(top5_count / len(words), 4) if words else 0.0,
         "total_chars": len(sentence),
         "csr": (len(sentence) - keystrokes) / len(sentence) * 100 if len(sentence) > 0 else 0,
         "final_editor": editor.strip(),
@@ -364,7 +400,7 @@ def print_typing_trace(result):
     completions = [w for w in result["completed_words"] if w[1] == "completion"]
     next_words = [w for w in result["completed_words"] if w[1] == "next_word"]
     manuals = [w for w in result["completed_words"] if w[1] == "manual"]
-    print(f"\n  📊 Result: {result['correct_words']}/{result['n_words']} words correct")
+    print(f"\n  📊 Result: Top-1={100*result['top1_accuracy']:.0f}%  Top-3={100*result['top3_accuracy']:.0f}%  Top-5={100*result['top5_accuracy']:.0f}%")
     print(f"     Completions: {len(completions)}  Next-words: {len(next_words)}  Manual: {len(manuals)}")
     print(f"     Keystrokes: {result['keystrokes']} (chars: {result['chars_typed']}, taps: {result['taps']})")
     print(f"     Simulated CSR: {result['csr']:.1f}%")
@@ -416,8 +452,8 @@ def main():
             print(f"  Typing [{lang_name}]: \"{preview}...\"", end="", flush=True)
         result = simulate_sentence(args.host, lang, sentence, delay=args.delay, initial_text=initial_text)
         all_results.append(result)
-        status = "✅" if result["correct_words"] == result["n_words"] else f"⚠️  {result['correct_words']}/{result['n_words']}"
-        print(f" → {status}  CSR={result['csr']:.1f}%  taps={result['taps']}/{result['n_words']}")
+        status = "✅" if result["taps"] == result["n_words"] else f"⚠️  {result['taps']}/{result['n_words']} accepted"
+        print(f" → {status}  CSR={result['csr']:.1f}%  Top1={100*result['top1_accuracy']:.0f}%  Top5={100*result['top5_accuracy']:.0f}%")
         print()
 
     if args.verbose:
@@ -436,21 +472,28 @@ def main():
             continue
 
         n_words = sum(r["n_words"] for r in lr)
-        correct = sum(r["correct_words"] for r in lr)
         total_ks = sum(r["keystrokes"] for r in lr)
         total_chars = sum(r["total_chars"] for r in lr)
         total_taps = sum(r["taps"] for r in lr)
+        total_top1 = sum(r["top1_accuracy"] * r["n_words"] for r in lr)
+        total_top3 = sum(r["top3_accuracy"] * r["n_words"] for r in lr)
+        total_top5 = sum(r["top5_accuracy"] * r["n_words"] for r in lr)
 
         completions = sum(1 for r in lr for w in r["completed_words"] if w[1] == "completion")
         next_words = sum(1 for r in lr for w in r["completed_words"] if w[1] == "next_word")
         manuals = sum(1 for r in lr for w in r["completed_words"] if w[1] == "manual")
         all_probs = [w[2] for r in lr for w in r["completed_words"] if w[2] > 0]
+        prefix_lens = [e["prefix_len"] for r in lr for e in r["events"] if e["type"] == "accept"]
 
         print(f"\n  {lang_name}:")
-        print(f"    Words correct:     {correct}/{n_words} ({100*correct/n_words:.0f}%)")
+        print(f"    Top-1 accuracy:    {100*total_top1/n_words:.1f}%")
+        print(f"    Top-3 accuracy:    {100*total_top3/n_words:.1f}%  (= acceptance rate)")
+        print(f"    Top-5 accuracy:    {100*total_top5/n_words:.1f}%")
         print(f"    Total keystrokes:  {total_ks} (of {total_chars} chars)")
         print(f"    Simulated CSR:     {100*(total_chars - total_ks)/total_chars:.1f}%")
         print(f"    Acceptances:       {total_taps}/{n_words} words ({100*total_taps/n_words:.0f}%)")
+        if prefix_lens:
+            print(f"    Avg prefix before accept: {sum(prefix_lens)/len(prefix_lens):.1f} chars")
         print(f"      Completions:     {completions}")
         print(f"      Next-words:      {next_words}")
         print(f"      Manual:          {manuals}")
@@ -459,17 +502,24 @@ def main():
             print(f"    Max prob:            {max(all_probs):.3f}")
 
     n_words = sum(r["n_words"] for r in all_results)
-    correct = sum(r["correct_words"] for r in all_results)
     total_ks = sum(r["keystrokes"] for r in all_results)
     total_chars = sum(r["total_chars"] for r in all_results)
     total_taps = sum(r["taps"] for r in all_results)
+    total_top1 = sum(r["top1_accuracy"] * r["n_words"] for r in all_results)
+    total_top3 = sum(r["top3_accuracy"] * r["n_words"] for r in all_results)
+    total_top5 = sum(r["top5_accuracy"] * r["n_words"] for r in all_results)
     all_probs = [w[2] for r in all_results for w in r["completed_words"] if w[2] > 0]
+    prefix_lens = [e["prefix_len"] for r in all_results for e in r["events"] if e["type"] == "accept"]
 
     print(f"\n  OVERALL:")
-    print(f"    Words correct:     {correct}/{n_words} ({100*correct/n_words:.0f}%)")
+    print(f"    Top-1 accuracy:    {100*total_top1/n_words:.1f}%")
+    print(f"    Top-3 accuracy:    {100*total_top3/n_words:.1f}%  (= acceptance rate)")
+    print(f"    Top-5 accuracy:    {100*total_top5/n_words:.1f}%")
     print(f"    Total keystrokes:  {total_ks} (of {total_chars} chars)")
     print(f"    Simulated CSR:     {100*(total_chars - total_ks)/total_chars:.1f}%")
     print(f"    Acceptances:       {total_taps}/{n_words} words ({100*total_taps/n_words:.0f}%)")
+    if prefix_lens:
+        print(f"    Avg prefix before accept: {sum(prefix_lens)/len(prefix_lens):.1f} chars")
     if all_probs:
         print(f"    Avg prob (accepted): {sum(all_probs)/len(all_probs):.3f}")
 
