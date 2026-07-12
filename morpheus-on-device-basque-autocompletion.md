@@ -16,7 +16,7 @@
 
 We present **Morpheus**, an on-device predictive autocompletion system for Basque (Euskara), a low-resource agglutinative language. The research question is whether a Gmail Smart Compose–equivalent multi-token continuation system — which Google serves from Cloud TPUs using an ~80M-parameter LSTM trained on ~8 billion emails — can run **entirely on a consumer laptop**, with zero network calls, for use in text editors. We select Mamba-2, a Selective State Space Model offering constant-memory O(1) per-step inference with no KV cache — the same property (no KV cache) that led Google to choose LSTM over Transformer for Smart Compose, but achieved here with a modern architecture that runs on-device.
 
-Our model (91M parameters, 55 MB Q4_K_M) is trained on ~10B tokens of curated Basque text using a 4K-vocabulary SentencePiece Unigram tokenizer. **A controlled vocabulary-size ablation** across 4K, 8K, 16K, and 32K reveals that MorphAcc consistency drops from 66.7% at 4K to 28.6% at 32K, mirroring the QuechuaTok finding. We argue that **fertility is a confound, not a quality metric**, for agglutinative tokenizer evaluation: lower fertility is achieved exactly by fusing morphemes into opaque units. We note this finding is based on MorphAcc across 4 vocabulary sizes; while it replicates QuechuaTok's result on a different language family, we did not train full models at 8K/16K/32K to verify downstream PPL (§4.4.5).
+Our model (91M parameters, 55 MB Q4_K_M) is trained on ~10B tokens of curated Basque text using a 4K-vocabulary SentencePiece Unigram tokenizer. **A controlled vocabulary-size ablation** across 4K, 8K, 16K, and 32K reveals that MorphAcc consistency drops from 66.7% at 4K to 28.6% at 32K, mirroring the QuechuaTok finding. We argue that **fertility correlates negatively with morphological accuracy**, making it a misleading quality metric for agglutinative tokenizer evaluation: lower fertility is achieved exactly by fusing morphemes into opaque units. We note this finding is based on MorphAcc across 4 vocabulary sizes; while it replicates QuechuaTok's result on a different language family, we did not train full models at 8K/16K/32K to verify downstream PPL (§4.4.5).
 
 After full training (76K steps, 14.9 hours), the best checkpoint (step 74K) achieves **held-out PPL of 7.13**, **25.3% CSR** (95% CI [24.0%, 26.5%]), and **76% MorphAcc**. A key methodological finding emerges: **PPL is the only metric that consistently produces coherent, reliable signal** for checkpoint ranking (7.56 → 7.17 → 7.13, all 14 evaluation files agree). The autocomplete-specific metrics proved fragile: CSR requires token-ID prompts to avoid BOS/tokenizer divergence bugs (string prompts gave ~4% vs ~28%), produces overlapping confidence intervals at n=300. A sentence-level typing simulation reveals a **CSR paradox**: the model's native Basque achieves the lowest simulated CSR (19.2%), below English (26.3%) and Spanish (30.9%) which represent <1% of training data — a structural artifact of agglutinative word length, not a model deficiency. An **unresolved anomaly**: next-word CSR does not track PPL improvement across the training trajectory, though this effect is backend-dependent and may be a computation artifact.
 
@@ -62,8 +62,10 @@ Two prediction paradigms dominate real-world autocomplete systems. **Multi-token
 | Gmail Smart Compose | ~80M | Server-side | ~8B emails (~320B+ tokens est.) | Cloud TPU (data center) | LSTM | Multi-token |
 | GitHub Copilot | Multi-billion | Server-side | Proprietary code corpus | Cloud GPU (Azure) | Transformer (FIM) | Multi-token |
 | GPT-2 eus-euscrawl | 124M | ~50 MB (Q4) | ~423M tokens | On-device (desktop) | Transformer | Multi-token |
-| **Morpheus v2** | **91M** | **55 MB** (Q4_K_M) | **Latxa Corpus v2 (curated, ~10B tok)** | **On-device (laptop)** | **Mamba-2** | **Both** |
+| **Morpheus v2** | **91M** | **55 MB** (Q4_K_M) | **Latxa Corpus v2 (curated, ~10B tok seen†)** | **On-device (laptop)** | **Mamba-2** | **Both** |
 | Latxa-Qwen3.5-2B | 1,882M | ~1.2 GB (Q4) | Latxa Corpus v2 (public, ~4.2B tokens) | High-end only | Qwen3.5 (instruct) | Multi-token |
+
+†~10B tokens seen over ~2.16 epochs (4.62B unique tokens in the curated corpus); see §4.2.
 
 **The KV-cache insight.** Despite Transformers achieving better perplexity, Google chose an LSTM for Smart Compose because Transformer self-attention requires maintaining keys and values from all previous decoding steps, making per-step latency grow with context length (Chen et al., 2019). GitHub Copilot, also Transformer-based, requires an elaborate global proxy infrastructure (HTTP/2, request cancellation, streaming, geographic routing) to achieve <200ms latency (Cheney, 2025). Google solved the latency problem with data-center TPUs; Morpheus solves it with Mamba-2's O(1) per-step inference at the architecture level — enabling the Smart Compose paradigm to run **on-device** on a consumer laptop (91M, 55 MB, zero network calls), comparable in scale to Smart Compose's 80M but without the data-center dependency.
 
@@ -119,7 +121,7 @@ We evaluated three candidate architectures against these constraints:
 #### Path A: xLSTM (Modern Recurrent)
 - 50-100M parameters
 - O(1) per-step inference, constant memory, no KV cache
-- Training from scratch on curated Latxa Corpus v2 (§4.2)
+- Training from scratch on curated Basque text (§4.2)
 - ONNX Runtime INT8 deployment
 - **Pros:** Safest latency, reuses v1 infrastructure, predictable
 - **Cons:** No pre-trained Basque knowledge, lower expected quality ceiling
@@ -221,7 +223,7 @@ Training was performed on a single NVIDIA L40 GPU (48 GB GDDR6, Ada Lovelace) wi
 
 Validation loss decreased monotonically throughout training (2.05 → 1.96), with PPL improving from 7.8 (step 25K) to 7.13 (step 74K). The model is fully converged — validation loss is flat from step 67K onward (Δ < 0.001). The best checkpoint (step 74K, valid_loss=1.9641, PPL=7.13) is used for all final evaluations and deployed models. Step 76K (final step) achieved identical PPL (7.13) and is not distinguishable in quality. The training budget of ~10B tokens yields a tokens-to-parameters ratio of approximately 110:1 — below the Mosaic inference-optimal (190:1) and MiniCPM small-model-optimal (192:1) recommendations, indicating the data budget is reasonable by modern small-model standards; see §6.7 for a detailed scaling-law analysis.
 
-**Checkpoint integrity:** Checkpoints are saved atomically (write to `.tmp` then `os.replace()`) every 2,000 steps. A file-based stop monitor detects checkpoint completion via size-stability polling (3 consecutive unchanged polls + size ≥ 540MB) and sends SIGINT for clean W&B flush.
+**Checkpoint integrity:** Checkpoints are saved atomically (write to `.tmp` then `os.replace()`) every 2,000 steps. A file-based stop monitor detects checkpoint completion via size-stability polling (3 consecutive unchanged polls + size ≥ 540MB) and sends SIGINT for clean W&B flush. The pre-training validation protocol (corpus audit, proxy overfit test, autocomplete smoke test) is documented in Appendix F.
 
 ### 4.4 Tokenizer Strategy: Deep Research and Implications
 
@@ -428,11 +430,11 @@ Every chip acceptance is logged to a JSONL file with: timestamp, model checkpoin
 python scripts/replay_completions.py --models step_0032000.Q4_K_M step_0054000.Q4_K_M
 ```
 
-The replay script hot-reloads each checkpoint, queries the same contexts, and checks whether the user-accepted word appears in the top-k. This enabled a critical finding: an apparent model regression (step 54K "forgetting" *Kaixo*) was diagnosed as an **inference engine bug**, not a model deficiency (§5.5.7).
+The replay script hot-reloads each checkpoint, queries the same contexts, and checks whether the user-accepted word appears in the top-k.
 
 The keyboard candidate algorithm (retokenization fallback, sticky merge, top-k fetch, acceptance semantics) is also ported to PyTorch in `src/eval_utils.py` as `evaluate_next_word_csr`, enabling training-time validation that faithfully reflects the deployed demo. This runs natively on the GPU model (no llama.cpp dependency) during periodic validation, reporting decomposed metrics (word accuracy, acceptance rate, average prefix length, average confidence) alongside a simulated CSR. It is used as a **secondary metric** — PPL remains primary for checkpoint ranking — and the decomposed metrics avoid the CSR paradox (§6.12) because they do not conflate model quality with morphological word length.
 
-The replay system also enabled a critical debugging finding: an apparent model regression (step 54K "forgetting" *Kaixo*) was traced to a stale Docker cache running an older `llama.cpp` with a bug in the SSM scan computation for Mamba-2 (`n_groups > 1`, fixed in commit `dc2187d48`). **When deploying Mamba-2 models with `llama.cpp`, pin to a build that includes this commit (2025-07-04 or later).** Details in Appendix C.
+The replay system also enabled a critical debugging finding: an apparent model regression (step 54K "forgetting" *Kaixo*) was traced to a stale Docker cache running an older `llama.cpp` with a bug in the SSM scan computation for Mamba-2 (`n_groups > 1`, fixed in commit `dc2187d48`), not a model deficiency. **When deploying Mamba-2 models with `llama.cpp`, pin to a build that includes this commit (2025-07-04 or later).** Details in Appendix C.
 
 ---
 
@@ -540,7 +542,7 @@ Per-token perplexity (PPL) is tokenizer-dependent and cannot be compared across 
 
 **Key findings:**
 
-1. **Morpheus outperforms GPT-2 on BPC** (0.970 vs 0.981) despite having 27% fewer parameters (91M vs 124M). The primary driver is training data volume: Morpheus was trained on ~10B tokens vs GPT-2's ~423M tokens — a 24× difference. This confirms that for low-resource languages, training data quantity matters more than parameter count. However, the near-tie in BPC despite the 24× data difference also reveals that character-level metrics saturate before morphological competence is achieved — see §6.7 for a detailed data scaling analysis.
+1. **Morpheus achieves marginally better BPC than GPT-2** (0.970 vs 0.981), despite having 27% fewer parameters (91M vs 124M). The difference is small and primarily attributable to training data volume: Morpheus was trained on ~10B tokens vs GPT-2's ~423M tokens — a 24× difference. The near-tie in BPC despite the 24× data difference reveals that character-level metrics saturate well before the model has learned the morphological patterns needed for good autocomplete — see §6.7 for a detailed data scaling analysis.
 
 2. **Latxa achieves the lowest BPC** (0.822), as expected for a 1.88B-parameter model — 20× larger than Morpheus. However, the BPC gap (0.148 bits/char) is modest relative to the parameter difference, reflecting diminishing returns from scale.
 
@@ -568,44 +570,29 @@ To provide a fair raw-model comparison without our inference engineering advanta
 
 ### 6.7 Data Scaling Analysis: Training Data Requirements for Low-Resource Language Models
 
-A natural question for any language model training effort is whether the training data budget was appropriately sized. We analyze this through the lens of established scaling laws and our empirical training trajectory.
+Was the 10B-token training budget appropriately sized? We analyze this through scaling-law context and empirical convergence.
 
-**Tokens-to-parameters ratio.** Our model has 91M parameters (including embeddings) and was trained on ~10B tokens, yielding a ratio of approximately **110:1** (tokens per parameter). The relevant scaling law literature provides context:
+**Tokens-to-parameters ratio.** Our 91M model trained on ~10B tokens yields a ratio of ~**110:1** (tokens per parameter). This sits below the Mosaic inference-optimal (190:1; Sardana et al., 2024) and MiniCPM small-model-optimal (192:1; Hu et al., 2024) recommendations — both more applicable than Chinchilla's 20:1 (compute-optimal, Hoffmann et al., 2022) because our model is deployed as a per-keystroke autocomplete system (the inference-heavy scenario Mosaic addresses). By modern small-model standards, the ratio is not excessive.
 
 | Framework | Ratio | Source |
 |-----------|-------|--------|
 | Chinchilla (compute-optimal) | 20:1 | Hoffmann et al. (2022) |
-| DeepSeek (quality-adjusted) | 30:1 | Bi et al. (2024) |
 | Mosaic (inference-optimal) | 190:1 | Sardana et al. (2024) |
 | MiniCPM (small-model optimal) | 192:1 | Hu et al. (2024) |
 | **Morpheus (actual)** | **110:1** | — |
 
-Chinchilla's 20:1 ratio is **compute-optimal** — it minimizes training compute for a target loss, but does not account for inference cost. Sardana et al. (2024) showed that for models with significant inference demand (~1B requests), the optimal ratio shifts upward: train smaller models on more data than Chinchilla recommends. Since our model is deployed as a per-keystroke autocomplete system (exactly the inference-heavy scenario Mosaic addresses), the Mosaic/M iniCPM range is more applicable than Chinchilla. Hu et al. (2024) specifically studied small language models (0.04B–2B parameters) and found a much higher optimal ratio (192:1) than Chinchilla, contradicting the intuition that small models need less data.
-
-**By modern small-model standards, our 110:1 ratio is not excessive.** It sits below both the Mosaic inference-optimal (190:1) and MiniCPM small-model-optimal (192:1) recommendations. Modern small language models are trained at far higher ratios: Qwen3-0.6B at 60,000:1 (36T tokens), Liquid LFM2.5-350M at 80,000:1 (28T tokens).
-
-**Empirical convergence analysis.** While the ratio is reasonable by scaling-law standards, our training trajectory reveals where the model actually stopped learning:
+**Empirical convergence.** The training trajectory reveals where the model actually stopped learning:
 
 | Training segment | Tokens seen | Δ PPL | Tokens per 1.0 PPL improvement |
 |-----------------|------------|-------|-------------------------------|
 | Step 32K → 54K | 4.2B → 7.1B | −0.39 | 7.4B |
 | Step 54K → 74K | 7.1B → 9.7B | −0.04 | 137.6B |
 
-The improvement rate dropped by **18.6×** between segments. The model effectively converged around **step 67K (~8.8B tokens)** — the final ~1.2B tokens produced no measurable PPL improvement. This does not mean the data budget was excessive; it means the **model capacity saturated on this data distribution**.
+The improvement rate dropped by **18.6×**. The model effectively converged around **step 67K (~8.8B tokens)** — the final ~1.2B tokens produced no measurable PPL improvement.
 
-**Data quality as the binding constraint.** The convergence at 8.8B tokens is better explained by data quality than by data quantity. Three pieces of evidence converge:
+**Data quality as the binding constraint.** The convergence at 8.8B tokens is better explained by data quality than quantity. Our corpus quality audit (§4.2, §6.10) identified ~20–30% visible artifacts (social media residue, duplicates, mixed-language content, date/number patterns). If ~20–30% of the corpus is low-value noise, the effective high-quality data is ~7–8B tokens — closely matching the 8.8B convergence point. DeepSeek's finding that "data quality significantly influences the optimal model/data scaling" (Bi et al., 2024) supports this interpretation.
 
-1. **Corpus noise.** Our corpus quality audit (§4.2, §6.10) identified ~20–30% visible artifacts: emoji-heavy social media residue (18% of sampled lines), exact duplicates (5.2%), mixed-language content (6.4%), templated repetition, and date/number patterns. If ~20–30% of the corpus is low-value noise, the effective high-quality data is ~7–8B tokens — closely matching the 8.8B convergence point.
-
-2. **GPT-2 eus-euscrawl as a natural experiment.** GPT-2 eus-euscrawl was trained on only ~423M tokens (3.4:1 ratio, heavily undertrained by Chinchilla standards) yet achieves nearly the same BPC as Morpheus (0.981 vs 0.970). However, Morpheus achieves **1.6× higher word accuracy** (60.4% vs 37.6%) — the 24× data advantage produces a dramatically better autocomplete model. This confirms that token count matters, but the BPC near-tie with a model trained on 24× less data suggests that character-level metrics saturate well before the model has learned the morphological patterns needed for good autocomplete. Quality multiplies the effectiveness of quantity.
-
-3. **DeepSeek's quality finding.** Bi et al. (2024) found that "the data quality significantly influences the optimal model/data scaling up allocation strategy" — higher-quality data means the compute budget should shift toward model size rather than data size, implying that high-quality data is more efficient per token.
-
-**Implication: data quality over quantity.** A 2–5B token corpus of aggressively filtered, high-quality Basque text would likely match or exceed the current 10B token mixed-quality corpus, because the marginal ~1.2B tokens that produced no improvement and the ~2–3B tokens of noise were not contributing to model quality. The Chinchilla-optimal point for our model (~1.8B tokens) serves as a floor; the MiniCPM-optimal point (~17.5B tokens) is unattainable without more high-quality Basque data than currently exists. The practical sweet spot for low-resource agglutinative language modeling at this scale is **2–5B tokens of quality-filtered data**.
-
-**Smart Compose as a high-resource reference point.** Google's Smart Compose (§2.1, Table 1) provides a concrete reference: the production ~80M LSTM was trained on ~8 billion English emails (~320B+ tokens estimated) — roughly **30–60× our 10B token corpus**. Beyond volume, Smart Compose's data is **domain-matched** (trained on emails, deployed for email writing), which is itself a form of data quality that Morpheus lacks (§6.10). This enormous data advantage is available because English is high-resource and Google had access to 1.5 billion users' emails. For Basque, no comparable data volume or domain-matched corpus exists. This is the fundamental asymmetry: Google can scale data indefinitely; we cannot. The question is not "how much data should we use?" but "given that Basque data is finite and domain-matched corpora do not exist, how do we maximize quality from what exists?" The answer is aggressive quality filtering rather than raw quantity maximization.
-
-This finding has implications for low-resource language modeling broadly: for languages where the total available high-quality text is finite and modest, data quality is the binding constraint, not data quantity.
+**Implication.** A 2–5B token corpus of aggressively filtered, high-quality Basque text would likely match or exceed the current 10B token mixed-quality corpus. The practical sweet spot for low-resource agglutinative language modeling at this scale is **2–5B tokens of quality-filtered data** — a finding with implications beyond Basque, since for any language where high-quality text is finite, data quality is the binding constraint, not quantity.
 
 ### 6.8 Evaluation Reliability: PPL vs. Autocomplete Metrics
 
@@ -1008,6 +995,34 @@ Example 5:
 **Observations.** Wikipedia completions are frequently perfect — the model reproduces encyclopedic prose with high fidelity, which is both a strength (accurate continuations) and a corpus-induced artifact (§6.10). News completions are often grammatically correct and contextually relevant, including multi-token continuations that add new information. Legal text produces structurally plausible completions. Education prompts yield mixed results: real prose sentences receive coherent continuations, but title/header lines produce empty or degenerate outputs (the model predicts EOS). Literature is the weakest domain — the archaic Basque orthography (17th–19th century) is out-of-distribution for the modern Batua-trained model, and completions are either empty or produce plausible-sounding but hallucinated content.
 
 Cross-lingual completions reveal the model's incidental transfer. High-frequency collocations are predicted correctly (*Thank you very* → *much*, *Los Estados* → *Unidos*, *El tiempo está bueno hoy y voy a salir a* → *la calle*). Longer continuations expose the Basque bias: *“the development of technology has”* → *“been found in the Basque Country”* (the model redirects to its dominant domain), and *“La República Francesa es un país de”* → *“gran calidad, ya que la gran mayoría de la población vas...”* (trails off into Basque mid-sentence). Repetition failures (*starting to start to start*) are common when the model lacks confident continuations in the non-dominant language.
+
+---
+
+## Appendix F: Three-Gate Pre-Training Validation Protocol
+
+Perplexity is the standard language modeling metric, but it is insufficient as a sole quality gate for autocomplete: a model can achieve low PPL while producing degenerate suggestions if the training corpus contains systematic artifacts (e.g., bare numbers in sentence position from official gazette texts). To ensure data and pipeline integrity before committing GPU resources, we designed a three-gate pre-training validation protocol. **No training run may proceed to the L40 without passing all three gates.**
+
+**Gate 1: Corpus Content Audit (CPU, ~30 min).** An LLM-based quality audit (40 random lines per source, 1–5 Basque quality scale) that identified the low-quality sub-corpora subsequently omitted from training (§4.2). The retained 11 sources scored an average of 4.6/5.
+
+**Gate 2: Proxy Overfit Test (GPU, ~20s).** A canary test: a 0.7M-parameter Mamba-2 model (128× smaller than target) attempts to memorize 5 hand-crafted Basque sentences not in the training corpus. If it can memorize novel Basque from the tokenized `.npy` format in 300 steps, the pipeline (tokenizer, serialization, architecture, training loop) is proven sound. Any downstream failure must then come from data quality or training scale, not infrastructure.
+
+| Metric | Value |
+|---|---|
+| Initial loss (step 0) | 8.30 (random initialization) |
+| Final loss (step 300) | 0.049 (170× reduction) |
+| Canary token accuracy | 57.7% (≥50% threshold) |
+| Runtime | 18.5 seconds |
+| NaN events | 0 |
+
+**Gate 3: Autocomplete Smoke Test (GPU, ~5 min).** Evaluates whether the full 91M model produces useful autocomplete suggestions on real Basque text. **Passed:** at step 32K, the model achieves CSR=24.9% on 300 held-out sentences and MorphAcc=70%, confirming the model produces coherent Basque completions.
+
+| Gate | Runtime | What it validates | clean-v3 result |
+|---|---|---|---|
+| 1: LLM audit | ~30 min CPU | Source quality, fragments, boilerplate | 11/14 sub-corpora retained |
+| 2: Proxy overfit | ~20s GPU | Tokenizer integrity, data format | ✅ 57.7% canary accuracy |
+| 3: Autocomplete smoke | ~5 min GPU | Autocomplete quality on real text | ✅ CSR=24.9%, MorphAcc=70% |
+
+Each gate targets a distinct failure class that PPL alone cannot detect: data contamination and source quality (Gate 1), pipeline and serialization integrity (Gate 2), and inference-time autocomplete behavior (Gate 3). Together they ensure that low PPL reflects genuine language modeling quality rather than artifacts of data or infrastructure.
 
 ---
 
