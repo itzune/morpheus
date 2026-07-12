@@ -38,7 +38,7 @@ Recent work on agglutinative language modeling confirms this challenge. QuechuaT
 2. Provides suggestions at **3–5 ms/token decode latency** on a 2017 consumer laptop CPU (97 ms end-to-end autocomplete), well within the 50ms/token P90 target
 3. Achieves **meaningful keystroke savings** for practical utility
 4. Handles **Basque morphology** — not just memorized collocations but productive case suffix prediction
-5. Supports **Euskañol** (Basque-Spanish code-switching), common in informal communication
+5. Exhibits **incidental cross-lingual transfer** to Spanish/English from web-crawl contamination (§6.11), though no social media or code-switched corpus was included in training
 6. Fits within **≤ 300 MB** on disk (feasible for browser extensions and desktop applications)
 7. Supports **both prediction paradigms** with inference engineering tailored to each
 
@@ -110,7 +110,7 @@ Our constraints create a tight optimization problem:
 | **No network calls** | Zero external dependencies | Privacy requirement; all data stays local |
 | **Basque morphology** | Correct case suffix prediction | Core user need, not just collocations |
 | **Training budget** | 1× NVIDIA L40 (48 GB), 5-10 days | Realistic for a small research team |
-| **Code-switching** | Basque-Spanish (Euskañol) | ~30% of informal Basque text contains Spanish |
+| **Cross-lingual transfer** | Incidental Spanish/English from web crawls | ~0.6% of corpus is non-Basque |
 
 ### 3.2 Candidate Architectures
 
