@@ -324,15 +324,13 @@ At our model scale, the parameter-efficiency argument is also decisive: at 4K vo
 
 ### 5.1 Export: PyTorch → HuggingFace → GGUF
 
-Direct ONNX export of Mamba models is not viable for production CPU inference. Instead, we use `llama.cpp`'s native Mamba-2 support:
-
 ```
 1. PyTorch checkpoint → HuggingFace format (custom export script)
 2. HuggingFace → GGUF FP16 (llama.cpp convert_hf_to_gguf.py)
 3. GGUF FP16 → Q4_K_M quantization (llama-quantize)
 ```
 
-The export script writes `tokenizer_config.json` with `add_bos_token: false` and a `generation_config.json`, ensuring llama.cpp does not auto-prepend a BOS token. This fix was motivated by a debugging experiment: the model was trained without BOS, but llama-server auto-prepended BOS for string prompts, producing CSR of ~4% (vs ~28% with correct token-ID prompts). This was diagnosed as two compounding issues — (1) BOS mismatch (the model never saw BOS during training) and (2) llama.cpp's built-in SentencePiece tokenizer diverging from the reference `sentencepiece` library on this 4K vocabulary, causing incorrect tokenization of long words. The fix is two-layer: the export writes `add_bos_token=false`, and the demo sends token IDs (not strings) to llama-server (§5.4).
+The export writes `add_bos_token: false` because the model was trained without BOS. A critical debugging finding: llama-server auto-prepends BOS for string prompts and its built-in SentencePiece tokenizer diverges from the reference library on this 4K vocabulary, producing CSR of ~4% vs ~28% with correct token-ID prompts. The demo server therefore sends token IDs, not strings (§5.4).
 
 ### 5.2 Quantization
 
@@ -350,14 +348,7 @@ On the NVIDIA L40 (GPU), the f16 model generates at ~550 tok/s in batch. On cons
 
 ### 5.4 Demo Server
 
-A Docker-based demo server provides:
-- **Greedy mode** (Smart Compose style): temperature=0.0, deterministic suggestions
-- **Sampling mode**: configurable temperature, top_p, WebSocket streaming
-- **Token-ID prompts**: Sends token IDs (not strings) to llama-server, bypassing the BOS/tokenizer divergence documented in §5.1
-- **Smart context**: strips trailing subword fragments so the model sees only complete tokens
-- **Ghost suffix**: deduplication of user-typed text from model prediction for inline ghost text display
-- **Output filtering**: punctuation collapse, \ufffd removal (for undertrained model artifacts)
-- **Model hot-reload**: `POST /api/model/reload` swaps GGUF files without container restart
+A Docker-based demo server wraps `llama-server` and serves both prediction paradigms over WebSocket/HTTP, using token-ID prompts to bypass the BOS/tokenizer divergence documented in §5.1. It supports greedy (temperature=0) and sampling modes, ghost-suffix deduplication for inline display, and model hot-reload for checkpoint comparison. The server's next-word candidate logic is the subject of §5.5; its multi-token logic is straightforward greedy continuation.
 
 ### 5.4.1 Two Prediction Paradigms
 
