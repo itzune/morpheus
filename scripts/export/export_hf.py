@@ -74,7 +74,7 @@ def main():
     parser = argparse.ArgumentParser(description="Export checkpoint to HF format for llama.cpp")
     parser.add_argument("--checkpoint", required=True, help="Path to .pt checkpoint")
     parser.add_argument("--output-dir", required=True, help="Output directory")
-    parser.add_argument("--tokenizer", default="tokenizer/morpheus.model",
+    parser.add_argument("--tokenizer", default="tokenizer/basque_unigram_4000.model",
                         help="Path to SentencePiece model")
     args = parser.parse_args()
 

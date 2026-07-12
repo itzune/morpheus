@@ -405,10 +405,10 @@ def main():
         targets_data = json.load(f)
 
     all_summaries = {}
+    csr_tests = None  # initialized at function scope for Strategy 1b
 
     # ── Strategy 1: CSR ──
     if args.strategy in ("csr", "all"):
-        csr_tests = None
         for s in targets_data.get("strategies", []):
             if s["name"] == "csr":
                 csr_tests = s["tests"]

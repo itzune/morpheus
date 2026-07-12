@@ -45,7 +45,7 @@ def load_checkpoint(ckpt_path, device="cpu"):
 
     # Find tokenizer relative to project root
     tokenizer_path = os.path.join(os.path.dirname(os.path.dirname(__file__)),
-                                  "tokenizer", "morpheus.model")
+                                  "tokenizer", "basque_unigram_4000.model")
     sp = spm.SentencePieceProcessor()
     sp.Load(tokenizer_path)
 
