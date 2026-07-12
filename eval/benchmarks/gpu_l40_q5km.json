@@ -1,0 +1,90 @@
+{
+  "label": "GPU-L40-Q5_K_M",
+  "host": "http://127.0.0.1:8080",
+  "timestamp": "2026-07-12 20:09:50",
+  "memory": {
+    "model_file": "step_0074000.Q5_K_M.gguf",
+    "model_size_mb": 63.0,
+    "n_params": 91000000,
+    "n_ctx": 1024,
+    "process_rss_mb": 335.7,
+    "gpu_vram_mb": 607
+  },
+  "speed": [
+    {
+      "prompt_name": "short_10tok",
+      "prompt_tokens": 4,
+      "prefill_tok_s": 546.1,
+      "decode_tok_s": 252.6,
+      "ttft_ms": 12.1
+    },
+    {
+      "prompt_name": "medium_30tok",
+      "prompt_tokens": 4,
+      "prefill_tok_s": 505.4,
+      "decode_tok_s": 277.2,
+      "ttft_ms": 17.8
+    },
+    {
+      "prompt_name": "long_100tok",
+      "prompt_tokens": 4,
+      "prefill_tok_s": 1095.2,
+      "decode_tok_s": 249.7,
+      "ttft_ms": 18.0
+    },
+    {
+      "prompt_name": "very_long_200tok",
+      "prompt_tokens": 129,
+      "prefill_tok_s": 3891.1,
+      "decode_tok_s": 249.4,
+      "ttft_ms": 38.0
+    }
+  ],
+  "latency": [
+    {
+      "prompt": "Euskal Herriko",
+      "n_predict": 3,
+      "wall_latency_ms": 25.8,
+      "p95_latency_ms": 36.0,
+      "decode_tok_s": 301.1,
+      "sample_output": " Unibertsitateko ("
+    },
+    {
+      "prompt": "Gaur eguraldi ona egiten du eta",
+      "n_predict": 5,
+      "wall_latency_ms": 38.2,
+      "p95_latency_ms": 51.8,
+      "decode_tok_s": 273.1,
+      "sample_output": " lenengo "
+    },
+    {
+      "prompt": "Bihar goizean lanera joan beharko dut",
+      "n_predict": 5,
+      "wall_latency_ms": 34.8,
+      "p95_latency_ms": 49.9,
+      "decode_tok_s": 275.8,
+      "sample_output": ", eta 10"
+    },
+    {
+      "prompt": "Euskara ikasten ari naiz baina oraindik",
+      "n_predict": 5,
+      "wall_latency_ms": 36.9,
+      "p95_latency_ms": 59.6,
+      "decode_tok_s": 276.2,
+      "sample_output": " ez dut ikasi."
+    },
+    {
+      "prompt": "Lagunekin afaria egitea asteburuan",
+      "n_predict": 5,
+      "wall_latency_ms": 40.6,
+      "p95_latency_ms": 53.9,
+      "decode_tok_s": 274.5,
+      "sample_output": ", eta antza"
+    }
+  ],
+  "summary": {
+    "peak_decode_tok_s": 277.2,
+    "peak_prefill_tok_s": 3891.1,
+    "avg_autocomplete_latency_ms": 35.3
+  }
+}
