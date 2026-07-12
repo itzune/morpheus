@@ -1,0 +1,129 @@
+Loaded tokenizer: tokenizer/basque_unigram_4000.model (vocab=4000)
+Loaded 30 CSR test sentences from eval/targets.json
+Device: cuda
+
+============================================================
+  Loading step_0010000.pt...
+  Step: 10000  Valid loss: None  Load: 0.6s
+  Running next-word CSR simulation (30 sentences)...
+  Completed in 244.2s
+  ┌─ Next-Word CSR:  0.375 (macro 0.373, CI [0.313, 0.438])
+  ├─ Top-1 Acc:      0.537
+  ├─ Top-3 Acc:      0.859  (= acceptance)
+  ├─ Top-5 Acc:      0.866
+  ├─ Acceptance:     0.859 (128/149)
+  ├─ Avg Prefix:     3.5 chars
+  ├─ Avg Confidence: 0.408
+  └─ Breakdown:      119 completions, 9 next-words, 21 manual
+
+============================================================
+  Loading step_0020000.pt...
+  Step: 20000  Valid loss: None  Load: 0.3s
+  Running next-word CSR simulation (30 sentences)...
+  Completed in 232.5s
+  ┌─ Next-Word CSR:  0.402 (macro 0.402, CI [0.344, 0.469])
+  ├─ Top-1 Acc:      0.503
+  ├─ Top-3 Acc:      0.852  (= acceptance)
+  ├─ Top-5 Acc:      0.859
+  ├─ Acceptance:     0.852 (127/149)
+  ├─ Avg Prefix:     3.2 chars
+  ├─ Avg Confidence: 0.415
+  └─ Breakdown:      118 completions, 9 next-words, 22 manual
+
+============================================================
+  Loading step_0030000.pt...
+  Step: 30000  Valid loss: None  Load: 0.1s
+  Running next-word CSR simulation (30 sentences)...
+  Completed in 242.3s
+  ┌─ Next-Word CSR:  0.382 (macro 0.381, CI [0.330, 0.443])
+  ├─ Top-1 Acc:      0.537
+  ├─ Top-3 Acc:      0.839  (= acceptance)
+  ├─ Top-5 Acc:      0.852
+  ├─ Acceptance:     0.839 (125/149)
+  ├─ Avg Prefix:     3.4 chars
+  ├─ Avg Confidence: 0.422
+  └─ Breakdown:      115 completions, 10 next-words, 24 manual
+
+============================================================
+  Loading step_0032000.pt...
+  Step: 32000  Valid loss: None  Load: 0.1s
+  Running next-word CSR simulation (30 sentences)...
+  Completed in 237.1s
+  ┌─ Next-Word CSR:  0.396 (macro 0.399, CI [0.352, 0.449])
+  ├─ Top-1 Acc:      0.523
+  ├─ Top-3 Acc:      0.866  (= acceptance)
+  ├─ Top-5 Acc:      0.873
+  ├─ Acceptance:     0.866 (129/149)
+  ├─ Avg Prefix:     3.6 chars
+  ├─ Avg Confidence: 0.401
+  └─ Breakdown:      116 completions, 13 next-words, 20 manual
+
+============================================================
+  Loading step_0054000.pt...
+  Step: 54000  Valid loss: None  Load: 0.1s
+  Running next-word CSR simulation (30 sentences)...
+  Completed in 243.1s
+  ┌─ Next-Word CSR:  0.385 (macro 0.399, CI [0.355, 0.448])
+  ├─ Top-1 Acc:      0.503
+  ├─ Top-3 Acc:      0.859  (= acceptance)
+  ├─ Top-5 Acc:      0.866
+  ├─ Acceptance:     0.859 (128/149)
+  ├─ Avg Prefix:     3.6 chars
+  ├─ Avg Confidence: 0.416
+  └─ Breakdown:      119 completions, 9 next-words, 21 manual
+
+============================================================
+  Loading best.pt...
+  Step: 74000  Valid loss: 1.9641390485422952  Load: 0.1s
+  Running next-word CSR simulation (30 sentences)...
+  Completed in 254.4s
+  ┌─ Next-Word CSR:  0.361 (macro 0.366, CI [0.311, 0.424])
+  ├─ Top-1 Acc:      0.503
+  ├─ Top-3 Acc:      0.832  (= acceptance)
+  ├─ Top-5 Acc:      0.852
+  ├─ Acceptance:     0.832 (124/149)
+  ├─ Avg Prefix:     3.4 chars
+  ├─ Avg Confidence: 0.433
+  └─ Breakdown:      114 completions, 10 next-words, 25 manual
+
+============================================================
+  Loading step_0076000.pt...
+  Step: 76000  Valid loss: None  Load: 0.1s
+  Running next-word CSR simulation (30 sentences)...
+  Completed in 249.4s
+  ┌─ Next-Word CSR:  0.373 (macro 0.379, CI [0.320, 0.450])
+  ├─ Top-1 Acc:      0.517
+  ├─ Top-3 Acc:      0.832  (= acceptance)
+  ├─ Top-5 Acc:      0.852
+  ├─ Acceptance:     0.832 (124/149)
+  ├─ Avg Prefix:     3.3 chars
+  ├─ Avg Confidence: 0.432
+  └─ Breakdown:      114 completions, 10 next-words, 25 manual
+
+
+======================================================================
+  COMPARISON: Next-Word CSR across checkpoints
+======================================================================
+
+  Checkpoint                  Step    PPL   NW-CSR     Top1     Top3     Top5   Accept  Prefix   Conf
+  ------------------------- ------ ------ -------- -------- -------- -------- -------- ------- ------
+  step_0010000.pt            10000    N/A    0.375    0.537    0.859    0.866    0.859     3.5  0.408
+  step_0020000.pt            20000    N/A    0.402    0.503    0.852    0.859    0.852     3.2  0.415
+  step_0030000.pt            30000    N/A    0.382    0.537    0.839    0.852    0.839     3.4  0.422
+  step_0032000.pt            32000    N/A    0.396    0.523    0.866    0.873    0.866     3.6  0.401
+  step_0054000.pt            54000    N/A    0.385    0.503    0.859    0.866    0.859     3.6  0.416
+  best.pt                    74000   7.13    0.361    0.503    0.832    0.852    0.832     3.4  0.433
+  step_0076000.pt            76000    N/A    0.373    0.517    0.832    0.852    0.832     3.3  0.432
+
+  CI ranges:
+    step_0010000.pt           [0.313, 0.438]
+    step_0020000.pt           [0.344, 0.469]
+    step_0030000.pt           [0.330, 0.443]
+    step_0032000.pt           [0.352, 0.449]
+    step_0054000.pt           [0.355, 0.448]
+    best.pt                   [0.311, 0.424]
+    step_0076000.pt           [0.320, 0.450]
+
+  Full results saved to eval/nw_csr_comparison_full.json
+
+======================================================================

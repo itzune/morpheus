@@ -18,7 +18,7 @@ We present **Morpheus**, an on-device predictive autocompletion system for Basqu
 
 Our model (91M parameters, 55 MB Q4_K_M) is trained on ~10B tokens of curated Basque text using a 4K-vocabulary SentencePiece Unigram tokenizer. **A controlled vocabulary-size ablation** across 4K, 8K, 16K, and 32K reveals that MorphAcc consistency drops from 66.7% at 4K to 28.6% at 32K, mirroring the QuechuaTok finding. We argue that **fertility correlates negatively with morphological accuracy**, making it a misleading quality metric for agglutinative tokenizer evaluation: lower fertility is achieved exactly by fusing morphemes into opaque units. We note this finding is based on MorphAcc across 4 vocabulary sizes; while it replicates QuechuaTok's result on a different language family, we did not train full models at 8K/16K/32K to verify downstream PPL (§4.4.5).
 
-After full training (76K steps, 14.9 hours), the best checkpoint (step 74K) achieves **held-out PPL of 7.13**, **25.3% CSR** (95% CI [24.0%, 26.5%]), and **76% MorphAcc**. A key methodological finding emerges: **PPL is the only metric that consistently produces coherent, reliable signal** for checkpoint ranking (7.56 → 7.17 → 7.13, all 14 evaluation files agree). The autocomplete-specific metrics proved fragile: CSR requires token-ID prompts to avoid BOS/tokenizer divergence bugs (string prompts gave ~4% vs ~28%), produces overlapping confidence intervals at n=300. A sentence-level typing simulation reveals a **CSR paradox**: the model's native Basque achieves the lowest simulated CSR (19.6%), below English (25.5%) and Spanish (29.3%) which represent <1% of training data — a structural artifact of agglutinative word length, not a model deficiency. An **unresolved anomaly**: next-word CSR does not track PPL improvement across the training trajectory, though this effect is backend-dependent and may be a computation artifact.
+After full training (76K steps, 14.9 hours), the best checkpoint (step 74K) achieves **held-out PPL of 7.13**, **25.3% CSR** (95% CI [24.0%, 26.5%]), and **76% MorphAcc**. A key methodological finding emerges: **PPL is the only metric that consistently produces coherent, reliable signal** for checkpoint ranking (7.56 → 7.17 → 7.13, all 14 evaluation files agree). The autocomplete-specific metrics proved fragile: CSR requires token-ID prompts to avoid BOS/tokenizer divergence bugs (string prompts gave ~4% vs ~28%), produces overlapping confidence intervals at n=300. A sentence-level typing simulation reveals a **CSR paradox**: the model's native Basque achieves the lowest simulated CSR (19.6%), below English (25.5%) and Spanish (29.3%) which represent <1% of training data — a structural artifact of agglutinative word length, not a model deficiency. An **unresolved anomaly**: in the PyTorch backend, *all* autocomplete metrics (CSR, Top-1, Top-3, Top-5 accuracy) move opposite to PPL improvement across the training trajectory — the model becomes more confident but not more accurate at exact-match next-word prediction. Only confidence tracks PPL. The CSR-specific effect is backend-dependent (does not replicate in GGUF) and may be partly a computation artifact.
 
 We document five **inference engineering strategies** — retokenization fallback, sticky merge, top-k exceeding display-k, next-word candidate extraction, and completion logging with replay — that address failure modes unique to deploying subword-tokenized models as interactive keyboards in agglutinative languages. A cross-model comparison using **Bits Per Character (BPC)** shows Morpheus (91M, BPC 0.970) matching GPT-2 eus-euscrawl (124M, BPC 0.981) and approaching Latxa-Qwen3.5-2B (1.88B, BPC 0.822) at 1/20th the parameters. A data scaling analysis finds the model converged at ~8.8B tokens (~1.9 epochs), likely due to **data quality constraints** rather than quantity, suggesting that for low-resource languages, aggressive quality filtering of a 2–5B token corpus would be more efficient than maximizing raw token count.
 
@@ -613,7 +613,7 @@ The improvement rate dropped by **18.6×**. The model effectively converged arou
 - **MorphAcc** saturates at 76% from step 54K (tokenizer-bound).
 - **Completion replay** favors 54K (Top-1 60→80%) but conflates model quality with inference engineering.
 
-**CSR is a lower bound — and structurally biased.** The typing simulation (§6.12) reveals a deeper problem: CSR is not merely resolution-limited, it is **structurally biased against the target language**. Agglutinative morphology requires longer typed prefixes before prediction, consuming the keystroke savings CSR measures. An unresolved anomaly (§6.13) — where NW-CSR does not track PPL improvement — provides further evidence that autocomplete metrics can mislead checkpoint selection, though this effect appears backend-dependent.
+**CSR is a lower bound — and structurally biased.** The typing simulation (§6.12) reveals a deeper problem: CSR is not merely resolution-limited, it is **structurally biased against the target language**. Agglutinative morphology requires longer typed prefixes before prediction, consuming the keystroke savings CSR measures. An unresolved anomaly (§6.13) — where *all* autocomplete metrics (CSR, Top-1, Top-3, Top-5) move opposite to PPL improvement in PyTorch — provides further evidence that exact-match metrics can mislead checkpoint selection, though the CSR-specific effect appears backend-dependent.
 
 ### 6.9 Overall Assessment at Step 74K (Training Complete)
 
@@ -684,38 +684,38 @@ Only **one high-confidence (≥0.8) acceptance occurred in Basque** (0.922), com
 
 **Recommendation:** CSR for agglutinative autocomplete should be accompanied by (1) Top-K accuracy (Top-1, Top-3, Top-5), (2) average prefix length before acceptance, and (3) average confidence. A naive reader comparing our 24.8% simulated CSR to the ~80% achievable in English autocomplete would conclude the model is poor, when in fact it achieves 79.5% Top-3 accuracy on its target language. The gap is structural, not qualitative.
 
-### 6.13 The CSR Inversion: A Backend-Dependent Anomaly
+### 6.13 The Inversion: All Autocomplete Metrics Move Opposite to PPL
 
-The CSR paradox (§6.12) shows that CSR penalizes agglutinative languages structurally. A more troubling question is whether CSR tracks model quality *within* a single language across training. To test this, we ran the next-word CSR simulation (the PyTorch port of the keyboard algorithm, §5.5.6) on **seven checkpoints** spanning the full training trajectory, from step 10K (early training) through step 76K (converged). The same 30 Basque CSR test sentences were used at every checkpoint, and the simulation faithfully replicates the deployed keyboard algorithm (retokenization fallback, sticky merge, top-3 display, acceptance semantics).
+The CSR paradox (§6.12) shows that CSR penalizes agglutinative languages structurally. A more troubling question is whether autocomplete metrics track model quality *within* a single language across training. To test this, we ran the next-word CSR simulation (the PyTorch port of the keyboard algorithm, §5.5.6) on **seven checkpoints** spanning the full training trajectory, from step 10K (early training) through step 76K (converged). The same 30 Basque CSR test sentences were used at every checkpoint, and the simulation faithfully replicates the deployed keyboard algorithm (retokenization fallback, sticky merge, top-3 display, acceptance semantics).
 
 **Results across the full training trajectory:**
 
-| Step | Held-out PPL | NW-CSR | 95% CI | Acceptance | Avg Prefix | Confidence | Manual |
-|-----:|:-----------:|:------:|:------:|:----------:|:----------:|:----------:|:------:|
-| 10K | — | 0.375 | [0.313, 0.438] | 0.859 | 3.5 | 0.408 | 14.1% |
-| 20K | — | **0.402** | [0.344, 0.469] | 0.852 | 3.2 | 0.415 | 14.8% |
-| 30K | — | 0.382 | [0.330, 0.443] | 0.839 | 3.4 | 0.422 | 16.1% |
-| 32K | 7.56 | 0.397 | [0.352, 0.450] | 0.866 | 3.6 | 0.400 | 13.4% |
-| 54K | 7.17 | 0.385 | [0.355, 0.448] | 0.859 | 3.6 | 0.415 | 14.1% |
-| 74K | **7.13** | **0.362** | [0.313, 0.426] | 0.832 | 3.5 | **0.433** | 16.8% |
-| 76K | 7.13 | 0.373 | [0.320, 0.450] | 0.832 | 3.3 | 0.432 | 16.8% |
+| Step | Held-out PPL | NW-CSR | 95% CI | Top-1 | Top-3 | Top-5 | Avg Prefix | Confidence |
+|-----:|:-----------:|:------:|:------:|:-----:|:-----:|:-----:|:----------:|:----------:|
+| 10K | — | 0.375 | [0.313, 0.438] | 0.537 | 0.859 | 0.866 | 3.5 | 0.408 |
+| 20K | — | **0.402** | [0.344, 0.469] | 0.503 | 0.852 | 0.859 | 3.2 | 0.415 |
+| 30K | — | 0.382 | [0.330, 0.443] | 0.537 | 0.839 | 0.852 | 3.4 | 0.422 |
+| 32K | 7.56 | 0.396 | [0.352, 0.449] | 0.523 | 0.866 | 0.873 | 3.6 | 0.401 |
+| 54K | 7.17 | 0.385 | [0.355, 0.448] | 0.503 | 0.859 | 0.866 | 3.6 | 0.416 |
+| 74K | **7.13** | **0.361** | [0.311, 0.424] | 0.503 | 0.832 | 0.852 | 3.4 | **0.433** |
+| 76K | 7.13 | 0.373 | [0.320, 0.450] | 0.517 | 0.832 | 0.852 | 3.3 | 0.432 |
 
-**What is clear:** the model improved (PPL 7.56 → 7.13). **What is unexpected:** in PyTorch, NW-CSR does not track this. It peaks at step 20K (0.402) and reaches its lowest at step 74K (0.362) — the best checkpoint. If PyTorch CSR had been the selection criterion, it would have chosen step 20K over step 74K. We call this the **CSR inversion**: in the PyTorch backend, the autocomplete metric moves opposite to model quality. As shown below, this effect is backend-specific and does not replicate in the deployed GGUF backend.
+**What is clear:** the model improved (PPL 7.56 → 7.13). **What is unexpected:** in PyTorch, *none* of the autocomplete metrics track this improvement. NW-CSR decreases (0.375 → 0.361), Top-1 accuracy decreases (0.537 → 0.503), Top-3 decreases (0.859 → 0.832), and Top-5 decreases (0.866 → 0.852). The inversion is **not specific to CSR** — it affects all Top-K metrics equally. The only metric that improves monotonically is **confidence** (0.408 → 0.433): the model becomes more certain about its predictions, but not more accurate at matching the gold-standard word.
 
-The decomposed metrics reveal: confidence increases monotonically (0.408 → 0.433) while acceptance decreases (0.859 → 0.832). The decline in NW-CSR is not quality degradation — acceptance rate remains high (83–87%) throughout.
+This finding broadens the anomaly considerably. It is not a quirk of CSR's formulation (keystroke accounting) or of acceptance semantics (sticky merge, retokenization fallback). The model's exact-match next-word prediction accuracy on this fixed 30-sentence test set does not improve with training, even though its probability distribution sharpens.
 
-**Hypotheses (preliminary, unresolved).** We do not yet understand why this occurs and cannot rule out computation artifacts:
-1. **Multiple valid continuations** — better model converges on *a* valid answer, not *the* gold answer; exact-match CSR cannot credit it.
-2. **Agglutinative probability distribution** — better model distributes probability across morphological variants, depressing top-1 on any single one.
-3. **Computation artifacts** — retokenization fallback merges probabilities across non-comparable paths; sticky merge +0.1 boost may interact with checkpoint-specific rankings.
+**Hypotheses (preliminary, unresolved).** The Top-K data strongly supports hypothesis (1):
+1. **Multiple valid continuations** *(most supported)* — a better language model converges on *a* valid continuation, not *the* gold-standard one. In agglutinative Basque, many morphological variants are syntactically valid after any given prefix (*paseatzera*, *paseatzeko*, *paseatzen*). As training improves, the model better estimates the full distribution — which may shift probability mass *away* from the specific gold answer toward other valid forms. PPL captures this distributional improvement; exact-match Top-K cannot.
+2. **Agglutinative probability distribution** — the better model distributes probability across morphological variants more evenly, depressing top-1 on any single one. Consistent with the 43.6pp Top-1-to-Top-3 gap observed in §6.12.
+3. **Computation artifacts** — bf16 forward pass may introduce systematic biases in logprob rankings; see GGUF cross-validation below.
 4. **Evaluation set sensitivity** — 30 sentences from a single Wikipedia topic; stylistic drift as training progresses.
 5. **Small sample size** — all CIs overlap (n=30); the trend is directional, not proven.
 
-**Practical implication:** **CSR should not be used as a primary checkpoint selection criterion** (§6.8). The anomaly shows CSR can fail to track model quality.
+**Practical implication:** **No exact-match autocomplete metric should be used as a primary checkpoint selection criterion** (§6.8). PPL is the only metric that reliably tracks model quality. The anomaly shows that Top-K accuracy and CSR can all move opposite to PPL, making them unreliable for model selection.
 
-**GGUF cross-validation: the anomaly is backend-dependent.** We ran the same 30 sentences through the deployed GGUF model (Q5_K_M, llama.cpp). The effect **does not replicate in GGUF**: PyTorch CSR decreases monotonically (0.397 → 0.362) while GGUF CSR modestly *increases* from 32K to 54K (0.362 → 0.390), roughly tracking the PPL improvement, then plateaus (0.389 at 74K). Step 32K is *lowest* in GGUF despite being *highest* in PyTorch — supporting hypothesis (3) that bf16 forward pass vs. Q5_K_M dequantization produce different logprob distributions. Full cross-backend comparison table in Appendix D.
+**GGUF cross-validation: the CSR inversion is backend-dependent.** We ran the same 30 sentences through the deployed GGUF model (Q5_K_M, llama.cpp). The CSR effect **does not replicate in GGUF**: PyTorch CSR decreases monotonically (0.397 → 0.361) while GGUF CSR modestly *increases* from 32K to 54K (0.362 → 0.390), roughly tracking the PPL improvement, then plateaus (0.389 at 74K). Step 32K is *lowest* in GGUF despite being *highest* in PyTorch — supporting hypothesis (3) that bf16 forward pass vs. Q5_K_M dequantization produce different logprob distributions. Full cross-backend comparison table in Appendix D. Note: Top-K data is only available for the PyTorch backend; the GGUF cross-validation measured CSR only.
 
-**The inversion is backend-specific.** In PyTorch (bf16), NW-CSR inverts — it decreases as PPL improves. In GGUF (Q5_K_M), NW-CSR modestly tracks PPL (0.362 → 0.390 → 0.389). The practical conclusion holds regardless: NW-CSR is too noisy across backends and sample sizes to serve as a reliable checkpoint selection criterion. The GGUF differences (±0.028) are small and non-monotonic, and all PyTorch CIs overlap (n=30). Quantization also reduces confidence across all checkpoints (e.g., step 74K: 0.433 → 0.381), as expected from 5-bit weight encoding.
+**The CSR inversion is backend-specific; the broader Top-K inversion is PyTorch-only (untested in GGUF).** The practical conclusion holds regardless: autocomplete metrics are too noisy across backends and sample sizes to serve as reliable checkpoint selection criteria. All PyTorch CIs overlap (n=30). Quantization also reduces confidence across all checkpoints (e.g., step 74K: 0.433 → 0.381), as expected from 5-bit weight encoding.
 
 ---
 
@@ -723,7 +723,7 @@ The decomposed metrics reveal: confidence increases monotonically (0.408 → 0.4
 
 ### 7.1 Immediate
 
-1. **Investigate the CSR anomaly** (§6.13) with a larger, more diverse evaluation set (100+ sentences). Training is complete (76K steps, ~10B tokens, 14.9 hours, PPL flat from step 67K).
+1. **Investigate the metric inversion** (§6.13) with a larger, more diverse evaluation set (100+ sentences). All autocomplete metrics (CSR, Top-1, Top-3, Top-5) decrease as PPL improves in PyTorch; only confidence tracks PPL. Training is complete (76K steps, ~10B tokens, 14.9 hours, PPL flat from step 67K).
 2. **Investigate repetition loops** — both checkpoints exhibit greedy-decoding repetition on some prompts. Repetition penalty or nucleus sampling may improve practical autocomplete quality more than further training.
 3. **Mitigate date/number prediction artifacts** (§6.10). The model over-predicts temporal and numeric expressions because the corpus is dominated by encyclopedic and journalistic prose. Candidate mitigations include: (a) **downweighting lines with high digit density** during training, (b) **post-hoc filtering** of numeric-heavy suggestions in the demo server, or (c) **domain reweighting** to reduce the relative proportion of Wikipedia/news text in favor of more conversational or instructional prose. Each approach has tradeoffs: downweighting may harm legitimate date prediction, post-hoc filtering adds latency, and domain reweighting requires additional clean data sources.
 4. **Scale CSR evaluation** — 300 sentences with CIs is a significant improvement over 30, but 1000+ would further tighten confidence intervals.
@@ -780,7 +780,7 @@ Morpheus demonstrates that **State Space Models (Mamba-2) are a viable architect
 
 1. **Vocabulary-size ablation for Basque.** Unigram MorphAcc drops from 66.7% at 4K to 28.6% at 32K, mirroring QuechuaTok. At 4K, verbal agreement morphemes (`zki`, `zu`, `ke`) are independently accessible; at 32K, they are buried in opaque atomic units. **Fertility correlates negatively with morphological accuracy** for agglutinative tokenizer evaluation — lower fertility is achieved by fusing morphemes into opaque units. We note this is based on 4 data points (MorphAcc, not downstream PPL) and establish correlation, not causation.
 
-2. **Evaluation methodology: PPL is the only reliable metric; autocomplete metrics are fragile.** PPL improved monotonically (7.56 → 7.17 → 7.13, all 14 files agree) and is the only metric that unambiguously ranked checkpoints. CSR is fragile to implement (string prompts gave ~4% vs ~28% with token IDs due to BOS/tokenizer bugs) and saturates at small sample sizes (CIs overlap at n=300). The **CSR paradox** (§6.12) shows the model's native Basque achieves the *lowest* simulated CSR (19.6%) — below English/Spanish at <1% of training data — because agglutinative word length requires longer typed prefixes. An **unresolved anomaly** (§6.13): next-word CSR does not track PPL improvement across the training trajectory, though this effect is backend-dependent and may be a computation artifact rather than a metric property. **CSR penalizes the very language such systems are designed to serve and should not be used as a primary optimization target.** This is corroborated by GitHub's Copilot team, who found acceptance-rate optimization structurally misleading (Fu & Mogensen, 2026).
+2. **Evaluation methodology: PPL is the only reliable metric; autocomplete metrics are fragile.** PPL improved monotonically (7.56 → 7.17 → 7.13, all 14 files agree) and is the only metric that unambiguously ranked checkpoints. CSR is fragile to implement (string prompts gave ~4% vs ~28% with token IDs due to BOS/tokenizer bugs) and saturates at small sample sizes (CIs overlap at n=300). The **CSR paradox** (§6.12) shows the model's native Basque achieves the *lowest* simulated CSR (19.6%) — below English/Spanish at <1% of training data — because agglutinative word length requires longer typed prefixes. An **unresolved anomaly** (§6.13): in the PyTorch backend, *all* autocomplete metrics (CSR, Top-1, Top-3, Top-5 accuracy) move opposite to PPL improvement across the training trajectory — the model becomes more confident but not more accurate at exact-match next-word prediction. The CSR-specific inversion is backend-dependent (does not replicate in GGUF) and may be partly a computation artifact rather than a metric property. **CSR penalizes the very language such systems are designed to serve and should not be used as a primary optimization target.** This is corroborated by GitHub's Copilot team, who found acceptance-rate optimization structurally misleading (Fu & Mogensen, 2026).
 
 3. **Inference engineering for agglutinative keyboards.** Five strategies — retokenization fallback, sticky merge, top-k exceeding display-k, next-word candidate extraction, and completion logging with replay — that address failure modes unique to subword-tokenized keyboards. Inference engineering adds 3.9× CSR on top of the raw model, demonstrating it is a major contribution, not a marginal optimization. We also report a critical dependency: Mamba-2 models require `llama.cpp` ≥ commit `dc2187d48` to avoid silently incorrect greedy outputs.
 
@@ -802,7 +802,7 @@ Morpheus demonstrates that **State Space Models (Mamba-2) are a viable architect
 
 ### The Path Forward
 
-The model has converged (PPL flat from step 67K). The next steps are: (1) integrate **Apertium Basque** for surface-preserving morpheme pre-segmentation, pushing MorphAcc toward 83%; (2) apply aggressive quality filtering to a 2–5B token subset; (3) distill a **Morpheus-Mobile** (~5–10M) for the Gboard paradigm; (4) investigate the CSR anomaly with larger evaluation sets.
+The model has converged (PPL flat from step 67K). The next steps are: (1) integrate **Apertium Basque** for surface-preserving morpheme pre-segmentation, pushing MorphAcc toward 83%; (2) apply aggressive quality filtering to a 2–5B token subset; (3) distill a **Morpheus-Mobile** (~5–10M) for the Gboard paradigm; (4) investigate the metric inversion with larger evaluation sets.
 
 ---
 
@@ -851,18 +851,20 @@ During development, step 54K appeared to have "forgotten" the word *Kaixo* (pred
 
 ---
 
-## Appendix D: CSR Inversion — Full GGUF Cross-Validation Table
+## Appendix D: Metric Inversion — Full GGUF Cross-Validation Table
 
-| Step | Backend | NW-CSR | Acceptance | Confidence | Manual |
-|-----:|---------|:------:|:----------:|:----------:|:------:|
-| 32K | PyTorch (bf16) | **0.397** | 0.866 | 0.400 | 13.4% |
-| 32K | GGUF (Q5_K_M) | **0.362** | 0.852 | 0.372 | 14.8% |
-| 54K | PyTorch (bf16) | 0.385 | 0.859 | 0.415 | 14.1% |
-| 54K | GGUF (Q5_K_M) | 0.390 | 0.839 | 0.413 | 16.1% |
-| 74K | PyTorch (bf16) | **0.362** | 0.832 | **0.433** | 16.8% |
-| 74K | GGUF (Q5_K_M) | **0.389** | 0.852 | 0.381 | 14.8% |
+| Step | Backend | NW-CSR | Top-1 | Top-3 | Top-5 | Confidence |
+|-----:|---------|:------:|:-----:|:-----:|:-----:|:----------:|
+| 32K | PyTorch (bf16) | 0.396 | 0.523 | 0.866 | 0.873 | 0.400 |
+| 32K | GGUF (Q5_K_M) | 0.362 | — | — | — | 0.372 |
+| 54K | PyTorch (bf16) | 0.385 | 0.503 | 0.859 | 0.866 | 0.415 |
+| 54K | GGUF (Q5_K_M) | 0.390 | — | — | — | 0.413 |
+| 74K | PyTorch (bf16) | 0.361 | 0.503 | 0.832 | 0.852 | 0.433 |
+| 74K | GGUF (Q5_K_M) | 0.389 | — | — | — | 0.381 |
 
-The effect does not replicate in GGUF: PyTorch CSR decreases monotonically (0.397 → 0.362) while GGUF CSR modestly increases from 32K to 54K (0.362 → 0.390), then plateaus (0.389 at 74K). This supports hypothesis (3): bf16 forward pass vs. Q5_K_M dequantization produce different logprob distributions, amplified by sticky merge and retokenization fallback.
+Top-K accuracy was only measured in the PyTorch backend. The GGUF cross-validation measured CSR only (via the demo server's keyboard API). In PyTorch, all Top-K metrics decrease from 32K to 74K alongside CSR; in GGUF, CSR modestly increases. Whether GGUF Top-K also tracks PPL remains untested.
+
+The CSR inversion does not replicate in GGUF: PyTorch CSR decreases monotonically (0.396 → 0.361) while GGUF CSR modestly increases from 32K to 54K (0.362 → 0.390), then plateaus (0.389 at 74K). This supports hypothesis (3): bf16 forward pass vs. Q5_K_M dequantization produce different logprob distributions. However, the broader Top-K inversion (all metrics decreasing in PyTorch) is untested in GGUF — the demo server API does not expose per-rank candidate data needed for Top-K computation.
 
 ---
 
