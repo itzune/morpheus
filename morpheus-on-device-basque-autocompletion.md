@@ -62,7 +62,7 @@ Two prediction paradigms dominate real-world autocomplete systems. **Multi-token
 | Gmail Smart Compose | ~80M | Server-side | ~8B emails (~320B+ tokens est.) | Cloud TPU (data center) | LSTM | Multi-token |
 | GitHub Copilot | Multi-billion | Server-side | Proprietary code corpus | Cloud GPU (Azure) | Transformer (FIM) | Multi-token |
 | GPT-2 eus-euscrawl | 124M | ~50 MB (Q4) | ~423M tokens | On-device (desktop) | Transformer | Multi-token |
-| **Morpheus v2** | **91M** | **55 MB** (Q4_K_M) | **~10B tokens** | **On-device (laptop)** | **Mamba-2** | **Both** |
+| **Morpheus v2** | **91M** | **55 MB** (Q4_K_M) | **Latxa Corpus v2 (curated, ~10B tok)** | **On-device (laptop)** | **Mamba-2** | **Both** |
 | Latxa-Qwen3.5-2B | 1,882M | ~1.2 GB (Q4) | Latxa Corpus v2 (public, ~4.2B tokens) | High-end only | Qwen3.5 (instruct) | Multi-token |
 
 **The KV-cache insight.** Despite Transformers achieving better perplexity, Google chose an LSTM for Smart Compose because Transformer self-attention requires maintaining keys and values from all previous decoding steps, making per-step latency grow with context length (Chen et al., 2019). GitHub Copilot, also Transformer-based, requires an elaborate global proxy infrastructure (HTTP/2, request cancellation, streaming, geographic routing) to achieve <200ms latency (Cheney, 2025). Google solved the latency problem with data-center TPUs; Morpheus solves it with Mamba-2's O(1) per-step inference at the architecture level — enabling the Smart Compose paradigm to run **on-device** on a consumer laptop (91M, 55 MB, zero network calls), comparable in scale to Smart Compose's 80M but without the data-center dependency.
@@ -119,7 +119,7 @@ We evaluated three candidate architectures against these constraints:
 #### Path A: xLSTM (Modern Recurrent)
 - 50-100M parameters
 - O(1) per-step inference, constant memory, no KV cache
-- Training from scratch on Morpheus Basque corpus
+- Training from scratch on curated Latxa Corpus v2 (§4.2)
 - ONNX Runtime INT8 deployment
 - **Pros:** Safest latency, reuses v1 infrastructure, predictable
 - **Cons:** No pre-trained Basque knowledge, lower expected quality ceiling
@@ -186,7 +186,7 @@ At 4K vocabulary, only 3.4% of parameters are in the embedding table (3.07M of ~
 
 ### 4.2 Data Pipeline
 
-**Corpus:** 4.62 billion subword tokens (pre-tokenized as uint16 .npy, 9.24 GB) from 11 curated Basque text sources after Phase 3 cleaning. The primary sources are EusCrawl v2 (web crawl, cleanest), HPLT v2 (web crawl, replaced v1 which had 83.8% duplicates), CulturaX, FineWeb2, FinePDFs, Colossal OSCAR, ZelaiHandi (news/blog), ParlEus (parliament transcriptions), and Wikipedia Basque (used for validation split). Two official gazette sources (BOPV, BOTHA) are included for training but excluded from tokenizer training due to >60% duplicate rates that would bias the vocabulary toward gazette boilerplate.
+**Corpus:** 4.62 billion subword tokens (pre-tokenized as uint16 .npy, 9.24 GB) from 11 curated Basque text sources. The corpus is derived from the publicly available **Latxa Corpus v2** (`HiTZ/latxa-corpus-v2` on HuggingFace; Etxaniz et al., 2024), with HPLT v1 excluded (83.8% duplicates) and additional deep-cleaning (Phase 0.5 + Phase 3: normalization, deduplication, quality filtering). The 11 retained sources are EusCrawl v2 (web crawl, cleanest), HPLT v2 (web crawl, replaced v1), CulturaX, FineWeb2, FinePDFs, Colossal OSCAR, ZelaiHandi (news/blog), ParlEus (parliament transcriptions), Wikipedia Basque (used for validation split), and two official gazette sources (BOPV, BOTHA). The gazette sources are included for training but excluded from tokenizer training due to >60% duplicate rates that would bias the vocabulary toward gazette boilerplate. Training saw ~10B tokens total (~2.16 epochs over the 4.62B-token corpus).
 
 **Cleaning:** Four-phase data cleaning pipeline applied before tokenization: (1) document re-parsing (encoding normalization, corrupted document detection), (2) form regularity (punctuation boundaries, whitespace normalization), (3) content filtering (validation/test leakage removal, line length filters, outlier removal), (4) deduplication (exact + near-deduplication via MinHash LSH).
 
@@ -599,6 +599,8 @@ Per-token perplexity (PPL) is tokenizer-dependent and cannot be compared across 
 | Latxa-Qwen3.5-2B | 1,882M | 248K | 0.822 | 4.89 | 0.359 |
 
 > **⚠ Corpus contamination caveat:** Wikipedia and Berria articles may appear in all three models' training data. Absolute BPC values are optimistic; the relative comparison is valid.
+>
+> **Note on shared corpus:** Morpheus and Latxa-Qwen3.5-2B both derive their training data from the Latxa Corpus v2 (§4.2). Morpheus uses a curated subset (11 of 14 sub-corpora, with additional deep-cleaning) trained for ~2.16 epochs (~10B tokens seen); Latxa-Qwen3.5-2B uses the same corpus for continued pretraining of a Qwen3.5 base (~4.2B tokens). The BPC difference between them is therefore attributable to model size (91M vs 1,882M), architecture (Mamba-2 vs Transformer), and training regime (from-scratch vs instruct-tuned continued pretraining) — not to data source differences. GPT-2 eus-euscrawl, by contrast, was trained on EusCrawl only (~423M tokens), making the Morpheus–GPT-2 comparison a natural experiment in data volume (24× difference) at similar parameter scale.
 
 **Key findings:**
 
