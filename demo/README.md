@@ -1,4 +1,4 @@
-# Morpheus v2 Mamba — Demo
+# Morpheus Mamba — Demo
 
 Ultra-low-latency Basque autocomplete with Mamba-2 (91M params) via llama.cpp.
 

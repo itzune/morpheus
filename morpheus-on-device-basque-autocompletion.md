@@ -4,7 +4,7 @@
 >
 > **Authors:** Xabier Ezpeleta
 >
-> **Code & Models:** `github.com/itzune/morpheus-mamba`
+> **Code & Models:** `github.com/itzune/morpheus`
 >
 > **Live Demo:** Docker-based local deployment supporting both Smart Compose–style ghost text and smartphone keyboard–style word chips
 >
@@ -60,7 +60,7 @@ Two prediction paradigms dominate real-world autocomplete systems. **Multi-token
 | Gmail Smart Compose | ~80M | Server-side | ~8B emails (~320B+ tokens est.) | Cloud TPU (data center) | LSTM | Multi-token |
 | GitHub Copilot | Multi-billion | Server-side | Proprietary code corpus | Cloud GPU (Azure) | Transformer (FIM) | Multi-token |
 | GPT-2 eus-euscrawl | 124M | ~50 MB (Q4) | ~423M tokens | On-device (desktop) | Transformer | Multi-token |
-| **Morpheus v2** | **91M** | **55 MB** (Q4_K_M) | **Latxa Corpus v2 (curated, ~10B tok seen†)** | **On-device (laptop)** | **Mamba-2** | **Multi-token** |
+| **Morpheus** | **91M** | **55 MB** (Q4_K_M) | **Latxa Corpus v2 (curated, ~10B tok seen†)** | **On-device (laptop)** | **Mamba-2** | **Multi-token** |
 | Latxa-Qwen3.5-2B | 1,882M | ~1.2 GB (Q4) | Latxa Corpus v2 (public, ~4.2B tokens) | High-end only | Qwen3.5 (instruct) | Multi-token |
 
 †~10B tokens seen over ~2.16 epochs (4.62B unique tokens in the curated corpus); see §4.2.
@@ -121,7 +121,7 @@ We evaluated three candidate architectures against these constraints:
 - O(1) per-step inference, constant memory, no KV cache
 - Training from scratch on curated Basque text (§4.2)
 - ONNX Runtime INT8 deployment
-- **Pros:** Safest latency, reuses v1 infrastructure, predictable
+- **Pros:** Safest latency, predictable
 - **Cons:** No pre-trained Basque knowledge, lower expected quality ceiling
 
 #### Path B: Distilled Transformer (from Kimu 9B)
@@ -241,9 +241,9 @@ A notable counterpoint: Arnett et al. (2025) found that morphological alignment 
 
 **The open question:** Neither Latxa nor Kimu has published an ablation study on tokenizer impact for Basque. At 7B-70B parameters, models overcome tokenizer deficiencies through scale — but our 91M model cannot afford a suboptimal tokenizer.
 
-#### 4.4.3 Retrospective on Our Decision
+#### 4.4.3 Why 4K Over 32K
 
-Our v1 tokenizer decision chose SentencePiece Unigram at 32K based on fertility 1.71. The 2026 research reveals:
+SentencePiece Unigram at 32K is the natural default — it yields a low fertility of 1.71 (fewer tokens per word, seemingly more efficient) and matches the vocabulary size most LLMs use. However, the 2026 research reveals:
 
 1. **Unigram was correct over BPE.** Xu & Kim (2026) and Stephen & Libovický (2026) support Unigram for agglutinative settings.
 2. **32K vocabulary places us in the surface-form memorization regime.** At 32K, the tokenizer memorizes frequent wordforms as atomic units, fragmenting morphemes arbitrarily.
@@ -261,7 +261,7 @@ We formulated a testable hypothesis:
 
 **Metric: MorphAcc consistency.** For each test word with a known root–suffix boundary (e.g., `etxe|tik`), we check whether the tokenizer places a token boundary at the morpheme boundary. A word scores `boundary_correct = true` if and only if the root and suffix are in **separate tokens** — not merely substrings of a single fused token. For example, `etxetik` → `▁etxe` `tik` scores ✓ (boundary preserved); `etxetik` → `▁etxetik` scores ✗ (fused into one token). The aggregate metric is the percentage of test words with `boundary_correct = true`.
 
-**Experimental design.** We trained SentencePiece Unigram tokenizers at 4K, 8K, 16K, and 32K on a proportional sample from the full corpus (336.8 MB, 3.5M lines, ~84M tokens, drawn proportionally from all 15 source files). All tokenizers used identical SentencePiece parameters: `model_type=unigram`, `character_coverage=0.9995`, `byte_fallback=True`. Training took ~60s per tokenizer on CPU. The 32K baseline was our existing production tokenizer trained on the same corpus with the same parameters.
+**Experimental design.** We trained SentencePiece Unigram tokenizers at 4K, 8K, 16K, and 32K on a proportional sample from the full corpus (336.8 MB, 3.5M lines, ~84M tokens, drawn proportionally from all 15 source files). All tokenizers used identical SentencePiece parameters: `model_type=unigram`, `character_coverage=0.9995`, `byte_fallback=True`. Training took ~60s per tokenizer on CPU. The 32K baseline was trained on the same corpus with the same parameters.
 
 **Test words.** We evaluated 21 Basque words covering five roots (`etxe`, `lagun`, `mendi`, `gizon`, `kale`) and eight case suffixes (absolutive `-a`, allative `-ra`, ablative `-tik`, genitive locative `-ko`, inessive `-an`, comitative `-arekin`, benefactive `-arentzat`, causal `-arengatik`). Representative examples:
 
@@ -534,7 +534,7 @@ Per-token perplexity (PPL) is tokenizer-dependent and cannot be compared across 
 | Model | Params | Vocab | BPC | PPL (token) | Tok/Char |
 |-------|--------|-------|-----|-------------|----------|
 | GPT-2 eus-euscrawl | 124M | 50K | 0.981 | 29.21 | 0.202 |
-| **Morpheus v2 (Mamba-2)** | **91M** | **4K** | **0.970** | **9.83** | **0.294** |
+| **Morpheus (Mamba-2)** | **91M** | **4K** | **0.970** | **9.83** | **0.294** |
 | Latxa-Qwen3.5-2B | 1,882M | 248K | 0.822 | 4.89 | 0.359 |
 
 > **Note on shared corpus:** Morpheus and Latxa-Qwen3.5-2B both derive their training data from the Latxa Corpus v2 (§4.2). Morpheus uses a curated subset (11 of 14 sub-corpora, with additional deep-cleaning) trained for ~2.16 epochs (~10B tokens seen); Latxa-Qwen3.5-2B uses the same corpus for continued pretraining of a Qwen3.5 base (~4.2B tokens). The BPC difference between them is therefore attributable to model size (91M vs 1,882M), architecture (Mamba-2 vs Transformer), and training regime (from-scratch vs instruct-tuned continued pretraining) — not to data source differences. GPT-2 eus-euscrawl, by contrast, was trained on EusCrawl only (~423M tokens), making the Morpheus–GPT-2 comparison a natural experiment in data volume (~11× difference in unique corpus size) at similar parameter scale.
@@ -554,7 +554,7 @@ To provide a fair raw-model comparison without our inference engineering advanta
 | Model | CSR (macro) | 95% CI | Word Accuracy |
 |-------|-------------|--------|---------------|
 | GPT-2 eus-euscrawl | 0.110 | [0.060, 0.167] | 37.6% (56/149) |
-| **Morpheus v2** | **0.094** | [0.058, 0.131] | **60.4% (90/149)** |
+| **Morpheus** | **0.094** | [0.058, 0.131] | **60.4% (90/149)** |
 | Latxa-Qwen3.5-2B | 0.237 | [0.201, 0.275] | 68.5% (102/149) |
 
 **Key findings:**
@@ -758,7 +758,7 @@ NW-CSR inverts only in PyTorch (↓) while GGUF tracks PPL (↑) — likely a bf
 
 ## 8. Code Availability
 
-All code, model checkpoints, and evaluation artifacts are publicly available at `github.com/itzune/morpheus-mamba`. The repository contains:
+All code, model checkpoints, and evaluation artifacts are publicly available at `github.com/itzune/morpheus`. The repository contains:
 
 - **Training pipeline**: Mamba-2 training with atomic checkpointing, gradient accumulation, and W&B integration
 - **Data pipeline**: Corpus cleaning, SentencePiece Unigram tokenizer training, and pretokenization with validation leakage prevention
