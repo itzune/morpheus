@@ -42,7 +42,7 @@ Recent work on agglutinative language modeling confirms this challenge. QuechuaT
 6. Fits within **≤ 300 MB** on disk (feasible for browser extensions and desktop applications)
 7. Supports **both prediction paradigms** with inference engineering tailored to each
 
-This paper is primarily a **systems paper** — its core question is whether Smart Compose–equivalent autocompletion can run on-device for Basque. The evaluation methodology findings (PPL reliability, CSR paradox) emerged from the challenge of evaluating that system, and the inference engineering strategies (§5.5) from deploying it. We present these methodological contributions as lessons learned, using the system as a case study.
+This paper is primarily a **systems paper** — its core question is whether Smart Compose–equivalent autocompletion can run on-device for Basque. The evaluation methodology findings (PPL reliability, CSR paradox) emerged from the challenge of evaluating that system, and the inference engineering strategies (§5.4) from deploying it. We present these methodological contributions as lessons learned, using the system as a case study.
 
 ---
 
@@ -69,7 +69,7 @@ Two prediction paradigms dominate real-world autocomplete systems. **Multi-token
 
 **Data asymmetry.** Smart Compose's training data has two advantages unavailable to Basque: **volume** (~8B emails, ~30–60× our curated corpus) and **domain match** (trained on emails, deployed for writing emails — the distribution the model learns is exactly what users produce). Morpheus trains on general Basque prose (Wikipedia, news, literature) but deploys as a general-purpose text editor, producing corpus-induced artifacts (§6.10) where the model over-predicts encyclopedic patterns. For Basque, no large email or conversational corpus exists — data quality is the binding constraint, not quantity (§6.7).
 
-**Mobile vs. desktop.** The 91M model is sized for the desktop multi-token continuation use case (comparable to Smart Compose). The mobile next-word prediction paradigm (Gboard: 1.4M/1.4MB) requires a distilled variant (~5–10M) that has not yet been trained; the inference engineering strategies in §5.5 are designed to carry over.
+**Mobile vs. desktop.** The 91M model is sized for the desktop multi-token continuation use case (comparable to Smart Compose). The mobile next-word prediction paradigm (Gboard: 1.4M/1.4MB) requires a distilled variant (~5–10M) that has not yet been trained; the inference engineering strategies in §5.4 are designed to carry over.
 
 Trnka & McCoy (2008) defined **Keystroke Savings Rate (KSR)** as the gold standard for word prediction evaluation: the percentage of keystrokes saved by accepting predictions. We adapt this as **Character Savings Rate (CSR)** — a simulation-based metric following the free-acceptance model where accepting a suggestion costs one keystroke (Tab).
 
@@ -320,39 +320,13 @@ At our model scale, the parameter-efficiency argument is also decisive: at 4K vo
 
 ## 5. Deployment Pipeline
 
-### 5.1 Export: PyTorch → HuggingFace → GGUF
+### 5.1 Deployment: Export and Quantization
 
-```
-1. PyTorch checkpoint → HuggingFace format (custom export script)
-2. HuggingFace → GGUF FP16 (llama.cpp convert_hf_to_gguf.py)
-3. GGUF FP16 → Q4_K_M quantization (llama-quantize)
-```
+The PyTorch checkpoint was exported to GGUF format via standard llama.cpp tooling (`convert_hf_to_gguf.py` → `llama-quantize`) and quantized to Q4_K_M (55 MB), the deployment default. A critical reproducibility finding: llama-server auto-prepends a BOS token for string prompts and its built-in SentencePiece tokenizer diverges from the reference library on this 4K vocabulary, producing CSR of ~4% vs ~28% with correct token-ID prompts. The demo server therefore sends token IDs, not strings (§5.3).
 
-The export writes `add_bos_token: false` because the model was trained without BOS. A critical debugging finding: llama-server auto-prepends BOS for string prompts and its built-in SentencePiece tokenizer diverges from the reference library on this 4K vocabulary, producing CSR of ~4% vs ~28% with correct token-ID prompts. The demo server therefore sends token IDs, not strings (§5.4).
+To validate the Q4_K_M choice, we compared it against Q5_K_M (66 MB) head-to-head on the same checkpoint (step 74K): multi-token CSR and Top-3 acceptance rate — the product metrics — are identical between the two quantizations. Q5_K_M shows a modest Top-1 advantage (~6pp), but this does not affect the deployed 3-chip UX. Given that Q4_K_M is 41% faster and 17% smaller (§5.2), the quality cost is zero on the metrics that matter.
 
-### 5.2 Quantization
-
-| Format | Size | BPW | Notes |
-|--------|------|-----|-------|
-| FP32 (PyTorch checkpoint) | ~547 MB | 32 | Training only |
-| FP16 (GGUF) | **181 MB** | 16 | Reference quality |
-| Q8_0 (GGUF) | 97 MB | 8 | Near-lossless |
-| Q5_K_M (GGUF) | 66 MB | 5.5 | High quality |
-| Q4_K_M (GGUF) | **55 MB** | 4.92 | **Deployment default** |
-
-To validate the Q4_K_M deployment choice, we compared Q4_K_M and Q5_K_M head-to-head on the same checkpoint (step 74K) using both multi-token CSR (30 sentences) and next-word keyboard simulation (15 sentences, Top-K metrics):
-
-| Metric | Q4_K_M | Q5_K_M | Δ |
-|--------|-------:|-------:|---|
-| Multi-token CSR (macro) | 27.31% | 27.05% | +0.26pp |
-| Multi-token CSR (micro) | 27.46% | 27.46% | 0.00pp |
-| Top-1 accuracy (next-word) | 43.0% | 48.9% | −5.9pp |
-| Top-3 accuracy (= acceptance) | 75.6% | 75.6% | 0.00pp |
-| Next-word CSR | 26.7% | 26.6% | +0.1pp |
-
-CSR and acceptance rate — the product metrics — are identical. Q5_K_M shows a modest Top-1 advantage (~6pp, consistent across all three languages), but this does not affect the deployed 3-chip UX: whether the correct word appears in the top 3 is the same for both quants. Given that Q4_K_M is 41% faster and 17% smaller (§5.3), the quality cost is zero on the metrics that matter.
-
-### 5.3 Inference Performance
+### 5.2 Inference Performance
 
 We benchmarked the model across three hardware configurations using llama-server's built-in `/completion` timing endpoint, measuring decode speed (tok/s during generation), prefill speed (tok/s during prompt processing), and end-to-end autocomplete latency (wall-clock time for short-prompt, 3–5 token generation — the realistic autocomplete scenario).
 
@@ -373,11 +347,11 @@ We benchmarked the model across three hardware configurations using llama-server
 
 **Decode speed is context-length independent.** Because Mamba-2's SSM state is fixed-size, decode speed remains constant whether the context is 4 tokens or 129 tokens. This is critical for text editors where context grows over a long editing session — unlike transformer models, whose KV cache grows linearly and eventually slows generation.
 
-### 5.4 Demo Server
+### 5.3 Demo Server
 
-A Docker-based demo server wraps `llama-server` and serves both prediction paradigms over WebSocket/HTTP, using token-ID prompts to bypass the BOS/tokenizer divergence documented in §5.1. It supports greedy (temperature=0) and sampling modes, ghost-suffix deduplication for inline display, and model hot-reload for checkpoint comparison. The server's next-word candidate logic is the subject of §5.5; its multi-token logic is straightforward greedy continuation.
+A Docker-based demo server wraps `llama-server` and serves both prediction paradigms over WebSocket/HTTP, using token-ID prompts to bypass the BOS/tokenizer divergence documented in §5.1. It supports greedy (temperature=0) and sampling modes, ghost-suffix deduplication for inline display, and model hot-reload for checkpoint comparison. The server's next-word candidate logic is the subject of §5.4; its multi-token logic is straightforward greedy continuation.
 
-### 5.4.1 Two Prediction Paradigms
+### 5.3.1 Two Prediction Paradigms
 
 The demo implements two distinct prediction paradigms, which we distinguish throughout the evaluation because they have different user experiences, failure modes, and applicable metrics:
 
@@ -388,15 +362,15 @@ The demo implements two distinct prediction paradigms, which we distinguish thro
 | **Output** | N tokens of gray inline text | 3 discrete word chips |
 | **Acceptance** | Tab accepts entire continuation | Tap selects one word |
 | **Failure mode** | Repetition loops, ghost-text jitter | Tokenization trap, prediction vanishing |
-| **Evaluated by** | CSR (§6) | Completion logging + replay (§5.5.6) |
+| **Evaluated by** | CSR (§6) | Completion logging + replay (§5.4.6) |
 
-Multi-token continuation is the simpler inference case: the model greedily extends the context. Next-word prediction is harder because it must produce *whole words* as discrete options, exposing the tokenization trap (§5.5.1). This distinction maps to evaluation: CSR measures multi-token quality, while completion logging measures next-word quality. Conflating them would obscure why PPL improvements are not confirmed by CSR while the keyboard experience benefits from candidate carry-forward.
+Multi-token continuation is the simpler inference case: the model greedily extends the context. Next-word prediction is harder because it must produce *whole words* as discrete options, exposing the tokenization trap (§5.4.1). This distinction maps to evaluation: CSR measures multi-token quality, while completion logging measures next-word quality. Conflating them would obscure why PPL improvements are not confirmed by CSR while the keyboard experience benefits from candidate carry-forward.
 
-### 5.5 Inference Engineering for Agglutinative Keyboards
+### 5.4 Inference Engineering for Agglutinative Keyboards
 
-This section addresses the **next-word prediction** paradigm (§5.4.1): deploying a language model as a real-time predictive keyboard that offers whole-word suggestion chips. This is the harder of the two paradigms because it must produce discrete, complete words — which exposes the tokenization trap, a structural failure mode of subword tokenization that does not appear in multi-token ghost-text continuation or in batch evaluation. Each strategy below is motivated by a concrete failure observed during development. The strategies are architecture-agnostic and would carry over directly to a future distilled mobile model (§2.1).
+This section addresses the **next-word prediction** paradigm (§5.3.1): deploying a language model as a real-time predictive keyboard that offers whole-word suggestion chips. This is the harder of the two paradigms because it must produce discrete, complete words — which exposes the tokenization trap, a structural failure mode of subword tokenization that does not appear in multi-token ghost-text continuation or in batch evaluation. Each strategy below is motivated by a concrete failure observed during development. The strategies are architecture-agnostic and would carry over directly to a future distilled mobile model (§2.1).
 
-#### 5.5.1 The Tokenization Trap
+#### 5.4.1 The Tokenization Trap
 
 In an agglutinative language with a 4K subword vocabulary, the same word can be reachable through multiple token paths — and the path the user's partial input lands on may not reach the correct completion.
 
@@ -404,7 +378,7 @@ In an agglutinative language with a 4K subword vocabulary, the same word can be 
 
 This is not a model deficiency; it is a structural artifact of subword tokenization. The problem is especially acute in agglutinative languages because long, morphologically complex words have many possible segmentation paths, and short prefixes often land on the wrong one.
 
-#### 5.5.2 Retokenization Fallback
+#### 5.4.2 Retokenization Fallback
 
 **Strategy:** When generating word-completion candidates, query the model from progressively shorter prefixes in parallel, then filter results by the user's actual typed prefix.
 
@@ -420,7 +394,7 @@ Path 1 reaches `[▁Ka, i]`, where the model predicts `xo` at 54.2% probability.
 
 A **from-scratch path** (empty prefix, predicting the next word from preceding context only) rescues single-token whole words. For example, *bezala* is a single token (`▁bezala`); when the user types *b*, the token `▁b` cannot reach `▁bezala`. Querying from the preceding context (*"Ni ondo, beti "*) surfaces *bezala* as a next-word prediction, which passes the `startswith("b")` filter.
 
-#### 5.5.3 Sticky Merge: Candidate Carry-Forward
+#### 5.4.3 Sticky Merge: Candidate Carry-Forward
 
 **Problem:** When the model predicts a next word (e.g., *izan* after *idatzia*) and the user types the first letter (*i*), the system switches from next-word prediction to word-completion mode. The token path changes (`▁izan` is one token, but `▁i` + continuation is a different path), and the previously good prediction vanishes from the candidate list — even though the user is typing exactly the word that was predicted.
 
@@ -437,17 +411,17 @@ State 2: "...idatzia i" → fresh: [iristeko, itxa, ikur, ...]
 
 The sticky pool resets on chip acceptance and message send, preventing stale candidates from persisting across word boundaries.
 
-#### 5.5.4 Top-k Exceeds Display-k
+#### 5.4.4 Top-k Exceeds Display-k
 
 The keyboard displays 3 suggestion chips but fetches 5 candidates from the server. The extra candidates populate the sticky pool, enabling carry-forward of lower-ranked but relevant predictions. Without this, *izan* (rank 5, prob=0.087) would never enter the sticky pool and could not be rescued in State 2.
 
-#### 5.5.5 Next-Word Candidate Extraction
+#### 5.4.5 Next-Word Candidate Extraction
 
 When the model's greedy continuation at a word-completion level begins with a space (▁-prefixed token), it signals that the model considers the current word complete and is predicting the *next* word. Rather than discarding these tokens (as noise), we extract them as next-word candidates with an `is_next_word` flag. The frontend handles these differently: inserting a leading space before the word, matching the user's expectation that the current word is finished.
 
 This also handles the edge case where the user has typed a complete word without a trailing space (e.g., *"Kaixo, zer"*): the model predicts *moduz* as a next word, and the candidate appears despite no explicit word boundary.
 
-#### 5.5.6 Completion Logging and Replay
+#### 5.4.6 Completion Logging and Replay
 
 Every chip acceptance is logged to a JSONL file with: timestamp, model checkpoint, context, smart context, accepted word and its probability, and all candidates offered. This transforms real user sessions into an evaluation dataset that can be replayed against any checkpoint:
 
@@ -473,13 +447,13 @@ We employ a multi-metric evaluation suite designed to capture different aspects 
 
 1. **Perplexity (PPL)** — The full next-token distribution quality. Computed on 1.83M held-out tokens (the validation set excluded from training via line-level leakage prevention). This is the smoothest, lowest-variance metric with no exact-match artifact. Computed with training-matching semantics: 1024-token windows, `</s>` separators included in loss, `ignore_index=0` for `<unk>`, no BOS, bfloat16.
 
-2. **Character Savings Rate (CSR)** — Simulates keystroke-by-keystroke typing. For each character in the target completion, the model receives `prompt + typed_so_far` and we check if its top-1 greedy prediction aligns with the remaining target. Acceptance costs 1 keystroke (Tab), following Trnka & McCoy (2008). We report **bootstrap 95% confidence intervals** (1000 resamples) on 300 held-out sentences. *This metric measures the **multi-token continuation** paradigm (§5.4.1): the model produces a greedy continuation and we check character-level alignment.*
+2. **Character Savings Rate (CSR)** — Simulates keystroke-by-keystroke typing. For each character in the target completion, the model receives `prompt + typed_so_far` and we check if its top-1 greedy prediction aligns with the remaining target. Acceptance costs 1 keystroke (Tab), following Trnka & McCoy (2008). We report **bootstrap 95% confidence intervals** (1000 resamples) on 300 held-out sentences. *This metric measures the **multi-token continuation** paradigm (§5.3.1): the model produces a greedy continuation and we check character-level alignment.*
 
 3. **Morpheme Boundary Accuracy (MorphAcc)** — For test cases with known morphological segmentation (e.g., `etxe|tik`), we compute whether the model's top-5 predictions include a token that respects the morpheme boundary. 40 tests across 5 roots × 4 case suffixes, with and without context.
 
 4. **Case Paradigm Completion** — For each of 6 Basque nouns, test all 14 grammatical cases (84 total). The model receives the bare root and we check if the correct case suffix ranks in top-K.
 
-5. **Completion Logging + Replay** — Real user chip acceptances are logged with full candidate context and replayed across checkpoints (§5.5.6). *This measures the **next-word prediction** paradigm.*
+5. **Completion Logging + Replay** — Real user chip acceptances are logged with full candidate context and replayed across checkpoints (§5.4.6). *This measures the **next-word prediction** paradigm.*
 6. **Keyboard Simulation (next-word)** — Two variants: (a) a frontend-faithful typing simulation (sticky merge, top-3 chips, acceptance semantics) that types 15 translated sentences (5 Basque, 5 English, 5 Spanish) char-by-char, and (b) a PyTorch-native port of the demo keyboard algorithm (`evaluate_next_word_csr` in `src/eval_utils.py`) that runs during training validation on the same 30 CSR test sentences. Both report decomposed metrics: Top-1 accuracy (was the correct word ever the #1 candidate?), Top-3 accuracy (= acceptance rate, was it in the displayed chips?), Top-5 accuracy (was it in the raw fetched pool?), average prefix before acceptance, and average confidence — alongside a simulated CSR. *This is a **secondary metric**; PPL remains primary for checkpoint ranking. The decomposed metrics avoid the CSR paradox (§6.12) because they do not conflate model quality with morphological word length.*
 7. **Bits Per Character (BPC)** — Total NLL in bits divided by character count. **Tokenizer-independent**, enabling fair comparison between models with 4K, 50K, and 248K vocabularies. Used for cross-model comparison (§6.6).
 8. **Simplified Next-Word CSR (cross-model)** — Greedy decode until a word boundary, extract the first word, compare to target. No inference engineering. Used for fair raw-model comparison across architectures (§6.6).
@@ -591,7 +565,7 @@ To provide a fair raw-model comparison without our inference engineering advanta
 
 3. **Latxa produces noisy completions.** As an instruct model, Latxa generates web navigation artifacts, markdown headers, and repeated text when used for raw text completion (e.g., the prompt "Euskal Herriko" produces "bidaia-gida/Ibilbideak/Arriurdin mendia"). This is a **confound in the CSR comparison**: instruct-tuning actively shifts the probability distribution away from raw corpus continuation toward conversational/structured outputs, penalizing Latxa on an autocomplete task it was not trained for. The BPC comparison is fairer (it measures per-character prediction quality regardless of generation mode), but the simplified CSR comparison should be read with this asymmetry in mind. A base (non-instruct) Latxa would provide a cleaner baseline (§7.3.3). For Morpheus, being a base language model is an architectural advantage for the autocomplete use case, where the model must continue text seamlessly rather than follow instructions.
 
-4. **Inference engineering adds 3.9× CSR.** Morpheus's simplified CSR of 0.094 increases to 0.362 with the full inference pipeline (retokenization fallback, sticky merge, top-k alternatives — see §5.5). This demonstrates that the engineering strategies documented in this paper are not marginal optimizations but a major contribution, nearly quadrupling the raw model's autocomplete utility.
+4. **Inference engineering adds 3.9× CSR.** Morpheus's simplified CSR of 0.094 increases to 0.362 with the full inference pipeline (retokenization fallback, sticky merge, top-k alternatives — see §5.4). This demonstrates that the engineering strategies documented in this paper are not marginal optimizations but a major contribution, nearly quadrupling the raw model's autocomplete utility.
 
 ### 6.7 Data Scaling Analysis: Training Data Requirements for Low-Resource Language Models
 
@@ -680,7 +654,7 @@ Although the model is trained exclusively on Basque-focused corpora, web-crawled
 
 ### 6.12 The CSR Paradox: Agglutinative Morphology Penalizes Native-Language Keystroke Savings
 
-To evaluate the keyboard-mode autocomplete under realistic usage, we developed a typing simulation that **faithfully replicates the frontend algorithm** (§5.5): char-by-char typing, sticky merge, top-3 chip display from a top-5 fetch, and full acceptance semantics. Fifteen sentences — five each in Basque, English, and Spanish — are translations of the same semantic content, controlling for topic and structure. The model accepts a suggestion the moment a matching candidate appears in the top-3 chips.
+To evaluate the keyboard-mode autocomplete under realistic usage, we developed a typing simulation that **faithfully replicates the frontend algorithm** (§5.4): char-by-char typing, sticky merge, top-3 chip display from a top-5 fetch, and full acceptance semantics. Fifteen sentences — five each in Basque, English, and Spanish — are translations of the same semantic content, controlling for topic and structure. The model accepts a suggestion the moment a matching candidate appears in the top-3 chips.
 
 > **Sample-size caveat:** Five sentences per language is a small sample, and we report these results as a preliminary observation rather than a statistically proven claim. The mechanism (longer agglutinative words require longer typed prefixes) is supported by the average prefix-length data below, but confirming the cross-lingual CSR gap at scale would require 500+ parallel sentences (§7.1).
 
@@ -711,7 +685,7 @@ Only **one high-confidence (≥0.8) acceptance occurred in Basque** (0.922), com
 
 ### 6.13 The Inversion: Exact-Match Metrics Move Opposite to PPL
 
-The CSR paradox (§6.12) shows that CSR penalizes agglutinative languages *structurally*. A more troubling question is whether autocomplete metrics track model quality *within* a single language across training. To test this, we ran the next-word keyboard simulation (the PyTorch port of the deployed algorithm, §5.5.6) on **seven checkpoints** spanning the full training trajectory, from step 10K (early training) through step 76K (converged), using the same 30 Basque test sentences at every checkpoint.
+The CSR paradox (§6.12) shows that CSR penalizes agglutinative languages *structurally*. A more troubling question is whether autocomplete metrics track model quality *within* a single language across training. To test this, we ran the next-word keyboard simulation (the PyTorch port of the deployed algorithm, §5.4.6) on **seven checkpoints** spanning the full training trajectory, from step 10K (early training) through step 76K (converged), using the same 30 Basque test sentences at every checkpoint.
 
 | Step | Held-out PPL | NW-CSR | 95% CI | Top-1 | Top-3 | Top-5 | Avg Prefix | Confidence |
 |-----:|:-----------:|:------:|:------:|:-----:|:-----:|:-----:|:----------:|:----------:|
@@ -763,15 +737,15 @@ NW-CSR inverts only in PyTorch (↓) while GGUF tracks PPL (↑) — likely a bf
 
 2. **Pre-segment corpus with surface-preserving morpheme boundaries** and retrain a morphology-aware tokenizer. Based on QuechuaTok results, this should increase MorphAcc from ~67% toward ~80%+.
 
-3. **Distill a mobile-variant model** for the next-word prediction paradigm (§5.4.1). The 91M model (55 MB) is sized for desktop (Smart Compose scale); mobile requires Gboard-scale (~5-10M, ~5-10 MB). A distilled Morpheus-Mobile using the 91M model as teacher would bring the inference engineering strategies (§5.5) into a smartphone-sized model. Mamba-2's O(1) memory (no KV cache) is a key advantage for this target.
+3. **Distill a mobile-variant model** for the next-word prediction paradigm (§5.3.1). The 91M model (55 MB) is sized for desktop (Smart Compose scale); mobile requires Gboard-scale (~5-10M, ~5-10 MB). A distilled Morpheus-Mobile using the 91M model as teacher would bring the inference engineering strategies (§5.4) into a smartphone-sized model. Mamba-2's O(1) memory (no KV cache) is a key advantage for this target.
 
 ### 7.3 Medium-term
 
 1. **Train Morpheus-Base (207M)** on the 4K tokenizer and compare against Morpheus-Small. A larger model may produce autocomplete improvements that are statistically detectable at current sample sizes — the 91M model's gains between 32K and 54K were directionally positive but too small for the multi-token metrics to confirm.
 2. **MWE token injection**: Extract the 1,000 most frequent Basque multi-word expressions and inject them as single tokens. This directly reduces autoregressive decoding steps by 40-60% for covered phrases.
-3. **Extend cross-model comparison** (§6.6): The current BPC comparison includes GPT-2 (124M), Latxa-Qwen3.5-2B (1.88B), and Morpheus (91M). A larger Latxa variant (7B+) and a base (non-instruct) Latxa model would provide a cleaner baseline, as the current Latxa's instruct-tuning produces noisy completions for raw text completion. Additionally, applying the full inference engineering pipeline (§5.5) to the baseline models would isolate the contribution of inference engineering from model quality.
-4. **Domain-specific fine-tuning.** The base model is trained on general Basque prose (Wikipedia, news, literature), which produces a general-purpose autocomplete but also corpus-induced artifacts such as the date/number prediction bias documented in §6.10. A lightweight fine-tuning stage on domain-specific corpora — e.g., legal Basque (terminology, statute language), medical, educational, or conversational/informal text — could improve suggestion relevance for specialized use cases while also mitigating the general-corpus artifacts. The current training infrastructure supports pretraining from scratch and checkpoint resume (continuing the same run), but **does not yet support fine-tuning-specific features**: separate fine-tuning datasets, layer freezing, differential learning rates, or parameter-efficient methods such as LoRA. The 91M parameter scale is small enough that full fine-tuning on a single GPU is feasible; the on-device deployment constraint means domain-adapted variants could be distributed as separate GGUF files and hot-swapped at runtime via the demo server's model reload endpoint (§5.4). This is also a candidate mitigation for the §6.10 date/number artifacts: a domain adapter trained on conversational or instructional prose would shift the model's distribution away from the encyclopedic patterns that produce numeric predictions.
-5. **On-device personalization from completion logs.** The completion logging system (§5.5.6) currently serves evaluation (checkpoint replay), but the logged acceptance events also constitute a local training signal: each accepted completion is a (context, target) pair in the deployment distribution. This enables **on-device personalization** — fine-tuning the 91M model on the user's own typing history — which directly addresses the domain mismatch artifacts documented in §6.10 (the model over-predicts encyclopedic patterns because it was trained on Wikipedia/news, while real users type emails, code comments, and chat). Unlike Gboard's federated approach (Xu et al., 2023), which adapts a *global* model from population-scale data with differential privacy and a coordinating server, on-device personalization adapts an *individual* model with no server and no privacy concern (data never leaves the device). The 91M parameter scale — 15–40× larger than Gboard's 2.4–6.4M federated LMs — provides sufficient capacity to meaningfully shift toward a single user's distribution. The completion log already captures the necessary (context, target) pairs; the remaining engineering is a lightweight fine-tuning path (LoRA or full) with the acceptance log as a streaming dataset, reusing the training infrastructure in `train.py`.
+3. **Extend cross-model comparison** (§6.6): The current BPC comparison includes GPT-2 (124M), Latxa-Qwen3.5-2B (1.88B), and Morpheus (91M). A larger Latxa variant (7B+) and a base (non-instruct) Latxa model would provide a cleaner baseline, as the current Latxa's instruct-tuning produces noisy completions for raw text completion. Additionally, applying the full inference engineering pipeline (§5.4) to the baseline models would isolate the contribution of inference engineering from model quality.
+4. **Domain-specific fine-tuning.** The base model is trained on general Basque prose (Wikipedia, news, literature), which produces a general-purpose autocomplete but also corpus-induced artifacts such as the date/number prediction bias documented in §6.10. A lightweight fine-tuning stage on domain-specific corpora — e.g., legal Basque (terminology, statute language), medical, educational, or conversational/informal text — could improve suggestion relevance for specialized use cases while also mitigating the general-corpus artifacts. The current training infrastructure supports pretraining from scratch and checkpoint resume (continuing the same run), but **does not yet support fine-tuning-specific features**: separate fine-tuning datasets, layer freezing, differential learning rates, or parameter-efficient methods such as LoRA. The 91M parameter scale is small enough that full fine-tuning on a single GPU is feasible; the on-device deployment constraint means domain-adapted variants could be distributed as separate GGUF files and hot-swapped at runtime via the demo server's model reload endpoint (§5.3). This is also a candidate mitigation for the §6.10 date/number artifacts: a domain adapter trained on conversational or instructional prose would shift the model's distribution away from the encyclopedic patterns that produce numeric predictions.
+5. **On-device personalization from completion logs.** The completion logging system (§5.4.6) currently serves evaluation (checkpoint replay), but the logged acceptance events also constitute a local training signal: each accepted completion is a (context, target) pair in the deployment distribution. This enables **on-device personalization** — fine-tuning the 91M model on the user's own typing history — which directly addresses the domain mismatch artifacts documented in §6.10 (the model over-predicts encyclopedic patterns because it was trained on Wikipedia/news, while real users type emails, code comments, and chat). Unlike Gboard's federated approach (Xu et al., 2023), which adapts a *global* model from population-scale data with differential privacy and a coordinating server, on-device personalization adapts an *individual* model with no server and no privacy concern (data never leaves the device). The 91M parameter scale — 15–40× larger than Gboard's 2.4–6.4M federated LMs — provides sufficient capacity to meaningfully shift toward a single user's distribution. The completion log already captures the necessary (context, target) pairs; the remaining engineering is a lightweight fine-tuning path (LoRA or full) with the acceptance log as a streaming dataset, reusing the training infrastructure in `train.py`.
 6. **Data scaling experiment for Basque.** The analysis in §6.7 suggests that 2–5B tokens of aggressively filtered, high-quality Basque text would likely match or exceed the current 10B token mixed-quality corpus. To empirically determine the optimal data size, train four models with identical architecture on 1B, 2B, 5B, and 10B token subsets of a quality-filtered corpus, and compare held-out PPL at convergence. This would yield the first data scaling law curve for Basque — a contribution to low-resource language modeling methodology. The experiment would also test whether the convergence at ~8.8B tokens (§6.7) is a property of data quality (fixable with better filtering) or of model capacity (requiring a larger model to benefit from more data).
 
 ### 7.4 Long-term
@@ -816,7 +790,7 @@ Morpheus demonstrates that **State Space Models (Mamba-2) are a viable architect
 
 4. **Cross-model baseline comparison using BPC.** BPC is the correct tokenizer-independent metric. Morpheus (91M, BPC 0.970) matches GPT-2 eus-euscrawl (124M, BPC 0.981) — driven by ~11× more training data (unique corpus), not architecture — and approaches Latxa-Qwen3.5-2B (1.88B, BPC 0.822) at 1/20th the parameters. Per-token PPL is misleading across vocabularies.
 
-5. **On-device Smart Compose feasibility.** A Smart Compose–equivalent system can run entirely on-device (91M Mamba-2, 55 MB, ~10B tokens) for a morphologically complex language. Both Google and we chose recurrent architectures over Transformers to avoid KV-cache latency (§2.1). The data scale asymmetry (Google's 30–60× larger corpus) reflects the high-resource vs. low-resource divide (§6.7). Benchmarking across three hardware configurations (§5.3) confirms the thesis: a 2017 consumer laptop CPU achieves 318 tok/s decode and 97 ms autocomplete latency, while a server CPU (440 tok/s) outperforms a server GPU (277 tok/s) — Mamba-2's O(1) state makes GPU overhead dominant for small models, reinforcing that CPU inference is both sufficient and practical.
+5. **On-device Smart Compose feasibility.** A Smart Compose–equivalent system can run entirely on-device (91M Mamba-2, 55 MB, ~10B tokens) for a morphologically complex language. Both Google and we chose recurrent architectures over Transformers to avoid KV-cache latency (§2.1). The data scale asymmetry (Google's 30–60× larger corpus) reflects the high-resource vs. low-resource divide (§6.7). Benchmarking across three hardware configurations (§5.2) confirms the thesis: a 2017 consumer laptop CPU achieves 318 tok/s decode and 97 ms autocomplete latency, while a server CPU (440 tok/s) outperforms a server GPU (277 tok/s) — Mamba-2's O(1) state makes GPU overhead dominant for small models, reinforcing that CPU inference is both sufficient and practical.
 
 6. **Data scaling analysis for low-resource LM.** Our 110:1 tokens-to-parameters ratio is reasonable by modern small-model standards (below Mosaic 190:1, MiniCPM 192:1). However, the model converged at ~8.8B tokens — not because the budget was excessive, but because **data quality is the binding constraint**. ~20–30% corpus noise means effective high-quality data is ~7–8B tokens, matching the convergence point. For low-resource languages, aggressive quality filtering of a 2–5B token corpus would likely outperform maximizing raw token count.
 
