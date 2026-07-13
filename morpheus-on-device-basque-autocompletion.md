@@ -205,9 +205,8 @@ Training was performed on a single NVIDIA L40 GPU (48 GB GDDR6, Ada Lovelace) wi
 - **Optimizer:** AdamW (β₁=0.9, β₂=0.95, weight_decay=0.1)
 - **Schedule:** Linear warmup (50M tokens) → cosine decay to 1e-5
 - **GPU config:** Power limit 260W, persistence mode enabled
-- **W&B run:** `knid3x95` ("rich-forest-14"), project `morpheus-v2-mamba`
 
-**Training progress** (4K model, W&B run `knid3x95`):
+**Training progress** (4K model):
 
 | Milestone | Step | Valid Loss | Valid PPL | Tokens Seen | % Complete |
 |-----------|------|------------|-----------|-------------|------------|
@@ -217,7 +216,7 @@ Training was performed on a single NVIDIA L40 GPU (48 GB GDDR6, Ada Lovelace) wi
 
 Validation loss decreased monotonically throughout training (2.05 → 1.96), with PPL improving from 7.8 (step 25K) to 7.13 (step 74K). The model is fully converged — validation loss is flat from step 67K onward (Δ < 0.001). The best checkpoint (step 74K, valid_loss=1.9641, PPL=7.13) is used for all final evaluations and deployed models. The training budget of ~10B tokens yields a tokens-to-parameters ratio of approximately 110:1 — below the Mosaic inference-optimal (190:1) and MiniCPM small-model-optimal (192:1) recommendations, indicating the data budget is reasonable by modern small-model standards; see §6.7 for a detailed scaling-law analysis.
 
-**Checkpoint integrity:** Checkpoints are saved atomically (write to `.tmp` then `os.replace()`) every 2,000 steps. A file-based stop monitor detects checkpoint completion via size-stability polling (3 consecutive unchanged polls + size ≥ 540MB) and sends SIGINT for clean W&B flush. The pre-training validation protocol (corpus audit, proxy overfit test, autocomplete smoke test) is documented in Appendix D.
+**Checkpoint integrity:** Checkpoints are saved atomically (write to `.tmp` then `os.replace()`) every 2,000 steps. A file-based stop monitor detects checkpoint completion via size-stability polling (3 consecutive unchanged polls + size ≥ 540MB) and sends SIGINT for clean shutdown. The pre-training validation protocol (corpus audit, proxy overfit test, autocomplete smoke test) is documented in Appendix D.
 
 ### 4.4 Tokenizer Strategy: Deep Research and Implications
 
@@ -760,7 +759,7 @@ NW-CSR inverts only in PyTorch (↓) while GGUF tracks PPL (↑) — likely a bf
 
 All code, model checkpoints, and evaluation artifacts are publicly available at `github.com/itzune/morpheus`. The repository contains:
 
-- **Training pipeline**: Mamba-2 training with atomic checkpointing, gradient accumulation, and W&B integration
+- **Training pipeline**: Mamba-2 training with atomic checkpointing and gradient accumulation
 - **Data pipeline**: Corpus cleaning, SentencePiece Unigram tokenizer training, and pretokenization with validation leakage prevention
 - **Export pipeline**: PyTorch → HuggingFace → GGUF conversion with BOS-token configuration
 - **Evaluation suite**: PPL, CSR with bootstrap confidence intervals, MorphAcc, and case paradigm completion
