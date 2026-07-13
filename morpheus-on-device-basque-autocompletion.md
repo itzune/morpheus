@@ -767,7 +767,8 @@ NW-CSR inverts only in PyTorch (↓) while GGUF tracks PPL (↑) — likely a bf
 2. **MWE token injection**: Extract the 1,000 most frequent Basque multi-word expressions and inject them as single tokens. This directly reduces autoregressive decoding steps by 40-60% for covered phrases.
 3. **Extend cross-model comparison** (§6.6): The current BPC comparison includes GPT-2 (124M), Latxa-Qwen3.5-2B (1.88B), and Morpheus (91M). A larger Latxa variant (7B+) and a base (non-instruct) Latxa model would provide a cleaner baseline, as the current Latxa's instruct-tuning produces noisy completions for raw text completion. Additionally, applying the full inference engineering pipeline (§5.5) to the baseline models would isolate the contribution of inference engineering from model quality.
 4. **Domain-specific fine-tuning.** The base model is trained on general Basque prose (Wikipedia, news, literature), which produces a general-purpose autocomplete but also corpus-induced artifacts such as the date/number prediction bias documented in §6.10. A lightweight fine-tuning stage on domain-specific corpora — e.g., legal Basque (terminology, statute language), medical, educational, or conversational/informal text — could improve suggestion relevance for specialized use cases while also mitigating the general-corpus artifacts. The current training infrastructure supports pretraining from scratch and checkpoint resume (continuing the same run), but **does not yet support fine-tuning-specific features**: separate fine-tuning datasets, layer freezing, differential learning rates, or parameter-efficient methods such as LoRA. The 91M parameter scale is small enough that full fine-tuning on a single GPU is feasible; the on-device deployment constraint means domain-adapted variants could be distributed as separate GGUF files and hot-swapped at runtime via the demo server's model reload endpoint (§5.4). This is also a candidate mitigation for the §6.10 date/number artifacts: a domain adapter trained on conversational or instructional prose would shift the model's distribution away from the encyclopedic patterns that produce numeric predictions.
-5. **Data scaling experiment for Basque.** The analysis in §6.7 suggests that 2–5B tokens of aggressively filtered, high-quality Basque text would likely match or exceed the current 10B token mixed-quality corpus. To empirically determine the optimal data size, train four models with identical architecture on 1B, 2B, 5B, and 10B token subsets of a quality-filtered corpus, and compare held-out PPL at convergence. This would yield the first data scaling law curve for Basque — a contribution to low-resource language modeling methodology. The experiment would also test whether the convergence at ~8.8B tokens (§6.7) is a property of data quality (fixable with better filtering) or of model capacity (requiring a larger model to benefit from more data).
+5. **On-device personalization from completion logs.** The completion logging system (§5.5.6) currently serves evaluation (checkpoint replay), but the logged acceptance events also constitute a local training signal: each accepted completion is a (context, target) pair in the deployment distribution. This enables **on-device personalization** — fine-tuning the 91M model on the user's own typing history — which directly addresses the domain mismatch artifacts documented in §6.10 (the model over-predicts encyclopedic patterns because it was trained on Wikipedia/news, while real users type emails, code comments, and chat). Unlike Gboard's federated approach (Xu et al., 2023), which adapts a *global* model from population-scale data with differential privacy and a coordinating server, on-device personalization adapts an *individual* model with no server and no privacy concern (data never leaves the device). The 91M parameter scale — 15–40× larger than Gboard's 2.4–6.4M federated LMs — provides sufficient capacity to meaningfully shift toward a single user's distribution. The completion log already captures the necessary (context, target) pairs; the remaining engineering is a lightweight fine-tuning path (LoRA or full) with the acceptance log as a streaming dataset, reusing the training infrastructure in `train.py`.
+6. **Data scaling experiment for Basque.** The analysis in §6.7 suggests that 2–5B tokens of aggressively filtered, high-quality Basque text would likely match or exceed the current 10B token mixed-quality corpus. To empirically determine the optimal data size, train four models with identical architecture on 1B, 2B, 5B, and 10B token subsets of a quality-filtered corpus, and compare held-out PPL at convergence. This would yield the first data scaling law curve for Basque — a contribution to low-resource language modeling methodology. The experiment would also test whether the convergence at ~8.8B tokens (§6.7) is a property of data quality (fixable with better filtering) or of model capacity (requiring a larger model to benefit from more data).
 
 ### 7.4 Long-term
 
@@ -1047,25 +1048,26 @@ Each gate targets a distinct failure class that PPL alone cannot detect: data co
 7. Etxaniz, J., Sainz, O., Perez, N., Aldabe, I., Rigau, G., Agirre, E., Ormazabal, A., Artetxe, M., & Soroa, A. (2024). *Latxa: An Open Language Model and Evaluation Suite for Basque*. arXiv:2403.20266.
 8. Chen, M. X., et al. (2019). *Gmail Smart Compose: Real-Time Assisted Writing*. arXiv:1906.00080.
 9. Hard, A., et al. (2018). *Federated Learning for Mobile Keyboard Prediction*. arXiv:1811.03604.
-10. Fu, S., & Mogensen, J. (2025). *The Road to Better Completions: Building a Faster, Smarter GitHub Copilot with a New Custom Model*. GitHub Blog, October 23, 2025.
-11. Cheney, D. (2025). *How GitHub Copilot Serves 400 Million Completion Requests a Day*. QCon San Francisco 2024 / InfoQ.
-12. Gu, A., & Dao, T. (2023). *Mamba: Linear-Time Sequence Modeling with Selective State Spaces*. arXiv:2312.00752.
-13. Dao, T., & Gu, A. (2024). *Transformers are SSMs: Generalized Models and Efficient Algorithms through Structured State Space Duality*. arXiv:2405.21060.
-14. Beck, M., et al. (2024). *xLSTM: Extended Long Short-Term Memory*. NeurIPS 2024.
-15. Lane, W., Harrigan, A., & Arppe, A. (2022). *Interactive Word Completion for Plains Cree*. ACL 2022.
-16. Trnka, K., & McCoy, K. (2008). *Evaluating Word Prediction: Framing Keystroke Savings*. ACL 2008.
-17. Liquid AI (2026). *LFM-2.5-230M: On-Device State Space Models*. liquid.ai.
-18. Orai NLP (2026). *Kimu: Basque-Adapted Language Models*. orai.eus.
-19. ChaI-TeA (2024). *ChaI-TeA: A Benchmark for Chinese Input Method*. arXiv:2412.18377.
-20. Kosyak, A., & Tyers, F. (2022). *Predictive text for agglutinative languages*.
-21. WSTypist (2026). *Simulation-based mobile typing evaluation*. arXiv:2602.06489.
-22. Rust, P., et al. (2021). *How Good is Your Tokenizer? On the Monolingual Performance of Multilingual Language Models*. ACL 2021.
-23. Hoffmann, J., et al. (2022). *Training Compute-Optimal Large Language Models* (Chinchilla). arXiv:2203.15556.
-24. Sardana, N., et al. (2024). *Beyond Chinchilla-Optimal: Accounting for Inference in Language Model Scaling Laws*. arXiv:2401.00448.
-25. Hu, S., et al. (2024). *MiniCPM: Unveiling the Potential of Small Language Models with Scalable Training Strategies*. arXiv:2404.06395.
-26. Bi, X., et al. (2024). *DeepSeek LLM: Scaling Open-Source Language Models with Longtermism*. arXiv:2401.02954.
-27. Muennighoff, N., et al. (2023). *Scaling Data-Constrained Language Models*. arXiv:2305.16264.
-28. Sainz, O., et al. (2025). *Instructing Large Language Models for Low-Resource Languages: A Systematic Study for Basque*. EMNLP 2025.
+10. Xu, Z., Zhang, Y., Andrew, G., Choquette-Choo, C. A., Kairouz, P., McMahan, H. B., Rosenstock, J., & Zhang, Y. (2023). *Federated Learning of Gboard Language Models with Differential Privacy*. ACL 2023 Industry Track. arXiv:2305.18465.
+11. Fu, S., & Mogensen, J. (2025). *The Road to Better Completions: Building a Faster, Smarter GitHub Copilot with a New Custom Model*. GitHub Blog, October 23, 2025.
+12. Cheney, D. (2025). *How GitHub Copilot Serves 400 Million Completion Requests a Day*. QCon San Francisco 2024 / InfoQ.
+13. Gu, A., & Dao, T. (2023). *Mamba: Linear-Time Sequence Modeling with Selective State Spaces*. arXiv:2312.00752.
+14. Dao, T., & Gu, A. (2024). *Transformers are SSMs: Generalized Models and Efficient Algorithms through Structured State Space Duality*. arXiv:2405.21060.
+15. Beck, M., et al. (2024). *xLSTM: Extended Long Short-Term Memory*. NeurIPS 2024.
+16. Lane, W., Harrigan, A., & Arppe, A. (2022). *Interactive Word Completion for Plains Cree*. ACL 2022.
+17. Trnka, K., & McCoy, K. (2008). *Evaluating Word Prediction: Framing Keystroke Savings*. ACL 2008.
+18. Liquid AI (2026). *LFM-2.5-230M: On-Device State Space Models*. liquid.ai.
+19. Orai NLP (2026). *Kimu: Basque-Adapted Language Models*. orai.eus.
+20. ChaI-TeA (2024). *ChaI-TeA: A Benchmark for Chinese Input Method*. arXiv:2412.18377.
+21. Kosyak, A., & Tyers, F. (2022). *Predictive text for agglutinative languages*.
+22. WSTypist (2026). *Simulation-based mobile typing evaluation*. arXiv:2602.06489.
+23. Rust, P., et al. (2021). *How Good is Your Tokenizer? On the Monolingual Performance of Multilingual Language Models*. ACL 2021.
+24. Hoffmann, J., et al. (2022). *Training Compute-Optimal Large Language Models* (Chinchilla). arXiv:2203.15556.
+25. Sardana, N., et al. (2024). *Beyond Chinchilla-Optimal: Accounting for Inference in Language Model Scaling Laws*. arXiv:2401.00448.
+26. Hu, S., et al. (2024). *MiniCPM: Unveiling the Potential of Small Language Models with Scalable Training Strategies*. arXiv:2404.06395.
+27. Bi, X., et al. (2024). *DeepSeek LLM: Scaling Open-Source Language Models with Longtermism*. arXiv:2401.02954.
+28. Muennighoff, N., et al. (2023). *Scaling Data-Constrained Language Models*. arXiv:2305.16264.
+29. Sainz, O., et al. (2025). *Instructing Large Language Models for Low-Resource Languages: A Systematic Study for Basque*. EMNLP 2025.
 
 ---
 
