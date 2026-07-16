@@ -33,13 +33,19 @@
 We ran both GGUF models through the **same inference engine** (llama-cpp-python)
 on the **same 16-prompt eval set**, with SentencePiece tokenization fed as token
 IDs (bypassing llama.cpp's string tokenizer, which diverges from SP on morpheus's
-4K vocab — a ~7× quality drop per its README). Full script: `compare_inference.py`,
+4K vocab). Full script: `compare_inference.py`,
 raw results: `notes/comparison_results.json`.
 
-**Critical BOS discovery:** morpheus was trained *without* BOS, but llama.cpp
-auto-prepends BOS for string prompts. With string prompts, morpheus scored **0%**.
-With token-ID prompts (no BOS), it jumped to **43.8%** — confirming the ~7× drop
-warned in the morpheus README.
+**Critical tokenizer-divergence finding:** llama.cpp's rebuilt tokenizer does NOT
+match SentencePiece for morpheus's 4K UNIGRAM vocab. Example: SP tokenizes
+`▁zer` as a single token (515), but llama.cpp splits it into `▁`+`z`+`er`
+(tokens 261, 277, 372). The model never saw that 3-token sequence in training,
+so string-prompt inference produces garbage (0%). Passing SP token IDs directly
+fixes it → 43.8%. This is **exactly the issue morpheus's README and demo server
+already document and handle** (`demo/server.py` uses `sp.encode(prompt)` →
+token IDs, never string prompts). So this is NOT a deployment bug — only our
+initial test script (using string prompts) was affected. Confirmed:
+`add_bos_token=false` in the GGUF metadata works correctly; BOS is NOT prepended.
 
 #### Head-to-head results (real inference, same eval set, same engine)
 
