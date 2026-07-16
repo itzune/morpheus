@@ -1,0 +1,684 @@
+{
+  "morpheus": {
+    "next_word": {
+      "top1": 7,
+      "top5": 12,
+      "n": 16,
+      "results": [
+        {
+          "prompt": "Egun on, zer",
+          "plausible": [
+            "moduz",
+            "berri",
+            "da",
+            "nola"
+          ],
+          "predicted": "moduz",
+          "raw": " moduz?",
+          "top5": [
+            " modu",
+            "a",
+            "u",
+            " esan",
+            "en"
+          ],
+          "top1_hit": true,
+          "top5_hit": true,
+          "ms": 26
+        },
+        {
+          "prompt": "Ni euskara",
+          "plausible": [
+            "ikasten",
+            "hitzen",
+            "dakit",
+            "maite"
+          ],
+          "predicted": "ri",
+          "raw": "ri buruzko gogoetak egiten ari naizenez, ez dut uste euskara",
+          "top5": [
+            "ri",
+            " ikasten",
+            "n",
+            " ikasteko",
+            " ikasi"
+          ],
+          "top1_hit": false,
+          "top5_hit": true,
+          "ms": 82
+        },
+        {
+          "prompt": "Bai, gustatu",
+          "plausible": [
+            "zait",
+            "zaizu",
+            "da"
+          ],
+          "predicted": "ko",
+          "raw": "ko litzaidake, baina ez dakit, ez dakit, ez dakit",
+          "top5": [
+            "ko",
+            " zait",
+            " egiten",
+            " egin",
+            ","
+          ],
+          "top1_hit": false,
+          "top5_hit": true,
+          "ms": 88
+        },
+        {
+          "prompt": "Ez dut",
+          "plausible": [
+            "ahaztu",
+            "dakit",
+            "maite",
+            "nahi",
+            "ikusi"
+          ],
+          "predicted": "uste",
+          "raw": " uste, baina, tira, ez dut uste.",
+          "top5": [
+            " uste",
+            " esango",
+            " ezer",
+            " nahi",
+            " ulertzen"
+          ],
+          "top1_hit": false,
+          "top5_hit": true,
+          "ms": 76
+        },
+        {
+          "prompt": "Zein da zure",
+          "plausible": [
+            "izena",
+            "adina",
+            "etxea"
+          ],
+          "predicted": "iritzia",
+          "raw": " iritzia?",
+          "top5": [
+            " iritzi",
+            " ",
+            " ustez",
+            " erre",
+            " lana"
+          ],
+          "top1_hit": false,
+          "top5_hit": false,
+          "ms": 26
+        },
+        {
+          "prompt": "Bihar goizean",
+          "plausible": [
+            "etorriko",
+            "joango",
+            "izango",
+            "izanen"
+          ],
+          "predicted": "",
+          "raw": ", 10:00etan, 10:30",
+          "top5": [
+            ",",
+            " goiz",
+            " hasiko",
+            " ",
+            " zehar"
+          ],
+          "top1_hit": false,
+          "top5_hit": false,
+          "ms": 83
+        },
+        {
+          "prompt": "Eskerrik asko",
+          "plausible": [
+            "guztiaz",
+            "laguntzagatik",
+            "denagatik",
+            "gu"
+          ],
+          "predicted": "",
+          "raw": ", bihotzez, zure laguntzagatik.",
+          "top5": [
+            ",",
+            " zure",
+            ".",
+            " guzti",
+            "!"
+          ],
+          "top1_hit": false,
+          "top5_hit": true,
+          "ms": 54
+        },
+        {
+          "prompt": "Non dago",
+          "plausible": [
+            "etxea",
+            "trena",
+            "garagardoa",
+            "jana"
+          ],
+          "predicted": "",
+          "raw": "?",
+          "top5": [
+            "?",
+            ",",
+            " ",
+            " nire",
+            " zure"
+          ],
+          "top1_hit": false,
+          "top5_hit": false,
+          "ms": 16
+        },
+        {
+          "prompt": "Zer",
+          "plausible": [
+            "da",
+            "esan",
+            "egin",
+            "norena"
+          ],
+          "predicted": "da",
+          "raw": " da kolpea?",
+          "top5": [
+            " da",
+            "a",
+            "bait",
+            "ren",
+            " esan"
+          ],
+          "top1_hit": true,
+          "top5_hit": true,
+          "ms": 41
+        },
+        {
+          "prompt": "Nola",
+          "plausible": [
+            "zaude",
+            "dago",
+            "da",
+            "esaten"
+          ],
+          "predicted": "nahi",
+          "raw": "nahi ere, 2018ko ekitaldian, 2",
+          "top5": [
+            "na",
+            "ko",
+            ",",
+            "bait",
+            "?"
+          ],
+          "top1_hit": false,
+          "top5_hit": false,
+          "ms": 79
+        },
+        {
+          "prompt": "Gaur ezin",
+          "plausible": [
+            "dut",
+            "naiz",
+            "da",
+            "dugu"
+          ],
+          "predicted": "da",
+          "raw": " da esan, baina, 1990eko hamarkadan, ",
+          "top5": [
+            " da",
+            "go",
+            " izan",
+            " dugu",
+            " dut"
+          ],
+          "top1_hit": true,
+          "top5_hit": true,
+          "ms": 84
+        },
+        {
+          "prompt": "Barkatu, ez",
+          "plausible": [
+            "dakit",
+            "nahi",
+            "dut",
+            "da"
+          ],
+          "predicted": "dut",
+          "raw": " dut uste.",
+          "top5": [
+            " dut",
+            " dakit",
+            "ta",
+            " da",
+            " nuen"
+          ],
+          "top1_hit": true,
+          "top5_hit": true,
+          "ms": 28
+        },
+        {
+          "prompt": "Euskal Herriko",
+          "plausible": [
+            "Unibertsitatea",
+            "hizkuntza",
+            "kultura"
+          ],
+          "predicted": "Unibertsitateko",
+          "raw": " Unibertsitateko (EHU) Zientzia eta Teknologia Fakulta",
+          "top5": [
+            " Unibertsitate",
+            " ",
+            " A",
+            " eta",
+            " beste"
+          ],
+          "top1_hit": false,
+          "top5_hit": true,
+          "ms": 83
+        },
+        {
+          "prompt": "Gaur eguraldi",
+          "plausible": [
+            "ona",
+            "txarra",
+            "politikoa"
+          ],
+          "predicted": "ona",
+          "raw": " ona egin du eta bihar eguzkia.",
+          "top5": [
+            " ona",
+            " txarra",
+            "ak",
+            " ederra",
+            "aren"
+          ],
+          "top1_hit": true,
+          "top5_hit": true,
+          "ms": 52
+        },
+        {
+          "prompt": "Atzo etxera",
+          "plausible": [
+            "joan",
+            "etorri",
+            "heldu"
+          ],
+          "predicted": "joan",
+          "raw": " joan nintzen, eta ez nuen ezer egin.",
+          "top5": [
+            " joan",
+            " etorri",
+            " itzuli",
+            " buelta",
+            " iritsi"
+          ],
+          "top1_hit": true,
+          "top5_hit": true,
+          "ms": 55
+        },
+        {
+          "prompt": "Lagun batek",
+          "plausible": [
+            "esan",
+            "egin",
+            "idatzi"
+          ],
+          "predicted": "esan",
+          "raw": " esan zidan, 1990eko hamarkadan, 19",
+          "top5": [
+            " esan",
+            ",",
+            " ",
+            " esaten",
+            " eta"
+          ],
+          "top1_hit": true,
+          "top5_hit": true,
+          "ms": 80
+        }
+      ]
+    },
+    "latency_ms": 2.890920639038086
+  },
+  "futo_basque": {
+    "next_word": {
+      "top1": 0,
+      "top5": 6,
+      "n": 16,
+      "results": [
+        {
+          "prompt": "Egun on, zer",
+          "plausible": [
+            "moduz",
+            "berri",
+            "da",
+            "nola"
+          ],
+          "predicted": "<XBU><CHAR_E><CHAR_G><CHAR_I><CHAR_N><XBC>egin<XEC>",
+          "raw": "<XBU><CHAR_E><CHAR_G><CHAR_I><CHAR_N><XBC>egin<XEC> <XBU><CHAR_D><CHAR_U><CHAR_T",
+          "top5": [
+            "<XBU>",
+            "eta ",
+            "a",
+            "da ",
+            "da"
+          ],
+          "top1_hit": false,
+          "top5_hit": true,
+          "ms": 44
+        },
+        {
+          "prompt": "Ni euskara",
+          "plausible": [
+            "ikasten",
+            "hitzen",
+            "dakit",
+            "maite"
+          ],
+          "predicted": "<XBU><CHAR_E><CHAR_R><CHAR_R><CHAR_E><CHAR_A><CHAR_L><CHAR_I><CHAR_T><CHAR_A><CHAR_T><CHAR_E><CHAR_A><XBC>errealitate",
+          "raw": "<XBU><CHAR_E><CHAR_R><CHAR_R><CHAR_E><CHAR_A><CHAR_L><CHAR_I><CHAR_T><CHAR_A><CH",
+          "top5": [
+            "<XBU>",
+            "eta ",
+            "a",
+            "ez ",
+            "bat "
+          ],
+          "top1_hit": false,
+          "top5_hit": false,
+          "ms": 43
+        },
+        {
+          "prompt": "Bai, gustatu",
+          "plausible": [
+            "zait",
+            "zaizu",
+            "da"
+          ],
+          "predicted": "<XBU><CHAR_D><CHAR_U><CHAR_T><XBC>dut<XEC>",
+          "raw": "<XBU><CHAR_D><CHAR_U><CHAR_T><XBC>dut<XEC> <XBU><CHAR_E><CHAR_T><XBC>eta<XEC> ",
+          "top5": [
+            "<XBU>",
+            "zai",
+            "zaio",
+            "zen ",
+            "zaigu"
+          ],
+          "top1_hit": false,
+          "top5_hit": true,
+          "ms": 43
+        },
+        {
+          "prompt": "Ez dut",
+          "plausible": [
+            "ahaztu",
+            "dakit",
+            "maite",
+            "nahi",
+            "ikusi"
+          ],
+          "predicted": "<XBU><CHAR_E><CHAR_R><CHAR_R><CHAR_E><CHAR_A><CHAR_L><CHAR_I><CHAR_T><CHAR_A><CHAR_T><CHAR_E><CHAR_A><XBC>errealitate",
+          "raw": "<XBU><CHAR_E><CHAR_R><CHAR_R><CHAR_E><CHAR_A><CHAR_L><CHAR_I><CHAR_T><CHAR_A><CH",
+          "top5": [
+            "<XBU>",
+            "eta ",
+            "a",
+            "ez ",
+            "zer "
+          ],
+          "top1_hit": false,
+          "top5_hit": false,
+          "ms": 42
+        },
+        {
+          "prompt": "Zein da zure",
+          "plausible": [
+            "izena",
+            "adina",
+            "etxea"
+          ],
+          "predicted": "<XBU><CHAR_E><CHAR_R><CHAR_A><CHAR_B><CHAR_I><CHAR_L><CHAR_E><CHAR_R><CHAR_A><XBC>erabilera<XEC>",
+          "raw": "<XBU><CHAR_E><CHAR_R><CHAR_A><CHAR_B><CHAR_I><CHAR_L><CHAR_E><CHAR_R><CHAR_A><XB",
+          "top5": [
+            "<XBU>",
+            "a",
+            "eta ",
+            "ez ",
+            ". "
+          ],
+          "top1_hit": false,
+          "top5_hit": false,
+          "ms": 43
+        },
+        {
+          "prompt": "Bihar goizean",
+          "plausible": [
+            "etorriko",
+            "joango",
+            "izango",
+            "izanen"
+          ],
+          "predicted": "<XBU><CHAR_E><CHAR_T><XBC>eta<XEC>",
+          "raw": "<XBU><CHAR_E><CHAR_T><XBC>eta<XEC> <XBU><CHAR_E><CHAR_R><CHAR_R><CHAR_E><CHAR_S>",
+          "top5": [
+            "<XBU>",
+            "eta ",
+            "a",
+            "(",
+            "da"
+          ],
+          "top1_hit": false,
+          "top5_hit": false,
+          "ms": 43
+        },
+        {
+          "prompt": "Eskerrik asko",
+          "plausible": [
+            "guztiaz",
+            "laguntzagatik",
+            "denagatik",
+            "gu"
+          ],
+          "predicted": "<XBU><CHAR_E><CHAR_R><CHAR_A><CHAR_B><CHAR_I><CHAR_L><CHAR_T><CHAR_Z><CHAR_E><CHAR_N><XBC>erabiltzen<XEC>",
+          "raw": "<XBU><CHAR_E><CHAR_R><CHAR_A><CHAR_B><CHAR_I><CHAR_L><CHAR_T><CHAR_Z><CHAR_E><CH",
+          "top5": [
+            "<XBU>",
+            "a",
+            "eta ",
+            "ez",
+            "ez "
+          ],
+          "top1_hit": false,
+          "top5_hit": false,
+          "ms": 44
+        },
+        {
+          "prompt": "Non dago",
+          "plausible": [
+            "etxea",
+            "trena",
+            "garagardoa",
+            "jana"
+          ],
+          "predicted": "<XBU><CHAR_E><CHAR_R><CHAR_R><CHAR_E><CHAR_G><CHAR_I><CHAR_S><CHAR_T><CHAR_R><CHAR_O><XBC>Erregistro",
+          "raw": "<XBU><CHAR_E><CHAR_R><CHAR_R><CHAR_E><CHAR_G><CHAR_I><CHAR_S><CHAR_T><CHAR_R><CH",
+          "top5": [
+            "<XBU>",
+            "eta ",
+            "a",
+            ". ",
+            "baina "
+          ],
+          "top1_hit": false,
+          "top5_hit": false,
+          "ms": 43
+        },
+        {
+          "prompt": "Zer",
+          "plausible": [
+            "da",
+            "esan",
+            "egin",
+            "norena"
+          ],
+          "predicted": "<XBU><CHAR_E><CHAR_G><CHAR_U><CHAR_N><CHAR_E><CHAR_A><CHAR_N><XBC>egunean<XEC>",
+          "raw": "<XBU><CHAR_E><CHAR_G><CHAR_U><CHAR_N><CHAR_E><CHAR_A><CHAR_N><XBC>egunean<XEC> <",
+          "top5": [
+            "<XBU>",
+            "da ",
+            "a",
+            "eta ",
+            "zer "
+          ],
+          "top1_hit": false,
+          "top5_hit": true,
+          "ms": 41
+        },
+        {
+          "prompt": "Nola",
+          "plausible": [
+            "zaude",
+            "dago",
+            "da",
+            "esaten"
+          ],
+          "predicted": "<XBU><CHAR_E><CHAR_G><CHAR_U><CHAR_N><CHAR_E><CHAR_A><CHAR_N><XBC>egunean<XEC>",
+          "raw": "<XBU><CHAR_E><CHAR_G><CHAR_U><CHAR_N><CHAR_E><CHAR_A><CHAR_N><XBC>egunean<XEC> <",
+          "top5": [
+            "<XBU>",
+            "da ",
+            "ez ",
+            "zen ",
+            "baina "
+          ],
+          "top1_hit": false,
+          "top5_hit": true,
+          "ms": 43
+        },
+        {
+          "prompt": "Gaur ezin",
+          "plausible": [
+            "dut",
+            "naiz",
+            "da",
+            "dugu"
+          ],
+          "predicted": "<XBU><CHAR_D><CHAR_U><CHAR_T><CHAR_E><XBC>dute<XEC>",
+          "raw": "<XBU><CHAR_D><CHAR_U><CHAR_T><CHAR_E><XBC>dute<XEC> <XBU><CHAR_E><CHAR_R><CHAR_A",
+          "top5": [
+            "<XBU>",
+            "da ",
+            "ez ",
+            "da",
+            "eta "
+          ],
+          "top1_hit": false,
+          "top5_hit": true,
+          "ms": 43
+        },
+        {
+          "prompt": "Barkatu, ez",
+          "plausible": [
+            "dakit",
+            "nahi",
+            "dut",
+            "da"
+          ],
+          "predicted": "<XBU><CHAR_D><CHAR_U><CHAR_T><CHAR_E><XBC>dute<XEC>",
+          "raw": "<XBU><CHAR_D><CHAR_U><CHAR_T><CHAR_E><XBC>dute<XEC> <XBU><CHAR_E><CHAR_R><CHAR_R",
+          "top5": [
+            "<XBU>",
+            "da ",
+            "da",
+            "ez ",
+            "ba"
+          ],
+          "top1_hit": false,
+          "top5_hit": true,
+          "ms": 43
+        },
+        {
+          "prompt": "Euskal Herriko",
+          "plausible": [
+            "Unibertsitatea",
+            "hizkuntza",
+            "kultura"
+          ],
+          "predicted": "<XBU><CHAR_A><CHAR_L><CHAR_D><CHAR_E><CHAR_R><CHAR_A><CHAR_Z><XBC>alderaz<XEC>",
+          "raw": "<XBU><CHAR_A><CHAR_L><CHAR_D><CHAR_E><CHAR_R><CHAR_A><CHAR_Z><XBC>alderaz<XEC> <",
+          "top5": [
+            "<XBU>",
+            "ikasle",
+            "Euskal ",
+            "gazte",
+            "buru"
+          ],
+          "top1_hit": false,
+          "top5_hit": false,
+          "ms": 42
+        },
+        {
+          "prompt": "Gaur eguraldi",
+          "plausible": [
+            "ona",
+            "txarra",
+            "politikoa"
+          ],
+          "predicted": "<XBU><CHAR_B><CHAR_A><CHAR_T><CHAR_E><CHAR_A><CHAR_N><XBC>batean<XEC>",
+          "raw": "<XBU><CHAR_B><CHAR_A><CHAR_T><CHAR_E><CHAR_A><CHAR_N><XBC>batean<XEC> <XBU><CHAR",
+          "top5": [
+            "<XBU>",
+            "a",
+            "eta ",
+            "(",
+            "bat "
+          ],
+          "top1_hit": false,
+          "top5_hit": false,
+          "ms": 44
+        },
+        {
+          "prompt": "Atzo etxera",
+          "plausible": [
+            "joan",
+            "etorri",
+            "heldu"
+          ],
+          "predicted": "<XBU><CHAR_E><CHAR_G><CHAR_I><CHAR_N><CHAR_D><CHAR_A><CHAR_K><CHAR_O><XBC>egindako<XEC>",
+          "raw": "<XBU><CHAR_E><CHAR_G><CHAR_I><CHAR_N><CHAR_D><CHAR_A><CHAR_K><CHAR_O><XBC>eginda",
+          "top5": [
+            "<XBU>",
+            ". ",
+            "eta ",
+            "(",
+            "da"
+          ],
+          "top1_hit": false,
+          "top5_hit": false,
+          "ms": 43
+        },
+        {
+          "prompt": "Lagun batek",
+          "plausible": [
+            "esan",
+            "egin",
+            "idatzi"
+          ],
+          "predicted": "<XBU><CHAR_E><CHAR_R><CHAR_R><CHAR_E><CHAR_G><CHAR_I><CHAR_S><CHAR_T><CHAR_R><CHAR_O><XBC>Erregistro",
+          "raw": "<XBU><CHAR_E><CHAR_R><CHAR_R><CHAR_E><CHAR_G><CHAR_I><CHAR_S><CHAR_T><CHAR_R><CH",
+          "top5": [
+            "<XBU>",
+            "(",
+            "eta ",
+            "a",
+            "bere "
+          ],
+          "top1_hit": false,
+          "top5_hit": false,
+          "ms": 43
+        }
+      ]
+    },
+    "latency_ms": 0.9528160095214844
+  }
+}
