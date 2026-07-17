@@ -6,7 +6,7 @@
 |-----------|------|--------|
 | Pretrained checkpoint (FIM vocab) | `checkpoints/step_0074000_fim.pt` | ✅ Ready (vocab 4016, 553MB) |
 | FIM tokenizer | `tokenizer/basque_unigram_fim.model` | ✅ Ready (4004 pieces) |
-| FIM training data | `data/train_fim.npy` | ⏳ Building (full corpus, ~4.6B tokens) |
+| FIM training data | `data/train_fim.npy` | ⏳ Building (full corpus, ~4.6B tokens; train caps at 500M) |
 | AR validation set | `data/valid_tokens_4k.npy` | ✅ Ready (FIM-for-free check) |
 | FIM validation set | `data/valid_fim.npy` | ✅ Ready (2M tokens) |
 | Phase 6 config | `config/phase6_fim.yaml` | ✅ Ready |
@@ -45,18 +45,19 @@ python3 train.py \
 ```
 
 **Key parameters (from config):**
-- `total_tokens: 2,000,000,000` (~15,258 steps)
+- `total_tokens: 500,000,000` (~3,815 steps)
 - `learning_rate: 1.0e-3` (lower than Phase 1's 2.0e-3 — continued pretrain)
 - `batch_size: 64, gradient_accumulation: 2` (effective batch 128)
 - `seq_len: 1024`
-- `warmup_tokens: 20,000,000` (shorter than Phase 1)
+- `warmup_tokens: 5,000,000` (shorter than Phase 1, 1% of total)
 - `eval_interval: 500, save_interval: 1000`
 
 **Expected:**
-- Training time: ~1-1.5 hours on L40
+- Training time: ~2.6 hours on L40 (54K tok/s throughput, measured from Phase 1)
 - VRAM: ~20-25 GB
 - AR valid loss: should NOT regress (FIM-for-free property)
 - FIM valid loss: should decrease as model learns infilling
+- Can extend with more tokens if eval looks good
 
 **Monitor:**
 ```bash
