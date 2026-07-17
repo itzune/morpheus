@@ -230,7 +230,8 @@ def count_tokens(input_dir, sp, fim_rate, boundary_bias, min_mid, min_line,
     n_fim = 0
     n_ar = 0
     n_skipped = 0
-    for line_idx, line in iterate_lines(input_dir, exclude_sources):
+    for line_idx, line in tqdm(iterate_lines(input_dir, exclude_sources),
+                               total=None, desc="Counting"):
         tokens = process_line(line, line_idx, sp, fim_rate, boundary_bias,
                               min_mid, min_line, digit_re)
         if tokens is None:
