@@ -1,8 +1,9 @@
 # morpheus TODO
 
 **Direction:** Desktop text-editor ghost-text autocompletion is now the primary
-target — see [`docs/TRAJECTORY.md`](./docs/TRAJECTORY.md) for the full rationale.
-This file is reordered around that direction: the Phase 6 FIM work leads,
+focus — see [`docs/TRAJECTORY.md`](./docs/TRAJECTORY.md) for the full rationale
+and [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md) for the component
+ownership model (what lives in the proxy vs. the plugin). This file is reordered around that direction: the Phase 6 FIM work leads,
 mobile-IME items are moved to a deferred research track, and the FUTO
 inference-engineering strategies are filtered to only what serves the editor.
 

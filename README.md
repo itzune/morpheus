@@ -49,7 +49,7 @@ A WebAssembly build runs the model directly in your browser at **<https://itzune
 | `exports/` | Exported checkpoints (HF + GGUF, multiple quantizations) |
 | `demo/` | FastAPI demo server, Dockerfile, and static frontend |
 | `eval/` | Benchmark results, baseline comparisons, CSR and next-word evaluations |
-| `docs/` | Research notes: tokenizer fieldwork, data scaling, Android keyboard, demo API |
+| `docs/` | Research notes + [`ARCHITECTURE.md`](./docs/ARCHITECTURE.md) (component ownership), [`TRAJECTORY.md`](./docs/TRAJECTORY.md) (desktop-editor direction), tokenizer fieldwork, data scaling, eval strategies |
 | `logs/` | Training logs and completion-acceptance logs (used for replay evaluation) |
 | `checkpoints/` | Training checkpoints |
 | `morpheus-on-device-basque-autocompletion.pdf` | The full write-up |
