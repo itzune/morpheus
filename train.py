@@ -237,12 +237,14 @@ def save_checkpoint(model, optimizer, step, cfg, path, valid_loss=None):
 # Training Loop
 # ---------------------------------------------------------------------------
 
-def train(cfg: dict, checkpoint_path: str = None):
+def train(cfg: dict, checkpoint_path: str = None, pretrained_path: str = None):
     """Run the full training loop.
     
     Args:
         cfg: Training configuration dictionary.
-        checkpoint_path: If provided, resume from this checkpoint file.
+        checkpoint_path: If provided, full resume (model + optimizer + step).
+        pretrained_path: If provided, load model weights only (fresh optimizer,
+            step=0). Used for continued pretraining (e.g. Phase 6 FIM).
     """
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Device: {device}")
@@ -326,6 +328,15 @@ def train(cfg: dict, checkpoint_path: str = None):
             best_ckpt = torch.load(best_path, map_location='cpu', weights_only=False)
             best_valid_loss = best_ckpt.get("valid_loss", float("inf"))
             print(f"  Found best.pt (step {best_ckpt.get('step', '?')}), best_valid_loss={best_valid_loss:.4f}")
+    elif pretrained_path:
+        print(f"Loading pretrained model weights: {pretrained_path}")
+        ckpt = torch.load(pretrained_path, map_location='cpu', weights_only=False)
+        model.load_state_dict(ckpt["model"])
+        src_step = ckpt.get("step", "?")
+        del ckpt  # Free CPU memory
+        print(f"  Loaded model from step {src_step}")
+        print(f"  Fresh optimizer, starting from step 0 (continued pretraining)")
+        print(f"  LR: {optimizer.param_groups[0]['lr']:.2e}")
 
     tokens_at_start = tokens_seen
     t0 = time.time()
@@ -373,6 +384,9 @@ def train(cfg: dict, checkpoint_path: str = None):
     if checkpoint_path:
         print(f"\nResuming training from step {global_step:,}/{total_steps:,} "
               f"(~{cfg['total_tokens']/1e9:.0f}B tokens)\n")
+    elif pretrained_path:
+        print(f"\nContinued pretraining from pretrained weights "
+              f"({total_steps:,} steps, ~{cfg['total_tokens']/1e9:.1f}B tokens)\n")
     else:
         print(f"\nStarting training... ({total_steps:,} steps, ~{cfg['total_tokens']/1e9:.0f}B tokens)\n")
 
@@ -503,7 +517,8 @@ def main():
     parser.add_argument("--train-data", help="Override training data path")
     parser.add_argument("--valid-data", help="Override validation data path")
     parser.add_argument("--output-dir", help="Override checkpoint output dir")
-    parser.add_argument("--resume", help="Path to checkpoint to resume from")
+    parser.add_argument("--resume", help="Path to checkpoint to resume from (full: model + optimizer + step)")
+    parser.add_argument("--pretrained", help="Path to pretrained checkpoint (model weights only, fresh optimizer)")
     parser.add_argument("--no-compile", action="store_true", help="Disable torch.compile")
     args = parser.parse_args()
 
@@ -528,7 +543,9 @@ def main():
         print(f"  {k}: {v}")
     print()
 
-    train(cfg, checkpoint_path=args.resume)
+    # --pretrained can come from CLI or config (cfg["pretrained"])
+    pretrained = args.pretrained or cfg.get("pretrained")
+    train(cfg, checkpoint_path=args.resume, pretrained_path=pretrained)
 
 
 if __name__ == "__main__":
