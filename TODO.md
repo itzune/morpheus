@@ -50,21 +50,18 @@ llama-server `/completion` and SP-encodes first. Only the **OpenAI face**
 (front route + response translator) is new.
 
 **Implementation sketch:**
-1. `POST /v1/completions` — accept OpenAI schema (`prompt`, `max_tokens`,
+1. ✅ `POST /v1/completions` — accept OpenAI schema (`prompt`, `max_tokens`,
    `temperature`, `top_k`, `stop`, `stream`); SP-encode the string; forward to
-   `_call_llama`; reformat response to `choices[0].text` / `usage`.
-2. Non-streaming first (`stream: false`) — single request/response reformat.
-3. Add **SSE streaming translation**: llama-server frames → OpenAI
-   `data: {...}` frames, on the fly. (Mechanical but required for ghost-text
-   responsiveness.)
-4. `POST /v1/complete` — convenience route `{prefix, suffix, max_tokens}`;
-   server applies the FIM template once P6 lands (no-op prefix-only until then).
-   This is the endpoint bespoke clients (Obsidian plugin, Vim function) use —
-   they never need to know morpheus's token names.
-5. Point Continue.dev at `http://localhost:<port>/v1`, `provider: openai`,
+   llama-server; reformat response to `choices[0].text` / `usage`.
+2. ✅ Non-streaming (`stream: false`) — single request/response reformat.
+3. ✅ **SSE streaming translation**: llama-server frames → OpenAI
+   `data: {...}` frames, on the fly.
+4. ✅ `POST /v1/complete` — convenience route `{prefix, suffix, max_tokens}`;
+   server applies the FIM template once P6 lands (prefix-only until then).
+5. ⬜ Point Continue.dev at `http://localhost:<port>/v1`, `provider: openai`,
    `roles: [autocomplete]`. Until FIM: no-op template, stop tokens `</s>`,
    `\n\n`; sampling per P7 (`temperature: 0.2`, `top_k: 3–5`).
-6. Dogfood prefix-only ghost-text in VS Code; record the quality baseline that
+6. ⬜ Dogfood prefix-only ghost-text in VS Code; record the quality baseline that
    FIM (P6) must beat.
 
 **Why this is reusable, not a Continue integration:** the `/v1/completions`
@@ -75,7 +72,10 @@ N thin clients; the tokenization fix and FIM template live in exactly the place
 they belong. If llama.cpp ever fixes the divergence upstream, delete the proxy
 and repoint — zero client changes.
 
-**Status:** Not started. No blockers. This is the unambiguous first step.
+**Status:** ✅ **Done** (commit `badf6e9`). `/v1/completions` (streaming +
+non-streaming), `/v1/complete`, and `/v1/models` all implemented on
+`demo/server.py`, tested end-to-end on GPU server. Next: point Continue.dev
+at the proxy and dogfood prefix-only ghost-text (P6 step 6).
 
 ---
 
@@ -312,6 +312,12 @@ desktop editor. Recorded here so the reasoning is explicit.
 
 ## Completed
 
+- [x] **P1: OpenAI-compatible `/v1/completions` + `/v1/complete` on proxy**
+      (commit `badf6e9`). Three routes on `demo/server.py`: `/v1/completions`
+      (streaming SSE + non-streaming, OpenAI schema), `/v1/complete` (convenience
+      `{prefix, suffix}` body), `/v1/models`. SP-encodes string prompts to token
+      IDs (bypasses llama.cpp tokenizer divergence). Tested end-to-end on GPU
+      server with real Basque prompts.
 - [x] Real inference comparison vs futo-basque (`compare_inference.py`)
 - [x] Verified morpheus deployment handles tokenizer divergence correctly
       (`demo/server.py` uses `sp.encode()` → token IDs, not string prompts)
