@@ -46,7 +46,7 @@ from mamba_ssm.models.config_mamba import MambaConfig
 
 # Reuse the same split logic as build_fim.py
 sys.path.insert(0, str(Path(__file__).parent / "pipeline"))
-from build_fim import make_fim_split, build_fim_string, find_word_boundaries
+from build_fim import make_fim_split
 
 # ── Constants ──
 FIM_TOKENS = {"<PRE>": 4000, "<SUF>": 4001, "<MID>": 4002, "<EOT>": 4003}
@@ -215,7 +215,6 @@ def evaluate_fim(model, sp, lines: list, device, n_examples: int = 200,
 
         prefix, middle, suffix = split
         mode = "PSM" if ex_rng.random() < 0.5 else "SPM"
-        fim_prompt = build_fim_string(prefix, middle, suffix, mode)
         # For eval, we only send the prompt (without the middle and <EOT>)
         # The model should generate the middle and then <EOT>
         if mode == "PSM":
