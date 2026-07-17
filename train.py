@@ -270,6 +270,20 @@ def train(cfg: dict, checkpoint_path: str = None, pretrained_path: str = None):
     print(f"  Train: {len(train_ds):,} sequences")
     print(f"  Valid: {len(valid_ds):,} sequences")
 
+    # FIM validation set (optional — Phase 6 continued pretraining)
+    valid_fim_loader = None
+    if cfg.get("valid_fim_data"):
+        fim_path = cfg["valid_fim_data"]
+        if Path(fim_path).exists():
+            valid_fim_ds = MemmapTokenDataset(fim_path, seq_len=cfg["seq_len"])
+            valid_fim_loader = DataLoader(
+                valid_fim_ds, batch_size=cfg["batch_size"],
+                shuffle=False, num_workers=1, pin_memory=True,
+            )
+            print(f"  FIM Valid: {len(valid_fim_ds):,} sequences ({fim_path})")
+        else:
+            print(f"  FIM Valid: {fim_path} not found, skipping")
+
     # num_workers=2: server has 30 GB RAM; each worker is a full Python process (~3-4 GB).
     # 4 workers + main process caused OOM. 2 workers + main fits in 30 GB.
     train_loader = DataLoader(
@@ -460,6 +474,14 @@ def train(cfg: dict, checkpoint_path: str = None, pretrained_path: str = None):
                         "valid/ppl": valid_ppl,
                         "step": global_step,
                     }
+
+                    # FIM validation loss (if FIM valid set is loaded)
+                    if valid_fim_loader is not None:
+                        fim_loss = evaluate(model, valid_fim_loader, device)
+                        fim_ppl = math.exp(min(fim_loss, 20))
+                        print(f"  [VALID-FIM] step={global_step}  loss={fim_loss:.4f}  ppl={fim_ppl:.1f}")
+                        wandb_metrics["valid/fim_loss"] = fim_loss
+                        wandb_metrics["valid/fim_ppl"] = fim_ppl
 
                     # Add CSR and MorphAcc if tests are available
                     if csr_tests and sp is not None:
