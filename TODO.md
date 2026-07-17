@@ -99,7 +99,11 @@ and a strong test against FIM.
 - Resume-from-74K smoke test: confirm AR perplexity is unchanged by the resize
   (embeddings are ~3M of 91M params; new rows train fast).
 
-**Status:** Not started. Gates P3–P5.
+**Status:** ✅ **Done**. FIM tokenizer (`tokenizer/basque_unigram_fim.model`,
+4004 pieces) and resized checkpoint (`checkpoints/step_0074000_fim.pt`,
+vocab 4016) both created and verified. Smoke test confirms AR perplexity
+unchanged: original loss=1.5909 (ppl 4.91) vs resized loss=1.5911 (ppl 4.91),
+Δ=0.01%. Gates P3–P5.
 
 ---
 
@@ -323,6 +327,13 @@ desktop editor. Recorded here so the reasoning is explicit.
 
 ## Completed
 
+- [x] **P2: FIM special tokens + embedding resize**
+      Three scripts: `add_fim_tokens.py` (protobuf append, preserves all
+      existing IDs), `resize_embeddings.py` (4000→4016, mean-init FIM rows,
+      zero-init padding, tied embeddings), `smoke_test_fim.py` (tokenizer +
+      AR perplexity). Results: 4 FIM tokens at IDs 4000–4003 (`<PRE>/<SUF>/
+      <MID>/<EOT>`, USER_DEFINED, atomic); AR perplexity Δ=0.01%
+      (loss 1.5909→1.5911, ppl 4.91→4.91) — negligible perturbation.
 - [x] **P1: OpenAI-compatible `/v1/completions` + `/v1/complete` on proxy**
       (commits `badf6e9`, `a205eb4`). Three routes on `demo/server.py`:
       `/v1/completions` (streaming SSE + non-streaming, OpenAI schema),
