@@ -4,8 +4,9 @@
 > (2) Deep-review FUTO Keyboard's transformer engineering strategies and identify
 > what could be applied to morpheus.
 >
-> Date: 2026-07-15. Updated 2026-07-15 with **real inference testing**
-> (`compare_inference.py`, both GGUF models loaded via llama-cpp-python, same eval set).
+> Date: 2026-07-15. Updated 2026-07-17 with **re-run inference testing** on the
+> fixed futo-basque v2.0.0 model (pretrain bug fixed + multitask finetune).
+> Both GGUF models loaded via llama-cpp-python, same 16-prompt eval set.
 > Based on FUTO source (`JNI_LanguageModel.cpp`, `LanguageModel.kt`,
 > `ModelMeta.cpp`), the morpheus writeup, and real inference results.
 
@@ -51,73 +52,71 @@ initial test script (using string prompts) was affected. Confirmed:
 
 | Metric | morpheus | futo-basque | Winner |
 |--------|----------|-------------|--------|
-| **Next-word top-1 (greedy)** | **43.8%** (7/16) | **0%** (0/16) | morpheus |
-| **Next-word top-5** | **75.0%** (12/16) | **37.5%** (6/16) | morpheus (2×) |
-| **Latency (ms/token)** | 2.9 | 1.0 | futo (3× faster) |
+| **Next-word top-1 (greedy)** | 43.8% (7/16) | **56.2%** (9/16) | **futo-basque** |
+| **Next-word top-5** | 75.0% (12/16) | 75.0% (12/16) | tie |
+| **Latency (ms/token)** | 2.5 | 0.8 | **futo-basque** (3× faster) |
 
-#### What morpheus gets right (7/16 top-1 hits)
+#### What both models get right (shared 7/16 top-1 hits)
 
-| Prompt | morpheus predicts | Gold |
-|--------|-------------------|------|
+Both models correctly predict the same 7 prompts:
+
+| Prompt | Both predict | Gold |
+|--------|-------------|------|
 | `Egun on, zer` | **moduz** ✓ | moduz, berri, da |
 | `Zer` | **da** ✓ | da, esan, egin |
 | `Gaur ezin` | **da** ✓ | dut, naiz, da |
-| `Barkatu, ez` | **dut** ✓ | dakit, nahi, dut |
-| `Gaur eguraldi` | **ona** ✓ | ona, txarra, politikoa |
+| `Barkatu, ez` | **da/dut** ✓ | dakit, nahi, dut |
+| `Gaur eguraldi` | **ona/txarra** ✓ | ona, txarra, politikoa |
 | `Atzo etxera` | **joan** ✓ | joan, etorri, heldu |
 | `Lagun batek` | **esan** ✓ | esan, egin, idatzi |
 
-#### morpheus near-misses (correct answer at rank 2 in top-5)
+#### Where futo-basque pulls ahead (2 additional top-1 hits)
 
-| Prompt | greedy (wrong) | Correct in top-5 | Gold |
-|--------|----------------|-------------------|------|
-| `Ni euskara` | ri | **ikasten** (rank 2) | ikasten |
-| `Bai, gustatu` | ko | **zait** (rank 2) | zait, zaizu |
-| `Euskal Herriko` | Unibertsitateko | **Unibertsitate** (rank 1!) | Unibertsitatea |
+futo-basque correctly predicts 2 prompts where morpheus fails:
 
-With beam search or top-2 sampling, morpheus would likely jump to **10/16 = 62.5%+**.
+| Prompt | morpheus | futo-basque | Gold |
+|--------|----------|-------------|------|
+| `Ni euskara` | ri ✗ | **ikasten** ✓ | ikasten |
+| `Bai, gustatu` | ko ✗ | **zait** ✓ | zait, zaizu |
 
-#### morpheus failures (date/number artifacts)
+These are high-value conversational patterns ("I Basque → am learning",
+"Yes, liked → it"). futo-basque's multitask finetune on conversational data
+likely helps here.
 
-morpheus still has the date/number artifact documented in §6.10 of its writeup:
-`Bihar goizean` → `,` (comma, expecting a time), `Non dago` → `?` (question mark).
-These are corpus-distribution artifacts, not model-capability failures.
+#### Where both models fail (7/16 shared misses)
 
-#### Why futo-basque scores 0% top-1 (100% format overfit)
+| Prompt | morpheus | futo-basque | Gold |
+|--------|----------|-------------|------|
+| `Ez dut` | uste | uste | ahaztu, dakit, maite |
+| `Zein da zure` | iritzia | ametsa | izena, adina, etxea |
+| `Bihar goizean` | , | hasiko | etorriko, joango, izango |
+| `Eskerrik asko` | , | zure | guztiaz, laguntzagatik |
+| `Non dago` | ? | zure | etxea, trena, garagardoa |
+| `Nola` | nahi | egin | zaude, dago, da |
+| `Euskal Herriko` | Unibertsitateko | Unibertsitateko | Unibertsitatea |
 
-**Every single top-1 prediction is an `<XBU>` autocorrect format token.** Not 8.3%
-as the futo-basque eval suggested — **0%**. The model NEVER emits a plain word
-as top-1 in next-word mode:
+Both models produce "uste" for `Ez dut` (a plausible but non-gold continuation)
+and both truncate `Euskal Herriko → Unibertsitateko` (close but genitive form).
 
-| Prompt | futo-basque top-1 | Hidden word inside format |
-|--------|-------------------|--------------------------|
-| `Egun on, zer` | `<XBU><CHAR_E><CHAR_G><CHAR_I><CHAR_N><XBC>egin<XEC>` | "egin" |
-| `Ni euskara` | `<XBU><CHAR_E>…errealitateate<XEC>` | "errealitateate" |
-| `Bai, gustatu` | `<XBU><CHAR_D><CHAR_U><CHAR_T><XBC>dut<XEC>` | "dut" ✓ |
-| `Barkatu, ez` | `<XBU><CHAR_D><CHAR_U><CHAR_T><CHAR_E><XBC>dute<XEC>` | "dute" |
+#### What changed since v1.0.0 (root cause postmortem)
 
-The model wraps everything in the autocorrect format. The words inside are often
-real Basque ("egin", "dut") but the format makes them unusable for next-word.
-Notably, `Bai, gustatu → dut` would have been a **miss** (gold is "zait"), and
-`Barkatu, ez → dute` is close to gold "dut" but the plural form.
+The previous comparison (Jul 15) showed futo-basque at **0% top-1** — every
+prediction was wrapped in `<XBU>` autocorrect format tokens. This was diagnosed
+as **two compounding bugs**:
 
-The futo-basque eval script's 8.3% likely came from extracting the word from
-inside the `<XBU>…<XBC>word<XEC>` format — but in raw inference, the format
-contamination is **100%**.
+1. **Pretrain double causal-shift** (root cause): the pretrain script used
+   `input_ids=ids[:-1]`, `labels=ids[1:]`, but HF Trainer already shifts
+   internally — so the model learned skip-1 prediction `P(token[i+2]|token[i])`
+   instead of next-token `P(token[i+1]|token[i])`. Diagnostic confirmed:
+   skip-1 loss 3.8 < next-token loss 7.6 (inverted). Fixed in `a377081`.
 
-#### futo-basque top-5 shows real words at ranks 2-5
+2. **Format contamination from sequential finetune**: the old 4a→4b→4c pipeline
+   mixed `<XBU>` control tokens inline with plain text, causing 100% format
+   bleed. Fixed by replacing with unified multitask finetune (4m): 60% plain
+   text + 40% isolated triples, strictly segregated at sequence level.
 
-When we look past the `<XBU>` at rank 1, real Basque words appear:
-
-| Prompt | top-5 (rank 1-5) | Gold match? |
-|--------|-------------------|-------------|
-| `Egun on, zer` | `<XBU>`, eta, a, **da**, da | da ✓ |
-| `Bai, gustatu` | `<XBU>`, **zai**, zaio, zen, zaigu | zai~zait ✓ |
-| `Zer` | `<XBU>`, **da**, a, eta, zer | da ✓ |
-| `Euskal Herriko` | `<XBU>`, ikasle, Euskal, gazte, buru | ✗ |
-
-The 37.5% top-5 comes mostly from "da" (the most common Basque auxiliary)
-appearing in many gold lists — a weak signal, not strong prediction.
+After both fixes, futo-basque v2.0.0 scores **56.2% top-1** — a complete reversal
+from 0%.
 
 ### 1.3 Documented stats (for reference)
 
@@ -130,46 +129,62 @@ layer (retokenization fallback + sticky merge):
 | Next-word top-3 | 85.2% (127/149) | — |
 | NW-CSR (with IE) | 0.40 | — |
 | Word accuracy (no IE) | 60.4% (90/149) | — |
-| Latency | 97ms (2017 laptop) | 2.9ms (L40 server) |
+| Latency | 97ms (2017 laptop) | 2.5ms (L40 server) |
 
 The real 43.8% (raw greedy, no IE, different eval set) is consistent with the
 documented 50.3% (with IE, CSR sentences). The gap is explained by: (1) no
 inference engineering, (2) different eval set, (3) fewer prompts (16 vs 149).
 
-futo-basque's documented 8.3% was from its own eval script (which extracts words
-from inside `<XBU>` format tokens). Our raw inference shows 0% — the format
-overfit is worse than the eval suggested.
+futo-basque v2.0.0's real inference score (56.2% top-1) is from the same eval
+set and engine as morpheus's 43.8% — a fair comparison.
 
-### 1.4 Autocorrect (where futo-basque shines)
+### 1.4 Autocorrect
 
-| Metric | futo-basque | morpheus |
+| Metric | futo-basque v2.0.0 | morpheus |
 |--------|-------------|----------|
-| **Autocorrect top-1** | **82.5%** (33/40) | N/A (doesn't do autocorrect) |
-| **Autocorrect top-5** | **95.0%** (38/40) | N/A |
+| **Autocorrect top-1** (standalone GGUF eval) | 0% (0/29) | N/A (doesn't do autocorrect) |
 
-futo-basque's designed purpose is autocorrect — given a typo (`kaixp`), predict the correct word (`kaixo`). It does this well (82.5%). **Morpheus has no autocorrect capability at all.** It does word *completion* (prefix → full word), not word *correction* (typo → correct word). These are fundamentally different tasks.
+**Note:** The previous comparison reported 82.5% autocorrect for futo-basque
+v1.0.0 — that number was from the model's own eval script which extracted words
+from inside `<XBU>` format tokens, and the model was trained on the broken
+skip-1 objective. The v2.0.0 model, evaluated honestly in FUTO control-token
+format (`keyboard.py`), scores 0% standalone — the 40% triple ratio in the
+multitask finetune wasn't sufficient to master the autocorrect format.
+
+However, in the real FUTO app, autocorrect works via a **hybrid architecture**:
+the classical dictionary engine (AOSP LatinIME) proposes real-word candidates,
+and the transformer re-ranks them. The transformer doesn't need to generate
+correct words from scratch — it just needs to score them. A Basque dictionary
+wordlist (`eu_wordlist.combined.gz`) is still needed for the dictionary half.
+
+**Morpheus has no autocorrect capability at all.** It does word *completion*
+(prefix → full word), not word *correction* (typo → correct word).
 
 ### 1.5 Verdict
 
 | Task | Winner | Margin |
 |------|--------|--------|
-| Next-word top-1 (real inference) | **morpheus** | 43.8% vs 0% (format overfit) |
-| Next-word top-5 (real inference) | **morpheus** | 75.0% vs 37.5% (2×) |
-| Autocorrect (typo → correct) | **futo-basque** | 82.5% vs N/A |
-| Inference latency (server) | **futo-basque** | 1.0ms vs 2.9ms (3× faster) |
+| Next-word top-1 (real inference) | **futo-basque** | 56.2% vs 43.8% (+12.4pp) |
+| Next-word top-5 (real inference) | **tie** | 75.0% vs 75.0% |
+| Autocorrect (standalone) | **neither** | futo 0% (needs dictionary engine), morpheus N/A |
+| Inference latency (server) | **futo-basque** | 0.8ms vs 2.5ms (3× faster) |
 | Deployment reach | **futo-basque** | Runs inside FUTO Keyboard (real Android app) |
 
-**For next-word prediction, morpheus is unambiguously better** — 43.8% top-1 vs
-0% (futo-basque's format overfit is total). morpheus also has strong near-miss
-recovery: 5 more correct answers sit at rank 2 in top-5, suggesting beam search
-would push it to 60%+. futo-basque's 0% is not a model-quality failure but a
-**format contamination** artifact: the 3-phase finetune taught the `<XBU>` format
-so aggressively that it bleeds into 100% of next-word predictions.
+**For next-word prediction, futo-basque v2.0.0 is now the winner** — 56.2% top-1
+vs morpheus's 43.8%, on the same eval set and engine. This is a complete reversal
+from the previous comparison (Jul 15), where futo-basque scored 0% due to a
+pretrain double causal-shift bug (now fixed) and format contamination from the
+sequential finetune pipeline (replaced by unified multitask finetune).
 
-The two models solve *different problems*: morpheus predicts what comes next;
-futo-basque corrects what you typed. futo-basque's autocorrect (82.5%) is a
-capability morpheus doesn't have. morpheus's next-word (43.8% raw, ~50% with IE)
-is a capability futo-basque has lost to format overfit.
+futo-basque achieves this with **3.6× fewer parameters** (25M vs 91M) and **3×
+faster inference** (0.8ms vs 2.5ms). The two models are now tied on top-5
+(75.0% each), meaning both have similar near-miss recovery — but futo-basque
+converts more of those into top-1 hits.
+
+The remaining gap: futo-basque's standalone autocorrect is 0% (the multitask
+finetune's 40% triple ratio wasn't enough to master the control-token format).
+In the real FUTO app, the hybrid dictionary engine should compensate, but a
+Basque dictionary wordlist is still needed. morpheus has no autocorrect at all.
 
 ---
 
