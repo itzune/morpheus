@@ -271,61 +271,89 @@ For FIM, chat completions is structurally wrong: FIM needs a raw prompt string
 production FIM system (Copilot, Codestral, Continue) uses the raw
 text-completion shape.
 
-### 4.2 The editor: Continue.dev
+### 4.2 A reusable Basque inference server, not a Continue integration
 
-[Continue.dev](https://docs.continue.dev) is the open-source AI coding
-assistant for VS Code and JetBrains. Critically, its **autocomplete** subsystem
-is FIM-native and model-agnostic: it ships per-model FIM templates
-(`core/autocomplete/templating/AutocompleteTemplate.ts`) for Qwen-Coder
-(`<|fim_prefix|>…<|fim_suffix|>…<|fim_middle|>`), Codestral
-(`[SUFFIX]…[PREFIX]`), Code Llama (`<PRE>…<SUF>…<MID>`), Granite, StableCode,
-and others.
+The architecture is the **inference-server pattern** (how vLLM, TGI, Ollama,
+and LM Studio all work): one server, many thin clients. The model-specific
+knowledge — the reference SentencePiece encoder and (later) the FIM template —
+lives server-side. Every client speaks the standard OpenAI completion API and
+stays generic.
 
-**The integration path for morpheus:**
+The server is `demo/server.py`. Its backend already exists: `_call_llama()`
+SP-encodes a string to token IDs and forwards them to llama-server's native
+`/completion` endpoint. The missing piece is an **OpenAI-compatible face** on
+the front — two routes:
 
-1. Run morpheus behind **llama-server** (already done by `demo/server.py`),
-   which exposes `/v1/completions`.
-2. Register a Continue provider pointing at `http://localhost:<port>/v1`,
-   `provider: openai`, with `roles: [autocomplete]`.
-3. Add a **morpheus FIM template** entry mapping morpheus's `<PRE>/<SUF>/<MID>`
-   tokens, with stop tokens `<EOT>`, `<PRE>`, `<SUF>`, `<MID>`.
-4. Set `prefixPercentage` / `maxSuffixPercentage` / `debounceDelay`.
+```
+Client (Continue / Obsidian / Vim / CLI)
+   │  standard completion API
+   ▼
+┌─────────────────────────────────────────────────────┐
+│ Proxy: demo/server.py (reuses existing _call_llama) │
+│  • /v1/completions  (OpenAI-compatible, string in)  │  ← Continue.dev uses this
+│  • /v1/complete     ({prefix,suffix} convenience)   │  ← thin bespoke clients
+│      └ SP-encode → token IDs → FIM template (P6)    │
+└─────────────────────────────────────────────────────┘
+   │  token-ID prompt
+   ▼
+llama-server /completion  (the fast engine; tokenizer bypassed)
+```
 
-This gives **VS Code + JetBrains** ghost-text autocomplete with *zero* editor
-plugin code of our own, and inherits Continue's prefiltering, snippet
-formatting, and multiline logic.
+- **`/v1/completions`** — the OpenAI-ecosystem standard. Takes an
+  already-templated string (`prompt`), `max_tokens`, `temperature`, `top_k`,
+  `stop`, `stream`; SP-encodes; forwards token IDs; reformats the response to
+  `choices[0].text` / `usage`. Continue.dev, Cody, codecompanion.nvim, and
+  Obsidian plugins (Text Generator, Smart Composer) all speak this with **zero
+  code from us**.
+- **`/v1/complete`** — a convenience route taking `{prefix, suffix, max_tokens}`
+  as separate fields. The server applies the FIM template (`<PRE>{prefix}<SUF>{suffix}<MID>`)
+  once P6 lands. This is the endpoint ~50-line bespoke clients use — an Obsidian
+  plugin or a Vim function sends raw prefix/suffix and renders the returned text
+  as ghost, never needing to know morpheus's token names.
 
-### 4.3 The token-ID fidelity caveat (the one real wrinkle)
+Putting the FIM template on the server (not in each client) is the key
+decision for reuse: if the model's FIM token names ever change, only the server
+changes; every client keeps working.
+
+[Continue.dev](https://docs.continue.dev) is the **first client**, chosen
+because its autocomplete subsystem is FIM-native and model-agnostic (it ships
+per-model FIM templates — Qwen-Coder, Codestral, Code Llama, Granite,
+StableCode). Continue points at `http://localhost:<port>/v1`, `provider: openai`,
+`roles: [autocomplete]`, and uses its own FIM template against
+`/v1/completions`. This gives VS Code + JetBrains ghost-text with zero editor
+plugin code, inheriting Continue's prefiltering, snippet formatting, and
+multiline logic.
+
+### 4.3 The tokenization fix lives server-side (not conditional)
 
 Morpheus has a known issue ([`../README.md`](../README.md) GGUF model card;
 [`demo/server.py`](../demo/server.py) `_prompt_to_ids` docstring): llama.cpp's
 rebuilt SentencePiece tokenizer **diverges** from the reference `sentencepiece`
 library on morpheus's 4K UNIGRAM vocab, costing ~7× autocomplete quality if
-string prompts are used. The demo server solves this by sending **token IDs**
-(`sp.encode(prompt, out_type=int)`) to llama-server's `/completion`, not
-strings.
+string prompts are used. The same AR model scored **0% via string prompts vs
+43.8% via token IDs** (`COMPARISON.md` §1.2).
 
-The OpenAI-compatible `/v1/completions` path that Continue speaks takes a
-**string** prompt, which would re-trigger the divergence. Two mitigations:
+This is not a maybe — it is already measured. So the proxy is **the
+architecture, not a fallback**: the reference SentencePiece encoder lives in
+the server, llama.cpp's broken tokenizer is bypassed, and every client gets
+faithful tokenization for free. There is no "test the string path first" step;
+we already know it produces garbage.
 
-- **Likely sufficient:** the divergence is worst on long agglutinative words.
-  FIM splits at char boundaries, and the FIM tokens themselves are atomic, so
-  the prefix/suffix pieces are shorter and less divergence-prone. This needs
-  empirical confirmation, not assumption.
-- **If fidelity matters:** keep a thin proxy (the existing `demo/server.py`
-  already is one) that accepts Continue's FIM string, SP-tokenizes it, and
-  forwards token IDs to llama-server `/completion`. ~50 lines on top of what
-  exists. This preserves training/inference tokenization identity.
-
-Start with the direct `/v1/completions` path; add the proxy only if the
-divergence measurably hurts FIM quality.
+The divergence is tokenizer-type × vocab-size × language (UNIGRAM Viterbi
+search × 4K small vocab × Basque agglutinative long words), **not the
+architecture** — a transformer with this exact tokenizer would hit the same
+issue. The clean fix is to put the correct encoder where the wrong one lives,
+which is exactly what the proxy does. If llama.cpp ever fixes the divergence
+upstream, delete the proxy and repoint clients at llama-server directly — zero
+client-side changes.
 
 ### 4.4 What this gets us immediately
 
-Even before the FIM model lands, Continue.dev works against the *current*
-AR-only model (prefix-only completion, suffix ignored). This means **step 3 of
-the roadmap can start today** against the existing 74K checkpoint, giving a
-working editor plugin to dogfood while the FIM model trains.
+The proxy face works against the *current* AR-only model (prefix-only
+completion, suffix ignored until FIM lands). This means the integration can
+start today against the existing 74K checkpoint: build the `/v1/completions`
+route, point Continue at it, dogfood prefix-only ghost-text, and record the
+quality baseline that FIM (Phase 6) must beat — all before any GPU work.
 
 ---
 
@@ -333,22 +361,23 @@ working editor plugin to dogfood while the FIM model trains.
 
 | Phase | Goal | Depends on | Effort |
 |-------|------|-----------|--------|
-| **6a** | Add `<PRE>/<SUF>/<MID>/<EOT>` tokens; resize embeddings; resume-from-74K smoke test | nothing | small |
+| **6e′** | Build the OpenAI-compatible face on the proxy (`/v1/completions` + `/v1/complete`); point Continue.dev at it; dogfood prefix-only against the 74K AR checkpoint; record the baseline FIM must beat | nothing | small — **first step** |
+| **6a** | Add `<PRE>/<SUF>/<MID>/<EOT>` tokens; resize embeddings; resume-from-74K smoke test | nothing (parallel with 6e′) | small |
 | **6b** | FIM data transform (char-level PSM/SPM) on Latxa v2; pretokenize FIM shards | 6a | medium |
 | **6c** | Continued-pretrain Phase 6: ~1–2B tokens, 50% FIM / 50% AR | 6b | GPU time |
 | **6d** | Basque FIM eval (random-span infilling on held-out sentences) | 6c | medium |
-| **6e** | Export FIM checkpoint → GGUF; add morpheus FIM template to Continue.dev; dogfood in VS Code | 6d | small |
-| **(parallel) 6e′** | Wire Continue.dev against the *current* AR checkpoint (prefix-only) for early dogfooding | nothing | small |
-| **(research) R** | Test Mamba-2 + FUTO autocorrect format (`TODO.md` Priority 2) | nothing | medium — *separate track, gates the mobile-IME decision* |
+| **6e** | Export FIM checkpoint → GGUF; add FIM template **server-side** to the proxy; dogfood in VS Code | 6d | small |
+| **(research) R** | Test Mamba-2 + FUTO autocorrect format (`TODO.md` D1) | nothing | medium — *separate track, gates the mobile-IME decision* |
 
-**Critical path:** 6a → 6b → 6c → 6d → 6e.
-**Fast-feedback path:** 6e′ (today) in parallel.
+**Critical path:** 6e′ (now) → 6a → 6b → 6c → 6d → 6e.
 
 Phases 6a–6e are coupled: FIM tokens must exist before FIM data can be
 tokenized, which must exist before Phase 6 training, which must finish before
-the FIM eval/model is meaningful. Phase 6e′ is fully independent and should
-start immediately to surface editor-integration UX issues while the model work
-proceeds.
+the FIM eval/model is meaningful. **6e′ is the unambiguous first step** — it
+builds the reusable Basque inference server (which every later phase and every
+client depends on), de-risks the integration surface for free, and establishes
+the dogfooding loop — all with zero model work. 6a can run in parallel since it
+touches only the tokenizer + embeddings, not the server.
 
 ---
 
@@ -382,10 +411,10 @@ proceeds.
    **empirical question** that only Phase 6c–6d answers. If degraded, the
    mitigation is shorter FIM spans (bias splits toward nearer boundaries),
    not an architecture change.
-2. **Tokenizer divergence under FIM.** Does the llama.cpp↔SentencePiece
-   divergence (§4.3) measurably hurt FIM, or is it masked by char-level
-   splitting and atomic FIM tokens? Needs measurement before committing to
-   the proxy.
+2. **Proxy SSE streaming translation.** llama-server's native `/completion`
+   streams in its own SSE frame format; the OpenAI `/v1/completions` face must
+   translate frames on the fly. Non-streaming is trivial; the streaming path
+   is mechanical but unverified. Resolved as part of 6e′.
 3. **Basque infilling eval design.** What's the right metric — exact-match
    reconstruction, LLM-judge plausibility, or a keystrokes-saved analogue
    applied to mid-document cursor positions? The existing CSR/MorphAcc
@@ -405,7 +434,11 @@ autocomplete**: long sessions, constant decode latency, morphology-aware
 tokenization. The missing capability is **cursor-position awareness**, which
 FIM provides. The plan is a continued-pretraining stage that adds FIM tokens
 and trains on a 50/50 FIM+AR mix of the existing corpus, evaluated with a new
-Basque infilling benchmark, and deployed through Continue.dev via the
-OpenAI-compatible completions protocol. Every step is evidence-grounded in the
-FIM literature and in the comparison findings; none requires an architecture
+Basque infilling benchmark, and deployed through a **reusable Basque inference
+server** (the proxy with an OpenAI-compatible face) that centralizes the
+tokenization fix and FIM template — letting any editor client (Continue.dev,
+Obsidian, Vim, CLI) connect with zero model-specific code. The first step is
+building that server face and dogfooding prefix-only completion against the
+current checkpoint, before any GPU work. Every step is evidence-grounded in
+the FIM literature and the comparison findings; none requires an architecture
 change or new data collection.

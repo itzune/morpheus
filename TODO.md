@@ -12,29 +12,70 @@ Each item references the evidence. Ordered by ROI / dependency.
 
 ## Primary track: Desktop editor autocompletion (Phase 6)
 
-### P1 — Continue.dev integration against the current AR model (fast path, today)
+### P1 — Build the OpenAI-compatible face on the proxy (foundation for every client)
 
 **Evidence:** The current 74K checkpoint already does prefix-only ghost-text.
-TRaJECTORY §5 — Phase 6e′. Continue.dev is FIM-native and model-agnostic; it
-works against any OpenAI-compatible `/v1/completions` endpoint, including a
-prefix-only AR model (suffix ignored until FIM lands).
+The token-ID fidelity problem is already *known*, not conditional: the same
+AR model scored **0% via string prompts vs 43.8% via token IDs**
+(`COMPARISON.md` §1.2). So pointing Continue directly at `llama-server`'s
+`/v1/completions` (string path) would hit the known-broken tokenization and
+fail immediately. The proxy is therefore **the architecture, not a fallback** —
+it centralizes the reference SentencePiece encoder and (later) the FIM template,
+so every client (Continue, Obsidian, Vim, CLI) is thin and model-agnostic.
 
-**Why it's #1:** Zero model work, zero retraining. Gets a working VS Code +
-JetBrains ghost-text plugin immediately, surfacing editor-integration UX issues
-(debounce, stop tokens, multiline boundaries) while the FIM model trains. The
-fast-feedback path that runs in parallel with everything below.
+**Why it's #1:** Zero model work, zero retraining. Builds the reusable Basque
+inference server and gives a working VS Code + JetBrains ghost-text plugin in
+the same step, surfacing editor-integration UX issues (debounce, stop tokens,
+multiline boundaries) while the FIM model trains.
+
+**Architecture — two endpoints on `demo/server.py`:**
+
+```
+Client (Continue / Obsidian / Vim / CLI)
+   │  standard completion API
+   ▼
+┌─────────────────────────────────────────────────────┐
+│ Proxy: demo/server.py (reuses existing _call_llama) │
+│  • /v1/completions  (OpenAI-compatible, string in)  │  ← Continue.dev uses this
+│  • /v1/complete     ({prefix,suffix} convenience)   │  ← thin bespoke clients
+│      └ SP-encode → token IDs → FIM template (P6)    │
+└─────────────────────────────────────────────────────┘
+   │  token-ID prompt
+   ▼
+llama-server /completion  (the fast engine; tokenizer bypassed)
+```
+
+The backend already exists: `_call_llama()` posts token-ID arrays to
+llama-server `/completion` and SP-encodes first. Only the **OpenAI face**
+(front route + response translator) is new.
 
 **Implementation sketch:**
-- Run morpheus behind `llama-server` (already done by `demo/server.py`), which
-  exposes `/v1/completions`.
-- Register a Continue.dev provider: `provider: openai`, endpoint
-  `http://localhost:<port>/v1`, `roles: [autocomplete]`.
-- Until FIM tokens exist, use a no-op template (plain prefix completion) with
-  stop tokens `</s>`, `\n\n` (paragraph boundary).
-- Tune `debounceDelay`, `prefixPercentage`, `maxSuffixPercentage`,
-  `modelTimeout` per [`docs/TRAJECTORY.md`](./docs/TRAJECTORY.md) §4.2.
+1. `POST /v1/completions` — accept OpenAI schema (`prompt`, `max_tokens`,
+   `temperature`, `top_k`, `stop`, `stream`); SP-encode the string; forward to
+   `_call_llama`; reformat response to `choices[0].text` / `usage`.
+2. Non-streaming first (`stream: false`) — single request/response reformat.
+3. Add **SSE streaming translation**: llama-server frames → OpenAI
+   `data: {...}` frames, on the fly. (Mechanical but required for ghost-text
+   responsiveness.)
+4. `POST /v1/complete` — convenience route `{prefix, suffix, max_tokens}`;
+   server applies the FIM template once P6 lands (no-op prefix-only until then).
+   This is the endpoint bespoke clients (Obsidian plugin, Vim function) use —
+   they never need to know morpheus's token names.
+5. Point Continue.dev at `http://localhost:<port>/v1`, `provider: openai`,
+   `roles: [autocomplete]`. Until FIM: no-op template, stop tokens `</s>`,
+   `\n\n`; sampling per P7 (`temperature: 0.2`, `top_k: 3–5`).
+6. Dogfood prefix-only ghost-text in VS Code; record the quality baseline that
+   FIM (P6) must beat.
 
-**Status:** Not started. No blockers.
+**Why this is reusable, not a Continue integration:** the `/v1/completions`
+face is the OpenAI-ecosystem standard — Continue, Cody, codecompanion.nvim, and
+Obsidian plugins (Text Generator, Smart Composer) all speak it with zero code
+from us. The `/v1/complete` face enables ~50-line bespoke clients. One server,
+N thin clients; the tokenization fix and FIM template live in exactly the place
+they belong. If llama.cpp ever fixes the divergence upstream, delete the proxy
+and repoint — zero client changes.
+
+**Status:** Not started. No blockers. This is the unambiguous first step.
 
 ---
 
@@ -120,24 +161,27 @@ and don't transfer to cursor-in-the-middle.
 
 ---
 
-### P6 — Phase 6e: Export FIM GGUF + Continue.dev FIM template + dogfood
+### P6 — Phase 6e: Export FIM GGUF + server-side FIM template + dogfood
 
-**Evidence:** TRAJECTORY §4.2. Continue.dev ships per-model FIM templates
-(`core/autocomplete/templating/AutocompleteTemplate.ts`); adding a morpheus
-entry is the integration point.
+**Evidence:** TRAJECTORY §4.2. The FIM template (`<PRE>{prefix}<SUF>{suffix}<MID>`)
+belongs **server-side** on the proxy (P1), not duplicated in each editor client.
+
+**What changed from the old TODO:** the old P6 framed the token-ID proxy as
+conditional ("test if FIM masks the divergence; if not, keep the proxy"). The
+proxy is the default from P1 — it already solves tokenization, so P6 only adds
+the FIM template to it. No client-side FIM templating; no per-editor token-name
+knowledge.
 
 **Implementation sketch:**
 - Export the FIM checkpoint → HF → GGUF (reuse `scripts/export/`); confirm
   `add_bos_token=false` metadata still set.
-- Add a morpheus FIM template to Continue.dev config:
-  `<PRE>{prefix}<SUF>{suffix}<MID>`, stop tokens `<EOT> <PRE> <SUF> <MID>`.
-- **Token-ID fidelity check (TRaJECTORY §4.3):** llama.cpp's SentencePiece
-  rebuild diverges from reference on this 4K vocab. Test whether FIM (char-level
-  splits, atomic FIM tokens) masks the divergence. If not, keep the thin
-  token-ID proxy in `demo/server.py` (accept Continue's FIM string → SP-tokenize
-  → forward token IDs to `/completion`).
+- Add the FIM template **to the proxy**: `/v1/complete` wraps `{prefix,suffix}`
+  as `<PRE>{prefix}<SUF>{suffix}<MID>`; `/v1/completions` passes through
+  already-templated strings (Continue.dev's own template works unchanged).
+  Stop tokens `<EOT> <PRE> <SUF> <MID>`.
 - Dogfood in VS Code against the realistic-message set; iterate stop-token /
-  debounce / multiline-boundary policy (TRaJECTORY §7.4).
+  debounce / multiline-boundary policy (TRaJECTORY §7.4). Compare against the
+  P1 prefix-only baseline — FIM must measurably beat it to justify the GPU spend.
 
 **Status:** Not started. Depends on P5.
 
