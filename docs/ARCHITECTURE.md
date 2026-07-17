@@ -108,18 +108,24 @@ SP tokenize it as one unit — no manual token splicing.
 
 These are **not configurable**. They are bug fixes, not preferences, and making
 them toggleable would let a misconfigured client get garbage output. They run
-on every request.
+on every request (non-streaming) via `_postprocess()`, and per-chunk via
+`_clean_chunk()` for streaming.
 
 | Strategy | Function | What it does |
 |----------|----------|--------------|
 | SP tokenization | `_normalize_prompt_to_ids` | Reference SentencePiece encode; bypasses llama.cpp divergence |
 | FIM templating | `/v1/complete` route | Builds `<PRE>{prefix}<SUF>{suffix}<MID>` when suffix present; falls back to AR when absent |
-| Stop tokens | both routes | `<EOT>`, `</s>` (native EOS), `\n\n` (paragraph boundary); passed to llama-server + double-checked client-side |
-| Digit token repair | `_generate_with_repair` | Swaps digit-containing output tokens for their best non-digit alternative from top-k logprobs (token-level, not string-level) |
-| Byte-fallback garbage filter | `_has_byte_fallback_garbage` | Detects non-Latin output (Cyrillic, U+FFFD) that signals a tokenizer trap; returns empty instead of junk |
-| Suggestion cleanup | `filter_suggestion` | Strips ▁ markers, U+FFFD, collapsed punct runs, trailing junk — the proxy decodes tokens→text, so it cleans here |
-| Confidence | `compute_confidence` | Average logprob excluding EOS/stop tokens; returned as a `confidence` field so clients can suppress low-quality ghosts |
-| Subword-aware context (AR mode) | `smart_context` + `ghost_suffix` | Strips half-finished subword fragments and deduplicates overlap so only the non-typed suffix shows as ghost. **N/A for FIM** — the middle is purely new text |
+| Stop tokens | `_postprocess` (non-streaming), inline (streaming) | `<EOT>`, `</s>` (native EOS), `\n\n` (paragraph boundary); passed to llama-server + double-checked in post-processing |
+| Byte-fallback garbage filter | `_has_byte_fallback_garbage` (via `_postprocess`) | Detects non-Latin output (Cyrillic, U+FFFD) that signals a tokenizer trap; returns empty + confidence 0.0 instead of junk |
+| Suggestion cleanup | `filter_suggestion` (via `_postprocess`) | Strips ▁ markers, U+FFFD, collapsed punct runs, trailing junk — the proxy decodes tokens→text, so it cleans here |
+| Confidence | `compute_confidence` (via `_postprocess`) | Average logprob excluding EOS/stop tokens; returned as a `confidence` field so clients can suppress low-quality ghosts |
+| Streaming cleanup | `_clean_chunk` | Per-chunk ▁/U+FFFD strip for SSE streams (full strategies need complete output) |
+
+> **Digit token repair** (`_generate_with_repair`) is **not** in this table — it
+> is keyboard-only (legacy `/api/autocomplete/keyboard` route). Desktop editor
+> completions legitimately contain digits ("2024ko urtarrilean", "3.14"), so
+> banning digit tokens would break prose. It stays on the keyboard route where
+> word-chip suggestions must never contain numbers.
 
 ### 3.4 What the proxy deliberately does NOT do
 
@@ -240,8 +246,9 @@ EDITOR                        PROXY (server.py)                    ENGINE (llama
   │                            │                                              │ then <EOT> (id 4003)
   │                            │                                              │ → stopped_eos/word
   │                            │◄─────────────────────────────────────────────┤
-  │                            │ text="ni ", strip stop, compute confidence
-  │                            │ check garbage filter, filter_suggestion
+  │                            │ text="ni ", _postprocess:
+  │                            │   strip stop, garbage filter,
+  │                            │   filter_suggestion, confidence(0.91)
   │  {text:"ni ", confidence:0.91, finish_reason:"stop"}
   │◄──────────────────────────┤
   │ 0.91 > 0.6 threshold → render "ni " as grey ghost
@@ -271,7 +278,8 @@ EDITOR                        PROXY                                  ENGINE
   │                            ├──────────────────────────────────────────────►│
   │                            │◄──────────────────────────────────────────────┤ "moduz?"
   │                            │ ghost_suffix: dedup overlap with typed text
-  │                            │ filter_suggestion, confidence
+  │                            │ _postprocess: garbage filter, filter_suggestion,
+  │                            │   confidence(0.78)
   │  {text:"moduz?", confidence:0.78}
   │◄──────────────────────────┤
 ```
@@ -300,7 +308,7 @@ changes, because the wire protocol (OpenAI completions) stays the same.
 
 | Component | Path | Role |
 |-----------|------|------|
-| Proxy | `demo/server.py` | FastAPI app; SP encode, FIM template, cleanup, two HTTP faces |
+| Proxy | `demo/server.py` | FastAPI app; SP encode, FIM template, `_postprocess` (garbage filter + cleanup + confidence), `_clean_chunk` (streaming), two HTTP faces |
 | OpenAI conformance test | `demo/test_openai_compat.py` | 9+2 checks against real `openai` SDK (the same SDK Continue.dev uses) |
 | Continue.dev config | `demo/continue_config.json` | Points Continue at the proxy (`provider: openai`, `roles: [autocomplete]`) |
 | Engine | llama-server binary | Raw inference; tokenizer bypassed |

@@ -62,8 +62,13 @@ try:
     # Verify object schema
     check("id field present", bool(resp.id), resp.id)
     check("finish_reason present", choice.finish_reason in ("stop", "length"), choice.finish_reason)
+    # Confidence is an extra field (not in OpenAI spec; SDK stores unknowns in model_extra)
+    raw = resp.model_extra or {}
+    has_confidence = "confidence" in raw and isinstance(raw["confidence"], (int, float))
+    check("non-streaming has confidence", has_confidence, str(raw.get("confidence")))
     print(f"    text: {text!r}")
     print(f"    finish_reason: {choice.finish_reason}")
+    print(f"    confidence: {raw.get('confidence')}")
     print(f"    usage: prompt={resp.usage.prompt_tokens} completion={resp.usage.completion_tokens}")
 except Exception as e:
     check("non-streaming returns text", False, str(e))
@@ -143,11 +148,14 @@ try:
     data = r.json()
     text = data.get("text", "")
     finish = data.get("finish_reason", "")
+    confidence = data.get("confidence", None)
     check("/v1/complete returns text", isinstance(text, str), repr(text))
     check("/v1/complete has finish_reason", finish in ("stop", "length"), repr(finish))
+    check("/v1/complete has confidence", isinstance(confidence, (int, float)), str(confidence))
     print(f"    prefix: 'Bihar goizean'")
     print(f"    suffix: 'etorriko naiz.'")
     print(f"    generated middle: {text!r}")
+    print(f"    confidence: {confidence}")
     print(f"    finish_reason: {finish}")
 except Exception as e:
     check("/v1/complete returns text", False, str(e))
@@ -163,8 +171,11 @@ try:
     r.raise_for_status()
     data = r.json()
     text = data.get("text", "")
+    confidence = data.get("confidence", None)
     check("/v1/complete AR returns text", isinstance(text, str) and len(text) > 0, repr(text))
+    check("/v1/complete AR has confidence", isinstance(confidence, (int, float)), str(confidence))
     print(f"    generated: {text!r}")
+    print(f"    confidence: {confidence}")
 except Exception as e:
     check("/v1/complete AR returns text", False, str(e))
 

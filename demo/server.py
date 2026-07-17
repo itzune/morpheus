@@ -887,6 +887,53 @@ def filter_suggestion(suggestion: str) -> str:
     return text
 
 
+# ── Always-on post-processing for OpenAI routes ──────────
+# These run on every /v1/completions (non-streaming) and /v1/complete
+# request. They are correctness fixes, not preferences — see
+# docs/ARCHITECTURE.md §3.3 / §5 (Layer 2, not configurable).
+
+
+def _postprocess(content: str, data: dict, stops: list[str]) -> tuple[str, float]:
+    """Apply always-on correctness strategies to raw llama-server output.
+
+    Pipeline (order matters):
+      1. Strip stop sequences (<EOT>, </s>-EOS, \n\n, or client-provided).
+      2. Byte-fallback garbage filter → return ("", 0.0) if non-Latin junk.
+         This catches the tokenizer-trap case where the model predicts
+         byte-fallback tokens that decode to Cyrillic / U+FFFD.
+      3. filter_suggestion — strip ▁ markers, U+FFFD, collapsed punct,
+         trailing junk. The proxy decodes tokens→text, so it cleans here.
+      4. compute_confidence — average logprob excluding EOS/stop tokens.
+
+    Returns (clean_text, confidence).  Confidence reflects the model's
+    actual prediction quality (from logprobs), independent of the text
+    cleanup — so garbage gets confidence 0.0 (suppressed by the client).
+    """
+    text = content
+    for s in stops:
+        if s and s in text:
+            text = text[: text.index(s)]
+            break
+    if _has_byte_fallback_garbage(text):
+        return "", 0.0
+    text = filter_suggestion(text)
+    confidence = compute_confidence(data)
+    return text, confidence
+
+
+def _clean_chunk(text: str) -> str:
+    """Per-chunk artifact cleanup for streaming (lightweight).
+
+    Full strategies (garbage filter, filter_suggestion, confidence) require
+    the complete output — use _postprocess for non-streaming.  For streaming
+    we only strip the two artifacts that would corrupt the stream mid-flight:
+    ▁ SentencePiece space markers and U+FFFD replacement characters.
+    """
+    if not text:
+        return text
+    return text.replace("▁", " ").replace("\ufffd", "")
+
+
 @app.get("/")
 async def index():
     static_dir = Path(__file__).parent / "static"
@@ -1340,7 +1387,12 @@ async def openai_completions(req: CompletionRequest):
     (bypassing llama.cpp's divergent tokenizer); forwards to llama-server;
     reformats the response to OpenAI shape. Supports streaming (SSE) and
     non-streaming. Stop sequences are passed through to llama-server (which
-    handles cross-token matching natively) and double-checked client-side.
+    handles cross-token matching natively) and double-checked in _postprocess.
+
+    Always-on strategies (non-streaming): _postprocess applies garbage
+    filter, filter_suggestion, and confidence — see docs/ARCHITECTURE.md §3.3.
+    Streaming: _clean_chunk strips ▁/U+FFFD per chunk (full strategies need
+    the complete output).
     """
     prompt_ids = _normalize_prompt_to_ids(req.prompt)
     if not prompt_ids:
@@ -1358,6 +1410,7 @@ async def openai_completions(req: CompletionRequest):
         "top_k": req.top_k if req.top_k is not None else 0,
         "min_p": req.min_p if req.min_p is not None else 0.0,
         "repeat_penalty": req.repeat_penalty if req.repeat_penalty is not None else 1.1,
+        "n_probs": N_PROBS,
         "stop": stops if stops else [],
     }
     if req.seed is not None:
@@ -1375,16 +1428,11 @@ async def openai_completions(req: CompletionRequest):
         r.raise_for_status()
         data = r.json()
 
-    text = data.get("content", "")
-    finish_reason = "length"
-    if data.get("stopped_eos") or data.get("stopped_word") or data.get("stop"):
-        finish_reason = "stop"
-    # Client-side stop check (fallback in case llama-server didn't honor)
-    for s in stops:
-        if s and s in text:
-            text = text[: text.index(s)]
-            finish_reason = "stop"
-            break
+    # ── Always-on strategies (see docs/ARCHITECTURE.md §3.3) ──
+    text, confidence = _postprocess(data.get("content", ""), data, stops)
+    finish_reason = "stop" if (
+        not text or data.get("stopped_eos") or data.get("stopped_word") or data.get("stop")
+    ) else "length"
 
     prompt_tokens = len(prompt_ids)
     completion_tokens = data.get("tokens_predicted", 0) or len(
@@ -1404,6 +1452,9 @@ async def openai_completions(req: CompletionRequest):
             "completion_tokens": completion_tokens,
             "total_tokens": prompt_tokens + completion_tokens,
         },
+        # Extra field (not in OpenAI spec; clients ignore unknowns).
+        # Thin clients (Obsidian plugin) use this to suppress low-quality ghosts.
+        "confidence": confidence,
     }
 
 
@@ -1450,7 +1501,7 @@ async def _stream_openai(payload: dict, stops: list[str]):
                         d = json.loads(data_str)
                     except json.JSONDecodeError:
                         continue
-                    text = d.get("content", "")
+                    text = _clean_chunk(d.get("content", ""))
                     # Client-side stop fallback (in case llama-server missed)
                     if text and stops:
                         for s in stops:
@@ -1505,6 +1556,13 @@ async def complete_prefix_suffix(req: CompleteRequest):
     A 50-line client just POSTs {prefix: buffer[:cursor], suffix: buffer[cursor:]}
     and renders the returned text as ghost — no FIM-token or tokenizer knowledge.
 
+    Always-on strategies: _postprocess applies garbage filter, filter_suggestion,
+    and confidence on every request — see docs/ARCHITECTURE.md §3.3.
+
+    Response: {text, confidence, finish_reason}.
+    The client uses `confidence` to suppress low-quality ghosts (threshold
+    is a client-side config, not a server param).
+
     FIM mode requires the FIM-capable model (Phase 6 checkpoint) to be loaded
     in llama-server. With the AR-only model, suffix is ignored (prefix-only).
     """
@@ -1533,6 +1591,7 @@ async def complete_prefix_suffix(req: CompleteRequest):
         "top_p": 1.0,
         "min_p": 0.0,
         "repeat_penalty": 1.1,
+        "n_probs": N_PROBS,
         "stop": stops,
     }
     async with httpx.AsyncClient(timeout=30.0) as client:
@@ -1540,13 +1599,9 @@ async def complete_prefix_suffix(req: CompleteRequest):
         r.raise_for_status()
         data = r.json()
 
-    text = data.get("content", "")
-    for s in stops:
-        if s and s in text:
-            text = text[: text.index(s)]
-            break
-    finish = "stop" if (not text or data.get("stopped_eos")) else "length"
-    return {"text": text, "finish_reason": finish}
+    text, confidence = _postprocess(data.get("content", ""), data, stops)
+    finish = "stop" if (not text or data.get("stopped_eos") or data.get("stop")) else "length"
+    return {"text": text, "confidence": confidence, "finish_reason": finish}
 
 
 @app.get("/v1/models")
