@@ -17,6 +17,7 @@ Run:
 Exit code 0 = all checks passed.
 """
 import sys
+import httpx
 from openai import OpenAI
 
 BASE_URL = "http://127.0.0.1:9090/v1"
@@ -124,6 +125,49 @@ try:
     print(f"    text: {resp.choices[0].text!r}")
 except Exception as e:
     check("token-ID prompt accepted", False, str(e))
+
+# ── 6. /v1/complete FIM route (prefix+suffix) ──
+print("\n=== 6. /v1/complete FIM route ===")
+try:
+    r = httpx.post(
+        f"{BASE_URL}/complete",
+        json={
+            "prefix": "Bihar goizean",
+            "suffix": "etorriko naiz.",
+            "max_tokens": 16,
+            "temperature": 0,
+        },
+        timeout=30.0,
+    )
+    r.raise_for_status()
+    data = r.json()
+    text = data.get("text", "")
+    finish = data.get("finish_reason", "")
+    check("/v1/complete returns text", isinstance(text, str), repr(text))
+    check("/v1/complete has finish_reason", finish in ("stop", "length"), repr(finish))
+    print(f"    prefix: 'Bihar goizean'")
+    print(f"    suffix: 'etorriko naiz.'")
+    print(f"    generated middle: {text!r}")
+    print(f"    finish_reason: {finish}")
+except Exception as e:
+    check("/v1/complete returns text", False, str(e))
+
+# ── 7. /v1/complete AR-only (no suffix) ──
+print("\n=== 7. /v1/complete AR-only (no suffix) ===")
+try:
+    r = httpx.post(
+        f"{BASE_URL}/complete",
+        json={"prefix": "Bihar goizean", "max_tokens": 8, "temperature": 0},
+        timeout=30.0,
+    )
+    r.raise_for_status()
+    data = r.json()
+    text = data.get("text", "")
+    check("/v1/complete AR returns text", isinstance(text, str) and len(text) > 0, repr(text))
+    print(f"    generated: {text!r}")
+except Exception as e:
+    check("/v1/complete AR returns text", False, str(e))
+
 
 # ── Summary ──
 print("\n" + "=" * 50)

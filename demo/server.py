@@ -1488,26 +1488,42 @@ class CompleteRequest(BaseModel):
     top_k: int = 0  # 0 = disabled (full vocabulary)
 
 
+# FIM stop token — the model generates <EOT> to signal the infill is done.
+# This is a string stop because llama-server decodes token 4003 as "<EOT>".
+# </s> (EOS) is handled natively by llama-server (stopped_eos).
+_FIM_EOT = "<EOT>"
+
+
 @app.post("/v1/complete")
 async def complete_prefix_suffix(req: CompleteRequest):
     """Convenience route for thin bespoke clients (Obsidian, Vim, CLI).
 
     Takes raw {prefix, suffix}; the server applies the FIM template
-    (<PRE>{prefix}<SUF>{suffix}<MID>) once the FIM model lands (Phase 6).
-    Until then: prefix-only AR completion (suffix ignored).
+    (<PRE>{prefix}<SUF>{suffix}<MID>) when a suffix is provided.
+    If suffix is empty, falls back to prefix-only AR completion.
 
     A 50-line client just POSTs {prefix: buffer[:cursor], suffix: buffer[cursor:]}
     and renders the returned text as ghost — no FIM-token or tokenizer knowledge.
+
+    FIM mode requires the FIM-capable model (Phase 6 checkpoint) to be loaded
+    in llama-server. With the AR-only model, suffix is ignored (prefix-only).
     """
-    # Until FIM model exists: prefix-only
-    prompt_ids = _normalize_prompt_to_ids(req.prefix)
+    if req.suffix.strip():
+        # ── FIM mode: build <PRE>{prefix}<SUF>{suffix}<MID> ──
+        # The FIM tokens are atomic USER_DEFINED in the SentencePiece model,
+        # so sp.encode() preserves them as single tokens (IDs 4000–4002).
+        # The model generates the middle, then <EOT> (4003) to stop.
+        fim_prompt = f"<PRE>{req.prefix}<SUF>{req.suffix}<MID>"
+        prompt_ids = _normalize_prompt_to_ids(fim_prompt)
+        stops = [_FIM_EOT, "\n\n"]
+    else:
+        # ── AR mode: prefix-only completion ──
+        prompt_ids = _normalize_prompt_to_ids(req.prefix)
+        stops = ["\n\n"]
+
     if not prompt_ids:
         return {"text": "", "finish_reason": "stop"}
 
-    # Note: </s> (EOS) is handled natively by llama-server (stopped_eos);
-    # passing it as a string stop would match token-ID 2 prematurely.
-    # \n\n stops at paragraph breaks — sensible for editor ghost-text.
-    stops = ["\n\n"]
     payload = {
         "prompt": prompt_ids,
         "n_predict": req.max_tokens,
