@@ -58,11 +58,17 @@ llama-server `/completion` and SP-encodes first. Only the **OpenAI face**
    `data: {...}` frames, on the fly.
 4. ✅ `POST /v1/complete` — convenience route `{prefix, suffix, max_tokens}`;
    server applies the FIM template once P6 lands (prefix-only until then).
-5. ⬜ Point Continue.dev at `http://localhost:<port>/v1`, `provider: openai`,
-   `roles: [autocomplete]`. Until FIM: no-op template, stop tokens `</s>`,
-   `\n\n`; sampling per P7 (`temperature: 0.2`, `top_k: 3–5`).
-6. ⬜ Dogfood prefix-only ghost-text in VS Code; record the quality baseline that
-   FIM (P6) must beat.
+5. ✅ **OpenAI-SDK conformance smoke test** (`demo/test_openai_compat.py`):
+   9/9 checks pass against the real `openai` Python SDK (v2.46.0) — models.list,
+   non-streaming text+usage+id+finish_reason, streaming SSE assembly, stop
+   sequences, token-ID prompt path. This is the same SDK Continue.dev uses, so
+   protocol conformance is proven without a full editor install.
+6. ⬇️ **Deferred to P6**: full Continue.dev-in-VS-Code dogfood. Rationale: the
+   prefix-only AR ghost-text is a weak test (the model just appends text); the
+   interesting FIM-specific UX (does `<MID>` respect the suffix? stop before
+   existing text?) only matters once the FIM model exists. The proxy itself is
+   proven conformat; the editor dogfood happens against the FIM model in P6,
+   where it doubles as the real quality bar.
 
 **Why this is reusable, not a Continue integration:** the `/v1/completions`
 face is the OpenAI-ecosystem standard — Continue, Cody, codecompanion.nvim, and
@@ -72,10 +78,11 @@ N thin clients; the tokenization fix and FIM template live in exactly the place
 they belong. If llama.cpp ever fixes the divergence upstream, delete the proxy
 and repoint — zero client changes.
 
-**Status:** ✅ **Done** (commit `badf6e9`). `/v1/completions` (streaming +
-non-streaming), `/v1/complete`, and `/v1/models` all implemented on
-`demo/server.py`, tested end-to-end on GPU server. Next: point Continue.dev
-at the proxy and dogfood prefix-only ghost-text (P6 step 6).
+**Status:** ✅ **Done** (commits `badf6e9`, smoke test below). `/v1/completions`
+(streaming + non-streaming), `/v1/complete`, and `/v1/models` all implemented
+on `demo/server.py` and verified end-to-end. The full Continue.dev editor
+dogfood is deferred to P6 (see step 6 above) — it's a weak test against AR-only
+and a strong test against FIM.
 
 ---
 
@@ -179,6 +186,10 @@ knowledge.
   as `<PRE>{prefix}<SUF>{suffix}<MID>`; `/v1/completions` passes through
   already-templated strings (Continue.dev's own template works unchanged).
   Stop tokens `<EOT> <PRE> <SUF> <MID>`.
+- Point Continue.dev at `http://localhost:9090/v1` (`provider: openai`,
+  `roles: [autocomplete]`); this is the dogfood deferred from P1 — the proxy is
+  already proven OpenAI-conformant, so this is config + UX observation, not
+  integration work. FIM is where ghost-text gets useful.
 - Dogfood in VS Code against the realistic-message set; iterate stop-token /
   debounce / multiline-boundary policy (TRaJECTORY §7.4). Compare against the
   P1 prefix-only baseline — FIM must measurably beat it to justify the GPU spend.
@@ -313,11 +324,14 @@ desktop editor. Recorded here so the reasoning is explicit.
 ## Completed
 
 - [x] **P1: OpenAI-compatible `/v1/completions` + `/v1/complete` on proxy**
-      (commit `badf6e9`). Three routes on `demo/server.py`: `/v1/completions`
-      (streaming SSE + non-streaming, OpenAI schema), `/v1/complete` (convenience
-      `{prefix, suffix}` body), `/v1/models`. SP-encodes string prompts to token
-      IDs (bypasses llama.cpp tokenizer divergence). Tested end-to-end on GPU
-      server with real Basque prompts.
+      (commits `badf6e9`, `a205eb4`). Three routes on `demo/server.py`:
+      `/v1/completions` (streaming SSE + non-streaming, OpenAI schema),
+      `/v1/complete` (convenience `{prefix, suffix}` body), `/v1/models`.
+      SP-encodes string prompts to token IDs (bypasses llama.cpp tokenizer
+      divergence). Verified with `demo/test_openai_compat.py` (9/9 checks
+      pass against the real `openai` Python SDK v2.46.0 — the same SDK
+      Continue.dev uses). Full Continue.dev editor dogfood deferred to P6
+      (AR-only ghost-text is a weak test; FIM is where it gets useful).
 - [x] Real inference comparison vs futo-basque (`compare_inference.py`)
 - [x] Verified morpheus deployment handles tokenizer divergence correctly
       (`demo/server.py` uses `sp.encode()` → token IDs, not string prompts)
