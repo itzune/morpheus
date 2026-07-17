@@ -13,9 +13,7 @@ logs/
 wandb/
 
 # Data (large files)
-data/train_tokens.npy
-data/valid_tokens.npy
-data/test_tokens.npy
+data/*.npy
 data/splits/
 data/corpus_sample.txt
 data/corpus_sample.txt.gz

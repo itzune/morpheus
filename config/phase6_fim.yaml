@@ -1,0 +1,73 @@
+# Phase 6: Continued pretraining with FIM (Fill-in-the-Middle)
+#
+# Resumes from step_0074000_fim.pt (vocab 4016, AR perplexity verified in P2).
+# Trains ~2B additional tokens on a 50% FIM / 50% AR mix (data/train_fim.npy).
+# Lower peak LR than Phase 1 (continued pretrain, not warm start).
+#
+# The "FIM-for-free" property (Bavarian et al. 2022) predicts AR perplexity
+# should not regress — monitored on data/valid_tokens_4k.npy (plain AR).
+#
+# Usage:
+#   python3 train.py --config config/phase6_fim.yaml --pretrained checkpoints/step_0074000_fim.pt
+# (requires --pretrained flag in train.py: loads model weights only, fresh optimizer)
+
+# Architecture (same as small.yaml — no architectural change for FIM)
+d_model: 768
+n_layer: 24
+ssm_layer: Mamba2
+d_state: 64
+d_conv: 4
+expand: 2
+headdim: 64
+chunk_size: 256
+
+# Vocabulary (FIM tokenizer: 4004 pieces → padded to 4016)
+vocab_size: 4004
+pad_vocab_size_multiple: 16
+
+# Regularization
+residual_in_fp32: true
+fused_add_norm: true
+
+# Training
+seq_len: 1024
+batch_size: 64
+gradient_accumulation: 2
+
+# Optimization (lower LR for continued pretrain — was 2.0e-3 in Phase 1)
+learning_rate: 1.0e-3
+min_lr: 1.0e-5
+weight_decay: 0.1
+beta1: 0.9
+beta2: 0.95
+grad_clip: 1.0
+
+# Schedule (~2B additional tokens; warmup is shorter for continued pretrain)
+warmup_tokens: 20_000_000
+total_tokens: 2_000_000_000
+
+# Precision
+dtype: bfloat16
+compile: false
+
+# Logging
+log_interval: 10
+eval_interval: 500
+save_interval: 1000
+
+# Paths
+train_data: data/train_fim.npy
+valid_data: data/valid_tokens_4k.npy   # AR valid — FIM-for-free check (must not regress)
+valid_fim_data: data/valid_fim.npy     # FIM valid — for P5 eval (not used by train.py yet)
+output_dir: checkpoints/phase6
+
+# Tokenizer & eval
+sp_model: tokenizer/basque_unigram_fim.model
+eval_targets: eval/targets.json
+
+# Pretrained checkpoint (model weights only; fresh optimizer + step=0)
+pretrained: checkpoints/step_0074000_fim.pt
+
+# Estimated additional steps: 2B / (1024 × 64 × 2) = ~15,258 steps
+# Estimated VRAM: ~20-25 GB (same as Phase 1)
+# Expected: AR perplexity stable (FIM-for-free), FIM infill capability gained

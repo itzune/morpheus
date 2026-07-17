@@ -125,7 +125,15 @@ for the 4K UNIGRAM vocab where Basque agglutination splits irregularly
   for generalization.
 - Pretokenize to `.npy` as the existing pipeline does.
 
-**Status:** Not started. Depends on P2.
+**Status:** ✅ **Done**. `scripts/pipeline/build_fim.py` implements char-level
+PSM/SPM transform with deterministic two-pass (count→fill) and per-line RNG.
+Built and verified:
+- `data/train_fim.npy` — full FIM+AR training stream (~5B tokens, 50% FIM)
+- `data/valid_fim.npy` — FIM validation set (2M tokens, 22.5K FIM + 27.4K AR)
+- Structure verified: 100% PSM (`PRE<SUF<MID<EOT`) and SPM (`SUF<PRE<MID<EOT`)
+  ordering correct; PSM/SPM balance 50.6/49.4; FIM rate ~45% (short lines
+  fall back to AR).
+- `config/phase6_fim.yaml` created (P4 config: 2B tokens, LR 1e-3, FIM data).
 
 ---
 
@@ -145,7 +153,7 @@ models). At 91M scale, 1–2B tokens is proportionate.
 - Monitor: AR perplexity on the existing valid set must not regress (the
   FIM-for-free property); add a FIM-span perplexity once P5 lands.
 
-**Status:** Not started. Depends on P3. Needs GPU time.
+**Status:** Not started. Depends on P3 (✅ done). Needs GPU time.
 
 ---
 
@@ -327,6 +335,14 @@ desktop editor. Recorded here so the reasoning is explicit.
 
 ## Completed
 
+- [x] **P3: Basque FIM dataset (char-level PSM/SPM transform)**
+      `scripts/pipeline/build_fim.py` — two-pass (count→fill) with deterministic
+      per-line RNG, 50% FIM / 50% AR, 50/50 PSM/SPM, ~20% linguistic-boundary
+      splits / ~80% random-char. FIM string SP-encoded as one string (FIM tokens
+      are atomic USER_DEFINED, survives encoding intact). Built:
+      `data/train_fim.npy` (~5B tokens), `data/valid_fim.npy` (2M tokens).
+      Verified: 100% PSM/SPM structure correct, PSM/SPM 50.6/49.4, FIM rate ~45%.
+      `config/phase6_fim.yaml` created for P4.
 - [x] **P2: FIM special tokens + embedding resize**
       Three scripts: `add_fim_tokens.py` (protobuf append, preserves all
       existing IDs), `resize_embeddings.py` (4000→4016, mean-init FIM rows,
