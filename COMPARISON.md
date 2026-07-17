@@ -186,6 +186,64 @@ finetune's 40% triple ratio wasn't enough to master the control-token format).
 In the real FUTO app, the hybrid dictionary engine should compensate, but a
 Basque dictionary wordlist is still needed. morpheus has no autocorrect at all.
 
+### 1.6 Keystrokes-saved on realistic messaging
+
+The top-1/top-5 accuracy on 16 hand-picked prompts (§1.2) has a methodological
+problem: the "gold" answers are often debatable (`Ez dut uste` = "I don't think
+so" is perfect Basque, but gold lists `ahaztu/dakit/maite`), and "accuracy on
+prompts" doesn't measure the actual keyboard user experience.
+
+A better metric: **keystrokes saved**. We simulate typing 20 realistic Basque
+messaging messages (WhatsApp/Telegram-style one-person messages) word by word.
+After each completed word + space, we ask the model for the next-word suggestion.
+If the intended next word appears, we count its character length as keystrokes
+saved. This directly measures "how much typing does the model eliminate?"
+
+Script: `futo-transformer-basque/scripts/eval/keystrokes.py`.
+
+#### Results
+
+| Metric | futo-basque v2.0.0 | morpheus | Winner |
+|--------|:---:|:---:|:---:|
+| **Top-1 keystrokes saved** | **8.4%** (61/726 chars) | 6.2% (45/726) | futo-basque |
+| **Top-5 keystrokes saved** | **28.9%** (210/726 chars) | 23.8% (173/726) | futo-basque |
+| Top-1 words correct | 14/137 | 11/137 | futo-basque |
+| Top-5 words correct | 45/137 | 39/137 | futo-basque |
+
+futo-basque wins on every metric. On a typical 40-character message, its top-1
+suggestion saves ~4 keystrokes (tap the first suggestion instead of typing
+those chars); the full top-5 suggestions bar saves ~12 characters (~29% of the
+message).
+
+Both models are honestly modest — the first word is never predictable (no
+context), and many words are content words that are genuinely unpredictable.
+But futo-basque's edge shows on the predictable patterns: `Eskerrik → asko`,
+`Euskara ikasten → ari`, `Ongi → etorri`, `Non → dago`, `Zein filma → ikusi`.
+
+#### Example: `Eskerrik asko denagatik oso ondo pasa nuen`
+
+```
+  ✓ ...Eskerrik ▎                → asko      (model: asko)   saved: +4 chars
+    ...Eskerrik asko ▎           → denagatik (model: zure)   saved:  0
+    ...Eskerrik asko denagatik ▎ → oso       (model: eta)    saved:  0
+    ...rrik asko denagatik oso ▎ → ondo      (model: pozik)  saved:  0
+  ✓ ...asko denagatik oso ondo ▎ → pasa      (model: pasa)   saved: +4 chars
+    ...denagatik oso ondo pasa ▎ → nuen      (model: duzuen) saved:  0
+  total: 8/28 predictable chars saved = 29%
+```
+
+The model nails the formulaic openings (`Eskerrik asko`, `oso ondo pasar`)
+where the corpus has strong collocations, and misses the content/variable
+words (`denagatik`, `nuen`) that are genuinely open-ended.
+
+#### Updated verdict (keystrokes-saved)
+
+The keystrokes-saved metric confirms the §1.2 conclusion: **futo-basque is the
+better next-word model**, and does so with 3.6× fewer parameters. The advantage
+is modest in absolute terms (8.4% vs 6.2% top-1) but consistent across all four
+metrics. For a keyboard where every keystroke matters, futo-basque eliminates
+~29% of typing via the suggestions bar.
+
 ---
 
 ## Part 2 — FUTO Engineering Strategies: Deep Review
