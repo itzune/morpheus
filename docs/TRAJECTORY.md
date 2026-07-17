@@ -359,17 +359,17 @@ quality baseline that FIM (Phase 6) must beat — all before any GPU work.
 
 ## 5. Roadmap
 
-| Phase | Goal | Depends on | Effort |
-|-------|------|-----------|--------|
-| **6e′** | Build the OpenAI-compatible face on the proxy (`/v1/completions` + `/v1/complete`); point Continue.dev at it; dogfood prefix-only against the 74K AR checkpoint; record the baseline FIM must beat | nothing | small — **first step** |
-| **6a** | Add `<PRE>/<SUF>/<MID>/<EOT>` tokens; resize embeddings; resume-from-74K smoke test | nothing (parallel with 6e′) | small |
-| **6b** | FIM data transform (char-level PSM/SPM) on Latxa v2; pretokenize FIM shards | 6a | medium |
-| **6c** | Continued-pretrain Phase 6: ~1–2B tokens, 50% FIM / 50% AR | 6b | GPU time |
-| **6d** | Basque FIM eval (random-span infilling on held-out sentences) | 6c | medium |
-| **6e** | Export FIM checkpoint → GGUF; add FIM template **server-side** to the proxy; dogfood in VS Code | 6d | small |
-| **(research) R** | Test Mamba-2 + FUTO autocorrect format (`TODO.md` D1) | nothing | medium — *separate track, gates the mobile-IME decision* |
+| Phase | Goal | Depends on | Effort | Status |
+|-------|------|-----------|--------|--------|
+| **6e′** | Build the OpenAI-compatible face on the proxy (`/v1/completions` + `/v1/complete`); point Continue.dev at it; dogfood prefix-only against the 74K AR checkpoint; record the baseline FIM must beat | nothing | small — **first step** | ✅ Done (P1) |
+| **6a** | Add `<PRE>/<SUF>/<MID>/<EOT>` tokens; resize embeddings; resume-from-74K smoke test | nothing (parallel with 6e′) | small | ✅ Done (P2) |
+| **6b** | FIM data transform (char-level PSM/SPM) on Latxa v2; pretokenize FIM shards | 6a | medium | ✅ Done (P3) |
+| **6c** | Continued-pretrain Phase 6: ~1–2B tokens, 50% FIM / 50% AR | 6b | GPU time | Next (P4) |
+| **6d** | Basque FIM eval (random-span infilling on held-out sentences) | 6c | medium | Script ready (P5) |
+| **6e** | Export FIM checkpoint → GGUF; add FIM template **server-side** to the proxy; dogfood in VS Code | 6d | small | P6 |
+| **(research) R** | Test Mamba-2 + FUTO autocorrect format (`TODO.md` D1) | nothing | medium — *separate track, gates the mobile-IME decision* | Deferred |
 
-**Critical path:** 6e′ (now) → 6a → 6b → 6c → 6d → 6e.
+**Critical path:** 6e′ ✅ → 6a ✅ → 6b ✅ → 6c (next) → 6d → 6e.
 
 Phases 6a–6e are coupled: FIM tokens must exist before FIM data can be
 tokenized, which must exist before Phase 6 training, which must finish before
