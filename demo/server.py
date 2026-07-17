@@ -23,7 +23,9 @@ from pathlib import Path
 
 import httpx
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, StreamingResponse
+from typing import Union, List, Optional
+from pydantic import BaseModel, Field
 
 # Tokenize endpoint (for demo token visualization)
 import sentencepiece as spm
@@ -1282,6 +1284,263 @@ async def tokenize(text: str = ""):
     return {
         "tokens": tokens,
         "smart_context": smart_context(text),
+    }
+
+
+# ── OpenAI-compatible face (/v1/completions, /v1/complete) ──────────────
+# This is the reusable Basque inference server: any client speaking the
+# OpenAI completion API (Continue.dev, Cody, codecompanion.nvim, Obsidian
+# plugins) connects with zero model-specific code. The reference SentencePiece
+# encoder lives here, bypassing llama.cpp's divergent tokenizer.
+#
+# Backend reuse: _call_llama() already SP-encodes + forwards token IDs to
+# llama-server /completion. These routes add the OpenAI face on top.
+
+
+class CompletionRequest(BaseModel):
+    """OpenAI /v1/completions request schema (subset we support)."""
+    prompt: Union[str, List[int], List[str]]
+    max_tokens: Optional[int] = 16
+    temperature: Optional[float] = 1.0
+    top_p: Optional[float] = 1.0
+    top_k: Optional[int] = 0
+    min_p: Optional[float] = 0.0
+    stop: Optional[Union[str, List[str]]] = Field(default_factory=list)
+    stream: Optional[bool] = False
+    seed: Optional[int] = None
+    repeat_penalty: Optional[float] = 1.1
+
+
+def _normalize_prompt_to_ids(prompt) -> list[int]:
+    """Normalize any OpenAI prompt form to SP token IDs (THE tokenization fix).
+
+    Accepts: string | list[int] (token IDs) | list[str] (batch, take first).
+    Returns reference-SentencePiece token IDs, matching training exactly.
+    """
+    sp = get_tokenizer()
+    if isinstance(prompt, str):
+        return sp.encode(prompt, out_type=int)
+    if isinstance(prompt, list) and prompt:
+        if isinstance(prompt[0], int):
+            return list(prompt)  # already token IDs
+        if isinstance(prompt[0], str):
+            return sp.encode(prompt[0], out_type=int)  # batch → take first
+    return []
+
+
+def _completion_id() -> str:
+    return f"cmpl-{int(time.time() * 1000)}"
+
+
+@app.post("/v1/completions")
+async def openai_completions(req: CompletionRequest):
+    """OpenAI-compatible text completion — the reusable server face.
+
+    Accepts the standard schema; SP-encodes string prompts to token IDs
+    (bypassing llama.cpp's divergent tokenizer); forwards to llama-server;
+    reformats the response to OpenAI shape. Supports streaming (SSE) and
+    non-streaming. Stop sequences are passed through to llama-server (which
+    handles cross-token matching natively) and double-checked client-side.
+    """
+    prompt_ids = _normalize_prompt_to_ids(req.prompt)
+    if not prompt_ids:
+        return {"error": {"message": "empty prompt", "type": "invalid_request_error"}}
+
+    stops = [req.stop] if isinstance(req.stop, str) else (req.stop or [])
+    greedy = req.temperature is None or req.temperature <= 0.0
+
+    payload: dict = {
+        "prompt": prompt_ids,
+        "n_predict": req.max_tokens or 16,
+        "stream": bool(req.stream),
+        "temperature": 0.0 if greedy else (req.temperature if req.temperature is not None else 1.0),
+        "top_p": req.top_p if req.top_p is not None else 1.0,
+        "top_k": req.top_k if req.top_k is not None else 0,
+        "min_p": req.min_p if req.min_p is not None else 0.0,
+        "repeat_penalty": req.repeat_penalty if req.repeat_penalty is not None else 1.1,
+        "stop": stops if stops else [],
+    }
+    if req.seed is not None:
+        payload["seed"] = req.seed
+
+    if req.stream:
+        return StreamingResponse(
+            _stream_openai(payload, stops),
+            media_type="text/event-stream",
+        )
+
+    # ── Non-streaming ──
+    async with httpx.AsyncClient(timeout=60.0) as client:
+        r = await client.post(f"{LLAMA_SERVER_URL}/completion", json=payload)
+        r.raise_for_status()
+        data = r.json()
+
+    text = data.get("content", "")
+    finish_reason = "length"
+    if data.get("stopped_eos") or data.get("stopped_word") or data.get("stop"):
+        finish_reason = "stop"
+    # Client-side stop check (fallback in case llama-server didn't honor)
+    for s in stops:
+        if s and s in text:
+            text = text[: text.index(s)]
+            finish_reason = "stop"
+            break
+
+    prompt_tokens = len(prompt_ids)
+    completion_tokens = data.get("tokens_predicted", 0) or len(
+        get_tokenizer().encode(text, out_type=int)
+    )
+
+    return {
+        "id": _completion_id(),
+        "object": "text_completion",
+        "created": int(time.time()),
+        "model": _model_name(),
+        "choices": [
+            {"text": text, "index": 0, "finish_reason": finish_reason, "logprobs": None}
+        ],
+        "usage": {
+            "prompt_tokens": prompt_tokens,
+            "completion_tokens": completion_tokens,
+            "total_tokens": prompt_tokens + completion_tokens,
+        },
+    }
+
+
+async def _stream_openai(payload: dict, stops: list[str]):
+    """Translate llama-server SSE stream → OpenAI SSE stream.
+
+    llama-server emits:  data: {"content":"tok","stop":false,...}\n\n
+    OpenAI expects:       data: {"choices":[{"text":"tok",...}],...}\n\n
+
+    Stop sequences are passed to llama-server (native cross-token handling);
+    we also guard client-side as a fallback. llama.cpp truncates at the stop
+    sequence (stop text excluded from content).
+    """
+    cmpl_id = _completion_id()
+    created = int(time.time())
+    model = _model_name()
+
+    def frame(text: str, finish: Optional[str] = None) -> str:
+        chunk = {
+            "id": cmpl_id,
+            "object": "text_completion",
+            "created": created,
+            "model": model,
+            "choices": [
+                {"text": text, "index": 0, "finish_reason": finish, "logprobs": None}
+            ],
+        }
+        return f"data: {json.dumps(chunk, ensure_ascii=False)}\n\n"
+
+    stop_emitted = False
+    try:
+        async with httpx.AsyncClient(timeout=None) as client:
+            async with client.stream(
+                "POST", f"{LLAMA_SERVER_URL}/completion", json=payload
+            ) as r:
+                r.raise_for_status()
+                async for line in r.aiter_lines():
+                    if not line or not line.startswith("data:"):
+                        continue
+                    data_str = line[len("data:") :].strip()
+                    if not data_str or data_str == "[DONE]":
+                        continue
+                    try:
+                        d = json.loads(data_str)
+                    except json.JSONDecodeError:
+                        continue
+                    text = d.get("content", "")
+                    # Client-side stop fallback (in case llama-server missed)
+                    if text and stops:
+                        for s in stops:
+                            if s and s in text:
+                                text = text[: text.index(s)]
+                                stop_emitted = True
+                                if text:
+                                    yield frame(text)
+                                yield frame("", "stop")
+                                break
+                        if stop_emitted:
+                            break
+                    if text:
+                        yield frame(text)
+                    if d.get("stop") or d.get("stopped_eos"):
+                        if not stop_emitted:
+                            yield frame("", "stop")
+                            stop_emitted = True
+                        break
+        if not stop_emitted:
+            yield frame("", "length")
+        yield "data: [DONE]\n\n"
+    except httpx.HTTPStatusError as e:
+        err = {"error": {"message": str(e), "type": "api_error"}}
+        yield f"data: {json.dumps(err)}\n\n"
+        yield "data: [DONE]\n\n"
+
+
+class CompleteRequest(BaseModel):
+    """Body for /v1/complete convenience route."""
+    prefix: str = ""
+    suffix: str = ""
+    max_tokens: int = 16
+    temperature: float = 0.2
+    top_k: int = 0  # 0 = disabled (full vocabulary)
+
+
+@app.post("/v1/complete")
+async def complete_prefix_suffix(req: CompleteRequest):
+    """Convenience route for thin bespoke clients (Obsidian, Vim, CLI).
+
+    Takes raw {prefix, suffix}; the server applies the FIM template
+    (<PRE>{prefix}<SUF>{suffix}<MID>) once the FIM model lands (Phase 6).
+    Until then: prefix-only AR completion (suffix ignored).
+
+    A 50-line client just POSTs {prefix: buffer[:cursor], suffix: buffer[cursor:]}
+    and renders the returned text as ghost — no FIM-token or tokenizer knowledge.
+    """
+    # Until FIM model exists: prefix-only
+    prompt_ids = _normalize_prompt_to_ids(req.prefix)
+    if not prompt_ids:
+        return {"text": "", "finish_reason": "stop"}
+
+    # Note: </s> (EOS) is handled natively by llama-server (stopped_eos);
+    # passing it as a string stop would match token-ID 2 prematurely.
+    # \n\n stops at paragraph breaks — sensible for editor ghost-text.
+    stops = ["\n\n"]
+    payload = {
+        "prompt": prompt_ids,
+        "n_predict": req.max_tokens,
+        "stream": False,
+        "temperature": req.temperature,
+        "top_k": req.top_k,
+        "top_p": 1.0,
+        "min_p": 0.0,
+        "repeat_penalty": 1.1,
+        "stop": stops,
+    }
+    async with httpx.AsyncClient(timeout=30.0) as client:
+        r = await client.post(f"{LLAMA_SERVER_URL}/completion", json=payload)
+        r.raise_for_status()
+        data = r.json()
+
+    text = data.get("content", "")
+    for s in stops:
+        if s and s in text:
+            text = text[: text.index(s)]
+            break
+    finish = "stop" if (not text or data.get("stopped_eos")) else "length"
+    return {"text": text, "finish_reason": finish}
+
+
+@app.get("/v1/models")
+async def list_models_v1():
+    """OpenAI-compatible model list (some clients probe this on startup)."""
+    return {
+        "object": "list",
+        "data": [
+            {"id": _model_name(), "object": "model", "owned_by": "morpheus"}
+        ],
     }
 
 
