@@ -1,11 +1,13 @@
 # Phase 6: Continued pretraining with FIM (Fill-in-the-Middle)
 #
 # Resumes from step_0074000_fim.pt (vocab 4016, AR perplexity verified in P2).
-# Trains ~2B additional tokens on a 50% FIM / 50% AR mix (data/train_fim.npy).
+# Trains ~500M additional tokens on a 50% FIM / 50% AR mix (data/train_fim.npy).
 # Lower peak LR than Phase 1 (continued pretrain, not warm start).
 #
 # The "FIM-for-free" property (Bavarian et al. 2022) predicts AR perplexity
 # should not regress — monitored on data/valid_tokens_4k.npy (plain AR).
+# FIM capability is acquired quickly (early in training); 500M is enough for
+# a first run. Can extend with more tokens if eval looks good.
 #
 # Usage:
 #   python3 train.py --config config/phase6_fim.yaml --pretrained checkpoints/step_0074000_fim.pt
@@ -42,9 +44,10 @@ beta1: 0.9
 beta2: 0.95
 grad_clip: 1.0
 
-# Schedule (~2B additional tokens; warmup is shorter for continued pretrain)
-warmup_tokens: 20_000_000
-total_tokens: 2_000_000_000
+# Schedule (~500M additional tokens; warmup is shorter for continued pretrain)
+# 500M tokens ≈ 3,815 steps ≈ ~2.6 hours on L40 (54K tok/s throughput)
+warmup_tokens: 5_000_000
+total_tokens: 500_000_000
 
 # Precision
 dtype: bfloat16
@@ -68,6 +71,7 @@ eval_targets: eval/targets.json
 # Pretrained checkpoint (model weights only; fresh optimizer + step=0)
 pretrained: checkpoints/step_0074000_fim.pt
 
-# Estimated additional steps: 2B / (1024 × 64 × 2) = ~15,258 steps
+# Estimated additional steps: 500M / (1024 × 64 × 2) = ~3,815 steps
+# Estimated time: ~2.6 hours on L40 (54K tok/s)
 # Estimated VRAM: ~20-25 GB (same as Phase 1)
 # Expected: AR perplexity stable (FIM-for-free), FIM infill capability gained
