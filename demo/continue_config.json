@@ -1,0 +1,39 @@
+{
+  "$schema": "https://raw.githubusercontent.com/continuedev/continue/main/core%2Fconfig%2Fschema.json",
+  "models": [
+    {
+      "title": "morpheus (FIM)",
+      "provider": "openai",
+      "model": "morpheus",
+      "apiBase": "http://localhost:9090/v1",
+      "apiKey": "not-needed",
+      "roles": ["autocomplete"],
+      "completionOptions": {
+        "temperature": 0.2,
+        "topK": 5,
+        "maxTokens": 32
+      },
+      "promptTemplates": [
+        {
+          "type": "edit"
+        },
+        {
+          "type": "autocomplete"
+        }
+      ]
+    }
+  ],
+  "tabAutocompleteModel": {
+    "title": "morpheus (FIM)",
+    "provider": "openai",
+    "model": "morpheus",
+    "apiBase": "http://localhost:9090/v1",
+    "apiKey": "not-needed"
+  },
+  "tabAutocompleteOptions": {
+    "debounceDelay": 300,
+    "maxPromptTokens": 512,
+    "template": "<PRE>{{{ prefix }}}<SUF>{{{ suffix }}}<MID>"
+  },
+  "allowAnonymousTelemetry": false
+}

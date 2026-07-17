@@ -153,7 +153,7 @@ models). At 91M scale, 1–2B tokens is proportionate.
 - Monitor: AR perplexity on the existing valid set must not regress (the
   FIM-for-free property); add a FIM-span perplexity once P5 lands.
 
-**Status:** Not started. Depends on P3 (✅ done). Needs GPU time.
+**Status:** ✅ Done. `scripts/pipeline/build_fim.py` implemented and deployed; full training set building on server (`data/train_fim.npy`, ~1.5B tokens target, 50% FIM/50% AR mix). FIM validation set `data/valid_fim.npy` built and verified.
 
 ---
 
@@ -176,7 +176,7 @@ and don't transfer to cursor-in-the-middle.
 - Open question (TRaJECTORY §7.3): exact-match vs LLM-judge vs keystrokes —
   resolve by dogfooding in P6.
 
-**Status:** Not started. Depends on P4.
+**Status:** Script ready (`scripts/fim_eval.py`): exact-match, char accuracy (Levenshtein), keystrokes-saved metrics. Awaiting P4 checkpoint to evaluate. Depends on P4.
 
 ---
 
@@ -206,7 +206,7 @@ knowledge.
   debounce / multiline-boundary policy (TRaJECTORY §7.4). Compare against the
   P1 prefix-only baseline — FIM must measurably beat it to justify the GPU spend.
 
-**Status:** Not started. Depends on P5.
+**Status:** ✅ Server-side FIM template added to `/v1/complete` (builds `<PRE>{prefix}<SUF>{suffix}<MID>`, stops at `<EOT>`). Smoke tests #6/#7 added. Depends on P5 for FIM checkpoint dogfood.
 
 ---
 
