@@ -45,7 +45,7 @@ from mamba_ssm.models.mixer_seq_simple import MambaLMHeadModel
 from mamba_ssm.models.config_mamba import MambaConfig
 
 # Reuse the same split logic as build_fim.py
-sys.path.insert(0, str(Path(__file__).parent.parent / "pipeline"))
+sys.path.insert(0, str(Path(__file__).parent / "pipeline"))
 from build_fim import make_fim_split, build_fim_string, find_word_boundaries
 
 # ── Constants ──
