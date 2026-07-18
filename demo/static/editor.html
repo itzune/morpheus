@@ -168,8 +168,8 @@ async function requestCompletion() {
 
   const endpoint = mode === 'fim' ? '/v1/complete' : '/v1/completions';
   const body = mode === 'fim'
-    ? { prefix, suffix, max_tokens: 32, temperature: 0 }
-    : { prompt: prefix, max_tokens: 32, temperature: 0, stop: ['\n'] };
+    ? { prefix, suffix, max_tokens: 20, temperature: 0 }
+    : { prompt: prefix, max_tokens: 20, temperature: 0, stop: ['\n'] };
 
   try {
     const resp = await fetch(endpoint, {
