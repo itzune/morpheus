@@ -36,7 +36,7 @@ from pathlib import Path
 from mamba_ssm.models.mixer_seq_simple import MambaLMHeadModel
 from mamba_ssm.models.config_mamba import MambaConfig
 
-from src.dataset import MemmapTokenDataset
+from src.dataset import MemmapTokenDataset, PackedFimDataset
 from src.eval_utils import compute_autocomplete_metrics
 
 
@@ -271,8 +271,17 @@ def train(cfg: dict, checkpoint_path: str = None, pretrained_path: str = None):
     output_dir.mkdir(parents=True, exist_ok=True)
 
     # Data
-    print(f"Loading data from {cfg['train_data']}...")
-    train_ds = MemmapTokenDataset(cfg["train_data"], seq_len=cfg["seq_len"])
+    # packed_dataset: use PackedFimDataset which greedily packs whole examples
+    # (delimited by </s>) into fixed windows, preventing FIM structures from
+    # being split across chunk boundaries. Critical for FIM training quality.
+    packed = cfg.get("packed_dataset", False)
+    if packed:
+        print(f"Loading training data (packed) from {cfg['train_data']}...")
+        train_ds = PackedFimDataset(cfg["train_data"], seq_len=cfg["seq_len"])
+    else:
+        print(f"Loading data from {cfg['train_data']}...")
+        train_ds = MemmapTokenDataset(cfg["train_data"], seq_len=cfg["seq_len"])
+    # AR validation: always flat MemmapTokenDataset (comparable to Phase 1 baseline)
     valid_ds = MemmapTokenDataset(cfg["valid_data"], seq_len=cfg["seq_len"])
     print(f"  Train: {len(train_ds):,} sequences")
     print(f"  Valid: {len(valid_ds):,} sequences")
@@ -282,7 +291,11 @@ def train(cfg: dict, checkpoint_path: str = None, pretrained_path: str = None):
     if cfg.get("valid_fim_data"):
         fim_path = cfg["valid_fim_data"]
         if Path(fim_path).exists():
-            valid_fim_ds = MemmapTokenDataset(fim_path, seq_len=cfg["seq_len"])
+            # FIM valid: use packed dataset to preserve FIM structure
+            if packed:
+                valid_fim_ds = PackedFimDataset(fim_path, seq_len=cfg["seq_len"])
+            else:
+                valid_fim_ds = MemmapTokenDataset(fim_path, seq_len=cfg["seq_len"])
             valid_fim_loader = DataLoader(
                 valid_fim_ds, batch_size=cfg["batch_size"],
                 shuffle=False, num_workers=1, pin_memory=True,
@@ -306,6 +319,22 @@ def train(cfg: dict, checkpoint_path: str = None, pretrained_path: str = None):
     model = build_model(cfg, device)
     n_params = sum(p.numel() for p in model.parameters())
     print(f"Model: {n_params:,} parameters (~{n_params / 1e6:.0f}M)")
+
+    # ── Per-class loss weights (EOT upweighting) ──
+    # Upweights <EOT> (id 4003) in the cross-entropy loss to combat the
+    # over-continuation failure mode: the model learns the infill but can't
+    # reliably emit <EOT> to stop. At 50% FIM ratio, <EOT> is a rare class
+    # drowned out by the strong AR continuation prior. A 5× weight directly
+    # increases the gradient signal for "stop here" without requiring 50B tokens.
+    # Failure mode to watch: premature truncation (model stops too early on
+    # long multi-word infills). Monitored via fim_eval prefix-truncation metric.
+    EOT_TOKEN_ID = 4003
+    eot_weight = cfg.get("eot_loss_weight", 1.0)
+    loss_weights = None
+    if eot_weight != 1.0:
+        loss_weights = torch.ones(model.config.vocab_size, device=device)
+        loss_weights[EOT_TOKEN_ID] = eot_weight
+        print(f"  EOT loss weight: {eot_weight}× (token id {EOT_TOKEN_ID})")
 
     # Optimizer
     optimizer = torch.optim.AdamW(
@@ -432,6 +461,9 @@ def train(cfg: dict, checkpoint_path: str = None, pretrained_path: str = None):
                     # ignore_index=0 (<unk>): safety net for stray unknown chars.
                     # Separators are </s> (id=2), NOT id=0, so they ARE in loss.
                     ignore_index=0,
+                    # Per-class weights: upweights <EOT> to combat
+                    # over-continuation (see eot_loss_weight config).
+                    weight=loss_weights,
                 ) / accum  # Scale loss for gradient accumulation
 
             # Backward

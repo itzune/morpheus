@@ -161,7 +161,8 @@ def generate_middle(model, sp, prompt_ids: list, device,
         ids.append(next_id)
         generated.append(next_id)
 
-    return generated
+    stopped_on_eot = (next_id == FIM_TOKENS["<EOT>"])
+    return generated, stopped_on_eot
 
 
 # ── Metrics ──
@@ -201,6 +202,30 @@ def keystrokes_saved(generated: str, reference: str) -> int:
     return len(reference) - levenshtein(generated, reference)
 
 
+def is_prefix_truncation(generated: str, reference: str) -> bool:
+    """Detect premature truncation: generation is a proper prefix of reference.
+
+    True when the model stopped too early — it produced the beginning of the
+    correct answer but cut it off (typically because <EOT> fired prematurely).
+    This is the failure mode introduced by EOT loss weighting.
+    """
+    if not generated or not reference:
+        return False
+    if generated == reference:
+        return False  # exact match, not truncation
+    return reference.startswith(generated) and len(generated) < len(reference)
+
+
+def length_bucket(ref_len: int) -> str:
+    """Bucket reference length for stratified truncation analysis."""
+    if ref_len < 15:
+        return "short"
+    elif ref_len < 30:
+        return "medium"
+    else:
+        return "long"
+
+
 # ── Evaluation ──
 
 def load_valid_lines(valid_file: str, min_line: int = 20, max_lines: int = 0) -> list:
@@ -231,6 +256,8 @@ def evaluate_fim(model, sp, lines: list, device, n_examples: int = 200,
     keystrokes = []
     gen_lengths = []
     ref_lengths = []
+    eot_stops = 0
+    prefix_truncations = 0
 
     # Pick n_examples lines (deterministic)
     indices = list(range(len(lines)))
@@ -263,7 +290,7 @@ def evaluate_fim(model, sp, lines: list, device, n_examples: int = 200,
         else:
             prompt_ids = [SUF] + suffix_ids + [PRE] + prefix_ids + [MID]
 
-        gen_ids = generate_middle(model, sp, prompt_ids, device)
+        gen_ids, stopped_on_eot = generate_middle(model, sp, prompt_ids, device)
         gen_text = sp.decode(gen_ids) if gen_ids else ""
         ref_text = sp.decode(middle_ids) if middle_ids else ""
 
@@ -274,9 +301,15 @@ def evaluate_fim(model, sp, lines: list, device, n_examples: int = 200,
         em = gen_text == ref_text
         ca = char_accuracy(gen_text, ref_text)
         ks = keystrokes_saved(gen_text, ref_text)
+        trunc = is_prefix_truncation(gen_text, ref_text)
+        bucket = length_bucket(len(ref_text))
 
         if em:
             exact_matches += 1
+        if stopped_on_eot:
+            eot_stops += 1
+        if trunc:
+            prefix_truncations += 1
         char_accs.append(ca)
         keystrokes.append(ks)
         gen_lengths.append(len(gen_text))
@@ -292,16 +325,31 @@ def evaluate_fim(model, sp, lines: list, device, n_examples: int = 200,
             "exact_match": em,
             "char_accuracy": ca,
             "keystrokes_saved": ks,
+            "stopped_on_eot": stopped_on_eot,
+            "is_prefix_truncation": trunc,
+            "ref_length_bucket": bucket,
         })
 
         if (i + 1) % 50 == 0:
             em_rate = exact_matches / len(char_accs)
             avg_ca = sum(char_accs) / len(char_accs)
             avg_ks = sum(keystrokes) / len(keystrokes)
+            eot_rate = eot_stops / len(char_accs)
+            trunc_rate = prefix_truncations / len(char_accs)
             print(f"  [{i+1}/{n_examples}] EM={em_rate:.1%}  char_acc={avg_ca:.1%}  "
-                  f"ks_saved={avg_ks:.1f}")
+                  f"ks_saved={avg_ks:.1f}  EOT={eot_rate:.1%}  trunc={trunc_rate:.1%}")
 
     n = len(char_accs)
+
+    # Length-bucketed prefix-truncation analysis (detects premature EOT on
+    # long infills — the failure mode from EOT loss weighting)
+    bucket_trunc = {"short": [0, 0], "medium": [0, 0], "long": [0, 0]}
+    for ex in examples:
+        b = ex["ref_length_bucket"]
+        bucket_trunc[b][1] += 1
+        if ex["is_prefix_truncation"]:
+            bucket_trunc[b][0] += 1
+
     metrics = {
         "n_examples": n,
         "exact_match_rate": exact_matches / n if n > 0 else 0,
@@ -312,6 +360,12 @@ def evaluate_fim(model, sp, lines: list, device, n_examples: int = 200,
         "keystrokes_saved_pct": (sum(keystrokes) / sum(ref_lengths) * 100) if ref_lengths else 0,
         "avg_gen_length": sum(gen_lengths) / n if n > 0 else 0,
         "avg_ref_length": sum(ref_lengths) / n if n > 0 else 0,
+        "eot_emission_rate": eot_stops / n if n > 0 else 0,
+        "prefix_truncation_rate": prefix_truncations / n if n > 0 else 0,
+        "truncation_by_bucket": {
+            b: {"rate": v[0] / v[1] if v[1] > 0 else 0, "count": v[1]}
+            for b, v in bucket_trunc.items()
+        },
     }
 
     return metrics, examples
@@ -383,6 +437,13 @@ def main():
     print(f"  Keystrokes saved:      {metrics['keystrokes_saved_pct']:.1f}%")
     print(f"  Avg gen length:        {metrics['avg_gen_length']:.1f} chars")
     print(f"  Avg ref length:        {metrics['avg_ref_length']:.1f} chars")
+    print(f"  EOT emission rate:     {metrics['eot_emission_rate']:.1%}")
+    print(f"  Prefix truncation:     {metrics['prefix_truncation_rate']:.1%}")
+    print(f"  ── Truncation by ref length bucket ──")
+    for b in ["short", "medium", "long"]:
+        t = metrics["truncation_by_bucket"][b]
+        lim = "<15" if b == "short" else "<30" if b == "medium" else "30+"
+        print(f"    {b:6s} ({lim:>4s} chars): {t['rate']:.1%}  ({t['count']} examples)")
     print("=" * 60)
 
     # Show examples

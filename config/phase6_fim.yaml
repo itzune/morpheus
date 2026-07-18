@@ -61,7 +61,7 @@ save_interval: 1000
 # Paths
 train_data: data/train_fim.npy
 valid_data: data/valid_tokens_4k.npy   # AR valid — FIM-for-free check (must not regress)
-valid_fim_data: data/valid_fim.npy     # FIM valid — for P5 eval (not used by train.py yet)
+valid_fim_data: data/valid_fim.npy     # FIM valid perplexity (monitored during training)
 output_dir: checkpoints/phase6
 
 # Tokenizer & eval
@@ -70,6 +70,17 @@ eval_targets: eval/targets.json
 
 # Pretrained checkpoint (model weights only; fresh optimizer + step=0)
 pretrained: checkpoints/step_0074000_fim.pt
+
+# Packed dataset: greedily packs whole examples (delimited by </s>) into
+# fixed windows, preventing FIM structures from being split across chunk
+# boundaries. Critical for FIM training quality (ML review red flag #7).
+packed_dataset: true
+
+# EOT loss weight: upweights <EOT> (id 4003) in cross-entropy loss to combat
+# over-continuation. The model learns the infill but can't reliably stop.
+# 5× recommended by ML review for low-compute regimes (can't afford 50B tokens).
+# Watch for: premature truncation on long infills (monitored via fim_eval).
+eot_loss_weight: 5.0
 
 # Estimated additional steps: 500M / (1024 × 64 × 2) = ~3,815 steps
 # Estimated time: ~2.6 hours on L40 (54K tok/s)

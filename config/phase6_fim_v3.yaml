@@ -1,0 +1,88 @@
+# Phase 6 v3: FIM with 70/30 ratio + <EOT> loss weighting
+#
+# Resumes from phase6/best.pt (v2: token-level + packed, 50/50, step 3500).
+# Changes from v2:
+#   - FIM ratio 50% → 70% (more structural token density)
+#   - <EOT> loss weight 1× → 5× (combat over-continuation / runaway generation)
+#
+# Per ML review (Option D): since 50B-token convergence is computationally
+# off the table, we artificially inflate both the density (70/30) and the
+# impact (5× EOT weight) of the stop-token signal within our 500M budget.
+#
+# Failure mode to watch: premature truncation on long multi-word infills.
+# Detected via fim_eval prefix-truncation metric (baseline v2: 0.0%).
+#
+# Usage:
+#   python3 train.py --config config/phase6_fim_v3.yaml --pretrained checkpoints/phase6/best.pt
+
+# Architecture (same as small.yaml — no architectural change for FIM)
+d_model: 768
+n_layer: 24
+ssm_layer: Mamba2
+d_state: 64
+d_conv: 4
+expand: 2
+headdim: 64
+chunk_size: 256
+
+# Vocabulary (FIM tokenizer: 4004 pieces → padded to 4016)
+vocab_size: 4004
+pad_vocab_size_multiple: 16
+
+# Regularization
+residual_in_fp32: true
+fused_add_norm: true
+
+# Training
+seq_len: 1024
+batch_size: 64
+gradient_accumulation: 2
+
+# Optimization (same as v2 — LR 1e-3 for continued pretrain)
+learning_rate: 1.0e-3
+min_lr: 1.0e-5
+weight_decay: 0.1
+beta1: 0.9
+beta2: 0.95
+grad_clip: 1.0
+
+# Schedule (500M additional tokens from v2 checkpoint)
+# 500M tokens ≈ 3,815 steps ≈ ~2.6 hours on L40
+warmup_tokens: 5_000_000
+total_tokens: 500_000_000
+
+# Precision
+dtype: bfloat16
+compile: false
+
+# Logging
+log_interval: 10
+eval_interval: 500
+save_interval: 1000
+
+# Paths
+train_data: data/train_fim_7030.npy       # NEW: 70% FIM / 30% AR (vs 50/50 in v2)
+valid_data: data/valid_tokens_4k.npy      # AR valid — FIM-for-free check
+valid_fim_data: data/valid_fim.npy        # FIM valid perplexity
+output_dir: checkpoints/phase6_v3         # NEW: don't overwrite v2
+
+# Tokenizer & eval
+sp_model: tokenizer/basque_unigram_fim.model
+eval_targets: eval/targets.json
+
+# Pretrained checkpoint: resume from v2 best (step 3500, FIM ppl 8.0)
+pretrained: checkpoints/phase6/best.pt
+
+# Packed dataset (same as v2)
+packed_dataset: true
+
+# EOT loss weight: 5× upweighting of <EOT> (id 4003) to combat over-continuation.
+# The model knows the infill but can't reliably stop (v2: 76.9% EOT emission,
+# 0.0% premature truncation, -25.2% keystrokes saved). The 23.1% non-EOT cases
+# produce runaway text that drags down the average.
+eot_loss_weight: 5.0
+
+# Estimated additional steps: 500M / (1024 × 64 × 2) = ~3,815 steps
+# Estimated time: ~2.6 hours on L40 (54K tok/s)
+# Expected: EOT emission ↑, prefix truncation ↑ (watch for >10%),
+#           keystrokes saved ↑ (less runaway)
