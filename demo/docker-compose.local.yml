@@ -16,6 +16,8 @@ services:
       - ../exports:/app/models:ro
       - ../tokenizer:/app/tokenizer:ro
       - ../logs:/app/logs
+      # Mount static assets live (no rebuild needed when editing editor.html)
+      - ../demo/static:/app/demo/static:ro
     environment:
       - MORPHEUS_MODEL=${MORPHEUS_MODEL:-v3_fim.Q5_K_M.gguf}
       - MORPHEUS_NGL=${MORPHEUS_NGL:-0}
