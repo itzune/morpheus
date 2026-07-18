@@ -1550,12 +1550,41 @@ class CompleteRequest(BaseModel):
     max_tokens: int = 16
     temperature: float = 0.2
     top_k: int = 0  # 0 = disabled (full vocabulary)
+    n: int = 1  # best-of-n: fire n parallel samples, return highest-confidence
 
 
 # FIM stop token — the model generates <EOT> to signal the infill is done.
 # This is a string stop because llama-server decodes token 4003 as "<EOT>".
 # </s> (EOS) is handled natively by llama-server (stopped_eos).
 _FIM_EOT = "<EOT>"
+
+
+async def _complete_once(client: httpx.AsyncClient, payload: dict, stops: list[str]) -> tuple[str, float, str]:
+    """Fire one completion request and post-process the result.
+
+    Returns (text, confidence, finish_reason). Used both for single
+    requests and as a parallel unit in best-of-n sampling.
+    """
+    r = await client.post(f"{LLAMA_SERVER_URL}/completion", json=payload)
+    r.raise_for_status()
+    data = r.json()
+    text, confidence = _postprocess(data.get("content", ""), data, stops)
+    finish = "stop" if (not text or data.get("stopped_eos") or data.get("stop")) else "length"
+    return text, confidence, finish
+
+
+def _pick_best_of_n(results: list) -> tuple[str, float, str]:
+    """From a list of (text, confidence, finish) tuples (or exceptions),
+    pick the highest-confidence non-empty result.
+
+    Used by best-of-n sampling in /v1/complete. Exceptions from failed
+    parallel requests are silently skipped — one bad sample shouldn't
+    sink the whole request.
+    """
+    valid = [r for r in results if isinstance(r, tuple) and r[0]]
+    if valid:
+        return max(valid, key=lambda r: r[1])
+    return ("", 0.0, "stop")
 
 
 @app.post("/v1/complete")
@@ -1616,12 +1645,18 @@ async def complete_prefix_suffix(req: CompleteRequest):
         "stop": stops,
     }
     async with httpx.AsyncClient(timeout=30.0) as client:
-        r = await client.post(f"{LLAMA_SERVER_URL}/completion", json=payload)
-        r.raise_for_status()
-        data = r.json()
-
-    text, confidence = _postprocess(data.get("content", ""), data, stops)
-    finish = "stop" if (not text or data.get("stopped_eos") or data.get("stop")) else "length"
+        if req.n <= 1:
+            text, confidence, finish = await _complete_once(client, payload, stops)
+        else:
+            # best-of-n: fire n parallel samples, pick highest-confidence
+            # non-empty result. llama-server uses a random seed by default,
+            # so even at low temperature the samples diverge. (At temp 0.0
+            # all samples are identical — best-of-n is pointless there.)
+            results = await asyncio.gather(
+                *[_complete_once(client, payload, stops) for _ in range(req.n)],
+                return_exceptions=True,
+            )
+            text, confidence, finish = _pick_best_of_n(results)
     return {"text": text, "confidence": confidence, "finish_reason": finish}
 
 

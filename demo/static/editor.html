@@ -55,17 +55,66 @@
   .dot.thinking { background: #f9e2af; animation: pulse 1s infinite; }
   .dot.ready { background: #a6e3a1; }
   @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
-  .hint { color: #585b70; font-size: 0.75rem; margin-top: 8px; }
+  .hint { color: #585b70; font-size: 0.85rem; margin-top: 24px; line-height: 1.6; }
   kbd {
     background: #313244; border: 1px solid #45475a; border-radius: 3px;
     padding: 1px 5px; font-size: 0.75rem; color: #a6adc8;
   }
+  /* Advanced options panel — collapsed by default, exposes CONFIG for live
+     tuning. Persists to localStorage so preferences survive reloads. */
+  .advanced {
+    width: 100%; max-width: 720px; margin-top: 16px;
+    border: 1px solid #313244; border-radius: 8px; background: #181825;
+    overflow: hidden;
+  }
+  .advanced summary {
+    padding: 10px 16px; cursor: pointer; user-select: none;
+    font-size: 0.85rem; color: #a6adc8; list-style: none;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .advanced summary::-webkit-details-marker { display: none; }
+  .advanced summary::before {
+    content: '▸'; transition: transform 0.15s; color: #585b70; font-size: 0.7rem;
+  }
+  .advanced[open] summary::before { transform: rotate(90deg); }
+  .advanced-body {
+    padding: 4px 16px 16px; border-top: 1px solid #313244;
+  }
+  .adv-group { margin-bottom: 14px; }
+  .adv-group:last-child { margin-bottom: 0; }
+  .adv-group-title {
+    font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em;
+    color: #585b70; margin: 10px 0 6px;
+  }
+  .adv-row {
+    display: flex; align-items: center; gap: 10px; margin: 6px 0;
+    font-size: 0.8rem;
+  }
+  .adv-row label { flex: 0 0 160px; color: #bac2de; }
+  .adv-row input[type="range"] { flex: 1; accent-color: #89b4fa; }
+  .adv-row input[type="number"] {
+    width: 90px; background: #313244; border: 1px solid #45475a;
+    border-radius: 4px; color: #cdd6f4; padding: 3px 6px; font-size: 0.8rem;
+    font-family: inherit;
+  }
+  .adv-row input[type="number"]:focus { outline: none; border-color: #89b4fa; }
+  .adv-val {
+    flex: 0 0 48px; text-align: right; color: #89b4fa;
+    font-variant-numeric: tabular-nums;
+  }
+  .adv-actions { margin-top: 14px; display: flex; gap: 8px; }
+  .adv-actions button {
+    background: #313244; border: 1px solid #45475a; border-radius: 4px;
+    color: #cdd6f4; padding: 4px 12px; font-size: 0.75rem; cursor: pointer;
+    font-family: inherit;
+  }
+  .adv-actions button:hover { background: #45475a; }
 </style>
 </head>
 <body>
 
 <h1>Morpheus Ghost-Text Editor</h1>
-<p class="subtitle">Euskal testu-editorea — autokonpletatzea (FIM + AR)</p>
+<p class="subtitle">Basque autocompletion model demo editor</p>
 
 <div class="editor-wrap">
   <div class="editor-container">
@@ -79,12 +128,19 @@
   <span><span class="dot idle" id="dot"></span><span id="status">Ready</span></span>
   <span id="stats">—</span>
 </div>
+
+<details class="advanced">
+  <summary>⚙ Advanced options</summary>
+  <div class="advanced-body" id="advanced-body"></div>
+</details>
+
 <p class="hint">
-  <kbd>Tab</kbd> accept suggestion &nbsp;·&nbsp;
-  <kbd>Ctrl</kbd>+<kbd>&rarr;</kbd> accept next word &nbsp;·&nbsp;
-  <kbd>Alt</kbd>+<kbd>]</kbd> next alternative &nbsp;·&nbsp;
-  <kbd>Alt</kbd>+<kbd>[</kbd> previous alternative &nbsp;·&nbsp;
-  <kbd>Esc</kbd> dismiss &nbsp;·&nbsp;
+  <kbd>Tab</kbd> accept suggestion<br>
+  <kbd>Ctrl</kbd>+<kbd>&rarr;</kbd> accept next word<br>
+  <kbd>Alt</kbd>+<kbd>]</kbd> next alternative<br>
+  <kbd>Alt</kbd>+<kbd>[</kbd> previous alternative<br>
+  <kbd>Esc</kbd> dismiss
+  <br>
   Cursor mid-sentence → FIM infill &nbsp;·&nbsp; cursor at end → append &nbsp;·&nbsp;
   Low-confidence suggestions are auto-suppressed
 </p>
@@ -115,7 +171,11 @@ const CONFIG = {
   // evidence (5 correct answers at rank 2 in top-5) justifies a small top-k.
   temperature: 0.2,
   top_k: 5,
-  max_tokens: 20,
+  max_tokens: 8,
+  // Best-of-n sampling: fire n parallel requests, return highest-confidence.
+  // Helps when confidence gate is high — among n samples one may cross the
+  // threshold. Only effective at temperature > 0 (identical at temp 0).
+  n: 1,
   // Alternative-cycling temperature (Alt+] / Alt+[): higher than baseline
   // so cycle requests diverge from the greedy top-1. Alt+[ walks history
   // without a request.
@@ -133,6 +193,117 @@ function resetCycling() {
   suggestionHistory = [];
   historyIndex = -1;
 }
+
+// ── Advanced options panel (collapsible) ──────────────────────────────
+// Exposes CONFIG for live tuning. Persists to localStorage. Schema-driven
+// so adding an option is a one-line change to ADVANCED_SCHEMA.
+const DEFAULTS = { ...CONFIG };
+try {
+  const saved = JSON.parse(localStorage.getItem('morpheus_config') || '{}');
+  Object.assign(CONFIG, saved);
+} catch (e) { /* ignore corrupt storage */ }
+
+const ADVANCED_SCHEMA = [
+  { group: 'Timing', items: [
+    { key: 'debounce_ms', label: 'Debounce (ms)', type: 'number', min: 0, max: 2000, step: 50 },
+  ]},
+  { group: 'Context window', items: [
+    { key: 'min_prefix_chars', label: 'Min prefix chars', type: 'number', min: 0, max: 200, step: 1 },
+    { key: 'prefix_chars', label: 'Prefix window', type: 'number', min: 64, max: 8192, step: 64 },
+    { key: 'suffix_chars', label: 'Suffix window', type: 'number', min: 64, max: 8192, step: 64 },
+  ]},
+  { group: 'Sampling', items: [
+    { key: 'temperature', label: 'Temperature', type: 'range', min: 0, max: 2, step: 0.05 },
+    { key: 'top_k', label: 'Top-k', type: 'number', min: 1, max: 40, step: 1 },
+    { key: 'max_tokens', label: 'Max tokens', type: 'number', min: 1, max: 128, step: 1 },
+    { key: 'n', label: 'Best-of-n (uses alt temp)', type: 'number', min: 1, max: 10, step: 1 },
+    { key: 'alt_temperature', label: 'Alt temp (Alt+])', type: 'range', min: 0, max: 2, step: 0.05 },
+  ]},
+  { group: 'Quality gate', items: [
+    { key: 'confidence_threshold', label: 'Confidence gate', type: 'range', min: 0, max: 1, step: 0.05 },
+  ]},
+];
+
+function formatVal(v, item) {
+  if (item.type === 'range')
+    return Number.isInteger(v) ? String(v) : v.toFixed(2);
+  return String(v);
+}
+
+function saveConfig() {
+  try {
+    const subset = {};
+    for (const grp of ADVANCED_SCHEMA)
+      for (const it of grp.items) subset[it.key] = CONFIG[it.key];
+    localStorage.setItem('morpheus_config', JSON.stringify(subset));
+  } catch (e) { /* storage may be unavailable */ }
+}
+
+function buildAdvancedPanel() {
+  const body = document.getElementById('advanced-body');
+  if (!body) return;
+  body.innerHTML = '';
+  for (const grp of ADVANCED_SCHEMA) {
+    const g = document.createElement('div');
+    g.className = 'adv-group';
+    const title = document.createElement('div');
+    title.className = 'adv-group-title';
+    title.textContent = grp.group;
+    g.appendChild(title);
+    for (const item of grp.items) {
+      const row = document.createElement('div');
+      row.className = 'adv-row';
+      const lbl = document.createElement('label');
+      lbl.textContent = item.label;
+      lbl.htmlFor = 'adv-' + item.key;
+      row.appendChild(lbl);
+      const input = document.createElement('input');
+      input.id = 'adv-' + item.key;
+      input.type = item.type;
+      if (item.min !== undefined) input.min = item.min;
+      if (item.max !== undefined) input.max = item.max;
+      if (item.step !== undefined) input.step = item.step;
+      input.value = CONFIG[item.key];
+      const update = () => {
+        const v = item.type === 'number' ? parseInt(input.value, 10) : parseFloat(input.value);
+        if (!isNaN(v)) {
+          CONFIG[item.key] = v;
+          if (valEl) valEl.textContent = formatVal(v, item);
+          saveConfig();
+        }
+      };
+      input.addEventListener('input', update);
+      let valEl = null;
+      if (item.type === 'range') {
+        valEl = document.createElement('span');
+        valEl.className = 'adv-val';
+        valEl.textContent = formatVal(CONFIG[item.key], item);
+        row.appendChild(input);
+        row.appendChild(valEl);
+      } else {
+        row.appendChild(input);
+      }
+      g.appendChild(row);
+    }
+    body.appendChild(g);
+  }
+  // Reset to defaults
+  const actions = document.createElement('div');
+  actions.className = 'adv-actions';
+  const reset = document.createElement('button');
+  reset.textContent = 'Reset to defaults';
+  reset.addEventListener('click', () => {
+    Object.assign(CONFIG, DEFAULTS);
+    localStorage.removeItem('morpheus_config');
+    buildAdvancedPanel();
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(requestCompletion, 100);
+  });
+  actions.appendChild(reset);
+  body.appendChild(actions);
+}
+
+buildAdvancedPanel();
 
 // Sync ghost layer scroll + content with textarea
 function syncGhost() {
@@ -194,11 +365,16 @@ async function requestCompletion() {
   // API params (§4.2 / P7): temperature 0.2 + top_k 5 recovers rank-2/rank-3
   // tokens; pure greedy (temp 0) is too brittle. The server applies stop
   // tokens (<EOT>, \n\n for FIM; \n\n for AR) and repeat_penalty 1.0.
+  // When best-of-n (n>1) is active, we sample at alt_temperature instead —
+  // best-of-n needs diversity to be useful, and at temp 0.2 all samples are
+  // identical (top-1 dominates after sharpening). alt_temperature (0.7) is
+  // the same diversity temp used for Alt+] cycling.
   const body = {
     prefix, suffix,
     max_tokens: CONFIG.max_tokens,
-    temperature: CONFIG.temperature,
+    temperature: CONFIG.n > 1 ? CONFIG.alt_temperature : CONFIG.temperature,
     top_k: CONFIG.top_k,
+    n: CONFIG.n,
   };
 
   try {
@@ -345,6 +521,7 @@ async function cycleNext() {
     max_tokens: CONFIG.max_tokens,
     temperature: CONFIG.alt_temperature,
     top_k: CONFIG.top_k,
+    n: CONFIG.n,
   };
 
   try {
