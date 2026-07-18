@@ -164,7 +164,7 @@ EXPORTS_DIR = Path(os.environ.get("MORPHEUS_MODELS_DIR", Path(__file__).resolve(
 MODELS_DIR = Path(os.environ.get("MORPHEUS_MODELS_DIR", "/app/models"))
 
 # Default model — change this when a new checkpoint is promoted
-DEFAULT_MODEL = "morpheus-v2-mamba.Q4_K_M.gguf"
+DEFAULT_MODEL = "v3_fim.Q5_K_M.gguf"
 
 # ── Completion logging ──────────────────────────────────
 # Logs user acceptances (and sends) to a JSONL file so we can build a
@@ -235,13 +235,13 @@ def _resolve_model(model_arg: str | None) -> str:
             if p.exists():
                 return str(p.resolve())
         print(f"Warning: MORPHEUS_MODEL={env_model} not found, using default")
-    # Default: explicit model, fallback to latest Q4_K_M in any search dir
+    # Default: explicit model, fallback to latest Q5_K_M, then any GGUF
     for d in search_dirs:
         p = d / DEFAULT_MODEL
         if p.exists():
             return str(p.resolve())
     for d in search_dirs:
-        ggufs = sorted(d.glob("*.Q4_K_M.gguf"))
+        ggufs = sorted(d.glob("*.Q5_K_M.gguf"))
         if ggufs:
             return str(ggufs[-1].resolve())
     for d in search_dirs:

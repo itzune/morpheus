@@ -4,6 +4,7 @@
 #   docker compose -f docker-compose.yml -f docker-compose.local.yml up -d --build
 #
 # Use this when you have local GGUF builds and don't want to publish to HuggingFace.
+# Defaults to v3_fim.Q5_K_M.gguf (FIM model); override with MORPHEUS_MODEL env var.
 
 services:
   demo:
@@ -16,5 +17,5 @@ services:
       - ../tokenizer:/app/tokenizer:ro
       - ../logs:/app/logs
     environment:
-      - MORPHEUS_MODEL=${MORPHEUS_MODEL:-morpheus-v2-mamba.Q5_K_M.gguf}
+      - MORPHEUS_MODEL=${MORPHEUS_MODEL:-v3_fim.Q5_K_M.gguf}
       - MORPHEUS_NGL=${MORPHEUS_NGL:-0}
