@@ -89,7 +89,8 @@
 <p class="hint">
   <kbd>Tab</kbd> accept suggestion &nbsp;·&nbsp;
   <kbd>Esc</kbd> dismiss &nbsp;·&nbsp;
-  Type in the middle to test FIM infill
+  Type in the middle to test FIM infill &nbsp;·&nbsp;
+  Low-confidence suggestions are auto-suppressed
 </p>
 
 <script>
@@ -103,6 +104,23 @@ let mode = 'fim';
 let currentSuggestion = '';
 let debounceTimer = null;
 let reqId = 0;
+
+// ── Plugin config (ARCHITECTURE.md §4.1 — Layer 3, purely local) ──
+const CONFIG = {
+  debounce_ms: 250,            // editor timing (was 350)
+  confidence_threshold: 0.6,   // suppress low-quality ghosts ("clueless mode")
+  min_prefix_chars: 10,        // don't request until enough context (was 2)
+  prefix_chars: 2048,          // how much context to send (truncation)
+  suffix_chars: 1024,          // how much suffix to send (truncation)
+  // API params (§4.2 / P7): low-but-nonzero temp + small top-k recovers
+  // rank-2/rank-3 tokens. Pure greedy (temp 0) is too brittle — the rank-2
+  // evidence (5 correct answers at rank 2 in top-5) justifies a small top-k.
+  temperature: 0.2,
+  top_k: 5,
+  max_tokens: 20,
+};
+
+let abortController = null;  // cancels in-flight request on new keystroke
 
 // Mode toggle
 document.querySelectorAll('.mode-btn').forEach(btn => {
@@ -153,47 +171,76 @@ async function requestCompletion() {
     return;
   }
 
-  const prefix = text.substring(0, cursor);
-  const suffix = text.substring(cursor);
+  // Context windowing (§4.1): truncate to prefix_chars/suffix_chars so we
+  // don't send the whole buffer on large documents.
+  const prefixStart = Math.max(0, cursor - CONFIG.prefix_chars);
+  const prefix = text.substring(prefixStart, cursor);
+  const suffix = text.substring(cursor, cursor + CONFIG.suffix_chars);
 
-  // Don't request on empty or very short prefix
-  if (prefix.trim().length < 2) {
+  // Don't request until enough context (§4.1: min_prefix_chars)
+  if (prefix.trim().length < CONFIG.min_prefix_chars) {
     currentSuggestion = '';
+    setStatus('idle', 'Ready');
+    statsEl.textContent = '—';
     syncGhost();
     return;
   }
+
+  // Abort any in-flight request — real cancellation, not just stale-ignore.
+  // Saves GPU/CPU when the user keeps typing.
+  if (abortController) abortController.abort();
+  abortController = new AbortController();
 
   setStatus('thinking', 'Thinking...');
   const myReqId = ++reqId;
 
   const endpoint = mode === 'fim' ? '/v1/complete' : '/v1/completions';
+  // API params (§4.2 / P7): temperature 0.2 + top_k 5 recovers rank-2/rank-3
+  // tokens; pure greedy (temp 0) is too brittle. AR stops at paragraph
+  // boundary (\n\n), not line — prose completions legitimately span lines.
   const body = mode === 'fim'
-    ? { prefix, suffix, max_tokens: 20, temperature: 0 }
-    : { prompt: prefix, max_tokens: 20, temperature: 0, stop: ['\n'] };
+    ? { prefix, suffix, max_tokens: CONFIG.max_tokens,
+        temperature: CONFIG.temperature, top_k: CONFIG.top_k }
+    : { prompt: prefix, max_tokens: CONFIG.max_tokens,
+        temperature: CONFIG.temperature, top_k: CONFIG.top_k, stop: ['\n\n'] };
 
   try {
     const resp = await fetch(endpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
+      signal: abortController.signal,
     });
     const data = await resp.json();
 
-    // Ignore stale responses
+    // Ignore stale responses (abort may race)
     if (myReqId !== reqId) return;
 
     const suggestion = mode === 'fim'
       ? (data.text || '')
       : (data.choices?.[0]?.text || '');
 
-    // Strip leading space for AR (we add it back visually)
+    const confidence = data.confidence || 0;
+
+    // Confidence gate (§4.1 / §6): suppress low-quality ghosts instead of
+    // showing wrong text. The proxy's confidence field (avg logprob) lets
+    // the client decide when the model is unsure — "clueless mode".
+    if (suggestion && confidence < CONFIG.confidence_threshold) {
+      currentSuggestion = '';
+      setStatus('idle', `Suppressed (conf ${confidence.toFixed(2)} < ${CONFIG.confidence_threshold})`);
+      statsEl.textContent = `conf=${confidence.toFixed(2)} · ${suggestion.length} chars · suppressed`;
+      syncGhost();
+      return;
+    }
+
     currentSuggestion = suggestion;
     setStatus('ready', suggestion ? 'Suggestion ready' : 'No suggestion');
     statsEl.textContent = suggestion
-      ? `conf=${(data.confidence || 0).toFixed(2)} · ${suggestion.length} chars`
+      ? `conf=${confidence.toFixed(2)} · ${suggestion.length} chars`
       : '—';
     syncGhost();
   } catch (e) {
+    if (e.name === 'AbortError') return;  // expected on new keystroke
     if (myReqId === reqId) {
       setStatus('idle', 'Error: ' + e.message);
       currentSuggestion = '';
@@ -207,7 +254,7 @@ editor.addEventListener('input', () => {
   currentSuggestion = '';
   syncGhost();
   clearTimeout(debounceTimer);
-  debounceTimer = setTimeout(requestCompletion, 350);
+  debounceTimer = setTimeout(requestCompletion, CONFIG.debounce_ms);
 });
 
 // Cursor movement clears/re-requests
