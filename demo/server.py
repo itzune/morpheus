@@ -1567,12 +1567,18 @@ async def complete_prefix_suffix(req: CompleteRequest):
     in llama-server. With the AR-only model, suffix is ignored (prefix-only).
     """
     if req.suffix.strip():
-        # ── FIM mode: build <PRE>{prefix}<SUF>{suffix}<MID> ──
-        # The FIM tokens are atomic USER_DEFINED in the SentencePiece model,
-        # so sp.encode() preserves them as single tokens (IDs 4000–4002).
-        # The model generates the middle, then <EOT> (4003) to stop.
-        fim_prompt = f"<PRE>{req.prefix}<SUF>{req.suffix}<MID>"
-        prompt_ids = _normalize_prompt_to_ids(fim_prompt)
+        # ── FIM mode: [PRE] prefix_ids [SUF] suffix_ids [MID] ──
+        # Token-level: encode prefix and suffix independently, then concat
+        # with FIM token IDs as raw IDs. This preserves ▁ word-boundary
+        # markers (BigCode/StarCoder approach) — avoids the string-level
+        # issue where words after FIM tokens get character-split.
+        sp_tok = get_tokenizer()
+        PRE = sp_tok.piece_to_id("<PRE>")
+        SUF = sp_tok.piece_to_id("<SUF>")
+        MID = sp_tok.piece_to_id("<MID>")
+        prefix_ids = sp_tok.encode(req.prefix, out_type=int)
+        suffix_ids = sp_tok.encode(req.suffix, out_type=int)
+        prompt_ids = [PRE] + prefix_ids + [SUF] + suffix_ids + [MID]
         stops = [_FIM_EOT, "\n\n"]
     else:
         # ── AR mode: prefix-only completion ──

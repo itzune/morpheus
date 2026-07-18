@@ -8,9 +8,9 @@ Measures the model's ability to infill text at arbitrary cursor positions:
   3. Keystrokes-saved-in-the-middle: chars saved by accepting the completion.
 
 For each evaluation sentence:
-  - Pick a random char-level span (the "middle")
-  - Build FIM prompt: <PRE>{prefix}<SUF>{suffix}<MID>
-  - SP-encode (FIM tokenizer, atomic special tokens)
+  - Tokenize full text, pick a random token-level span (the "middle")
+  - Build FIM prompt: [PRE] prefix_ids [SUF] suffix_ids [MID] (raw token IDs)
+  - Token-level splitting preserves ▁ word markers (BigCode/StarCoder approach)
   - Greedy-decode until <EOT> or max_tokens
   - Compare generated middle to original
 
@@ -46,7 +46,7 @@ from mamba_ssm.models.config_mamba import MambaConfig
 
 # Reuse the same split logic as build_fim.py
 sys.path.insert(0, str(Path(__file__).parent / "pipeline"))
-from build_fim import make_fim_split
+from build_fim import make_fim_split_tokens
 
 # ── Constants ──
 FIM_TOKENS = {"<PRE>": 4000, "<SUF>": 4001, "<MID>": 4002, "<EOT>": 4003}
@@ -239,28 +239,37 @@ def evaluate_fim(model, sp, lines: list, device, n_examples: int = 200,
 
     for i, idx in enumerate(indices):
         text = lines[idx]
-        # Deterministic split for this example
+        # Tokenize full text first (preserves ▁ word markers)
+        tokens = sp.encode(text, out_type=int)
+        if len(tokens) < min_line:
+            continue
+
+        # Deterministic split at TOKEN level (BigCode/StarCoder approach)
         ex_rng = random.Random(seed + idx)
-        split = make_fim_split(text, ex_rng, boundary_bias, min_mid, min_line)
+        split = make_fim_split_tokens(tokens, sp, ex_rng, boundary_bias, min_mid)
         if split is None:
             continue
 
-        prefix, middle, suffix = split
+        prefix_ids, middle_ids, suffix_ids = split
         mode = "PSM" if ex_rng.random() < 0.5 else "SPM"
-        # For eval, we only send the prompt (without the middle and <EOT>)
-        # The model should generate the middle and then <EOT>
-        if mode == "PSM":
-            prompt_str = f"<PRE>{prefix}<SUF>{suffix}<MID>"
-        else:
-            prompt_str = f"<SUF>{suffix}<PRE>{prefix}<MID>"
 
-        prompt_ids = sp.encode(prompt_str, out_type=int)
+        PRE = FIM_TOKENS["<PRE>"]
+        SUF = FIM_TOKENS["<SUF>"]
+        MID = FIM_TOKENS["<MID>"]
+
+        # Build prompt as raw token IDs (no string re-encoding)
+        if mode == "PSM":
+            prompt_ids = [PRE] + prefix_ids + [SUF] + suffix_ids + [MID]
+        else:
+            prompt_ids = [SUF] + suffix_ids + [PRE] + prefix_ids + [MID]
+
         gen_ids = generate_middle(model, sp, prompt_ids, device)
         gen_text = sp.decode(gen_ids) if gen_ids else ""
+        ref_text = sp.decode(middle_ids) if middle_ids else ""
 
         # Strip leading space (SentencePiece often adds ▁ at start of generation)
         gen_text = gen_text.strip()
-        ref_text = middle.strip()
+        ref_text = ref_text.strip()
 
         em = gen_text == ref_text
         ca = char_accuracy(gen_text, ref_text)
@@ -276,9 +285,9 @@ def evaluate_fim(model, sp, lines: list, device, n_examples: int = 200,
         examples.append({
             "text": text[:120],
             "mode": mode,
-            "prefix": prefix[:60],
-            "middle": middle[:60],
-            "suffix": suffix[:60],
+            "prefix": sp.decode(prefix_ids)[:60] if prefix_ids else "",
+            "middle": ref_text[:60],
+            "suffix": sp.decode(suffix_ids)[:60] if suffix_ids else "",
             "generated": gen_text[:60],
             "exact_match": em,
             "char_accuracy": ca,
