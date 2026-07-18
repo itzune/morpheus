@@ -738,46 +738,36 @@ The two orders are sampled with equal probability; Bavarian et al. (2022) showed
 
 Training resumes from the step-74K AR checkpoint (`checkpoints/step_0074000.pt`, PPL 7.13), with embeddings resized to accommodate the FIM tokens. The FIM training corpus is built from the same 4.6B-token curated corpus (§4.2): each document is split into prefix/middle/suffix at a random token boundary, with 20% of splits biased toward linguistic boundaries (sentence/clause breaks) to better reflect real cursor positions. Examples are **greedily packed** into fixed 1,025-token windows — whole examples concatenated end-to-end with no cross-example contamination and no padding waste (a PackedFimDataset). The validation set is held out as flat FIM examples (1,932 sequences, 1.92M tokens) for comparability. Training uses a 500M-token budget at learning rate $1 \times 10^{-3}$ with cosine decay, ~3,815 steps, on a single L40 GPU. This budget is deliberately modest: FIM capability is acquired quickly relative to the original 10B-token AR pre-training, and the goal is behavioral adaptation rather than new linguistic knowledge.
 
-### 7.3 Phase 6 v2: Token-Level Splitting and the `<EOT>` Problem
+### 7.3 The Stop-Token Reliability Problem
 
-The first full FIM run (Phase 6 v2) used a **50/50 FIM/AR ratio** with token-level splitting and no special stop-token handling. Results were encouraging on perplexity but exposed a behavioral failure:
-
-| Metric | Phase 6 v2 |
-|--------|-----------|
-| AR valid PPL | 7.4 (stable vs. 7.13 AR-only — "FIM-for-free" holds) |
-| FIM valid PPL | 8.0 |
-| `<EOT>` emission rate | **76.9%** |
-| Avg generation length | 56.8 chars (vs. 45.0 reference) |
-| Keystrokes saved | **−25.2%** |
-
-The model learned to infill coherently (FIM PPL 8.0 is close to AR PPL 7.4), but it **over-generated**: in 23% of cases it failed to emit `<EOT>` and ran past the correct stopping point, producing 56.8 chars against a 45.0-char reference. This is the classic FIM stop-token reliability problem — the model learns *what* to generate but not *when to stop*. The cost is severe: at −25.2% keystrokes saved, the model costs the user more keystrokes (to reject over-long suggestions) than it saves. AR perplexity was unaffected (7.13 → 7.4), confirming that FIM data does not degrade AR quality when AR data remains in the mix — the "FIM-for-free" property of Bavarian et al. (2022) holds even for a 91M model.
+A naive FIM continued pre-training — a 50/50 FIM/AR mix with token-level splitting and no special stop-token handling — learns to infill coherently (FIM perplexity close to AR perplexity) but exposes a behavioral failure: the model **over-generates**. It fails to reliably emit `<EOT>` (emission ≈77%) and runs well past the correct stopping point (≈57 chars generated against a ≈45-char reference), yielding deeply negative keystrokes saved (≈−25%) — the model costs the user more keystrokes rejecting over-long suggestions than it saves. This is the classic FIM stop-token reliability problem: the model learns *what* to generate but not *when to stop*. The root cause is signal sparsity — `<EOT>` is a single token per FIM example — which, within a modest CPT budget, is insufficient for the model to reliably learn to emit it. (AR perplexity is unaffected by FIM data when AR data remains in the mix — the "FIM-for-free" property of Bavarian et al., 2022, holds even for a 91M model.)
 
 ### 7.4 Phase 6 v3: EOT Loss Weighting
 
-A senior ML engineering review of the v2 failure mode identified the root cause: within a 500M-token budget, the `<EOT>` signal is too sparse — a single token per FIM example — for the model to reliably learn to emit it. Two interventions were selected (designated "Option D" in the review):
+A senior ML engineering review of the over-generation failure (§7.3) identified the root cause: within a 500M-token budget, the `<EOT>` signal is too sparse — a single token per FIM example — for the model to reliably learn to emit it. Two interventions were selected (designated "Option D" in the review):
 
 1. **70/30 FIM/AR ratio** (up from 50/50): increases the *density* of FIM — and thus `<EOT>` — examples per token seen.
 2. **5× loss weighting on `<EOT>`** (token id 4003): a per-class weight in the cross-entropy loss that inflates the *impact* of each `<EOT>` token on the gradient, compensating for its sparsity.
 
-The review's specific concern was a failure mode dual to v2's: over-weighting `<EOT>` could cause **premature truncation** — the model stopping too early to avoid the now-cheaper mistake of running long. We instrumented the evaluation (§7.5) with a *prefix-truncation rate* and length-bucketed analysis to detect this directly, setting a 15% long-bucket truncation rate as the failure threshold.
+The review's specific concern was a failure mode dual to over-generation: over-weighting `<EOT>` could cause **premature truncation** — the model stopping too early to avoid the now-cheaper mistake of running long. We instrumented the evaluation (§7.5) with a *prefix-truncation rate* and length-bucketed analysis to detect this directly, setting a 15% long-bucket truncation rate as the failure threshold.
 
-### 7.5 FIM Evaluation: v2 vs. v3
+### 7.5 FIM Evaluation
 
 Evaluation uses 147 held-out FIM examples (token-level splits, 20% at linguistic boundaries), measuring exact-match, character accuracy, keystrokes saved, `<EOT>` emission rate, and prefix-truncation rate bucketed by reference length (short <15, medium <30, long 30+ chars):
 
-| Metric | v2 (50/50, no EOT weight) | v3 (70/30, 5× EOT weight) | Change |
-|--------|---------------------------|---------------------------|--------|
-| `<EOT>` emission rate | 76.9% | **88.4%** | +11.5pp |
-| Keystrokes saved | −25.2% | **−5.9%** | ~4× better |
-| Exact-match rate | 2.7% | **6.8%** | 2.5× |
-| Avg char accuracy | 31.2% | **32.3%** | +1.1pp |
-| Avg generation length (ref=45.0) | 56.8 (over-gen) | **40.3** | closer to target |
-| Prefix truncation (overall) | 0.0% | 1.4% | minimal |
-| └ long-bucket truncation | 0.0% | 2.3% | well under 15% threshold |
-| AR valid PPL | 7.4 | 7.5 | stable |
-| FIM valid PPL | 8.0 | 7.9 | −0.1 |
+| Metric | Result |
+|--------|--------|
+| `<EOT>` emission rate | 88.4% |
+| Keystrokes saved | −5.9% |
+| Exact-match rate | 6.8% |
+| Avg char accuracy | 32.3% |
+| Avg generation length (ref=45.0) | 40.3 |
+| Prefix truncation (overall) | 1.4% |
+| └ long-bucket truncation | 2.3% (< 15% threshold) |
+| AR valid PPL | 7.5 |
+| FIM valid PPL | 7.9 |
 
-The 5× `<EOT>` weighting worked as designed: emission reliability rose from 77% to 88%, and over-generation collapsed (56.8 → 40.3 chars, near the 45.0 target), turning a deeply negative keystrokes-saved (−25.2%) into a near-break-even (−5.9%). Crucially, the feared premature-truncation failure mode **did not materialize**: overall truncation is 1.4% and the long-bucket rate is 2.3% — far below the 15% threshold — so the weighting did not teach the model to stop too early. AR perplexity remained stable (7.4 → 7.5), confirming that the 70/30 FIM ratio did not trade away AR capability for FIM. The model now slightly *under*-generates (40.3 vs. 45.0), a preferable failure mode: a short correct completion is more useful to a user than a long rambling one.
+The 5× `<EOT>` weighting (§7.4) resolved the over-generation problem of §7.3: `<EOT>` emission reaches 88.4% and generation length (40.3) sits near the 45.0-char reference, turning deeply negative keystrokes saved into near-break-even (−5.9%). Crucially, the feared premature-truncation failure mode **did not materialize**: overall truncation is 1.4% and the long-bucket rate is 2.3% — far below the 15% threshold — so the weighting did not teach the model to stop too early. AR perplexity remained stable (7.5, vs. 7.13 AR-only base), confirming that the 70/30 FIM ratio did not trade away AR capability for FIM. The model now slightly *under*-generates (40.3 vs. 45.0), a preferable failure mode: a short correct completion is more useful to a user than a long rambling one.
 
 ### 7.6 Deployment: Thick-Proxy Architecture and Decoding Policy
 
@@ -868,7 +858,7 @@ Morpheus demonstrates that **State Space Models (Mamba-2) are a viable architect
 6. **Data scaling analysis for low-resource LM.** Our 110:1 tokens-to-parameters ratio is reasonable by modern small-model standards (below Mosaic 190:1, MiniCPM 192:1). However, the model converged at ~8.8B tokens — not because the budget was excessive, but because **data quality is the binding constraint**. ~20–30% corpus noise means effective high-quality data is ~7–8B tokens, matching the convergence point. For low-resource languages, aggressive quality filtering of a 2–5B token corpus would likely outperform maximizing raw token count.
 
 
-7. **Continued pre-training for Fill-in-the-Middle (FIM).** We extend the AR-only step-74K checkpoint to cursor-mid-text completion via CPT on FIM-structured data (§7), using Code Llama-style tokens, token-level splitting, and the "FIM-for-free" no-mask loss (Bavarian et al., 2022). The key engineering finding is the **stop-token reliability problem**: a naive 50/50 FIM/AR mix achieves good FIM perplexity (8.0) but over-generates (−25.2% keystrokes saved) because `<EOT>` emission is unreliable (77%). A 5× loss weight on `<EOT>` with a 70/30 FIM/AR ratio (Phase 6 v3) raises emission to 88% and keystrokes saved to −5.9%, without inducing premature truncation (long-bucket truncation 2.3% vs. a 15% failure threshold) and without degrading AR perplexity (7.4 → 7.5). The deployment uses a thick-proxy architecture with token-ID prompts and a decoding policy (temperature 0.2, top-k 5) grounded in measured model behavior rather than defaults — another instance of the §6.8 lesson.
+7. **Continued pre-training for Fill-in-the-Middle (FIM).** We extend the AR-only step-74K checkpoint to cursor-mid-text completion via CPT on FIM-structured data (§7), using Code Llama-style tokens, token-level splitting, and the "FIM-for-free" no-mask loss (Bavarian et al., 2022). The key engineering finding is the **stop-token reliability problem**: within a modest CPT budget, the `<EOT>` signal is too sparse for the model to reliably learn when to stop, causing over-generation. A 5× loss weight on `<EOT>` with a 70/30 FIM/AR ratio resolves this — `<EOT>` emission reaches 88% and keystrokes saved −5.9%, without inducing premature truncation (long-bucket truncation 2.3% vs. a 15% failure threshold) and without degrading AR perplexity (7.5). The deployment uses a thick-proxy architecture with token-ID prompts and a decoding policy (temperature 0.2, top-k 5) grounded in measured model behavior rather than defaults — another instance of the §6.8 lesson.
 
 ### Limitations
 
