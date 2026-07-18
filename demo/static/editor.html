@@ -27,14 +27,20 @@
     font-size: 15px; line-height: 1.6; white-space: pre-wrap; word-break: break-word;
     border: none; outline: none; resize: none; overflow: hidden;
   }
+  /* Ghost layer renders ALL visible text: real text (white) + suggestion
+     (gray). The textarea on top is transparent — it only provides the caret
+     and accepts input. This lets the ghost text push the "after" text to
+     the right (VS Code inline-suggestion behavior) instead of the textarea's
+     own "after" text overlapping the ghost on top of it. */
   .ghost-layer {
-    color: #6c7086; pointer-events: none; z-index: 1;
-    caret-color: transparent;
+    color: #cdd6f4; pointer-events: none; z-index: 1;
   }
   .input-layer {
-    background: transparent; color: #cdd6f4; z-index: 2;
+    background: transparent; color: transparent; z-index: 2;
     caret-color: #f5e0dc;
   }
+  .input-layer::placeholder { color: #585b70; }
+  .input-layer::selection { color: #cdd6f4; background: rgba(137,180,250,0.3); }
   .ghost-text { color: #585b70; font-style: italic; }
   .status-bar {
     width: 100%; max-width: 720px; margin-top: 12px;
