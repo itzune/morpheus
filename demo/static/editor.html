@@ -108,7 +108,10 @@ let reqId = 0;
 // ── Plugin config (ARCHITECTURE.md §4.1 — Layer 3, purely local) ──
 const CONFIG = {
   debounce_ms: 250,            // editor timing (was 350)
-  confidence_threshold: 0.6,   // suppress low-quality ghosts ("clueless mode")
+  confidence_threshold: 0.2,   // calibrated to real FIM data (range 0.13–0.52,
+                               // median 0.41; 0.6 from docs would suppress all)
+                               // — filters the two clearly-wrong garbage outputs
+                               // (conf <0.15) while keeping real suggestions
   min_prefix_chars: 10,        // don't request until enough context (was 2)
   prefix_chars: 2048,          // how much context to send (truncation)
   suffix_chars: 1024,          // how much suffix to send (truncation)
