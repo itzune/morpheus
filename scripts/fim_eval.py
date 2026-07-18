@@ -80,7 +80,12 @@ def load_checkpoint(checkpoint_path: str, device) -> tuple:
     """Load checkpoint, return (model, vocab_size)."""
     ckpt = torch.load(checkpoint_path, map_location="cpu", weights_only=False)
     cfg = ckpt["config"]
-    vocab_size = cfg.get("padded_vocab_size", cfg.get("vocab_size", 4016))
+    # Read the ACTUAL vocab size from the embedding shape — the config may
+    # store vocab_size=4004 (pre-padding) with padded_vocab_size=None, while
+    # the model was built with pad_vocab_size_multiple=16 → 4016.
+    # The embedding weight is the ground truth.
+    emb = ckpt["model"]["backbone.embedding.weight"]
+    vocab_size = emb.shape[0]
     model = build_model(vocab_size, device)
     model.load_state_dict(ckpt["model"])
     model.eval()
