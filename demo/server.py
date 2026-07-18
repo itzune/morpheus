@@ -29,7 +29,12 @@ from pydantic import BaseModel, Field
 
 # Tokenize endpoint (for demo token visualization)
 import sentencepiece as spm
-TOKENIZER_PATH = Path(__file__).resolve().parent.parent / "tokenizer" / "basque_unigram_4000.model"
+# Use the FIM tokenizer (4004 pieces: original 4000 + <PRE>/<SUF>/<MID>/<EOT>).
+# The first 4000 pieces are identical to basque_unigram_4000.model, so AR
+# encoding is unaffected. The 4 extra pieces are needed for /v1/complete FIM
+# route — without them, piece_to_id("<PRE>") returns 0 (unk) and the model
+# receives garbage structure.
+TOKENIZER_PATH = Path(__file__).resolve().parent.parent / "tokenizer" / "basque_unigram_fim.model"
 _sp = None
 
 def get_tokenizer():
@@ -955,6 +960,14 @@ async def index_keyboard():
     return HTMLResponse(html_path.read_text())
 
 
+@app.get("/editor.html")
+async def index_editor():
+    """Ghost-text editor demo — FIM infill + AR append modes."""
+    static_dir = Path(__file__).parent / "static"
+    html_path = static_dir / "editor.html"
+    return HTMLResponse(html_path.read_text())
+
+
 @app.get("/api/autocomplete/greedy")
 async def autocomplete_greedy(text: str = "", max_tokens: int = 3, filter_punctuation: bool = True, filter_numeric: bool = True):
     if not text.strip():
@@ -1596,7 +1609,9 @@ async def complete_prefix_suffix(req: CompleteRequest):
         "top_k": req.top_k,
         "top_p": 1.0,
         "min_p": 0.0,
-        "repeat_penalty": 1.1,
+        # FIM infill: no repeat penalty (legitimately reuses context words),
+        # greedy sampling for deterministic ghost-text.
+        "repeat_penalty": 1.0,
         "n_probs": N_PROBS,
         "stop": stops,
     }

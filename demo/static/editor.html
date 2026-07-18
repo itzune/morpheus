@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="eu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Morpheus — Euskal Ghost-Text Editor</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #1e1e2e; color: #cdd6f4; display: flex; flex-direction: column;
+    align-items: center; min-height: 100vh; padding: 24px;
+  }
+  h1 { font-size: 1.4rem; margin-bottom: 4px; color: #89b4fa; }
+  .subtitle { color: #6c7086; font-size: 0.85rem; margin-bottom: 20px; }
+  .editor-wrap {
+    width: 100%; max-width: 720px; position: relative;
+  }
+  .editor-container {
+    position: relative; width: 100%; min-height: 400px;
+    background: #181825; border: 1px solid #313244; border-radius: 8px;
+    overflow: hidden;
+  }
+  .ghost-layer, .input-layer {
+    position: absolute; top: 0; left: 0; width: 100%; min-height: 400px;
+    padding: 16px 20px; font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 15px; line-height: 1.6; white-space: pre-wrap; word-break: break-word;
+    border: none; outline: none; resize: none; overflow: hidden;
+  }
+  .ghost-layer {
+    color: #6c7086; pointer-events: none; z-index: 1;
+    caret-color: transparent;
+  }
+  .input-layer {
+    background: transparent; color: #cdd6f4; z-index: 2;
+    caret-color: #f5e0dc;
+  }
+  .ghost-text { color: #585b70; font-style: italic; }
+  .status-bar {
+    width: 100%; max-width: 720px; margin-top: 12px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.8rem; color: #6c7086;
+  }
+  .status-bar .dot {
+    display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+    margin-right: 6px; vertical-align: middle;
+  }
+  .dot.idle { background: #585b70; }
+  .dot.thinking { background: #f9e2af; animation: pulse 1s infinite; }
+  .dot.ready { background: #a6e3a1; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+  .mode-toggle {
+    display: flex; gap: 8px; margin-bottom: 16px;
+  }
+  .mode-btn {
+    padding: 6px 14px; border: 1px solid #313244; border-radius: 6px;
+    background: #181825; color: #6c7086; cursor: pointer; font-size: 0.8rem;
+  }
+  .mode-btn.active { background: #313244; color: #cdd6f4; border-color: #89b4fa; }
+  .hint { color: #585b70; font-size: 0.75rem; margin-top: 8px; }
+  kbd {
+    background: #313244; border: 1px solid #45475a; border-radius: 3px;
+    padding: 1px 5px; font-size: 0.75rem; color: #a6adc8;
+  }
+</style>
+</head>
+<body>
+
+<h1>Morpheus Ghost-Text Editor</h1>
+<p class="subtitle">Euskal testu-editorea — FIM (Fill-in-the-Middle) autokonpletatzea</p>
+
+<div class="mode-toggle">
+  <button class="mode-btn active" data-mode="fim">FIM (insert anywhere)</button>
+  <button class="mode-btn" data-mode="ar">AR (append at end)</button>
+</div>
+
+<div class="editor-wrap">
+  <div class="editor-container">
+    <div class="ghost-layer" id="ghost"></div>
+    <textarea class="input-layer" id="editor" spellcheck="false"
+      placeholder="Idatzi hemen... (e.g. 'Kaixo, zer moduz?')"></textarea>
+  </div>
+</div>
+
+<div class="status-bar">
+  <span><span class="dot idle" id="dot"></span><span id="status">Ready</span></span>
+  <span id="stats">—</span>
+</div>
+<p class="hint">
+  <kbd>Tab</kbd> accept suggestion &nbsp;·&nbsp;
+  <kbd>Esc</kbd> dismiss &nbsp;·&nbsp;
+  Type in the middle to test FIM infill
+</p>
+
+<script>
+const editor = document.getElementById('editor');
+const ghost = document.getElementById('ghost');
+const dot = document.getElementById('dot');
+const statusEl = document.getElementById('status');
+const statsEl = document.getElementById('stats');
+
+let mode = 'fim';
+let currentSuggestion = '';
+let debounceTimer = null;
+let reqId = 0;
+
+// Mode toggle
+document.querySelectorAll('.mode-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    mode = btn.dataset.mode;
+    currentSuggestion = '';
+    syncGhost();
+    requestCompletion();
+  });
+});
+
+// Sync ghost layer scroll + content with textarea
+function syncGhost() {
+  ghost.scrollTop = editor.scrollTop;
+  ghost.scrollLeft = editor.scrollLeft;
+
+  if (!currentSuggestion) {
+    ghost.innerHTML = escapeHtml(editor.value);
+    return;
+  }
+
+  const before = editor.value.substring(0, editor.selectionStart);
+  const after = editor.value.substring(editor.selectionEnd);
+  ghost.innerHTML = escapeHtml(before) +
+    '<span class="ghost-text">' + escapeHtml(currentSuggestion) + '</span>' +
+    escapeHtml(after);
+}
+
+function escapeHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function setStatus(state, text) {
+  dot.className = 'dot ' + state;
+  statusEl.textContent = text;
+}
+
+async function requestCompletion() {
+  const text = editor.value;
+  const cursor = editor.selectionStart;
+
+  // AR mode: only suggest at end of text
+  if (mode === 'ar' && cursor !== text.length) {
+    currentSuggestion = '';
+    syncGhost();
+    return;
+  }
+
+  const prefix = text.substring(0, cursor);
+  const suffix = text.substring(cursor);
+
+  // Don't request on empty or very short prefix
+  if (prefix.trim().length < 2) {
+    currentSuggestion = '';
+    syncGhost();
+    return;
+  }
+
+  setStatus('thinking', 'Thinking...');
+  const myReqId = ++reqId;
+
+  const endpoint = mode === 'fim' ? '/v1/complete' : '/v1/completions';
+  const body = mode === 'fim'
+    ? { prefix, suffix, max_tokens: 32, temperature: 0 }
+    : { prompt: prefix, max_tokens: 32, temperature: 0, stop: ['\n'] };
+
+  try {
+    const resp = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    const data = await resp.json();
+
+    // Ignore stale responses
+    if (myReqId !== reqId) return;
+
+    const suggestion = mode === 'fim'
+      ? (data.text || '')
+      : (data.choices?.[0]?.text || '');
+
+    // Strip leading space for AR (we add it back visually)
+    currentSuggestion = suggestion;
+    setStatus('ready', suggestion ? 'Suggestion ready' : 'No suggestion');
+    statsEl.textContent = suggestion
+      ? `conf=${(data.confidence || 0).toFixed(2)} · ${suggestion.length} chars`
+      : '—';
+    syncGhost();
+  } catch (e) {
+    if (myReqId === reqId) {
+      setStatus('idle', 'Error: ' + e.message);
+      currentSuggestion = '';
+      syncGhost();
+    }
+  }
+}
+
+// Debounced input handler
+editor.addEventListener('input', () => {
+  currentSuggestion = '';
+  syncGhost();
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(requestCompletion, 350);
+});
+
+// Cursor movement clears/re-requests
+editor.addEventListener('click', () => {
+  currentSuggestion = '';
+  syncGhost();
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(requestCompletion, 200);
+});
+
+editor.addEventListener('keyup', (e) => {
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+    currentSuggestion = '';
+    syncGhost();
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(requestCompletion, 200);
+  }
+});
+
+// Tab to accept, Esc to dismiss
+editor.addEventListener('keydown', (e) => {
+  if (e.key === 'Tab' && currentSuggestion) {
+    e.preventDefault();
+    const cursor = editor.selectionStart;
+    const before = editor.value.substring(0, cursor);
+    const after = editor.value.substring(editor.selectionEnd);
+    editor.value = before + currentSuggestion + after;
+    const newPos = cursor + currentSuggestion.length;
+    editor.setSelectionRange(newPos, newPos);
+    currentSuggestion = '';
+    syncGhost();
+    // Request next completion
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(requestCompletion, 100);
+  } else if (e.key === 'Escape') {
+    e.preventDefault();
+    currentSuggestion = '';
+    syncGhost();
+  }
+});
+
+// Auto-resize textarea
+function autoResize() {
+  editor.style.height = 'auto';
+  editor.style.height = Math.max(400, editor.scrollHeight) + 'px';
+  ghost.style.height = editor.style.height;
+}
+editor.addEventListener('input', autoResize);
+
+// Seed with example text
+editor.value = 'Kaixo, moduz? Ni atzo ';
+autoResize();
+syncGhost();
+setTimeout(requestCompletion, 500);
+</script>
+</body>
+</html>
