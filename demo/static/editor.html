@@ -82,6 +82,8 @@
 <p class="hint">
   <kbd>Tab</kbd> accept suggestion &nbsp;·&nbsp;
   <kbd>Ctrl</kbd>+<kbd>&rarr;</kbd> accept next word &nbsp;·&nbsp;
+  <kbd>Alt</kbd>+<kbd>]</kbd> next alternative &nbsp;·&nbsp;
+  <kbd>Alt</kbd>+<kbd>[</kbd> previous alternative &nbsp;·&nbsp;
   <kbd>Esc</kbd> dismiss &nbsp;·&nbsp;
   Cursor mid-sentence → FIM infill &nbsp;·&nbsp; cursor at end → append &nbsp;·&nbsp;
   Low-confidence suggestions are auto-suppressed
@@ -114,9 +116,23 @@ const CONFIG = {
   temperature: 0.2,
   top_k: 5,
   max_tokens: 20,
+  // Alternative-cycling temperature (Alt+] / Alt+[): higher than baseline
+  // so cycle requests diverge from the greedy top-1. Alt+[ walks history
+  // without a request.
+  alt_temperature: 0.7,
 };
 
 let abortController = null;  // cancels in-flight request on new keystroke
+
+// Alternative-suggestion cycling (Copilot convention): Alt+] fetches a new
+// alternative at elevated temperature; Alt+[ walks back through history.
+let suggestionHistory = [];
+let historyIndex = -1;
+
+function resetCycling() {
+  suggestionHistory = [];
+  historyIndex = -1;
+}
 
 // Sync ghost layer scroll + content with textarea
 function syncGhost() {
@@ -212,6 +228,13 @@ async function requestCompletion() {
     }
 
     currentSuggestion = suggestion;
+    // Auto-request resets cycling history: the context may have changed.
+    if (suggestion) {
+      suggestionHistory = [{text: suggestion, confidence}];
+      historyIndex = 0;
+    } else {
+      resetCycling();
+    }
     setStatus('ready', suggestion ? 'Suggestion ready' : 'No suggestion');
     statsEl.textContent = suggestion
       ? `conf=${confidence.toFixed(2)} · ${suggestion.length} chars`
@@ -230,6 +253,7 @@ async function requestCompletion() {
 // Debounced input handler
 editor.addEventListener('input', () => {
   currentSuggestion = '';
+  resetCycling();
   syncGhost();
   clearTimeout(debounceTimer);
   debounceTimer = setTimeout(requestCompletion, CONFIG.debounce_ms);
@@ -238,6 +262,7 @@ editor.addEventListener('input', () => {
 // Cursor movement clears/re-requests
 editor.addEventListener('click', () => {
   currentSuggestion = '';
+  resetCycling();
   syncGhost();
   clearTimeout(debounceTimer);
   debounceTimer = setTimeout(requestCompletion, 200);
@@ -246,6 +271,7 @@ editor.addEventListener('click', () => {
 editor.addEventListener('keyup', (e) => {
   if (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
     currentSuggestion = '';
+    resetCycling();
     syncGhost();
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(requestCompletion, 200);
@@ -262,6 +288,7 @@ function acceptFull() {
   const newPos = cursor + currentSuggestion.length;
   editor.setSelectionRange(newPos, newPos);
   currentSuggestion = '';
+  resetCycling();
   syncGhost();
   autoResize();
   // Request next completion
@@ -286,9 +313,11 @@ function acceptNextWord() {
   if (rest) {
     // Keep the remainder as the new ghost text (still valid; don't re-request yet)
     currentSuggestion = rest;
+    resetCycling();
     syncGhost();
   } else {
     currentSuggestion = '';
+    resetCycling();
     syncGhost();
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(requestCompletion, 100);
@@ -296,7 +325,75 @@ function acceptNextWord() {
   autoResize();
 }
 
-// Tab = accept full, Ctrl/Cmd+Right = accept next word, Esc = dismiss
+// Alt+] = next alternative (elevated temp), Alt+[ = previous (walk history)
+async function cycleNext() {
+  const text = editor.value;
+  const cursor = editor.selectionStart;
+  const prefixStart = Math.max(0, cursor - CONFIG.prefix_chars);
+  const prefix = text.substring(prefixStart, cursor);
+  const suffix = text.substring(cursor, cursor + CONFIG.suffix_chars);
+
+  if (prefix.trim().length < CONFIG.min_prefix_chars) return;
+
+  if (abortController) abortController.abort();
+  abortController = new AbortController();
+  setStatus('thinking', 'Fetching alternative...');
+  const myReqId = ++reqId;
+
+  const body = {
+    prefix, suffix,
+    max_tokens: CONFIG.max_tokens,
+    temperature: CONFIG.alt_temperature,
+    top_k: CONFIG.top_k,
+  };
+
+  try {
+    const resp = await fetch('/v1/complete', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+      signal: abortController.signal,
+    });
+    const data = await resp.json();
+    if (myReqId !== reqId) return;
+
+    const suggestion = data.text || '';
+    const confidence = data.confidence || 0;
+
+    // BUG FIX: On empty/low-conf cycle response, do NOT wipe the current
+    // suggestion or history. Keep showing what we have and report that no
+    // alternative was found. (Previous version wiped currentSuggestion here,
+    // causing the "suggestion vanishes" regression.)
+    if (!suggestion || confidence < CONFIG.confidence_threshold) {
+      setStatus('ready', currentSuggestion ? 'No alternative found' : 'No suggestion');
+      return;
+    }
+
+    suggestionHistory.push({text: suggestion, confidence});
+    historyIndex = suggestionHistory.length - 1;
+    currentSuggestion = suggestion;
+    setStatus('ready', 'Alternative ready');
+    statsEl.textContent = `${historyIndex + 1}/${suggestionHistory.length} · conf=${confidence.toFixed(2)}`;
+    syncGhost();
+  } catch (e) {
+    if (e.name === 'AbortError') return;
+    if (myReqId === reqId) {
+      setStatus('idle', 'Error: ' + e.message);
+    }
+  }
+}
+
+function cyclePrev() {
+  if (historyIndex <= 0) return;
+  historyIndex--;
+  const item = suggestionHistory[historyIndex];
+  currentSuggestion = item.text;
+  setStatus('ready', 'Previous alternative');
+  statsEl.textContent = `${historyIndex + 1}/${suggestionHistory.length} · conf=${item.confidence.toFixed(2)}`;
+  syncGhost();
+}
+
+// Tab = accept full, Ctrl/Cmd+Right = accept next word, Alt+]/[ = cycle, Esc = dismiss
 editor.addEventListener('keydown', (e) => {
   if (e.key === 'Tab' && currentSuggestion) {
     e.preventDefault();
@@ -304,6 +401,12 @@ editor.addEventListener('keydown', (e) => {
   } else if ((e.ctrlKey || e.metaKey) && e.key === 'ArrowRight' && currentSuggestion) {
     e.preventDefault();
     acceptNextWord();
+  } else if (e.altKey && (e.code === 'BracketRight' || e.key === ']')) {
+    e.preventDefault();
+    cycleNext();
+  } else if (e.altKey && (e.code === 'BracketLeft' || e.key === '[')) {
+    e.preventDefault();
+    cyclePrev();
   } else if (e.key === 'Escape') {
     e.preventDefault();
     currentSuggestion = '';
