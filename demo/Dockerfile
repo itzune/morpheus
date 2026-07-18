@@ -60,7 +60,7 @@ RUN python3.11 -m pip install --no-cache-dir \
     sentencepiece==0.2.* \
     huggingface_hub==0.25.*
 
-COPY demo/server.py demo/
+COPY demo/server.py demo/backends.py demo/
 COPY demo/static/ demo/static/
 COPY demo/docker-entrypoint.sh /app/docker-entrypoint.sh
 RUN chmod +x /app/docker-entrypoint.sh

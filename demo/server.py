@@ -27,45 +27,31 @@ from fastapi.responses import HTMLResponse, StreamingResponse
 from typing import Union, List, Optional
 from pydantic import BaseModel, Field
 
-# Tokenize endpoint (for demo token visualization)
-import sentencepiece as spm
-# Use the FIM tokenizer (4004 pieces: original 4000 + <PRE>/<SUF>/<MID>/<EOT>).
-# The first 4000 pieces are identical to basque_unigram_4000.model, so AR
-# encoding is unaffected. The 4 extra pieces are needed for /v1/complete FIM
-# route — without them, piece_to_id("<PRE>") returns 0 (unk) and the model
-# receives garbage structure.
-TOKENIZER_PATH = Path(__file__).resolve().parent.parent / "tokenizer" / "basque_unigram_fim.model"
-_sp = None
+# ── Model backend (pluggable: tokenizer + FIM template + output cleanup) ──
+# The three architecture-specific concerns live in backends.py, so the
+# OpenAI-compatible routes and all clients are model-agnostic. Swapping to a
+# transformer or fine-tuned Llama is `MORPHEUS_BACKEND=llama-fim` — no route
+# or client changes. See backends.py and demo/README.md.
+from backends import (
+    get_backend,
+    compute_confidence,
+    filter_suggestion,
+    has_byte_fallback_garbage as _has_byte_fallback_garbage,
+    is_pure_punct as _is_pure_punct,
+)
 
-def get_tokenizer():
-    global _sp
-    if _sp is None:
-        _sp = spm.SentencePieceProcessor(model_file=str(TOKENIZER_PATH))
-    return _sp
+backend = get_backend()
 
 
-def _prompt_to_ids(prompt: str) -> list[int]:
-    """Encode the prompt to SentencePiece token IDs, matching training exactly.
+def _prompt_to_ids(prompt: str):
+    """Encode the prompt for llama-server (backend-specific).
 
-    Two reasons this is required rather than sending a string prompt:
-
-    1. NO BOS: the model was trained without <s> (pretokenize.py uses
-       sp.encode(line) + </s> separators, never <s>). The GGUF now carries
-       add_bos_token=false (set by export_hf.py), so llama-server won't prepend
-       <s> even for string prompts — this part is solved at the artifact level.
-
-    2. TOKENIZATION FIDELITY (the active reason): llama.cpp's built-in
-       SentencePiece tokenizer does NOT always reproduce the reference
-       sentencepiece library's tokenization for this 4K unigram vocab — they
-       diverge on long words (e.g. "Unibertsitate" → different subword splits),
-       which shifts the argmax and costs ~10 CSR points (string 17% vs token-ID
-       28% on targets.json). Sending token IDs from the SAME SentencePiece
-       model used in training/pretokenize/eval guarantees the model sees the
-       exact token sequence it was trained on — matching the GPU eval path
-       (src/eval_utils.py::evaluate_csr uses sp.encode(text, out_type=int)).
+    The SentencePiece backend returns token IDs (bypassing llama.cpp's
+    divergent tokenizer for fidelity to training); a Llama/transformer
+    backend returns the string and lets llama.cpp tokenize. Either way
+    _call_llama sends the result as llama-server's `prompt` field.
     """
-    sp = get_tokenizer()
-    return sp.encode(prompt, out_type=int)  # SentencePiece default: NO BOS
+    return backend.encode(prompt)
 
 
 def smart_context(text: str) -> str:
@@ -131,23 +117,6 @@ def ghost_suffix(text: str, smart_ctx: str, suggestion: str) -> str:
             return suggestion[i:]
     return suggestion
 
-
-def tokenize_visual(text: str) -> list[dict]:
-    """Tokenize text for visualization. Returns [{token, start, end}, ...]"""
-    if not text:
-        return []
-    sp = get_tokenizer()
-    result = []
-    offset = 0
-    for tid in sp.encode(text, out_type=int):
-        piece = sp.id_to_piece(tid)
-        # piece starts with \u2581 (space marker) — replace with actual space
-        if piece.startswith("\u2581"):
-            display = piece[1:]
-            result.append({"token": display, "space_before": True})
-        else:
-            result.append({"token": piece, "space_before": False})
-    return result
 
 app = FastAPI(title="Morpheus v2 Mamba Demo")
 
@@ -472,7 +441,6 @@ async def _generate_with_repair(
       5. If a digit token has NO non-digit alternative: if it's the first
          token, return empty; otherwise truncate at the good prefix.
     """
-    sp = get_tokenizer()
     t0 = time.perf_counter()
     result = await _call_llama(prompt_ids, max_tokens, temperature, greedy)
 
@@ -523,7 +491,7 @@ async def _generate_with_repair(
                     return "", confidence, candidates, latency
                 # Later token unrepairable → truncate at good prefix
                 latency = (time.perf_counter() - t0) * 1000
-                return sp.decode_ids(repaired_ids), confidence, candidates, latency
+                return backend.decode(repaired_ids), confidence, candidates, latency
         else:
             repaired_ids.append(chosen_id)
 
@@ -535,7 +503,7 @@ async def _generate_with_repair(
     # Re-generate from the first swap point (one extra request)
     new_prompt = prompt_ids + repaired_ids[: first_swap + 1]
     remaining = max_tokens - (first_swap + 1)
-    prefix_text = sp.decode_ids(repaired_ids[: first_swap + 1])
+    prefix_text = backend.decode(repaired_ids[: first_swap + 1])
 
     if remaining <= 0:
         latency = (time.perf_counter() - t0) * 1000
@@ -622,14 +590,13 @@ async def _keyboard_candidates(
         Generate from the full text, return top-k first-token words plus the
         greedy full word.
     """
-    sp = get_tokenizer()
     t0 = time.perf_counter()
 
     text_before_word, current_word = _extract_current_word(text)
 
     # ── Next-word prediction (cursor after space) ──
     if not current_word:
-        prompt_ids = sp.encode(text, out_type=int)
+        prompt_ids = backend.encode(text)
         result = await _call_llama(prompt_ids, max_tokens, 0.0, greedy=True)
         probs = result.get("completion_probabilities", [])
         content = result.get("content", "")
@@ -688,10 +655,10 @@ async def _keyboard_candidates(
             break
         shorter_word = current_word[:shorter_len]
         prefix = text_before_word + shorter_word
-        fallback_paths.append((shorter_word, sp.encode(prefix, out_type=int), False))
+        fallback_paths.append((shorter_word, backend.encode(prefix), False))
     # Always add the from-scratch path if there's preceding context
     if text_before_word.strip():
-        fallback_paths.append(("", sp.encode(text_before_word, out_type=int), True))
+        fallback_paths.append(("", backend.encode(text_before_word), True))
 
     # Fire all calls in parallel to keep latency ~1x instead of Nx
     results = await asyncio.gather(
@@ -782,161 +749,11 @@ async def _keyboard_candidates(
     return sorted_cands[:top_k], latency
 
 
-def compute_confidence(result: dict) -> float:
-    """Extract average confidence from completion_probabilities.
-
-    Excludes EOS/stop tokens (logprob near 0.0, prob near 1.0) —
-    these are not real predictions and inflate the average.
-    """
-    probs = result.get("completion_probabilities", [])
-    if not probs:
-        return 1.0
-    import math
-    # Exclude EOS tokens (logprob > -0.01, i.e. prob > 99%)
-    real_probs = [math.exp(p["logprob"]) for p in probs if p["logprob"] < -0.01]
-    if not real_probs:
-        return 0.0
-    return round(sum(real_probs) / len(real_probs), 4)
-
-
-# ── Suggestion cleanup ──────────────────────────
-# Digit filtering is now done at the token level by _generate_with_repair(),
-# which swaps digit-containing tokens for their best non-digit alternative
-# from top-k logprobs. The old post-hoc string filter (filter_numeric_after_punct)
-# has been removed.
-
-# Punctuation filter (filter_suggestion) is retained for decoding artifacts
-# (▁ markers, collapsed punct runs, replacement chars) — these are pipeline
-# issues, not data contamination.
-
-
-def _has_byte_fallback_garbage(text: str) -> bool:
-    """Check if text contains non-Latin characters (byte-fallback garbage).
-
-    When the tokenizer trap occurs (e.g. "zaud" → [▁za, u, d] can't reach
-    "zaude" → [▁zaude]), the model predicts byte-fallback tokens (<0xB5>,
-    <0xD0>, ...) which llama-server decodes into non-Latin Unicode (Cyrillic
-    'е', U+FFFD, etc.).
-
-    Basque uses Latin script: all legitimate non-ASCII characters (ñ, ç, ü,
-    á, é, í, ó, ú) fall within Latin-1 Supplement (U+0080-U+00FF). Any
-    character above U+00FF can only come from byte-fallback bytes forming
-    unintended UTF-8 sequences, so it's garbage.
-    """
-    return any(ord(c) > 0xFF for c in text)
-
-
-def _is_pure_punct(s: str) -> bool:
-    """Check if string is only punctuation, no word characters."""
-    return bool(s.strip()) and all(c in PUNCT_CHARS for c in s.strip())
-
-
-def filter_suggestion(suggestion: str) -> str:
-    """Remove decoding artifacts and undertraining junk from model output.
-
-    Two categories of cleanup:
-      - Decoding pipeline artifacts (always needed, not data-related):
-        ▁ SentencePiece space markers, U+FFFD replacement chars at
-        byte-fallback boundaries.
-      - Undertraining junk (fades as model converges): collapsed punct
-        runs ("da??"), trailing space-punct ("kaixo . ,"), pure-punct
-        output.  The </s>-in-loss fix (separators now included in
-        training) should reduce these over time, but they persist while
-        the model is partially trained.
-
-    - Preserves leading whitespace (word boundary signal)
-    - Strips replacement characters (U+FFFD)
-    - Replaces lone ▁ markers with spaces
-    - Collapses whitespace
-    - Keeps at most ONE trailing punctuation character
-    - If only punctuation+whitespace remains, returns empty
-    """
-    if not suggestion:
-        return suggestion
-
-    # Replace ▁ markers with spaces, strip replacement chars
-    text = suggestion.replace("▁", " ").replace("\ufffd", "")
-
-    # Preserve leading whitespace (meaningful: indicates new word)
-    # but strip trailing whitespace
-    text = text.rstrip()
-
-    # Collapse internal whitespace
-    import re
-    text = re.sub(r'\s+', ' ', text)
-
-    # Collapse runs of 2+ punctuation chars (same or different) to single first char.
-    # "da??) eta" → "da? eta"  "LLC.," → "LLC."
-    text = re.sub(r'([{}])[{}]+'.format(re.escape(PUNCT_CHARS), re.escape(PUNCT_CHARS)), r'\1', text)
-
-    # Strip trailing space-then-punct sequences: "hello . ," → "hello"
-    while True:
-        tail = re.search(r' [{}]+$'.format(re.escape(PUNCT_CHARS)), text)
-        if not tail:
-            break
-        text = text[:-len(tail.group())]
-
-    # If the result has no word characters (only punct/whitespace),
-    # reject it. Exception: a bare "." or "?" without surrounding
-    # whitespace is a legitimate sentence-ending suggestion.
-    stripped = text.strip()
-    if stripped:
-        has_word = any(c.isalpha() for c in stripped)
-        if not has_word:
-            # Bare single punct (no whitespace around it)? Keep it.
-            if stripped in PUNCT_CHARS and text == stripped:
-                return stripped
-            else:
-                return ""  # e.g. " ." or " ," or " .," — junk
-
-    return text
-
-
-# ── Always-on post-processing for OpenAI routes ──────────
-# These run on every /v1/completions (non-streaming) and /v1/complete
-# request. They are correctness fixes, not preferences — see
-# docs/ARCHITECTURE.md §3.3 / §5 (Layer 2, not configurable).
-
-
-def _postprocess(content: str, data: dict, stops: list[str]) -> tuple[str, float]:
-    """Apply always-on correctness strategies to raw llama-server output.
-
-    Pipeline (order matters):
-      1. Strip stop sequences (<EOT>, </s>-EOS, \n\n, or client-provided).
-      2. Byte-fallback garbage filter → return ("", 0.0) if non-Latin junk.
-         This catches the tokenizer-trap case where the model predicts
-         byte-fallback tokens that decode to Cyrillic / U+FFFD.
-      3. filter_suggestion — strip ▁ markers, U+FFFD, collapsed punct,
-         trailing junk. The proxy decodes tokens→text, so it cleans here.
-      4. compute_confidence — average logprob excluding EOS/stop tokens.
-
-    Returns (clean_text, confidence).  Confidence reflects the model's
-    actual prediction quality (from logprobs), independent of the text
-    cleanup — so garbage gets confidence 0.0 (suppressed by the client).
-    """
-    text = content
-    for s in stops:
-        if s and s in text:
-            text = text[: text.index(s)]
-            break
-    if _has_byte_fallback_garbage(text):
-        return "", 0.0
-    text = filter_suggestion(text)
-    confidence = compute_confidence(data)
-    return text, confidence
-
-
-def _clean_chunk(text: str) -> str:
-    """Per-chunk artifact cleanup for streaming (lightweight).
-
-    Full strategies (garbage filter, filter_suggestion, confidence) require
-    the complete output — use _postprocess for non-streaming.  For streaming
-    we only strip the two artifacts that would corrupt the stream mid-flight:
-    ▁ SentencePiece space markers and U+FFFD replacement characters.
-    """
-    if not text:
-        return text
-    return text.replace("▁", " ").replace("\ufffd", "")
+# Output cleanup (compute_confidence, filter_suggestion, byte-fallback guard,
+# _postprocess, _clean_chunk) now lives in backends.py — applied via
+# backend.postprocess() / backend.clean_chunk(). The legacy /api/* endpoints
+# still call filter_suggestion / _has_byte_fallback_garbage directly (imported
+# above); both are harmless no-ops on clean BPE output.
 
 
 @app.get("/")
@@ -1328,21 +1145,11 @@ async def reload_model(model: str = ""):
 
 @app.get("/api/tokenize")
 async def tokenize(text: str = ""):
-    """Return token breakdown for visualization."""
+    """Return token breakdown for visualization (backend-specific)."""
     if not text:
         return {"tokens": [], "smart_context": ""}
-    sp = get_tokenizer()
-    ids = sp.encode(text, out_type=int)
-    tokens = []
-    for tid in ids:
-        piece = sp.id_to_piece(tid)
-        if piece.startswith("\u2581"):
-            display = piece[1:] if len(piece) > 1 else " "
-            tokens.append({"token": display, "space_before": True})
-        else:
-            tokens.append({"token": piece, "space_before": False})
     return {
-        "tokens": tokens,
+        "tokens": backend.visual_tokens(text),
         "smart_context": smart_context(text),
     }
 
@@ -1350,11 +1157,9 @@ async def tokenize(text: str = ""):
 # ── OpenAI-compatible face (/v1/completions, /v1/complete) ──────────────
 # This is the reusable Basque inference server: any client speaking the
 # OpenAI completion API (Continue.dev, Cody, codecompanion.nvim, Obsidian
-# plugins) connects with zero model-specific code. The reference SentencePiece
-# encoder lives here, bypassing llama.cpp's divergent tokenizer.
-#
-# Backend reuse: _call_llama() already SP-encodes + forwards token IDs to
-# llama-server /completion. These routes add the OpenAI face on top.
+# plugins) connects with zero model-specific code. Tokenization, FIM
+# templating, and output cleanup are delegated to `backend` (backends.py) —
+# so these routes are architecture-agnostic.
 
 
 class CompletionRequest(BaseModel):
@@ -1371,21 +1176,14 @@ class CompletionRequest(BaseModel):
     repeat_penalty: Optional[float] = 1.1
 
 
-def _normalize_prompt_to_ids(prompt) -> list[int]:
-    """Normalize any OpenAI prompt form to SP token IDs (THE tokenization fix).
+def _normalize_prompt_to_ids(prompt):
+    """Normalize an OpenAI prompt (str | list[int] | list[str]) for llama-server.
 
-    Accepts: string | list[int] (token IDs) | list[str] (batch, take first).
-    Returns reference-SentencePiece token IDs, matching training exactly.
+    Delegates to the backend: SentencePiece encodes strings to token IDs
+    (fidelity to training); Llama/transformer passes strings through (llama.cpp
+    tokenizes). Token-ID lists pass through unchanged on both.
     """
-    sp = get_tokenizer()
-    if isinstance(prompt, str):
-        return sp.encode(prompt, out_type=int)
-    if isinstance(prompt, list) and prompt:
-        if isinstance(prompt[0], int):
-            return list(prompt)  # already token IDs
-        if isinstance(prompt[0], str):
-            return sp.encode(prompt[0], out_type=int)  # batch → take first
-    return []
+    return backend.normalize_prompt(prompt)
 
 
 def _completion_id() -> str:
@@ -1396,15 +1194,15 @@ def _completion_id() -> str:
 async def openai_completions(req: CompletionRequest):
     """OpenAI-compatible text completion — the reusable server face.
 
-    Accepts the standard schema; SP-encodes string prompts to token IDs
-    (bypassing llama.cpp's divergent tokenizer); forwards to llama-server;
+    Accepts the standard schema; the backend encodes the prompt (SP → token
+    IDs, or Llama → string); forwards to llama-server;
     reformats the response to OpenAI shape. Supports streaming (SSE) and
     non-streaming. Stop sequences are passed through to llama-server (which
-    handles cross-token matching natively) and double-checked in _postprocess.
+    handles cross-token matching natively) and double-checked in backend.postprocess.
 
-    Always-on strategies (non-streaming): _postprocess applies garbage
+    Always-on strategies (non-streaming): backend.postprocess applies garbage
     filter, filter_suggestion, and confidence — see docs/ARCHITECTURE.md §3.3.
-    Streaming: _clean_chunk strips ▁/U+FFFD per chunk (full strategies need
+    Streaming: backend.clean_chunk strips ▁/U+FFFD per chunk (full strategies need
     the complete output).
     """
     prompt_ids = _normalize_prompt_to_ids(req.prompt)
@@ -1442,15 +1240,13 @@ async def openai_completions(req: CompletionRequest):
         data = r.json()
 
     # ── Always-on strategies (see docs/ARCHITECTURE.md §3.3) ──
-    text, confidence = _postprocess(data.get("content", ""), data, stops)
+    text, confidence = backend.postprocess(data.get("content", ""), data, stops)
     finish_reason = "stop" if (
         not text or data.get("stopped_eos") or data.get("stopped_word") or data.get("stop")
     ) else "length"
 
-    prompt_tokens = len(prompt_ids)
-    completion_tokens = data.get("tokens_predicted", 0) or len(
-        get_tokenizer().encode(text, out_type=int)
-    )
+    prompt_tokens = len(prompt_ids) if isinstance(prompt_ids, list) else backend.count_tokens(prompt_ids)
+    completion_tokens = data.get("tokens_predicted", 0) or backend.count_tokens(text)
 
     return {
         "id": _completion_id(),
@@ -1514,7 +1310,7 @@ async def _stream_openai(payload: dict, stops: list[str]):
                         d = json.loads(data_str)
                     except json.JSONDecodeError:
                         continue
-                    text = _clean_chunk(d.get("content", ""))
+                    text = backend.clean_chunk(d.get("content", ""))
                     # Client-side stop fallback (in case llama-server missed)
                     if text and stops:
                         for s in stops:
@@ -1553,12 +1349,6 @@ class CompleteRequest(BaseModel):
     n: int = 1  # best-of-n: fire n parallel samples, return highest-confidence
 
 
-# FIM stop token — the model generates <EOT> to signal the infill is done.
-# This is a string stop because llama-server decodes token 4003 as "<EOT>".
-# </s> (EOS) is handled natively by llama-server (stopped_eos).
-_FIM_EOT = "<EOT>"
-
-
 async def _complete_once(client: httpx.AsyncClient, payload: dict, stops: list[str]) -> tuple[str, float, str]:
     """Fire one completion request and post-process the result.
 
@@ -1568,7 +1358,7 @@ async def _complete_once(client: httpx.AsyncClient, payload: dict, stops: list[s
     r = await client.post(f"{LLAMA_SERVER_URL}/completion", json=payload)
     r.raise_for_status()
     data = r.json()
-    text, confidence = _postprocess(data.get("content", ""), data, stops)
+    text, confidence = backend.postprocess(data.get("content", ""), data, stops)
     finish = "stop" if (not text or data.get("stopped_eos") or data.get("stop")) else "length"
     return text, confidence, finish
 
@@ -1598,7 +1388,7 @@ async def complete_prefix_suffix(req: CompleteRequest):
     A 50-line client just POSTs {prefix: buffer[:cursor], suffix: buffer[cursor:]}
     and renders the returned text as ghost — no FIM-token or tokenizer knowledge.
 
-    Always-on strategies: _postprocess applies garbage filter, filter_suggestion,
+    Always-on strategies: backend.postprocess applies garbage filter, filter_suggestion,
     and confidence on every request — see docs/ARCHITECTURE.md §3.3.
 
     Response: {text, confidence, finish_reason}.
@@ -1609,29 +1399,21 @@ async def complete_prefix_suffix(req: CompleteRequest):
     in llama-server. With the AR-only model, suffix is ignored (prefix-only).
     """
     if req.suffix.strip():
-        # ── FIM mode: [PRE] prefix_ids [SUF] suffix_ids [MID] ──
-        # Token-level: encode prefix and suffix independently, then concat
-        # with FIM token IDs as raw IDs. This preserves ▁ word-boundary
-        # markers (BigCode/StarCoder approach) — avoids the string-level
-        # issue where words after FIM tokens get character-split.
-        sp_tok = get_tokenizer()
-        PRE = sp_tok.piece_to_id("<PRE>")
-        SUF = sp_tok.piece_to_id("<SUF>")
-        MID = sp_tok.piece_to_id("<MID>")
-        prefix_ids = sp_tok.encode(req.prefix, out_type=int)
-        suffix_ids = sp_tok.encode(req.suffix, out_type=int)
-        prompt_ids = [PRE] + prefix_ids + [SUF] + suffix_ids + [MID]
-        stops = [_FIM_EOT, "\n\n"]
+        # ── FIM mode: the backend builds the infill prompt + stops ──
+        # (SentencePiece: token-level <PRE>/<SUF>/<MID> to preserve ▁
+        # markers; Llama: a string template). Clients send {prefix,
+        # suffix} and stay agnostic of the sentinel convention.
+        prompt, stops = backend.fim_prompt(req.prefix, req.suffix)
     else:
         # ── AR mode: prefix-only completion ──
-        prompt_ids = _normalize_prompt_to_ids(req.prefix)
+        prompt = backend.ar_prompt(req.prefix)
         stops = ["\n\n"]
 
-    if not prompt_ids:
+    if not prompt:
         return {"text": "", "finish_reason": "stop"}
 
     payload = {
-        "prompt": prompt_ids,
+        "prompt": prompt,
         "n_predict": req.max_tokens,
         "stream": False,
         "temperature": req.temperature,

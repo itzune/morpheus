@@ -160,3 +160,31 @@ FastAPI proxy + llama-server + GGUF model** is reused unchanged by:
 
 Spin up the Docker container once; point as many clients as you like at
 `http://localhost:9090/v1`.
+
+### Swap the model architecture (`backends.py`)
+
+The three architecture-specific concerns — tokenization, FIM template, output
+cleanup — are encapsulated in a `ModelBackend` so the routes and clients above
+are model-agnostic. Swapping architectures is selecting a backend, not
+rewriting the server:
+
+```bash
+# Default: Morpheus Mamba-2 + custom SentencePiece + BigCode FIM
+MORPHEUS_BACKEND=morpheus-sp-fim   # (the default)
+
+# A fine-tuned Llama / transformer for FIM (string prompts, Code Llama tokens,
+# no SentencePiece bypass or byte-fallback cleanup)
+MORPHEUS_BACKEND=llama-fim
+```
+
+| Backend | Tokenizer | FIM tokens | Cleanup |
+|---------|-----------|-----------|---------|
+| `morpheus-sp-fim` | reference SentencePiece → token IDs (bypasses llama.cpp divergence) | `<PRE>/<SUF>/<MID>/<EOT>` | ▁/byte-fallback/punct filters |
+| `llama-fim` | strings (llama.cpp ships the canonical BPE) | `<\|fim_begin\|>/<\|fim_hole\|>/<\|fim_end\|>/<\|eot_id\|>` | stop-strip + confidence only |
+
+Each backend is a subclass of `ModelBackend` in [`backends.py`](backends.py)
+with six methods: `encode`, `fim_prompt`, `ar_prompt`, `postprocess`,
+`clean_chunk`, `visual_tokens`. Adding a third architecture (e.g. a
+StarCoder-style transformer) is one new subclass — no route or client changes.
+The FIM sentinel strings are class attributes, so retargeting a fine-tune with
+a different convention is a one-line edit.
