@@ -55,14 +55,6 @@
   .dot.thinking { background: #f9e2af; animation: pulse 1s infinite; }
   .dot.ready { background: #a6e3a1; }
   @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
-  .mode-toggle {
-    display: flex; gap: 8px; margin-bottom: 16px;
-  }
-  .mode-btn {
-    padding: 6px 14px; border: 1px solid #313244; border-radius: 6px;
-    background: #181825; color: #6c7086; cursor: pointer; font-size: 0.8rem;
-  }
-  .mode-btn.active { background: #313244; color: #cdd6f4; border-color: #89b4fa; }
   .hint { color: #585b70; font-size: 0.75rem; margin-top: 8px; }
   kbd {
     background: #313244; border: 1px solid #45475a; border-radius: 3px;
@@ -73,12 +65,7 @@
 <body>
 
 <h1>Morpheus Ghost-Text Editor</h1>
-<p class="subtitle">Euskal testu-editorea — FIM (Fill-in-the-Middle) autokonpletatzea</p>
-
-<div class="mode-toggle">
-  <button class="mode-btn active" data-mode="fim">FIM (insert anywhere)</button>
-  <button class="mode-btn" data-mode="ar">AR (append at end)</button>
-</div>
+<p class="subtitle">Euskal testu-editorea — autokonpletatzea (FIM + AR)</p>
 
 <div class="editor-wrap">
   <div class="editor-container">
@@ -96,7 +83,7 @@
   <kbd>Tab</kbd> accept suggestion &nbsp;·&nbsp;
   <kbd>Ctrl</kbd>+<kbd>&rarr;</kbd> accept next word &nbsp;·&nbsp;
   <kbd>Esc</kbd> dismiss &nbsp;·&nbsp;
-  Type in the middle to test FIM infill &nbsp;·&nbsp;
+  Cursor mid-sentence → FIM infill &nbsp;·&nbsp; cursor at end → append &nbsp;·&nbsp;
   Low-confidence suggestions are auto-suppressed
 </p>
 
@@ -107,7 +94,6 @@ const dot = document.getElementById('dot');
 const statusEl = document.getElementById('status');
 const statsEl = document.getElementById('stats');
 
-let mode = 'fim';
 let currentSuggestion = '';
 let debounceTimer = null;
 let reqId = 0;
@@ -131,18 +117,6 @@ const CONFIG = {
 };
 
 let abortController = null;  // cancels in-flight request on new keystroke
-
-// Mode toggle
-document.querySelectorAll('.mode-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    mode = btn.dataset.mode;
-    currentSuggestion = '';
-    syncGhost();
-    requestCompletion();
-  });
-});
 
 // Sync ghost layer scroll + content with textarea
 function syncGhost() {
@@ -174,13 +148,10 @@ async function requestCompletion() {
   const text = editor.value;
   const cursor = editor.selectionStart;
 
-  // AR mode: only suggest at end of text
-  if (mode === 'ar' && cursor !== text.length) {
-    currentSuggestion = '';
-    syncGhost();
-    return;
-  }
-
+  // The server's /v1/complete auto-selects mode: non-empty suffix → FIM
+  // (insert in the middle); empty suffix → AR (append at end). So the editor
+  // always sends {prefix: text[:cursor], suffix: text[cursor:]} and the model
+  // does the right thing whether the cursor is mid-sentence or at the end.
   // Context windowing (§4.1): truncate to prefix_chars/suffix_chars so we
   // don't send the whole buffer on large documents.
   const prefixStart = Math.max(0, cursor - CONFIG.prefix_chars);
@@ -204,18 +175,18 @@ async function requestCompletion() {
   setStatus('thinking', 'Thinking...');
   const myReqId = ++reqId;
 
-  const endpoint = mode === 'fim' ? '/v1/complete' : '/v1/completions';
   // API params (§4.2 / P7): temperature 0.2 + top_k 5 recovers rank-2/rank-3
-  // tokens; pure greedy (temp 0) is too brittle. AR stops at paragraph
-  // boundary (\n\n), not line — prose completions legitimately span lines.
-  const body = mode === 'fim'
-    ? { prefix, suffix, max_tokens: CONFIG.max_tokens,
-        temperature: CONFIG.temperature, top_k: CONFIG.top_k }
-    : { prompt: prefix, max_tokens: CONFIG.max_tokens,
-        temperature: CONFIG.temperature, top_k: CONFIG.top_k, stop: ['\n\n'] };
+  // tokens; pure greedy (temp 0) is too brittle. The server applies stop
+  // tokens (<EOT>, \n\n for FIM; \n\n for AR) and repeat_penalty 1.0.
+  const body = {
+    prefix, suffix,
+    max_tokens: CONFIG.max_tokens,
+    temperature: CONFIG.temperature,
+    top_k: CONFIG.top_k,
+  };
 
   try {
-    const resp = await fetch(endpoint, {
+    const resp = await fetch('/v1/complete', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
@@ -226,10 +197,7 @@ async function requestCompletion() {
     // Ignore stale responses (abort may race)
     if (myReqId !== reqId) return;
 
-    const suggestion = mode === 'fim'
-      ? (data.text || '')
-      : (data.choices?.[0]?.text || '');
-
+    const suggestion = data.text || '';
     const confidence = data.confidence || 0;
 
     // Confidence gate (§4.1 / §6): suppress low-quality ghosts instead of
