@@ -133,6 +133,13 @@ def build_model(cfg: dict, device: torch.device) -> MambaLMHeadModel:
 
     model = MambaLMHeadModel(config, device=device, dtype=dtype)
 
+    # Record the actual padded vocab size in cfg so it's saved in checkpoints.
+    # Without this, the checkpoint config only has the pre-padding vocab_size
+    # (e.g. 4004) and no padded_vocab_size, so downstream tools (fim_eval,
+    # export) can't determine the true embedding size (4016) without
+    # inspecting the weight tensors directly.
+    cfg["padded_vocab_size"] = config.vocab_size
+
     if cfg.get("compile", False):
         try:
             print("Compiling model with torch.compile...")

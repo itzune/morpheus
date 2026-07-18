@@ -105,10 +105,20 @@ def main():
     headdim = config["headdim"]
     n_heads = d_inner // headdim
 
+    # Use the padded vocab size (matches the actual embedding tensor shape).
+    # The checkpoint config may store only the pre-padding vocab_size (e.g.
+    # 4004); the real embedding is padded to a multiple of
+    # pad_vocab_size_multiple (e.g. 4016). The GGUF converter uses the tensor
+    # shape anyway, but config.json should be consistent.
+    padded_vocab = config.get("padded_vocab_size")
+    if not padded_vocab:
+        multiple = config.get("pad_vocab_size_multiple", 1)
+        padded_vocab = ((config["vocab_size"] + multiple - 1) // multiple) * multiple
+
     hf_config = {
         "d_model": d_model,
         "n_layer": config["n_layer"],
-        "vocab_size": config["vocab_size"],
+        "vocab_size": padded_vocab,
         "d_conv": config["d_conv"],
         "expand": expand,
         "d_state": config["d_state"],

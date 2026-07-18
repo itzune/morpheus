@@ -56,22 +56,42 @@ MAX_GEN_TOKENS = 64  # generous; most middle spans are < 30 tokens
 
 # ── Model ──
 
-def build_model(vocab_size: int, device) -> MambaLMHeadModel:
+def _pad_vocab(vocab_size: int, multiple: int) -> int:
+    """Pad vocab size to multiple for hardware alignment."""
+    return ((vocab_size + multiple - 1) // multiple) * multiple
+
+
+def build_model_from_config(cfg: dict, device) -> MambaLMHeadModel:
+    """Build Mamba-2 model from a checkpoint's config dict.
+
+    Reads architecture params (d_model, n_layer, etc.) from the config rather
+    than hardcoding them, so the eval works for any model size (Small/Base/Large).
+    """
+    # Resolve the actual padded vocab size:
+    #   1. Prefer saved padded_vocab_size (train.py writes this after the fix)
+    #   2. Fall back to computing from vocab_size + pad_vocab_size_multiple
+    vocab_size = cfg.get("padded_vocab_size")
+    if not vocab_size:
+        vocab_size = _pad_vocab(
+            cfg["vocab_size"],
+            cfg.get("pad_vocab_size_multiple", 1),
+        )
+
     config = MambaConfig(
-        d_model=768,
-        n_layer=24,
+        d_model=cfg["d_model"],
+        n_layer=cfg["n_layer"],
         vocab_size=vocab_size,
         ssm_cfg={
-            "layer": "Mamba2",
-            "d_state": 64,
-            "d_conv": 4,
-            "expand": 2,
-            "headdim": 64,
-            "chunk_size": 256,
+            "layer": cfg.get("ssm_layer", "Mamba2"),
+            "d_state": cfg["d_state"],
+            "d_conv": cfg["d_conv"],
+            "expand": cfg["expand"],
+            "headdim": cfg["headdim"],
+            "chunk_size": cfg.get("chunk_size", 256),
         },
         rms_norm=True,
-        residual_in_fp32=True,
-        fused_add_norm=True,
+        residual_in_fp32=cfg.get("residual_in_fp32", True),
+        fused_add_norm=cfg.get("fused_add_norm", True),
     )
     return MambaLMHeadModel(config, device=device, dtype=torch.bfloat16)
 
@@ -80,18 +100,25 @@ def load_checkpoint(checkpoint_path: str, device) -> tuple:
     """Load checkpoint, return (model, vocab_size)."""
     ckpt = torch.load(checkpoint_path, map_location="cpu", weights_only=False)
     cfg = ckpt["config"]
-    # Read the ACTUAL vocab size from the embedding shape — the config may
-    # store vocab_size=4004 (pre-padding) with padded_vocab_size=None, while
-    # the model was built with pad_vocab_size_multiple=16 → 4016.
-    # The embedding weight is the ground truth.
-    emb = ckpt["model"]["backbone.embedding.weight"]
-    vocab_size = emb.shape[0]
-    model = build_model(vocab_size, device)
+    model = build_model_from_config(cfg, device)
+
+    # Verify the config-derived vocab size matches the actual embedding shape.
+    # The embedding weight is the ground truth — if these don't match, the
+    # checkpoint is inconsistent and loading would silently produce a broken model.
+    emb_vocab = ckpt["model"]["backbone.embedding.weight"].shape[0]
+    model_vocab = model.config.vocab_size
+    if emb_vocab != model_vocab:
+        raise ValueError(
+            f"Config-derived vocab size ({model_vocab}) doesn't match "
+            f"embedding shape ({emb_vocab}). Checkpoint may be corrupted "
+            f"or config is stale."
+        )
+
     model.load_state_dict(ckpt["model"])
     model.eval()
     del ckpt
     torch.cuda.empty_cache()
-    return model, vocab_size
+    return model, model_vocab
 
 
 # ── Generation ──
