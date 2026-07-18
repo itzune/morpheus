@@ -1,0 +1,20 @@
+# Local override: use the GGUF from ../exports/ instead of downloading from HuggingFace.
+#
+# Usage (from the demo/ directory):
+#   docker compose -f docker-compose.yml -f docker-compose.local.yml up -d --build
+#
+# Use this when you have local GGUF builds and don't want to publish to HuggingFace.
+
+services:
+  demo:
+    build:
+      context: ..
+      dockerfile: demo/Dockerfile
+    volumes:
+      # Mount local GGUF models directly (no HuggingFace download)
+      - ../exports:/app/models:ro
+      - ../tokenizer:/app/tokenizer:ro
+      - ../logs:/app/logs
+    environment:
+      - MORPHEUS_MODEL=${MORPHEUS_MODEL:-morpheus-v2-mamba.Q5_K_M.gguf}
+      - MORPHEUS_NGL=${MORPHEUS_NGL:-0}
