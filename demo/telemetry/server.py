@@ -30,7 +30,7 @@ from fastapi.responses import HTMLResponse
 from pydantic import BaseModel, Field
 from typing import Optional
 
-from db import init_db, insert_events, get_events, get_stats, get_models, get_total_count
+from db import init_db, insert_events, get_events, get_stats, get_models, get_total_count, get_suggestion_groups
 
 app = FastAPI(title="Morpheus Telemetry", version="1.0.0")
 
@@ -107,6 +107,18 @@ def models():
     return {"models": get_models()}
 
 
+@app.get("/api/suggestions")
+def suggestions(
+    hours: int = Query(24, le=720),
+    model: Optional[str] = Query(None),
+    limit: int = Query(200, le=1000),
+):
+    """Grouped suggestion lifecycle data for the event log viewer.
+    Each entry is one suggestion (grouped by suggestion_id) with its
+    context, suggestion text, latency, confidence, and outcome."""
+    return {"suggestions": get_suggestion_groups(hours, model, limit)}
+
+
 @app.get("/health")
 def health():
     return {"status": "ok", "events": get_total_count()}
@@ -117,4 +129,11 @@ def health():
 def dashboard():
     """Serve the telemetry dashboard (Chart.js, auto-refreshing)."""
     html_path = Path(__file__).resolve().parent / "static" / "dashboard.html"
+    return HTMLResponse(html_path.read_text(encoding="utf-8"))
+
+
+@app.get("/events", response_class=HTMLResponse)
+def events_page():
+    """Serve the raw event log viewer."""
+    html_path = Path(__file__).resolve().parent / "static" / "events.html"
     return HTMLResponse(html_path.read_text(encoding="utf-8"))

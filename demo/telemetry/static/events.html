@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Morpheus Telemetry — Event Log</title>
+<style>
+  :root {
+    --bg: #1e1e1e; --surface: #2a2a2a; --surface2: #333;
+    --text: #dcddde; --muted: #8e8e8e; --accent: #7c3aed;
+    --green: #22c55e; --red: #ef4444; --yellow: #eab308;
+    --blue: #3b82f6; --orange: #f97316;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg); color: var(--text); padding: 20px; max-width: 1200px; margin: 0 auto; }
+  h1 { font-size: 1.5rem; margin-bottom: 2px; }
+  .subtitle { color: var(--muted); font-size: 0.85rem; margin-bottom: 20px; }
+  .nav { margin-bottom: 20px; }
+  .nav a { color: var(--accent); text-decoration: none; font-size: 0.85rem; }
+  .controls { display: flex; gap: 6px; align-items: center; margin-bottom: 20px; flex-wrap: wrap; }
+  .controls button { background: var(--surface); border: 1px solid #444; color: var(--text); padding: 5px 14px; border-radius: 6px; cursor: pointer; font-size: 0.82rem; }
+  .controls button:hover { border-color: var(--accent); }
+  .controls button.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .controls select { background: var(--surface); border: 1px solid #444; color: var(--text); padding: 5px 10px; border-radius: 6px; font-size: 0.82rem; }
+  .controls .refresh { margin-left: auto; color: var(--muted); font-size: 0.78rem; }
+  .list { display: flex; flex-direction: column; gap: 10px; }
+  .entry { background: var(--surface); border-radius: 8px; border-left: 3px solid var(--muted); overflow: hidden; }
+  .entry.accepted { border-left-color: var(--green); }
+  .entry.rejected { border-left-color: var(--red); }
+  .entry.ignored { border-left-color: var(--muted); }
+  .entry.partially_accepted { border-left-color: var(--blue); }
+  .entry-header { display: flex; align-items: center; gap: 10px; padding: 10px 14px; cursor: pointer; }
+  .entry-header:hover { background: var(--surface2); }
+  .badge { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; padding: 2px 8px; border-radius: 4px; white-space: nowrap; }
+  .badge.accepted { background: var(--green); color: #fff; }
+  .badge.rejected { background: var(--red); color: #fff; }
+  .badge.ignored { background: #555; color: #ccc; }
+  .badge.partially_accepted { background: var(--blue); color: #fff; }
+  .entry-time { color: var(--muted); font-size: 0.78rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .entry-model { font-size: 0.78rem; color: var(--accent); white-space: nowrap; }
+  .entry-suggestion { flex: 1; font-family: 'SF Mono', 'Cascadia Code', Consolas, monospace; font-size: 0.82rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text); }
+  .entry-suggestion .ghost { color: var(--muted); }
+  .entry-meta { display: flex; gap: 14px; font-size: 0.75rem; color: var(--muted); white-space: nowrap; }
+  .entry-meta span { font-variant-numeric: tabular-nums; }
+  .entry-body { padding: 0 14px 14px; display: none; }
+  .entry.expanded .entry-body { display: block; }
+  .field { margin-bottom: 10px; }
+  .field-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin-bottom: 3px; }
+  .field-content { font-family: 'SF Mono', 'Cascadia Code', Consolas, monospace; font-size: 0.82rem; background: var(--bg); border-radius: 6px; padding: 8px 10px; white-space: pre-wrap; word-break: break-word; max-height: 200px; overflow-y: auto; line-height: 1.5; }
+  .field-content.suggestion { border-left: 2px solid var(--accent); }
+  .field-content.context { border-left: 2px solid var(--blue); }
+  .empty { color: var(--muted); text-align: center; padding: 40px; font-style: italic; }
+</style>
+</head>
+<body>
+  <div class="nav"><a href="/dashboard">&larr; Back to Dashboard</a></div>
+  <h1>Event Log</h1>
+  <div class="subtitle">Full request lifecycle: context, suggestion, latency, outcome</div>
+
+  <div class="controls">
+    <button data-hours="1">1h</button>
+    <button data-hours="6">6h</button>
+    <button data-hours="24" class="active">24h</button>
+    <button data-hours="168">7d</button>
+    <select id="model-filter"><option value="">All models</option></select>
+    <label style="font-size:0.82rem;color:var(--muted)"><input type="checkbox" id="auto-refresh" checked> Auto-refresh</label>
+    <span class="refresh" id="refresh-indicator">Loading...</span>
+  </div>
+
+  <div class="list" id="entries"></div>
+
+  <script>
+    let currentHours = 24;
+    let currentModel = '';
+    let refreshTimer = null;
+
+    document.querySelectorAll('.controls button[data-hours]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.controls button[data-hours]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentHours = parseInt(btn.dataset.hours);
+        load();
+      });
+    });
+
+    document.getElementById('model-filter').addEventListener('change', e => {
+      currentModel = e.target.value;
+      load();
+    });
+
+    document.getElementById('auto-refresh').addEventListener('change', e => {
+      setupAutoRefresh(e.target.checked);
+    });
+
+    function setupAutoRefresh(on) {
+      if (refreshTimer) { clearInterval(refreshTimer); refreshTimer = null; }
+      if (on) refreshTimer = setInterval(load, 10000);
+    }
+
+    function shortModel(name) {
+      return name.replace(/\.Q[0-9]_[A-Z](_[A-Z]+)?\.gguf$/, '').replace(/\.gguf$/, '');
+    }
+
+    function escapeHtml(s) {
+      const d = document.createElement('div');
+      d.textContent = s;
+      return d.innerHTML;
+    }
+
+    async function loadModels() {
+      try {
+        const res = await fetch('/api/models');
+        const data = await res.json();
+        const sel = document.getElementById('model-filter');
+        const current = sel.value;
+        sel.innerHTML = '<option value="">All models</option>' +
+          data.models.map(m => '<option value="' + escapeHtml(m) + '">' + escapeHtml(shortModel(m)) + '</option>').join('');
+        sel.value = current;
+      } catch (e) {}
+    }
+
+    async function load() {
+      const indicator = document.getElementById('refresh-indicator');
+      indicator.textContent = 'Loading...';
+      try {
+        let url = '/api/suggestions?hours=' + currentHours + '&limit=200';
+        if (currentModel) url += '&model=' + encodeURIComponent(currentModel);
+        const res = await fetch(url);
+        const data = await res.json();
+        render(data.suggestions || []);
+        indicator.textContent = (data.suggestions || []).length + ' suggestions &middot; Updated ' + new Date().toLocaleTimeString();
+      } catch (e) {
+        indicator.textContent = 'Error: ' + e.message;
+      }
+    }
+
+    function render(suggestions) {
+      const container = document.getElementById('entries');
+      if (suggestions.length === 0) {
+        container.innerHTML = '<div class="empty">No suggestions in this time range. Start typing in Obsidian with telemetry enabled.</div>';
+        return;
+      }
+
+      container.innerHTML = suggestions.map((s, i) => {
+        const outcome = s.outcome || 'ignored';
+        const suggestion = s.suggestion_text || '(text not recorded — enable "Include suggestion text" in settings)';
+        const context = s.context || '(context not recorded)';
+        const lat = s.latency_ms ? Math.round(s.latency_ms) + 'ms' : '\u2014';
+        const conf = s.confidence != null ? s.confidence.toFixed(3) : '\u2014';
+        const reason = s.reject_reason ? ' &middot; ' + escapeHtml(s.reject_reason) : '';
+        const partial = s.accepted_length != null ? ' (' + s.accepted_length + '/' + s.suggestion_length + ' chars)' : '';
+
+        return '<div class="entry ' + outcome + '" id="entry-' + i + '">' +
+          '<div class="entry-header" onclick="toggle(' + i + ')">' +
+            '<span class="badge ' + outcome + '">' + escapeHtml(outcome) + partial + '</span>' +
+            '<span class="entry-time">' + escapeHtml(s.timestamp) + '</span>' +
+            '<span class="entry-model">' + escapeHtml(shortModel(s.model)) + '</span>' +
+            '<span class="entry-suggestion"><span class="ghost">\u2026</span>' + escapeHtml(suggestion.slice(0, 80)) + '</span>' +
+            '<span class="entry-meta">' +
+              '<span>\u23f1 ' + lat + '</span>' +
+              '<span>\u2696 ' + conf + '</span>' +
+            '</span>' +
+          '</div>' +
+          '<div class="entry-body">' +
+            '<div class="field"><div class="field-label">Context (prefix sent to server)</div><div class="field-content context">' + escapeHtml(context) + '</div></div>' +
+            '<div class="field"><div class="field-label">Suggestion' + reason + '</div><div class="field-content suggestion">' + escapeHtml(suggestion) + '</div></div>' +
+            '<div class="field"><div class="field-label">Details</div><div class="field-content">' +
+              'Latency: ' + lat + '\n' +
+              'Confidence: ' + conf + '\n' +
+              'Prompt length: ' + (s.prompt_length || '\u2014') + ' chars\n' +
+              'Suggestion length: ' + (s.suggestion_length || '\u2014') + ' chars\n' +
+              'Outcome: ' + escapeHtml(outcome) + (reason ? ' (' + escapeHtml(s.reject_reason) + ')' : '') + '\n' +
+              'Events: ' + s.event_count + '\n' +
+              'Suggestion ID: ' + escapeHtml(s.suggestion_id) +
+            '</div></div>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    }
+
+    function toggle(i) {
+      const el = document.getElementById('entry-' + i);
+      if (el) el.classList.toggle('expanded');
+    }
+
+    loadModels();
+    load();
+    setupAutoRefresh(true);
+  </script>
+</body>
+</html>

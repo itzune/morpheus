@@ -138,6 +138,104 @@ def get_total_count() -> int:
         return row["count"]
 
 
+def get_suggestion_groups(
+    hours: int = 24, model: str | None = None, limit: int = 200
+) -> list[dict]:
+    """Group events by suggestion_id, returning the lifecycle of each
+    suggestion. Each group has the suggested event (latency, confidence,
+    text, context) plus the outcome (accepted / partially_accepted /
+    rejected / ignored).
+    """
+    cutoff = f"-{hours} hours"
+    with _get_conn() as conn:
+        if model:
+            rows = conn.execute(
+                """SELECT * FROM events
+                   WHERE model = ? AND timestamp >= datetime('now', ?)
+                   ORDER BY id DESC""",
+                (model, cutoff),
+            ).fetchall()
+        else:
+            rows = conn.execute(
+                """SELECT * FROM events
+                   WHERE timestamp >= datetime('now', ?)
+                   ORDER BY id DESC""",
+                (cutoff,),
+            ).fetchall()
+
+    # Group by suggestion_id, preserving most-recent-first order
+    groups: dict[str, list[dict]] = {}
+    order: list[str] = []
+    for r in rows:
+        sid = r["suggestion_id"]
+        if not sid:
+            continue
+        if sid not in groups:
+            groups[sid] = []
+            order.append(sid)
+        groups[sid].append(dict(r))
+
+    result = []
+    for sid in order:
+        events = groups[sid]
+        # The suggested event carries latency, confidence, text, context
+        suggested = next(
+            (e for e in events if e["event_type"] == "suggested"), None
+        )
+        if not suggested:
+            continue  # orphan events without a preceding suggested
+
+        # Determine outcome from the non-suggested events
+        outcome = "ignored"  # default: only suggested, no interaction
+        reject_reason = None
+        accepted_length = None
+        for e in events:
+            et = e["event_type"]
+            if et == "accepted":
+                outcome = "accepted"
+            elif et == "partially_accepted":
+                outcome = "partially_accepted"
+                accepted_length = e.get("accepted_length")
+            elif et == "rejected":
+                outcome = "rejected"
+                reject_reason = e.get("reject_reason")
+            elif et == "ignored":
+                outcome = "ignored"
+
+        # Context: prefer the suggested event's context; fall back to
+        # the accepted event's context (older plugin versions only sent
+        # context on accept).
+        context = suggested.get("context")
+        if not context:
+            accepted_ev = next(
+                (e for e in events if e["event_type"] == "accepted"), None
+            )
+            if accepted_ev:
+                context = accepted_ev.get("context")
+
+        result.append(
+            {
+                "suggestion_id": sid,
+                "model": suggested["model"],
+                "timestamp": suggested["timestamp"],
+                "suggestion_text": suggested.get("suggestion_text"),
+                "context": context,
+                "latency_ms": suggested.get("latency_ms"),
+                "confidence": suggested.get("confidence"),
+                "prompt_length": suggested.get("prompt_length"),
+                "suggestion_length": suggested.get("suggestion_length"),
+                "outcome": outcome,
+                "reject_reason": reject_reason,
+                "accepted_length": accepted_length,
+                "event_count": len(events),
+            }
+        )
+        if len(result) >= limit:
+            break
+
+    return result
+
+
 def get_stats(hours: int = 24) -> dict:
     """Aggregated stats for the dashboard: per-model breakdown + timeline."""
     cutoff = f"-{hours} hours"

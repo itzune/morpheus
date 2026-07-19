@@ -323,7 +323,8 @@ function createFetchPlugin(plugin: MorpheusPlugin) {
               latency,
               confidence,
               text,
-              prefix.length
+              prefix.length,
+              prefix
             );
 
             // Push to cycling history

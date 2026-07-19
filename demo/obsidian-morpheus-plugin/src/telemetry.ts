@@ -73,7 +73,8 @@ export class TelemetryService {
     latencyMs: number,
     confidence: number,
     suggestionText: string,
-    promptLength: number
+    promptLength: number,
+    context: string
   ): void {
     // Any outstanding suggestion that wasn't accepted/rejected was ignored
     this.markIgnoredIfOutstanding();
@@ -91,6 +92,9 @@ export class TelemetryService {
       prompt_length: promptLength,
       suggestion_text: settings.telemetryIncludeText
         ? suggestionText.slice(0, 500)
+        : undefined,
+      context: settings.telemetryIncludeText
+        ? context.slice(0, 500)
         : undefined,
     });
   }
