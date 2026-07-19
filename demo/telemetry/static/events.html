@@ -170,6 +170,7 @@
               'Prompt length: ' + (s.prompt_length || '\u2014') + ' chars\n' +
               'Suggestion length: ' + (s.suggestion_length || '\u2014') + ' chars\n' +
               'Outcome: ' + escapeHtml(outcome) + (reason ? ' (' + escapeHtml(s.reject_reason) + ')' : '') + '\n' +
+              (s.accepted_length != null ? 'Accepted: ' + s.accepted_length + '/' + s.suggestion_length + ' chars (' + Math.round(s.accepted_length / s.suggestion_length * 100) + '%)\n' : '') +
               'Events: ' + s.event_count + '\n' +
               'Suggestion ID: ' + escapeHtml(s.suggestion_id) +
             '</div></div>' +
