@@ -157,7 +157,7 @@ The figures make the deployment architecture visible: identical client, differen
 | Model | Params | BPC | CSR (simplified) | Word Accuracy |
 |-------|--------|-----|-------------------|---------------|
 | GPT-2 eus-euscrawl | 124M | 0.981 | 0.110 | 37.6% |
-| **Morpheus (Mamba-2)** | **91M** | **0.970** | **0.094** | **60.4%** |
+| Morpheus (Mamba-2) | 91M | 0.970 | 0.094 | 60.4% |
 | Kimu 2B (base) | 2B | 0.744 | 0.215 | 61.7% |
 | Latxa 8B (base) | 8B | **0.490** | **0.266** | **75.2%** |
 
