@@ -220,15 +220,17 @@ function createFetchPlugin(plugin: MorpheusPlugin) {
         for (const tr of update.transactions) {
           for (const effect of tr.effects) {
             if (effect.is(CycleNextEffect)) {
-              this.cycleNext(update.view);
+              // Defer: can't call view.dispatch() from within update().
+              // queueMicrotask runs after the current update cycle.
+              queueMicrotask(() => this.cycleNext(update.view));
               return;
             }
             if (effect.is(CyclePrevEffect)) {
-              this.cyclePrev(update.view);
+              queueMicrotask(() => this.cyclePrev(update.view));
               return;
             }
             if (effect.is(AcceptNextWordEffect)) {
-              this.acceptNextWord(update.view);
+              queueMicrotask(() => this.acceptNextWord(update.view));
               return;
             }
           }
