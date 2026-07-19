@@ -17,7 +17,7 @@ The comparison establishes a **two-tier deployment architecture, fixed by hardwa
 
 The model uses a 4,000-token SentencePiece Unigram vocabulary, chosen so that Basque's agglutinative morphology (root + suffix chains) splits into reusable subwords rather than fusing into opaque atomic tokens.
 
-For the full architecture, training, evaluation, and deployment details, see **[morpheus-on-device-basque-autocompletion.pdf](./morpheus-on-device-basque-autocompletion.pdf)** — the write-up covers the survey, the architecture-selection decision, the two-model benchmark, and the evaluation-methodology findings (a "fertility paradox" and a "CSR paradox" that make perplexity the only reliable checkpoint-ranking metric for agglutinative languages).
+See the write-up for the full architecture, training, evaluation, and deployment details: **[morpheus-on-device-basque-autocompletion.pdf](./morpheus-on-device-basque-autocompletion.pdf)** (concise, default) covers the survey, the architecture-selection decision, the two-model benchmark, and the evaluation-methodology findings (a "fertility paradox" and a "CSR paradox" that make perplexity the only reliable checkpoint-ranking metric for agglutinative languages). A longer, detailed version is available as **[morpheus-on-device-basque-autocompletion-full.pdf](./morpheus-on-device-basque-autocompletion-full.pdf)**.
 
 ## Models on Hugging Face
 
@@ -65,6 +65,8 @@ A WebAssembly build runs the model directly in your browser at **<https://itzune
 | `docs/` | Research notes + [`ARCHITECTURE.md`](./docs/ARCHITECTURE.md) (component ownership), [`TRAJECTORY.md`](./docs/TRAJECTORY.md) (desktop-editor direction), tokenizer fieldwork, data scaling, eval strategies |
 | `logs/` | Training logs and completion-acceptance logs (used for replay evaluation) |
 | `checkpoints/` | Training checkpoints |
-| `morpheus-on-device-basque-autocompletion.pdf` | The full write-up |
-| `morpheus-on-device-basque-autocompletion.md` | Source markdown for the write-up |
+| `morpheus-on-device-basque-autocompletion.pdf` | The write-up (concise, default) |
+| `morpheus-on-device-basque-autocompletion.md` | Source markdown for the concise write-up |
+| `morpheus-on-device-basque-autocompletion-full.pdf` | The detailed write-up |
+| `morpheus-on-device-basque-autocompletion-full.md` | Source markdown for the detailed write-up |
 | `pyproject.toml` | Dependencies (managed with [`uv`](https://docs.astral.sh/uv/)) |

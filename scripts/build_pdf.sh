@@ -1,17 +1,23 @@
 #!/bin/bash
-# Build PDF from the paper markdown using pandoc + pdflatex.
+# Build PDF from a paper markdown using pandoc + pdflatex.
 # Includes a Unicode pre-processor for math symbols, box-drawing chars,
 # SentencePiece markers, and Basque accented characters.
+#
+# Usage:
+#   scripts/build_pdf.sh                                            # default (concise) write-up
+#   scripts/build_pdf.sh morpheus-on-device-basque-autocompletion-full.md   # detailed write-up
 set -e
 cd "$(dirname "$0")/.."
 
-INPUT="morpheus-on-device-basque-autocompletion.md"
+INPUT="${1:-morpheus-on-device-basque-autocompletion.md}"
+OUT="${INPUT%.md}.pdf"
 TMP="/tmp/paper_fixed.md"
-OUT="morpheus-on-device-basque-autocompletion.pdf"
+export INPUT TMP
 
 # Unicode pre-processor
 python3 << 'PY'
-with open("morpheus-on-device-basque-autocompletion.md", "r") as f:
+import os
+with open(os.environ["INPUT"], "r") as f:
     text = f.read()
 
 # Math symbols → plain text (avoids math-mode issues in tables)
@@ -91,12 +97,14 @@ text = text.replace("®", "(R)")
 text = text.replace("\\ufffd", "U+FFFD")
 text = text.replace("\\u2581", "U+2581")
 
-with open("/tmp/paper_fixed.md", "w") as f:
+with open(os.environ["TMP"], "w") as f:
     f.write(text)
 print("Unicode fix complete")
 PY
 
 echo "Running pandoc + pdflatex..."
+echo "  input:  $INPUT"
+echo "  output: $OUT"
 pandoc "$TMP" \
   -o "$OUT" \
   --pdf-engine=pdflatex \

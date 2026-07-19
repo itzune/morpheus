@@ -605,7 +605,7 @@ language differs. Work done on one port informs the other.
 - **HuggingFace (safetensors)**: [huggingface.co/itzune/morpheus](https://huggingface.co/itzune/morpheus)
 - **HuggingFace (GGUF)**: [huggingface.co/itzune/morpheus-gguf](https://huggingface.co/itzune/morpheus-gguf)
 - **Server demo inference engineering**: `demo/server.py` (reference implementation for all ported logic in §7).
-- **Paper**: `morpheus-on-device-basque-autocompletion.md`, §5.5 "Inference Engineering for Agglutinative Keyboards".
+- **Paper**: `morpheus-on-device-basque-autocompletion-full.md`, §5.5 "Inference Engineering for Agglutinative Keyboards".
 
 ---
 

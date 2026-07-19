@@ -8,7 +8,7 @@
 
 ## Summary of Findings
 
-Our controlled vocabulary ablation experiment (§4.5.4 in morpheus-on-device-basque-autocompletion.md) on Basque text
+Our controlled vocabulary ablation experiment (§4.5.4 in morpheus-on-device-basque-autocompletion-full.md) on Basque text
 confirms the QuechuaTok finding for Basque:
 
 | Vocab Size | MorphAcc Consistency | Fertility | Regime |
@@ -491,4 +491,4 @@ Training a 4K tokenizer on the segmented corpus is expected to push MorphAcc bey
 | `scripts/train_morfessor.py` | Fieldwork: train Morfessor (abandoned) | ✅ Exists (reference) |
 | `docs/tokenizer-fieldwork.md` | Full experiment report | ✅ Complete |
 | `docs/tokenizer-pipeline.md` | This file | ✅ Created |
-| `morpheus-on-device-basque-autocompletion.md` | §4.5.4: fieldwork results integrated | ✅ Updated |
+| `morpheus-on-device-basque-autocompletion-full.md` | §4.5.4: fieldwork results integrated | ✅ Updated |
