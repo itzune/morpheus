@@ -13,13 +13,21 @@
 
 import {
   App,
+  Editor,
   Notice,
   Plugin,
   PluginSettingTab,
   Setting,
   requestUrl,
 } from "obsidian";
-import { createMorpheusExtension } from "./ghost-text";
+import { EditorView } from "@codemirror/view";
+import {
+  createMorpheusExtension,
+  hasSuggestion,
+  AcceptNextWordEffect,
+  CycleNextEffect,
+  CyclePrevEffect,
+} from "./ghost-text";
 import { TelemetryService } from "./telemetry";
 
 export interface MorpheusSettings {
@@ -107,6 +115,55 @@ export default class MorpheusPlugin extends Plugin {
       },
     });
 
+    // ── Ghost-text interaction commands ────────────────────────────────
+    // These are registered as Obsidian commands (not just CodeMirror
+    // keymaps) so they appear in Settings → Hotkeys and take priority
+    // over Obsidian's own keybindings (e.g. Ctrl+Right = move word).
+    // Each uses editorCheckCallback: returns false when there's no
+    // suggestion, so the key falls through to the default behavior.
+
+    this.addCommand({
+      id: "accept-next-word",
+      name: "Accept next word",
+      hotkeys: [{ modifiers: ["Ctrl"], key: "ArrowRight" }],
+      editorCheckCallback: (checking, editor) => {
+        const view = this.getView(editor);
+        if (!view || !hasSuggestion(view)) return false;
+        if (!checking) {
+          view.dispatch({ effects: AcceptNextWordEffect.of(null) });
+        }
+        return true;
+      },
+    });
+
+    this.addCommand({
+      id: "cycle-next",
+      name: "Next completion",
+      hotkeys: [{ modifiers: ["Alt"], key: "]" }],
+      editorCheckCallback: (checking, editor) => {
+        const view = this.getView(editor);
+        if (!view || !this.settings.enabled) return false;
+        if (!checking) {
+          view.dispatch({ effects: CycleNextEffect.of(null) });
+        }
+        return true;
+      },
+    });
+
+    this.addCommand({
+      id: "cycle-prev",
+      name: "Previous completion",
+      hotkeys: [{ modifiers: ["Alt"], key: "[" }],
+      editorCheckCallback: (checking, editor) => {
+        const view = this.getView(editor);
+        if (!view || !hasSuggestion(view)) return false;
+        if (!checking) {
+          view.dispatch({ effects: CyclePrevEffect.of(null) });
+        }
+        return true;
+      },
+    });
+
     // Initial status + periodic refresh
     this.updateStatusBar();
     this.registerInterval(
@@ -124,6 +181,13 @@ export default class MorpheusPlugin extends Plugin {
 
   async saveSettings() {
     await this.saveData(this.settings);
+  }
+
+  /** Get the CodeMirror 6 EditorView from an Obsidian Editor.
+   *  `editor.cm` is Obsidian's internal bridge to the CM6 view. */
+  private getView(editor: Editor): EditorView | null {
+    const cm = (editor as unknown as { cm?: EditorView }).cm;
+    return cm ?? null;
   }
 
   /** Query the server's /api/model endpoint and show the model name in the

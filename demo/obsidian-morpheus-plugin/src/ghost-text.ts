@@ -69,10 +69,13 @@ const SetSuggestionEffect = StateEffect.define<{
 
 const ClearSuggestionEffect = StateEffect.define<null>();
 
-/** Keymap → fetch plugin: trigger Alt+] / Alt+[ / Ctrl+Right. */
-const CycleNextEffect = StateEffect.define<null>();
-const CyclePrevEffect = StateEffect.define<null>();
-const AcceptNextWordEffect = StateEffect.define<null>();
+/** Keymap / command → fetch plugin: trigger Alt+] / Alt+[ / Ctrl+Right.
+ *  Exported so main.ts can dispatch them from Obsidian commands (which
+ *  take priority over CodeMirror keymaps and are configurable via
+ *  Settings → Hotkeys). */
+export const CycleNextEffect = StateEffect.define<null>();
+export const CyclePrevEffect = StateEffect.define<null>();
+export const AcceptNextWordEffect = StateEffect.define<null>();
 
 // ── State ──────────────────────────────────────────────────────────────
 
@@ -505,31 +508,6 @@ export function createMorpheusExtension(plugin: MorpheusPlugin) {
         },
       },
       {
-        key: "Ctrl-ArrowRight",
-        run: (view: EditorView) => {
-          const state = view.state.field(InlineSuggestionState);
-          if (!state?.suggestion) return false;
-          view.dispatch({ effects: AcceptNextWordEffect.of(null) });
-          return true;
-        },
-      },
-      {
-        key: "Alt-]",
-        run: (view: EditorView) => {
-          // Only cycle if enabled and there's a prefix to complete from
-          if (!plugin.settings.enabled) return false;
-          view.dispatch({ effects: CycleNextEffect.of(null) });
-          return true;
-        },
-      },
-      {
-        key: "Alt-[",
-        run: (view: EditorView) => {
-          view.dispatch({ effects: CyclePrevEffect.of(null) });
-          return true;
-        },
-      },
-      {
         key: "Escape",
         run: (view: EditorView) => {
           const state = view.state.field(InlineSuggestionState);
@@ -552,4 +530,14 @@ export function createMorpheusExtension(plugin: MorpheusPlugin) {
     renderGhostTextPlugin,
     ghostTextKeymap,
   ];
+}
+
+// ── Helpers for Obsidian commands ───────────────────────────────────────
+
+/** Check whether a ghost-text suggestion is currently showing.
+ *  Used by Obsidian commands (registered in main.ts) to decide whether
+ *  to handle the key or let it fall through to the default behavior. */
+export function hasSuggestion(view: EditorView): boolean {
+  const state = view.state.field(InlineSuggestionState);
+  return !!state?.suggestion;
 }

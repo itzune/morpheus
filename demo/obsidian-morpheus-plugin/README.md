@@ -157,13 +157,21 @@ Then set **Server URL** in the plugin settings to match.
 
 ## Keybindings
 
-| Key | Action |
-|-----|--------|
-| **Tab** | Accept the full suggestion. |
-| **Ctrl+Right** | Accept the next word (partial acceptance). The remainder stays as ghost text — press again for the next word, or Tab for the rest. |
-| **Alt+]** | Cycle to the next alternative. Fetches a new completion at the cycle temperature (higher → more diverse). |
-| **Alt+[** | Cycle back to the previous alternative (from history). |
-| **Esc** | Dismiss the suggestion. |
+All interaction hotkeys are **configurable** via Obsidian's Settings →
+Hotkeys (search for "Morpheus"). Defaults:
+
+| Command | Default key | Action |
+|---------|-------------|--------|
+| Accept suggestion | **Tab** | Accept the full suggestion. (When no suggestion is showing, Tab indents as usual.) |
+| Accept next word | **Ctrl+Right** | Accept the next word (partial acceptance). The remainder stays as ghost text — press again for the next word, or Tab for the rest. (When no suggestion is showing, Ctrl+Right moves the cursor as usual.) |
+| Next completion | **Alt+]** | Cycle to the next alternative. Fetches a new completion at the cycle temperature (higher → more diverse). |
+| Previous completion | **Alt+[** | Cycle back to the previous alternative (from history). |
+| Dismiss suggestion | **Esc** | Dismiss the suggestion. |
+
+Tab and Esc are handled at the editor level (they need to fall through to
+indent/dismiss when there's no suggestion). The other three are registered
+as Obsidian commands, so they appear in the Hotkeys settings and take
+priority over Obsidian's own keybindings.
 
 ## Telemetry
 

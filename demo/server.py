@@ -1415,47 +1415,65 @@ async def complete_prefix_suffix(req: CompleteRequest):
     FIM mode requires the FIM-capable model (Phase 6 checkpoint) to be loaded
     in llama-server. With the AR-only model, suffix is ignored (prefix-only).
     """
-    if req.suffix.strip():
+    use_fim = bool(req.suffix.strip())
+
+    def _build_payload(p, s):
+        return {
+            "prompt": p,
+            "n_predict": req.max_tokens,
+            "stream": False,
+            "temperature": req.temperature,
+            "top_k": req.top_k,
+            "top_p": 1.0,
+            "min_p": 0.0,
+            # FIM infill: no repeat penalty (legitimately reuses context words),
+            # greedy sampling for deterministic ghost-text.
+            "repeat_penalty": 1.0,
+            "n_probs": N_PROBS,
+            "stop": s,
+        }
+
+    async def _run(p, s):
+        """Fire n samples (or 1) and return (text, confidence, finish)."""
+        nonlocal req, client
+        pl = _build_payload(p, s)
+        if req.n <= 1:
+            return await _complete_once(client, pl, s)
+        results = await asyncio.gather(
+            *[_complete_once(client, pl, s) for _ in range(req.n)],
+            return_exceptions=True,
+        )
+        return _pick_best_of_n(results)
+
+    client = _client()
+
+    if use_fim:
         # ── FIM mode: the backend builds the infill prompt + stops ──
         # (SentencePiece: token-level <PRE>/<SUF>/<MID> to preserve ▁
         # markers; Llama: a string template). Clients send {prefix,
         # suffix} and stay agnostic of the sentinel convention.
         prompt, stops = backend.fim_prompt(req.prefix, req.suffix)
+        if prompt:
+            text, confidence, finish = await _run(prompt, stops)
+            # ── FIM fallback: base models (Kimu 2B, Latxa 8B) emit EOS
+            #    when they see FIM sentinels, returning empty text. Fall
+            #    back to AR (prefix-only) so the user still gets a
+            #    suggestion. FIM-capable models (Morpheus) return non-empty
+            #    and skip the fallback (one call, no latency penalty).
+            if not text.strip():
+                ar_prompt = backend.ar_prompt(req.prefix)
+                ar_stops = ["\n\n"]
+                text, confidence, finish = await _run(ar_prompt, ar_stops)
+        else:
+            text, confidence, finish = "", 0.0, "stop"
     else:
         # ── AR mode: prefix-only completion ──
         prompt = backend.ar_prompt(req.prefix)
         stops = ["\n\n"]
+        if not prompt:
+            return {"text": "", "finish_reason": "stop"}
+        text, confidence, finish = await _run(prompt, stops)
 
-    if not prompt:
-        return {"text": "", "finish_reason": "stop"}
-
-    payload = {
-        "prompt": prompt,
-        "n_predict": req.max_tokens,
-        "stream": False,
-        "temperature": req.temperature,
-        "top_k": req.top_k,
-        "top_p": 1.0,
-        "min_p": 0.0,
-        # FIM infill: no repeat penalty (legitimately reuses context words),
-        # greedy sampling for deterministic ghost-text.
-        "repeat_penalty": 1.0,
-        "n_probs": N_PROBS,
-        "stop": stops,
-    }
-    client = _client()
-    if req.n <= 1:
-        text, confidence, finish = await _complete_once(client, payload, stops)
-    else:
-        # best-of-n: fire n parallel samples, pick highest-confidence
-        # non-empty result. llama-server uses a random seed by default,
-        # so even at low temperature the samples diverge. (At temp 0.0
-        # all samples are identical — best-of-n is pointless there.)
-        results = await asyncio.gather(
-            *[_complete_once(client, payload, stops) for _ in range(req.n)],
-            return_exceptions=True,
-        )
-        text, confidence, finish = _pick_best_of_n(results)
     return {"text": text, "confidence": confidence, "finish_reason": finish}
 
 
