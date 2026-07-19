@@ -820,7 +820,15 @@ The 5× `<EOT>` weighting (§7.4) resolved the over-generation problem of §7.3:
 
 ### 7.6 Deployment: Thick-Proxy Architecture and Decoding Policy
 
-FIM inference is deployed through a **thick proxy / thin client** architecture: a FastAPI server (`demo/server.py`) holds the SentencePiece tokenizer and the FIM template, exposing an OpenAI-compatible `/v1/completions` route and a convenience `/v1/complete` route that accepts `{prefix, suffix}` and performs FIM templating server-side. The proxy encodes the prefix and suffix to **token IDs** (not strings) before sending them to `llama-server` — the same BOS/tokenizer-divergence mitigation documented in §5.4.1, generalized to the FIM setting. This maximizes client reuse: any editor plugin speaks the standard completion API and need not know the FIM token convention. A Docker-based deployment (`demo/Dockerfile`) compiles `llama.cpp` with Mamba-2 support and runs entirely on CPU: on an 8-core consumer CPU, the 64 MB Q5_K_M model achieves ~75–90 tok/s decode and ~160 ms per FIM request — sufficient for real-time ghost-text.
+FIM inference is deployed through a **thick proxy / thin client** architecture: a FastAPI server (`demo/server.py`) holds the SentencePiece tokenizer and the FIM template, exposing an OpenAI-compatible `/v1/completions` route and a convenience `/v1/complete` route that accepts `{prefix, suffix}` and performs FIM templating server-side. The proxy encodes the prefix and suffix to **token IDs** (not strings) before sending them to `llama-server` — the same BOS/tokenizer-divergence mitigation documented in §5.4.1, generalized to the FIM setting. This maximizes client reuse: any editor plugin speaks the standard completion API and need not know the FIM token convention.
+
+We built an Obsidian plugin (`demo/obsidian-morpheus-plugin/`) that validates this design: it renders inline ghost text via CodeMirror 6, speaks only the `{prefix, suffix}` protocol, and switches between the on-device Mamba-2 model and the server-side Latxa 8B by changing a single Server URL setting. The identical plugin in the identical editor, differing only in the endpoint, is shown in Figures 1–2:
+
+![**Figure 1.** Morpheus on-device: ghost-text autocomplete in Obsidian, served by the local 91M Mamba-2 model (55 MB, CPU). The status bar confirms the local model. The user is writing about the deployment itself and the model completes the verb *ditu*.](assets/morpheus-obsidian-plugin-autocompletion.png){width=90%}
+
+![**Figure 2.** The same plugin, pointed at a GPU server running Latxa 8B (6.6 GB). Only the Server URL changed. The model completes the user's sentence about Latxa with "*dira. Hala ere, ezin da lokalean exekutatu*" — "they are. However, it cannot be run locally" — a self-aware articulation of the two-tier constraint.](assets/morpheus-obsidian-plugin-autocompletion-latxa8b.png){width=90%}
+
+A Docker-based deployment (`demo/Dockerfile`) compiles `llama.cpp` with Mamba-2 support and runs entirely on CPU: on an 8-core consumer CPU, the 64 MB Q5_K_M model achieves ~75–90 tok/s decode and ~160 ms per FIM request — sufficient for real-time ghost-text.
 
 The decoding policy encodes three layers of configuration, following the analysis in §6.8 that autocomplete metrics are fragile and that greedy decoding misses valid rank-2 candidates:
 
@@ -877,6 +885,7 @@ All code, model checkpoints, and evaluation artifacts are publicly available at 
 - **Export pipeline**: PyTorch → HuggingFace → GGUF conversion with BOS-token configuration
 - **Evaluation suite**: PPL, CSR with bootstrap confidence intervals, MorphAcc, and case paradigm completion
 - **Demo server**: Docker-based FastAPI inference server supporting both multi-token ghost-text continuation (Smart Compose–style) and next-word prediction (smartphone keyboard–style chips), with completion logging and checkpoint replay
+- **Obsidian plugin**: CodeMirror 6 ghost-text editor integration (`demo/obsidian-morpheus-plugin/`), backend-agnostic — switches between on-device Mamba-2 and server-side Latxa 8B by changing the endpoint URL
 - **Tokenizer ablation data**: Full per-word tokenization results across 4K/8K/16K/32K vocabularies
 
 The primary model checkpoint (step 74K, fully trained) and all quantized GGUF variants (Q4_K_M, Q5_K_M) are included. The model is also published on HuggingFace: `itzune/morpheus` (safetensors format) and `itzune/morpheus-gguf` (GGUF format).

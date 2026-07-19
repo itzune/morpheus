@@ -111,9 +111,33 @@ Five strategies address this:
 
 ---
 
-## 6. Evaluation and Results
+## 6. Deployment: From Model to Editor
 
-### 6.1 Core Metrics
+A model that achieves 318 tok/s in isolation cannot reach the user's cursor without a serving stack. Morpheus deploys through a **thick-proxy architecture**: a FastAPI server wraps a compiled `llama.cpp` backend and exposes a thin-client protocol that any editor can speak.
+
+**Export and quantization.** The PyTorch checkpoint is exported to GGUF via `llama.cpp` tooling and quantized to Q4_K_M (55 MB). A critical reproducibility finding: `llama-server` auto-prepends a BOS token for string prompts, and its built-in SentencePiece tokenizer diverges from the reference library on the 4K vocabulary, collapsing CSR from ~28% to ~4%. The server therefore sends **token IDs, not strings** — a mitigation that generalizes to FIM.
+
+**The thick proxy.** A FastAPI server (`demo/server.py`) wraps a compiled `llama.cpp` binary and holds the SentencePiece tokenizer, the FIM template, and the inference-engineering strategies from §5. It exposes a convenience route for thin clients:
+
+```
+POST /v1/complete  {prefix, suffix}  →  {text, confidence}
+```
+
+Any editor plugin speaks this protocol — no FIM tokens, no tokenizer, no SentencePiece. The server applies the FIM template, encodes to token IDs, calls `llama-server`, and post-processes (garbage filtering, confidence scoring, candidate extraction). A Docker deployment (`demo/Dockerfile`) compiles `llama.cpp` with Mamba-2 SSM support and runs on CPU: on a 2017 laptop, the 55 MB model achieves ~160 ms per FIM request.
+
+**Desktop integration.** We built an Obsidian plugin (`demo/obsidian-morpheus-plugin/`) that renders inline ghost text via CodeMirror 6. On typing pause, it POSTs the text before and after the cursor to `/v1/complete`; the response appears as transparent inline text (**Tab** accepts, **Esc** dismisses). The plugin is **backend-agnostic**: only the Server URL setting differs between tiers. At `localhost:9090` it uses the on-device Mamba-2 model; at a GPU server URL it uses Latxa 8B — no plugin modification, no reinstall.
+
+![**Figure 1.** Morpheus on-device: ghost-text autocomplete in Obsidian, served by the local 91M Mamba-2 model (55 MB, CPU). The status bar confirms the local model. The user is writing about the deployment itself ("...Obsidian plugin batekin... proposamenak jasotzen" — "with an Obsidian plugin... receiving suggestions") and the model completes the verb *ditu*.](assets/morpheus-obsidian-plugin-autocompletion.png){width=90%}
+
+![**Figure 2.** The same plugin, same editor — pointed at a GPU server running Latxa 8B (6.6 GB). Only the Server URL changed. The suggestion is longer and more specific. The model completes the user's sentence about Latxa with "*dira. Hala ere, ezin da lokalean exekutatu*" — "they are. However, it cannot be run locally" — a self-aware articulation of the two-tier constraint.](assets/morpheus-obsidian-plugin-autocompletion-latxa8b.png){width=90%}
+
+The two figures make the two-tier architecture visible: identical client, different backend, abstracted behind a URL. The 91M model runs locally (status bar: `v3_fim.Q5_K_M.gguf`); the 8B model runs on the GPU (status bar: `HITZ.Latxa-Llama-3.1-8B.Q6_K.gguf`). The hardware constraint — not a preference — determines which tier serves the user.
+
+---
+
+## 7. Evaluation and Results
+
+### 7.1 Core Metrics
 
 | Metric | Result | Interpretation |
 |--------|--------|----------------|
@@ -125,7 +149,7 @@ Five strategies address this:
 
 **PPL is the only reliable checkpoint-ranking metric.** It improved monotonically across all 14 evaluation files (7.56 → 7.17 → 7.13). CSR, MorphAcc, and case paradigm metrics all saturated or produced noisy, non-monotonic signal. CSR is fragile to implement (string prompts gave ~4% vs ~28% with token-ID prompts due to BOS/tokenizer bugs) and cannot distinguish checkpoints at n=300 (all confidence intervals overlap).
 
-### 6.2 Cross-Model Comparison
+### 7.2 Cross-Model Comparison
 
 **Bits Per Character (BPC)** is the correct tokenizer-independent metric for comparing models with different vocabularies:
 
@@ -146,7 +170,7 @@ Morpheus matches GPT-2's BPC at fewer parameters (the difference is primarily at
 
 The qualitative difference is clear: Latxa commits to semantically specific continuations (a concrete meeting time, an encryption property), while Morpheus often drifts into high-frequency connective filler or unrelated statistical patterns. Morpheus's sweet spot is **formulaic completion** — email openings, fixed collocations, administrative phrasing — and **domain-specialized fine-tunes**.
 
-### 6.3 The CSR Paradox
+### 7.3 The CSR Paradox
 
 A typing simulation with 15 parallel sentences (5 per language, identical semantic content) revealed that the model's native Basque achieves the **lowest** simulated CSR:
 
@@ -162,7 +186,7 @@ This is not a model deficiency — it is a structural property of agglutinative 
 
 ---
 
-## 7. Fill-in-the-Middle (FIM) Extension
+## 8. Fill-in-the-Middle (FIM) Extension
 
 The AR-only model can only extend a prefix. For desktop text editing, the cursor often sits within a sentence, requiring text that bridges what precedes and follows — the **Fill-in-the-Middle** objective. We extended Morpheus via continued pre-training from the step-74K checkpoint, using Code Llama-style FIM tokens (`<PRE>`, `<SUF>`, `<MID>`, `<EOT>`), token-level splitting, and a 500M-token budget.
 
@@ -179,17 +203,17 @@ The feared premature-truncation failure mode did not materialize. AR capability 
 
 ---
 
-## 8. Known Limitations
+## 9. Known Limitations
 
 - **CSR of 25%** is below the ~80% achievable in English autocomplete — partly model quality, partly the structural CSR paradox.
 - **Corpus-induced artifacts:** The model over-predicts dates and numbers because the corpus is dominated by encyclopedic and journalistic prose. *Aipatu bezala,* → *2015eko ekainean,* instead of a general continuation. This is domain mismatch: Smart Compose avoids it by training on emails and deploying for emails; for Basque, no large conversational corpus exists.
 - **No morphological pre-segmentation** yet: MorphAcc could improve from 76% toward 83%+ with Apertium-based surface-preserving boundaries.
 - **No user study:** All evaluation is simulation-based. The model is too large for mobile (Gboard: 1.4M/1.4 MB); a distilled ~5–10M variant has not been trained.
-- **Evaluation limitations:** PPL is the only reliable metric; CSR and MorphAcc saturate at available sample sizes. The metric inversion (§6.3) — autocomplete metrics moving opposite to PPL improvement — suggests that a better model distributes probability across valid morphological variants, depressing exact-match accuracy.
+- **Evaluation limitations:** PPL is the only reliable metric; CSR and MorphAcc saturate at available sample sizes. The metric inversion (§7.3) — autocomplete metrics moving opposite to PPL improvement — suggests that a better model distributes probability across valid morphological variants, depressing exact-match accuracy.
 
 ---
 
-## 9. Conclusion
+## 10. Conclusion
 
 Morpheus demonstrates that **on-device predictive autocompletion for an agglutinative language is feasible**. A 91M Mamba-2 model, fitting in 55 MB with zero network calls, provides real-time ghost-text completion on a 2017 laptop CPU — comparable in scale to Gmail Smart Compose but without the data-center dependency.
 
@@ -201,7 +225,7 @@ Morpheus demonstrates that **on-device predictive autocompletion for an agglutin
 
 3. **Inference engineering as a first-class contribution.** Five strategies addressing the tokenization trap add 3.9× CSR on top of the raw model — retokenization fallback, sticky merge, top-k exceeding display-k, next-word extraction, and completion logging with replay.
 
-4. **Two-tier deployment architecture.** Morpheus (91M, 55 MB) runs on the edge for formulaic completion and domain fine-tunes. Latxa 8B (base) is the server-side quality ceiling (+8.35 CSR points, cross-domain competence), but GPU-bound. The split is a hardware constraint, not a preference.
+4. **Two-tier deployment architecture.** Morpheus (91M, 55 MB) runs on the edge for formulaic completion and domain fine-tunes. Latxa 8B (base) is the server-side quality ceiling (+8.35 CSR points, cross-domain competence), but GPU-bound. The split is a hardware constraint, not a preference. A thick-proxy FastAPI server wraps compiled `llama.cpp` and exposes a `{prefix, suffix} → {text}` protocol; an Obsidian plugin demonstrates that the identical editor client switches tiers by changing one URL (§6).
 
 5. **Data quality over quantity.** The model converged at ~8.8B tokens; a 2–5B token high-quality corpus would likely match the full 10B mixed-quality one. For low-resource languages, aggressive quality filtering dominates raw scale.
 

@@ -1,0 +1,10 @@
+{
+  "id": "morpheus-autocomplete",
+  "name": "Morpheus Autocomplete",
+  "version": "0.1.0",
+  "minAppVersion": "0.15.0",
+  "description": "Ghost-text autocompletion for Basque (and any language) via a Morpheus demo server. Tab to accept, Esc to dismiss. Point at localhost for the on-device Mamba-2 model or a GPU server for Latxa 8B — just change the endpoint URL.",
+  "author": "Xabier Ezpeleta",
+  "authorUrl": "https://github.com/itzune",
+  "isDesktopOnly": false
+}

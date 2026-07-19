@@ -43,6 +43,19 @@ The container auto-downloads the Q4_K_M GGUF from Hugging Face at startup — no
 
 See [`demo/README.md`](./demo/README.md) and [`docs/demo.md`](./docs/demo.md) for configuration, the HTTP/WebSocket API, and `llama.cpp` version requirements.
 
+### Use it in Obsidian (desktop editor plugin)
+
+A ghost-text autocomplete plugin for [Obsidian](https://obsidian.md) connects to the demo server and renders inline suggestions as you type — **Tab** to accept, **Esc** to dismiss. The plugin is backend-agnostic: point it at `localhost:9090` for the on-device Mamba-2 model, or a GPU server URL for Latxa 8B — just change the Server URL setting.
+
+```bash
+cd demo/obsidian-morpheus-plugin
+npm install && npm run build
+# Copy main.js, manifest.json, styles.css into your vault's
+# .obsidian/plugins/morpheus-autocomplete/ folder
+```
+
+See [`demo/obsidian-morpheus-plugin/README.md`](./demo/obsidian-morpheus-plugin/README.md) for install details and dev setup.
+
 ### Try it in the browser (WebAssembly)
 
 A WebAssembly build runs the model directly in your browser at **<https://itzune.eus/morpheus-wasm>**. It is slower than the native `llama.cpp` path and still has some known issues, but lets you try Morpheus without installing anything.
@@ -61,6 +74,7 @@ A WebAssembly build runs the model directly in your browser at **<https://itzune
 | `scripts/` | Benchmarking, baseline evaluation, cross-lingual and domain eval utilities |
 | `exports/` | Exported checkpoints (HF + GGUF, multiple quantizations) |
 | `demo/` | FastAPI demo server, Dockerfile, and static frontend |
+| `demo/obsidian-morpheus-plugin/` | Obsidian ghost-text plugin (CodeMirror 6, backend-agnostic) |
 | `eval/` | Benchmark results, baseline comparisons, CSR and next-word evaluations |
 | `docs/` | Research notes + [`ARCHITECTURE.md`](./docs/ARCHITECTURE.md) (component ownership), [`TRAJECTORY.md`](./docs/TRAJECTORY.md) (desktop-editor direction), tokenizer fieldwork, data scaling, eval strategies |
 | `logs/` | Training logs and completion-acceptance logs (used for replay evaluation) |

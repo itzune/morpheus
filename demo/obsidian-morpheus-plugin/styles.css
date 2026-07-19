@@ -1,0 +1,13 @@
+/* Ghost text — the inline suggestion shown at the cursor. */
+.morpheus-ghost-text {
+  opacity: 0.4;
+  font-style: italic;
+  pointer-events: none;
+  color: var(--text-muted);
+  user-select: none;
+}
+
+/* Status bar item — click to toggle on/off. */
+.morpheus-status {
+  cursor: pointer;
+}
