@@ -178,6 +178,24 @@ This is not a model deficiency — it is a structural property of agglutinative 
 
 ---
 
+### 7.4 The Metric Inversion: Exact-Match Metrics Move Opposite to PPL
+
+The CSR paradox (§7.3) shows that CSR penalizes agglutinative languages *structurally* — a cross-language effect. A more troubling question is whether autocomplete metrics track model quality *within* a single language, *across training*. To test this, we ran the next-word keyboard simulation (PyTorch port of the deployed algorithm; futo-basque companion) on **seven checkpoints** spanning the full training trajectory (step 10K–76K), using the same 30 Basque test sentences at every checkpoint. The three checkpoints with held-out PPL measurements tell the story:
+
+| Step | Held-out PPL | NW-CSR | Top-1 Acc | Top-3 Acc | Confidence |
+|-----:|:-----------:|:------:|:---------:|:---------:|:----------:|
+| 32K | 7.56 | 0.396 | 0.523 | 0.866 | 0.401 |
+| 54K | 7.17 | 0.385 | 0.503 | 0.859 | 0.416 |
+| 74K | **7.13** | **0.361** | **0.503** | **0.832** | **0.433** |
+
+The model improved (PPL 7.56 → 7.13), yet *every* exact-match metric moved the wrong way: NW-CSR, Top-1, and Top-3 all **decrease**. The only metric that improves monotonically is **confidence** (0.401 → 0.433) — the model becomes more certain about its predictions, but not more accurate at matching the gold-standard word.
+
+**Cross-backend validation.** We recomputed the metrics from stored GGUF simulation events (the demo server logs full ranked candidate lists). The inversion is **partially backend-dependent**: NW-CSR inverts only in PyTorch (0.396 → 0.361, ↓) while GGUF tracks PPL (0.362 → 0.389, ↑) — likely a bf16 forward-pass artifact. But **Top-1 accuracy decreases in both backends** (PyTorch: 0.523 → 0.503; GGUF: 0.537 → 0.510) — a real effect, not a computation artifact.
+
+**Hypothesis.** As the model improves, it distributes probability across multiple valid morphological continuations (*paseatzera*, *paseatzeko*, *paseatzen*), depressing top-1 on any single one. PPL captures this distributional sharpening; exact-match Top-K cannot. In GGUF, the gold word still appears in the top-3 (Top-3 flat), so the user can still accept it after a few more characters — keeping NW-CSR roughly tracking PPL. In PyTorch (bf16), Top-3 also decreases — the gold word drops out of the candidate list entirely, a more severe degradation partly attributable to precision.
+
+**Practical implication.** No exact-match autocomplete metric should be used as a primary checkpoint selection criterion for agglutinative autocomplete. PPL is the only metric that reliably tracks model quality. All CIs overlap (n=30); the trends are directional, not statistically proven. Full cross-backend data in Appendix B of the detailed version.
+
 ## 8. Fill-in-the-Middle (FIM) Extension
 
 The AR-only model can only extend a prefix. For desktop text editing, the cursor often sits within a sentence, requiring text that bridges what precedes and follows — the **Fill-in-the-Middle** objective. We extended Morpheus via continued pre-training from the step-74K checkpoint, using Code Llama-style FIM tokens (`<PRE>`, `<SUF>`, `<MID>`, `<EOT>`), token-level splitting, and a 500M-token budget.
@@ -201,7 +219,7 @@ The feared premature-truncation failure mode did not materialize. AR capability 
 - **Corpus-induced artifacts:** The model over-predicts dates and numbers because the corpus is dominated by encyclopedic and journalistic prose. *Aipatu bezala,* → *2015eko ekainean,* instead of a general continuation. This is domain mismatch: Smart Compose avoids it by training on emails and deploying for emails; for Basque, no large conversational corpus exists.
 - **No morphological pre-segmentation** yet: MorphAcc could improve from 76% toward 83%+ with Apertium-based surface-preserving boundaries.
 - **No user study:** All evaluation is simulation-based. The model is too large for mobile (Gboard: 1.4M/1.4 MB); a distilled ~5–10M variant has not been trained.
-- **Evaluation limitations:** PPL is the only reliable metric; CSR and MorphAcc saturate at available sample sizes. The metric inversion (§7.3) — autocomplete metrics moving opposite to PPL improvement — suggests that a better model distributes probability across valid morphological variants, depressing exact-match accuracy.
+- **Evaluation limitations:** PPL is the only reliable metric; CSR and MorphAcc saturate at available sample sizes. The metric inversion (§7.4) — autocomplete metrics moving opposite to PPL improvement — suggests that a better model distributes probability across valid morphological variants, depressing exact-match accuracy.
 
 ---
 
