@@ -93,6 +93,13 @@ def filter_suggestion(suggestion: str) -> str:
     # Replace ▁ markers with spaces, strip replacement chars
     text = suggestion.replace("▁", " ").replace("\ufffd", "")
 
+    # Ghost text is inline — if the model's first token is a newline,
+    # it wants a new paragraph, not an inline completion. Suppress.
+    # (Base models do this after sentence-ending punctuation; a model
+    # fine-tuned for autocomplete generates a space + word instead.)
+    if text.startswith("\n"):
+        return ""
+
     # Preserve leading whitespace (word-boundary signal), strip trailing
     text = text.rstrip()
 
@@ -420,9 +427,23 @@ class LlamaFIMBackend(ModelBackend):
         return prompt, [self.FIM_EOT, "\n\n"]
 
     # ── Output postprocessing ──
-    # Inherits the base: stop-strip + compute_confidence. No ▁/byte-fallback
-    # cleanup — BPE output is clean. (filter_suggestion is still wired into
-    # the legacy /api/* endpoints and is a harmless no-op on clean text.)
+    def postprocess(self, content: str, data: dict, stops: list[str]) -> tuple[str, float]:
+        # 1. Strip stop sequences.
+        text = content
+        for s in stops:
+            if s and s in text:
+                text = text[: text.index(s)]
+                break
+        # 2. filter_suggestion: collapse whitespace (newlines → spaces),
+        #    strip punctuation junk, reject pure-punct output, and suppress
+        #    leading-newline suggestions (model wants a new paragraph, not
+        #    inline completion). BPE output is clean Latin text, so this is
+        #    a harmless no-op on well-formed output — but it catches the
+        #    base-model case where the model emits "\n" after sentence-
+        #    ending punctuation.
+        text = filter_suggestion(text)
+        # 3. Average logprob excluding EOS/stop tokens.
+        return text, compute_confidence(data)
 
 
 # ── Factory ────────────────────────────────────────────────────────────
