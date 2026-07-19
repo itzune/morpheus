@@ -7,6 +7,10 @@
  * FIM templating, tokenization, and cleanup per-backend). Tab accepts, Esc
  * dismisses.
  *
+ * Telemetry: every suggestion lifecycle event (suggested, accepted, rejected,
+ * ignored) is tracked via the TelemetryService for cross-model analysis.
+ * See telemetry.ts.
+ *
  * Adapted from the CodeMirror 6 inline-suggestion pattern
  * (cf. Leoyishou/obsidian-ai-autocomplete), but targeting the Morpheus
  * demo server's {prefix, suffix} -> {text, confidence} convenience route
@@ -35,36 +39,52 @@ import type MorpheusPlugin from "./main";
 
 /** Carries a new suggestion (or null to clear) + the doc snapshot it was
  *  computed against, so stale responses (doc changed since request) are
- *  discarded by the StateField. */
+ *  discarded by the StateField. Also carries telemetry metadata
+ *  (suggestionId, confidence, model) so the keymap can log accept/reject. */
 const InlineSuggestionEffect = StateEffect.define<{
   text: string | null;
   doc: Text;
+  suggestionId: string;
+  confidence: number;
+  model: string;
 }>();
 
 const ClearSuggestionEffect = StateEffect.define<null>();
 
-const InlineSuggestionState = StateField.define<{ suggestion: string | null }>({
+interface SuggestionState {
+  suggestion: string | null;
+  suggestionId: string | null;
+  confidence: number;
+  model: string;
+}
+
+const InlineSuggestionState = StateField.define<SuggestionState>({
   create() {
-    return { suggestion: null };
+    return { suggestion: null, suggestionId: null, confidence: 0, model: "" };
   },
   update(value, tr) {
     // Explicit clear
     for (const effect of tr.effects) {
       if (effect.is(ClearSuggestionEffect)) {
-        return { suggestion: null };
+        return { suggestion: null, suggestionId: null, confidence: 0, model: "" };
       }
     }
     // New suggestion arrived — only accept if doc hasn't changed since request
     for (const effect of tr.effects) {
       if (effect.is(InlineSuggestionEffect)) {
         if (tr.state.doc === effect.value.doc) {
-          return { suggestion: effect.value.text };
+          return {
+            suggestion: effect.value.text,
+            suggestionId: effect.value.suggestionId,
+            confidence: effect.value.confidence,
+            model: effect.value.model,
+          };
         }
       }
     }
     // Any doc change or cursor move clears the suggestion
     if (tr.docChanged || tr.selection) {
-      return { suggestion: null };
+      return { suggestion: null, suggestionId: null, confidence: 0, model: "" };
     }
     return value;
   },
@@ -132,6 +152,11 @@ function createFetchPlugin(plugin: MorpheusPlugin) {
       private generation = 0;
 
       update(update: ViewUpdate) {
+        // Mark any outstanding suggestion as ignored on any change
+        if (update.docChanged || update.selectionSet) {
+          plugin.telemetry?.markIgnoredIfOutstanding();
+        }
+
         if (!update.docChanged) return;
         if (!plugin.settings.enabled) return;
 
@@ -165,6 +190,8 @@ function createFetchPlugin(plugin: MorpheusPlugin) {
             // Don't trigger on very short prefixes
             if (prefix.trim().length < 3) return;
 
+            const reqStart = performance.now();
+
             try {
               const res = await requestUrl({
                 url: `${settings.serverUrl.replace(/\/$/, "")}/v1/complete`,
@@ -189,8 +216,27 @@ function createFetchPlugin(plugin: MorpheusPlugin) {
               const confidence: number = data?.confidence ?? 0;
 
               if (text.trim() && confidence >= settings.confidenceThreshold) {
+                const latency = performance.now() - reqStart;
+                const suggestionId = plugin.telemetry?.newSuggestionId() ?? "";
+                const model = plugin.currentModel ?? "unknown";
+
+                plugin.telemetry?.trackSuggested(
+                  model,
+                  suggestionId,
+                  latency,
+                  confidence,
+                  text,
+                  prefix.length
+                );
+
                 update.view.dispatch({
-                  effects: InlineSuggestionEffect.of({ text, doc }),
+                  effects: InlineSuggestionEffect.of({
+                    text,
+                    doc,
+                    suggestionId,
+                    confidence,
+                    model,
+                  }),
                 });
               }
             } catch (e) {
@@ -206,6 +252,7 @@ function createFetchPlugin(plugin: MorpheusPlugin) {
 
       destroy() {
         if (this.timer) clearTimeout(this.timer);
+        plugin.telemetry?.markIgnoredIfOutstanding();
       }
     }
   );
@@ -215,41 +262,30 @@ function createFetchPlugin(plugin: MorpheusPlugin) {
 
 export function createMorpheusExtension(plugin: MorpheusPlugin) {
   // Keymap is created inside the factory so it can close over `plugin`
-  // for settings access (serverUrl) and acceptance logging.
+  // for settings access (serverUrl) and telemetry.
   const ghostTextKeymap = Prec.highest(
     keymap.of([
       {
         key: "Tab",
         run: (view: EditorView) => {
-          const suggestion =
-            view.state.field(InlineSuggestionState)?.suggestion;
-          if (!suggestion) return false; // let default Tab (indent) run
+          const state = view.state.field(InlineSuggestionState);
+          if (!state?.suggestion) return false; // let default Tab (indent) run
 
           const head = view.state.selection.main.head;
           view.dispatch({
-            changes: { from: head, to: head, insert: suggestion },
-            selection: { anchor: head + suggestion.length },
+            changes: { from: head, to: head, insert: state.suggestion },
+            selection: { anchor: head + state.suggestion.length },
             userEvent: "input.complete",
           });
 
-          // Fire-and-forget acceptance log (for the eval/replay pipeline).
-          // See server.py /api/log — these logs build a real eval dataset.
-          const url = plugin.settings.serverUrl.replace(/\/$/, "");
+          // Telemetry: track acceptance
           const fullText = view.state.doc.toString();
-          requestUrl({
-            url: `${url}/api/log`,
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              event: "accept",
-              context: fullText.slice(Math.max(0, head - 200), head),
-              smart_context: fullText.slice(Math.max(0, head - 200), head),
-              accepted: { text: suggestion },
-              source: "obsidian",
-            }),
-          }).catch(() => {
-            /* best-effort; server may be down */
-          });
+          plugin.telemetry?.trackAccepted(
+            state.suggestionId ?? "",
+            state.model,
+            state.suggestion,
+            fullText.slice(Math.max(0, head - 200), head)
+          );
 
           return true;
         },
@@ -257,9 +293,12 @@ export function createMorpheusExtension(plugin: MorpheusPlugin) {
       {
         key: "Escape",
         run: (view: EditorView) => {
-          const suggestion =
-            view.state.field(InlineSuggestionState)?.suggestion;
-          if (!suggestion) return false;
+          const state = view.state.field(InlineSuggestionState);
+          if (!state?.suggestion) return false;
+          plugin.telemetry?.trackRejected(
+            state.suggestionId ?? "",
+            state.model
+          );
           view.dispatch({ effects: ClearSuggestionEffect.of(null) });
           return true;
         },

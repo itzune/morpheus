@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Morpheus Telemetry</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #1e1e1e; --surface: #2a2a2a; --text: #dcddde;
+    --muted: #8e8e8e; --accent: #7c3aed;
+    --green: #22c55e; --red: #ef4444; --yellow: #eab308; --blue: #3b82f6;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg); color: var(--text); padding: 20px; max-width: 1200px; margin: 0 auto; }
+  h1 { font-size: 1.5rem; margin-bottom: 2px; }
+  .subtitle { color: var(--muted); font-size: 0.85rem; margin-bottom: 20px; }
+  .cards { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+  .card { background: var(--surface); border-radius: 8px; padding: 14px 20px; min-width: 150px; flex: 1; }
+  .card .label { color: var(--muted); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; }
+  .card .value { font-size: 1.7rem; font-weight: 700; margin-top: 4px; }
+  .charts { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  @media (max-width: 900px) { .charts { grid-template-columns: 1fr; } }
+  .chart-box { background: var(--surface); border-radius: 8px; padding: 16px; }
+  .chart-box h2 { font-size: 0.85rem; margin-bottom: 12px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+  .chart-container { position: relative; height: 220px; }
+  .controls { display: flex; gap: 6px; align-items: center; margin-bottom: 20px; }
+  .controls button { background: var(--surface); border: 1px solid #444; color: var(--text); padding: 5px 14px; border-radius: 6px; cursor: pointer; font-size: 0.82rem; }
+  .controls button:hover { border-color: var(--accent); }
+  .controls button.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .controls .refresh { margin-left: auto; color: var(--muted); font-size: 0.78rem; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { padding: 9px 12px; text-align: left; border-bottom: 1px solid #333; font-size: 0.82rem; }
+  th { color: var(--muted); font-weight: 600; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.05em; }
+  tr:last-child td { border-bottom: none; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .empty { color: var(--muted); text-align: center; padding: 40px; font-style: italic; }
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+  <h1>Morpheus Telemetry</h1>
+  <div class="subtitle">Autocomplete interaction analytics across models</div>
+
+  <div class="controls">
+    <button data-hours="1">1h</button>
+    <button data-hours="6">6h</button>
+    <button data-hours="24" class="active">24h</button>
+    <button data-hours="168">7d</button>
+    <span class="refresh" id="refresh-indicator">Loading...</span>
+  </div>
+
+  <div class="cards" id="cards"></div>
+
+  <div class="charts">
+    <div class="chart-box">
+      <h2>Acceptance Rate by Model</h2>
+      <div class="chart-container"><canvas id="acceptanceChart"></canvas></div>
+    </div>
+    <div class="chart-box">
+      <h2>Latency by Model (ms)</h2>
+      <div class="chart-container"><canvas id="latencyChart"></canvas></div>
+    </div>
+    <div class="chart-box" style="grid-column: 1 / -1;">
+      <h2>Suggestions Over Time</h2>
+      <div class="chart-container" style="height: 180px;"><canvas id="timelineChart"></canvas></div>
+    </div>
+  </div>
+
+  <div class="chart-box">
+    <h2>Per-Model Breakdown</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Model</th>
+          <th class="num">Suggested</th>
+          <th class="num">Accepted</th>
+          <th class="num">Rejected</th>
+          <th class="num">Ignored</th>
+          <th class="num">Accept Rate</th>
+          <th class="num">Avg Latency</th>
+          <th class="num">P50</th>
+          <th class="num">P95</th>
+          <th class="num">Avg Conf</th>
+        </tr>
+      </thead>
+      <tbody id="stats-body"></tbody>
+    </table>
+  </div>
+
+  <script>
+    const COLORS = ['#7c3aed', '#3b82f6', '#22c55e', '#eab308', '#ef4444', '#ec4899', '#06b6d4', '#f97316'];
+    let currentHours = 24;
+    let charts = {};
+
+    document.querySelectorAll('.controls button[data-hours]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.controls button[data-hours]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentHours = parseInt(btn.dataset.hours);
+        loadStats();
+      });
+    });
+
+    function fmtPct(v) { return (v * 100).toFixed(1) + '%'; }
+    function fmtMs(v) { return v ? Math.round(v) + 'ms' : '\u2014'; }
+    function shortModel(name) {
+      return name.replace(/\.Q[0-9]_[A-Z](_[A-Z]+)?\.gguf$/, '').replace(/\.gguf$/, '');
+    }
+
+    async function loadStats() {
+      const indicator = document.getElementById('refresh-indicator');
+      indicator.textContent = 'Loading...';
+      try {
+        const res = await fetch('/api/stats?hours=' + currentHours);
+        const data = await res.json();
+        renderCards(data.overall);
+        renderTable(data.models);
+        renderAcceptanceChart(data.models);
+        renderLatencyChart(data.models);
+        renderTimelineChart(data.timeline, data.models);
+        indicator.textContent = 'Updated ' + new Date().toLocaleTimeString();
+      } catch (e) {
+        indicator.textContent = 'Error: ' + e.message;
+      }
+    }
+
+    function renderCards(overall) {
+      document.getElementById('cards').innerHTML =
+        '<div class="card"><div class="label">Suggested</div><div class="value">' + overall.suggested + '</div></div>' +
+        '<div class="card"><div class="label">Accepted</div><div class="value" style="color:var(--green)">' + overall.accepted + '</div></div>' +
+        '<div class="card"><div class="label">Accept Rate</div><div class="value">' + fmtPct(overall.acceptance_rate) + '</div></div>' +
+        '<div class="card"><div class="label">Models</div><div class="value">' + overall.models + '</div></div>';
+    }
+
+    function renderTable(models) {
+      const body = document.getElementById('stats-body');
+      if (!models || models.length === 0) {
+        body.innerHTML = '<tr><td colspan="10" class="empty">No data yet. Start typing in Obsidian with telemetry enabled.</td></tr>';
+        return;
+      }
+      body.innerHTML = models.map(function(m) {
+        return '<tr>' +
+          '<td>' + shortModel(m.model) + '</td>' +
+          '<td class="num">' + (m.suggested || 0) + '</td>' +
+          '<td class="num" style="color:var(--green)">' + (m.accepted || 0) + '</td>' +
+          '<td class="num" style="color:var(--red)">' + (m.rejected || 0) + '</td>' +
+          '<td class="num" style="color:var(--muted)">' + (m.ignored || 0) + '</td>' +
+          '<td class="num"><strong>' + fmtPct(m.acceptance_rate) + '</strong></td>' +
+          '<td class="num">' + fmtMs(m.avg_latency_ms) + '</td>' +
+          '<td class="num">' + fmtMs(m.p50_latency_ms) + '</td>' +
+          '<td class="num">' + fmtMs(m.p95_latency_ms) + '</td>' +
+          '<td class="num">' + (m.avg_confidence ? m.avg_confidence.toFixed(2) : '\u2014') + '</td>' +
+          '</tr>';
+      }).join('');
+    }
+
+    function destroyChart(id) { if (charts[id]) { charts[id].destroy(); delete charts[id]; } }
+
+    function renderAcceptanceChart(models) {
+      destroyChart('acceptance');
+      if (!models || models.length === 0) return;
+      charts.acceptance = new Chart(document.getElementById('acceptanceChart'), {
+        type: 'bar',
+        data: {
+          labels: models.map(m => shortModel(m.model)),
+          datasets: [{
+            label: 'Acceptance Rate',
+            data: models.map(m => +(m.acceptance_rate * 100).toFixed(1)),
+            backgroundColor: models.map((_, i) => COLORS[i % COLORS.length]),
+            borderRadius: 4,
+          }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { beginAtZero: true, ticks: { callback: v => v + '%', color: '#8e8e8e' }, grid: { color: '#333' } },
+            x: { ticks: { color: '#8e8e8e', font: { size: 11 } }, grid: { display: false } }
+          }
+        }
+      });
+    }
+
+    function renderLatencyChart(models) {
+      destroyChart('latency');
+      if (!models || models.length === 0) return;
+      charts.latency = new Chart(document.getElementById('latencyChart'), {
+        type: 'bar',
+        data: {
+          labels: models.map(m => shortModel(m.model)),
+          datasets: [
+            { label: 'P50', data: models.map(m => m.p50_latency_ms || 0), backgroundColor: '#3b82f6', borderRadius: 4 },
+            { label: 'P95', data: models.map(m => m.p95_latency_ms || 0), backgroundColor: '#ef4444', borderRadius: 4 }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { labels: { color: '#8e8e8e' } } },
+          scales: {
+            y: { beginAtZero: true, ticks: { callback: v => v + 'ms', color: '#8e8e8e' }, grid: { color: '#333' } },
+            x: { ticks: { color: '#8e8e8e', font: { size: 11 } }, grid: { display: false } }
+          }
+        }
+      });
+    }
+
+    function renderTimelineChart(timeline, models) {
+      destroyChart('timeline');
+      if (!timeline || timeline.length === 0) return;
+      const hours = [...new Set(timeline.map(t => t.hour))].sort();
+      const modelNames = [...new Set(timeline.map(t => t.model))];
+      const datasets = modelNames.map((model, i) => ({
+        label: shortModel(model),
+        data: hours.map(h => {
+          const entry = timeline.find(t => t.hour === h && t.model === model);
+          return entry ? entry.suggested : 0;
+        }),
+        borderColor: COLORS[i % COLORS.length],
+        backgroundColor: COLORS[i % COLORS.length] + '33',
+        fill: false,
+        tension: 0.3,
+      }));
+      charts.timeline = new Chart(document.getElementById('timelineChart'), {
+        type: 'line',
+        data: { labels: hours.map(h => h.slice(11, 16)), datasets },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { labels: { color: '#8e8e8e', font: { size: 11 } } } },
+          scales: {
+            y: { beginAtZero: true, ticks: { color: '#8e8e8e' }, grid: { color: '#333' } },
+            x: { ticks: { color: '#8e8e8e', maxRotation: 0, font: { size: 10 } }, grid: { color: '#333' } }
+          }
+        }
+      });
+    }
+
+    loadStats();
+    setInterval(loadStats, 15000);
+  </script>
+</body>
+</html>

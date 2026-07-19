@@ -20,6 +20,7 @@ import {
   requestUrl,
 } from "obsidian";
 import { createMorpheusExtension } from "./ghost-text";
+import { TelemetryService } from "./telemetry";
 
 export interface MorpheusSettings {
   /** Morpheus demo server base URL (no trailing slash). */
@@ -40,6 +41,12 @@ export interface MorpheusSettings {
   contextBefore: number;
   /** Characters of text after the cursor to send as suffix (FIM). 0 = append-only. */
   contextAfter: number;
+  /** Enable opt-in telemetry (acceptance rates, latency, confidence). */
+  telemetryEnabled: boolean;
+  /** Telemetry server endpoint. Empty = disabled. */
+  telemetryEndpoint: string;
+  /** Include suggestion/context text in telemetry (for qualitative replay). */
+  telemetryIncludeText: boolean;
 }
 
 const DEFAULT_SETTINGS: MorpheusSettings = {
@@ -52,14 +59,22 @@ const DEFAULT_SETTINGS: MorpheusSettings = {
   bestOfN: 1,
   contextBefore: 1500,
   contextAfter: 400,
+  telemetryEnabled: false,
+  telemetryEndpoint: "",
+  telemetryIncludeText: false,
 };
 
 export default class MorpheusPlugin extends Plugin {
   settings: MorpheusSettings = DEFAULT_SETTINGS;
   private statusEl: HTMLElement | null = null;
+  telemetry: TelemetryService | null = null;
+  currentModel = "";
 
   async onload() {
     await this.loadSettings();
+
+    // Initialize telemetry service (opt-in, disabled by default)
+    this.telemetry = new TelemetryService(() => this.settings);
 
     // Status bar item (click to toggle on/off)
     this.statusEl = this.addStatusBarItem();
@@ -96,6 +111,10 @@ export default class MorpheusPlugin extends Plugin {
     );
   }
 
+  onunload() {
+    this.telemetry?.destroy();
+  }
+
   async loadSettings() {
     this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
   }
@@ -119,11 +138,14 @@ export default class MorpheusPlugin extends Plugin {
       const res = await requestUrl({ url: `${url}/api/model` });
       const name = res.json?.current?.name;
       if (name && name !== "none") {
+        this.currentModel = name;
         this.statusEl.setText(`Morpheus: ${name}`);
       } else {
+        this.currentModel = "";
         this.statusEl.setText("Morpheus: no model");
       }
     } catch {
+      this.currentModel = "";
       this.statusEl.setText("Morpheus: offline");
     }
   }
@@ -313,6 +335,84 @@ class MorpheusSettingTab extends PluginSettingTab {
                 `✗ Cannot reach server at ${this.plugin.settings.serverUrl}`,
                 5000
               );
+            } finally {
+              btn.setButtonText("Test");
+              btn.setDisabled(false);
+            }
+          })
+      );
+
+    // ── Telemetry ──
+    containerEl.createEl("h3", { text: "Telemetry" });
+    containerEl.createEl("p", {
+      cls: "setting-item-description",
+    }).setText(
+      "Opt-in usage analytics to measure how useful suggestions are. " +
+        "Tracks acceptance rates, latency, and confidence per model. " +
+        "Data is sent to your configurable endpoint. Self-host for full privacy."
+    );
+
+    new Setting(containerEl)
+      .setName("Enable telemetry")
+      .setDesc("Send interaction events (suggested, accepted, rejected, ignored) to the telemetry endpoint.")
+      .addToggle((toggle) =>
+        toggle
+          .setValue(this.plugin.settings.telemetryEnabled)
+          .onChange(async (value) => {
+            this.plugin.settings.telemetryEnabled = value;
+            await this.plugin.saveSettings();
+          })
+      );
+
+    new Setting(containerEl)
+      .setName("Telemetry endpoint")
+      .setDesc("URL of your telemetry server (e.g. http://localhost:9100). Leave empty to disable.")
+      .addText((text) =>
+        text
+          .setPlaceholder("http://localhost:9100")
+          .setValue(this.plugin.settings.telemetryEndpoint)
+          .onChange(async (value) => {
+            this.plugin.settings.telemetryEndpoint = value;
+            await this.plugin.saveSettings();
+          })
+      );
+
+    new Setting(containerEl)
+      .setName("Include suggestion text")
+      .setDesc("Send the actual suggestion and context text (for qualitative replay). Off = metrics only.")
+      .addToggle((toggle) =>
+        toggle
+          .setValue(this.plugin.settings.telemetryIncludeText)
+          .onChange(async (value) => {
+            this.plugin.settings.telemetryIncludeText = value;
+            await this.plugin.saveSettings();
+          })
+      );
+
+    new Setting(containerEl)
+      .setName("Test telemetry")
+      .setDesc("Check if the telemetry server is reachable.")
+      .addButton((btn) =>
+        btn
+          .setButtonText("Test")
+          .setCta()
+          .onClick(async () => {
+            const endpoint = this.plugin.settings.telemetryEndpoint.replace(/\/$/, "");
+            if (!endpoint) {
+              new Notice("Set a telemetry endpoint first.", 3000);
+              return;
+            }
+            btn.setButtonText("Testing...");
+            btn.setDisabled(true);
+            try {
+              const res = await requestUrl({ url: `${endpoint}/health` });
+              if (res.json?.status === "ok") {
+                new Notice(`Telemetry reachable (${res.json.events} events). Dashboard: ${endpoint}/dashboard`, 5000);
+              } else {
+                new Notice("Unexpected response from telemetry server.", 5000);
+              }
+            } catch {
+              new Notice(`Cannot reach telemetry server at ${endpoint}`, 5000);
             } finally {
               btn.setButtonText("Test");
               btn.setDisabled(false);

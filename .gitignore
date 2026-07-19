@@ -58,3 +58,8 @@ scripts/__pycache__/
 
 # Reports (generated, not version-controlled)
 reports/
+
+# Telemetry database (runtime data, not version-controlled)
+demo/telemetry/telemetry.db
+demo/telemetry/telemetry.db-wal
+demo/telemetry/telemetry.db-shm
