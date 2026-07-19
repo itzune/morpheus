@@ -135,25 +135,22 @@ fixes the deployment split:
 
 | | **Morpheus (91M, 64 MB)** | Kimu 2B (2.1 GB) | Latxa 8B (6.6 GB) |
 |---|---|---|---|
-| **GPU (L40)** latency | **76 ms (105 tok/s)** | 95 ms (84.5 tok/s) | 115 ms (70.4 tok/s) |
-| **GPU (L40)** memory | **602 MiB VRAM** | 3036 MiB VRAM | 6988 MiB VRAM |
-| **CPU laptop** latency | **196 ms (40.7 tok/s)** | 1439 ms (5.6 tok/s) | 2869 ms (2.8 tok/s) |
-| **CPU laptop** memory | **266 MiB RAM** | 2357 MiB RAM | 6648 MiB RAM |
+| **GPU (L40)** latency | **70 ms (114.1 tok/s)** | 74 ms (107.6 tok/s) | 102 ms (78.3 tok/s) |
+| **GPU (L40)** memory | **602 MiB VRAM** | 3036 MiB VRAM | 6992 MiB VRAM |
+| **CPU laptop** latency | **87 ms (91.7 tok/s)** | 1439 ms (5.6 tok/s) | 2869 ms (2.8 tok/s) |
+| **CPU laptop** memory | **264 MiB RAM** | 2357 MiB RAM | 6648 MiB RAM |
 | Autocomplete-viable on CPU? | **yes** | no (9.6× over) | no (19× over budget) |
 
 On the L40 all three clear the 150 ms threshold and the choice is a
-quality/VRAM trade. Latency scales cleanly with model size: 76 / 95 / 115 ms.
+quality/VRAM trade. Latency scales cleanly with model size: 70 / 74 / 102 ms.
 Kimu is the efficiency frontier — it matches Latxa's CSR at 43% less VRAM and
-19 ms lower latency. The GPU itself is not the bottleneck — utilization across
-all three processes on the single card is 31% mean / 78% peak. The host-CPU
-signal runs *counter* to model size: Latxa's and Kimu's model servers idle at
-0% host CPU (the `llama-fim` backend hands llama-server a plain string and the
-GPU does all the work), whereas morpheus's `morpheus-sp-fim` backend burns 2%
-host CPU on SentencePiece encoding + retokenization-fallback in Python — the
-smaller model is cheaper to *run* but costlier to *serve*. On a CPU laptop
+28 ms lower latency. The GPU itself is not the bottleneck — utilization across
+all three processes on the single card is 33% mean / 74% peak. All three model
+servers idle at ~1% host CPU on the GPU — the GPU handles all inference work,
+and the host CPU only manages tokenization and HTTP transport. On a CPU laptop
 Latxa 8B collapses to ~2.9 s/request and 6.6 GB RAM — not a real-time model
-off-Gpu — Kimu 2B is 2× faster (~1.4 s, 5.6 tok/s) but still 9.6× over budget,
-while morpheus stays at 40.7 tok/s. So the two tiers are not a
+off-GPU — Kimu 2B is 2× faster (~1.4 s, 5.6 tok/s) but still 9.6× over budget,
+while morpheus stays at 91.7 tok/s. So the two tiers are not a
 preference but a constraint: **morpheus is the only one that runs on the edge with acceptable latency;
 Kimu and Latxa are the server-side ceiling** (and the FIM fine-tune
 candidates, see point 3 below). Full benchmark:
@@ -559,7 +556,7 @@ deployment architecture as a **two-tier split, fixed by hardware rather than
 preference**:
 
 - **Morpheus (Mamba-2, 91M, 64 MB) is the on-device tier.** It is the only
-  model that runs on the edge — 40.7 tok/s on a 2017 consumer laptop CPU — but
+  model that runs on the edge — 91.7 tok/s on a 2017 consumer laptop CPU — but
   its quality ceiling is real: on essay and technical prose it gives *naive*
   predictions, drifting to high-frequency connective filler or unrelated
   statistical patterns instead of holding the semantic thread. Its sweet spot

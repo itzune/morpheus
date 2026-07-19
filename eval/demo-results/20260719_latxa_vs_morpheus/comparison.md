@@ -100,14 +100,14 @@ All three models offloaded `-ngl 99`, served simultaneously (10.6 GB / 46 GB VRA
 
 | Model | mean | p50 | p95 | min | max | tok/s | VRAM | host CPU | RSS |
 |-------|-----:|-----:|-----:|----:|----:|------:|-----:|----:|----:|
-| **Morpheus Q5_K_M (91M)** | **76 ms** | **64 ms** | **133 ms** | **43 ms** | **181 ms** | **104.9** | **602 MiB** | 2% | 1569 MiB |
-| Kimu 2B Q6_K | 95 ms | 98 ms | 101 ms | 71 ms | 102 ms | 84.5 | 3036 MiB | 0% | 910 MiB |
-| Latxa 8B Q6_K | 115 ms | 115 ms | 120 ms | 107 ms | 128 ms | 70.4 | 6988 MiB | 0% | 1138 MiB |
+| **Morpheus Q5_K_M (91M)** | **70 ms** | **55 ms** | **124 ms** | **39 ms** | **178 ms** | **114.1** | **602 MiB** | 1% | 1958 MiB |
+| Kimu 2B Q6_K | 74 ms | 75 ms | 78 ms | 67 ms | 80 ms | 107.6 | 3036 MiB | 0% | 1198 MiB |
+| Latxa 8B Q6_K | 102 ms | 103 ms | 106 ms | 97 ms | 108 ms | 78.3 | 6992 MiB | 0% | 1221 MiB |
 
-GPU utilization (shared): mean 31%, peak 78%. All three models stay well under
+GPU utilization (shared): mean 33%, peak 74%. All three models stay well under
 the 150 ms autocomplete threshold. Latency scales cleanly with model size:
-Morpheus (91M) → Kimu (2B) → Latxa (8B) at 76 / 95 / 115 ms. Kimu is the
-sweet spot — +19 ms over Morpheus for +9.3 CSR points, and 19 ms *faster* than
+Morpheus (91M) → Kimu (2B) → Latxa (8B) at 70 / 74 / 102 ms. Kimu is the
+sweet spot — +4 ms over Morpheus for +9.3 CSR points, and 28 ms *faster* than
 Latxa at 43% less VRAM.
 
 ### Localhost laptop — Intel i7-8550U 4c/8t @1.8 GHz, 15 GB RAM, **no GPU**
@@ -116,7 +116,7 @@ One model at a time, `-ngl 0 -c 2048 -t 8` (pure CPU).
 
 | Model | mean | p50 | p95 | tok/s | RAM (RSS) | host CPU |
 |-------|-----:|-----:|-----:|------:|----------:|----:|
-| **Morpheus Q5_K_M (91M)** | **196 ms** | **165 ms** | **343 ms** | **40.7** | **266 MiB** | **86%** |
+| **Morpheus Q5_K_M (91M)** | **87 ms** | **80 ms** | **147 ms** | **91.7** | **264 MiB** | **77%** |
 | Kimu 2B Q6_K | 1439 ms | 1429 ms | 1500 ms | 5.6 | 2357 MiB | 563% |
 | Latxa 8B Q6_K | 2869 ms | 2796 ms | 3356 ms | 2.8 | 6648 MiB | 534% |
 
@@ -124,14 +124,14 @@ One model at a time, `-ngl 0 -c 2048 -t 8` (pure CPU).
 
 1. **On GPU, all three are viable autocomplete models.** Kimu is the
    efficiency frontier: it matches Latxa's CSR (34.1% vs 33.2%) at 43% less
-   VRAM (3.0 vs 7.0 GB) and 17% lower latency (95 vs 115 ms). Morpheus is the
-   cheapest (602 MiB, 76 ms) but 9 CSR points behind.
+   VRAM (3.0 vs 7.0 GB) and 27% lower latency (74 vs 102 ms). Morpheus is the
+   cheapest (602 MiB, 70 ms) but 9 CSR points behind.
 2. **On CPU, only Morpheus is viable.** Latxa 8B at 2.8 tok/s means a single
    token takes ~360 ms and an 8-token completion takes ~2.9 s — ~19× over the
    150 ms threshold — while pinning 5.3 cores and 6.6 GB of RAM. Kimu 2B is
    2× faster than Latxa (5.6 tok/s, ~1.4 s/request) and uses 2.8× less RAM
    (2.4 GB), but is still ~9.6× over the budget — not a real-time model
-   off-GPU. Morpheus on the same laptop does 40.7 tok/s (196 ms for 8 tokens),
+   off-GPU. Morpheus on the same laptop does 91.7 tok/s (87 ms for 8 tokens),
    comfortably inside the budget.
 3. **The size gap is the deployment gap.** Latxa is 98× larger on disk
    (6290 vs 64 MiB); Kimu is 33× larger (2100 vs 64 MiB). That is the cost of
@@ -143,7 +143,7 @@ The three-model comparison **confirms the two-tier positioning** while
 revealing Kimu 2B as a compelling mid-tier:
 
 - **Kimu 2B matches Latxa 8B on CSR** (34.1% vs 33.2%) at 4× smaller size and
-  19 ms lower latency — a 2B Basque-pretrained model is sufficient to reach the
+  28 ms lower latency — a 2B Basque-pretrained model is sufficient to reach the
   8B quality ceiling on this task.
 - **Both Basque LLMs beat Morpheus by ~9 CSR points** (33-34% vs 24.8%) — the
   gap a 2B+ pretrained backbone opens over a 91M from-scratch model.
@@ -151,7 +151,7 @@ revealing Kimu 2B as a compelling mid-tier:
   infill is non-functional on both Kimu and Latxa (base models emit garbage on
   FIM sentinels). A FIM fine-tune should close the remaining gap.
 - **The deployment split is a hardware constraint, not a preference.** Morpheus
-  (91M, 55 MB) is the only CPU-viable model (40.7 tok/s on a 2017 laptop); Kimu
+  (91M, 55 MB) is the only CPU-viable model (91.7 tok/s on a 2017 laptop); Kimu
   and Latxa are GPU-bound.
 
 ## Raw result files

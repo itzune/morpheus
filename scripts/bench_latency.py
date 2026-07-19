@@ -82,6 +82,7 @@ def sample_resources(pids, with_gpu, stop):
                              "cpu": float(out[0]), "mem_pct": float(out[1]),
                              "rss_mb": int(out[2])/1024, "vsz_mb": int(out[3])/1024})
             except Exception: pass
+        time.sleep(0.5)
         if with_gpu:
             try:
                 out = subprocess.check_output(

@@ -12,7 +12,7 @@ This is the question this project investigates. Basque (Euskara) is a low-resour
 
 The comparison establishes a **two-tier deployment architecture, fixed by hardware rather than preference**:
 
-- **Morpheus (91M, 55 MB)** is the only model that runs on the edge (40.7 tok/s on a 2017 laptop CPU), but its quality ceiling is visible on generative prose — its sweet spot is **formulaic completion** (email openings/closings, fixed collocations) and **domain-specialized fine-tunes** where a narrow distribution raises the hit rate on the patterns it can actually learn.
+- **Morpheus (91M, 55 MB)** is the only model that runs on the edge (91.7 tok/s on a 2017 laptop CPU), but its quality ceiling is visible on generative prose — its sweet spot is **formulaic completion** (email openings/closings, fixed collocations) and **domain-specialized fine-tunes** where a narrow distribution raises the hit rate on the patterns it can actually learn.
 - **Latxa 8B (base)** is the server-side quality ceiling (+8.35 CSR points, cross-domain competence without specialization) but is GPU-bound, collapsing to 2.9 s/request on the same laptop. It is the candidate for FIM continued pretraining, and a practical advantage is that it rides on a **standard LLM** (Llama-3.1) with its mature ecosystem (quantization, serving, editor plugins, eval harnesses) shared with mainstream work.
 
 The model uses a 4,000-token SentencePiece Unigram vocabulary, chosen so that Basque's agglutinative morphology (root + suffix chains) splits into reusable subwords rather than fusing into opaque atomic tokens.
