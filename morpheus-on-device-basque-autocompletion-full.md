@@ -155,19 +155,7 @@ We evaluated three candidate architectures against these constraints:
 
 ### 3.3 Decision: Mamba-2 (Path C)
 
-We selected Mamba-2 for the following weighted scoring:
-
-| Criterion | Weight | xLSTM | Distilled Transformer | **Mamba-2** |
-|-----------|--------|-------|----------------------|-------------|
-| Expected prediction quality | 30% | 3 | **5** | **4** |
-| Inference latency safety | 25% | **5** | 3 | **5** |
-| Engineering effort / risk | 20% | **4** | 2 | 3 |
-| Ecosystem maturity | 10% | 3 | **5** | 3 |
-| Future-proofing | 10% | 3 | 4 | **5** |
-| Training cost | 5% | **5** | 3 | **4** |
-| **Weighted Score** | | 3.80 | 3.70 | **4.05** |
-
-Mamba-2 combines the LSTM-like inference properties essential for on-device autocomplete (constant memory, predictable latency) with dramatically better language modeling capacity than recurrent architectures at the same scale. This directly mirrors Google's Smart Compose decision (§2.1): both chose recurrent over Transformer architectures to avoid KV-cache latency, but Mamba-2 solves it at the architecture level rather than with data-center TPUs.
+We selected **Mamba-2**. It combines the LSTM-like inference properties essential for on-device autocomplete (constant memory, predictable latency) with dramatically better language modeling capacity than recurrent architectures at the same scale. This directly mirrors Google's Smart Compose decision (§2.1): both chose recurrent over Transformer architectures to avoid KV-cache latency, but Mamba-2 solves it at the architecture level rather than with data-center TPUs.
 
 The decision to not pursue Path B (distillation) was driven by practical concerns: the Gemma tokenizer's 256K vocabulary would require aggressive pruning for a 200M model (embedding table alone = 524 MB), and KV cache management on consumer CPU introduces latency variance that violates our 50ms P90 constraint.
 

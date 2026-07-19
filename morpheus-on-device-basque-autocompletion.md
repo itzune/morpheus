@@ -41,17 +41,7 @@ Two strategic paths present themselves. **Adapting an existing Basque LLM** (the
 
 ## 2. Architecture Selection
 
-Our constraints demand ≤300 MB on disk, P90 ≤50 ms per-token latency, zero network calls, and training on a single NVIDIA L40 GPU. We evaluated three candidates:
-
-| Criterion (weight) | xLSTM | Distilled Transformer | **Mamba-2** |
-|---------------------|-------|----------------------|-------------|
-| Prediction quality (30%) | 3 | **5** | 4 |
-| Inference latency (25%) | **5** | 3 | **5** |
-| Engineering risk (20%) | **4** | 2 | 3 |
-| Future-proofing (10%) | 3 | 4 | **5** |
-| **Weighted Score** | 3.80 | 3.70 | **4.05** |
-
-Mamba-2 combines LSTM-like inference properties (constant memory, no KV cache) with substantially better language modeling capacity. The distillation path was rejected because Gemma's 256K vocabulary would consume the entire parameter budget in embeddings alone, and KV cache on consumer CPU violates the latency constraint.
+Our constraints demand ≤300 MB on disk, P90 ≤50 ms per-token latency, zero network calls, and training on a single NVIDIA L40 GPU. We evaluated three candidates — xLSTM, a distilled Transformer, and Mamba-2 — and selected **Mamba-2**. It combines LSTM-like inference properties (constant memory, no KV cache) with substantially better language modeling capacity. The distillation path was rejected because Gemma's 256K vocabulary would consume the entire parameter budget in embeddings alone, and KV cache on consumer CPU violates the latency constraint.
 
 ---
 
