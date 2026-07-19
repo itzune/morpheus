@@ -40,5 +40,21 @@ services:
       - MORPHEUS_NGL=${MORPHEUS_NGL:-0}
     restart: unless-stopped
 
+  # Telemetry server: collects autocomplete interaction events from the
+  # Obsidian plugin and serves a cross-model analytics dashboard.
+  # Separate from the completion server (Copilot pattern: execution ≠
+  # observation). Opt-in on the plugin side; self-hostable.
+  telemetry:
+    build:
+      context: ..
+      dockerfile: demo/telemetry/Dockerfile
+    ports:
+      - "9100:9100"
+    volumes:
+      # Persist SQLite database across restarts
+      - morpheus-telemetry:/data
+    restart: unless-stopped
+
 volumes:
   morpheus-models:
+  morpheus-telemetry:

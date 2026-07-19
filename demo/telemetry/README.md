@@ -36,6 +36,24 @@ per model. This directly answers "which model's suggestions are most useful?"
 
 ## Quick Start
 
+### Option 1: Docker Compose (recommended)
+
+The telemetry server is included in `docker-compose.yml` alongside the
+completion server. Both start together:
+
+```bash
+cd demo
+docker compose -f docker-compose.yml -f docker-compose.local.yml up -d --build
+```
+
+- Completion server: `http://localhost:9090`
+- Telemetry server: `http://localhost:9100`
+- Dashboard: `http://localhost:9100/dashboard`
+
+The SQLite database persists in a Docker volume (`morpheus-telemetry`).
+
+### Option 2: Standalone
+
 ```bash
 cd demo/telemetry
 pip install -r requirements.txt
