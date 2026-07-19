@@ -100,8 +100,8 @@ All three models offloaded `-ngl 99`, served simultaneously (10.6 GB / 46 GB VRA
 
 | Model | mean | p50 | p95 | min | max | tok/s | VRAM | host CPU | RSS |
 |-------|-----:|-----:|-----:|----:|----:|------:|-----:|----:|----:|
-| Morpheus Q5_K_M (91M) | 76 ms | 64 ms | 133 ms | 43 ms | 181 ms | 104.9 | 602 MiB | 2% | 1569 MiB |
-| **Kimu 2B Q6_K** | **95 ms** | 98 ms | 101 ms | 71 ms | 102 ms | 84.5 | **3036 MiB** | 0% | 910 MiB |
+| **Morpheus Q5_K_M (91M)** | **76 ms** | **64 ms** | **133 ms** | **43 ms** | **181 ms** | **104.9** | **602 MiB** | 2% | 1569 MiB |
+| Kimu 2B Q6_K | 95 ms | 98 ms | 101 ms | 71 ms | 102 ms | 84.5 | 3036 MiB | 0% | 910 MiB |
 | Latxa 8B Q6_K | 115 ms | 115 ms | 120 ms | 107 ms | 128 ms | 70.4 | 6988 MiB | 0% | 1138 MiB |
 
 GPU utilization (shared): mean 31%, peak 78%. All three models stay well under
@@ -116,7 +116,7 @@ One model at a time, `-ngl 0 -c 2048 -t 8` (pure CPU).
 
 | Model | mean | p50 | p95 | tok/s | RAM (RSS) | host CPU |
 |-------|-----:|-----:|-----:|------:|----------:|----:|
-| Morpheus Q5_K_M (91M) | 196 ms | 165 ms | 343 ms | 40.7 | 266 MiB | 86% |
+| **Morpheus Q5_K_M (91M)** | **196 ms** | **165 ms** | **343 ms** | **40.7** | **266 MiB** | **86%** |
 | Kimu 2B Q6_K | 1439 ms | 1429 ms | 1500 ms | 5.6 | 2357 MiB | 563% |
 | Latxa 8B Q6_K | 2869 ms | 2796 ms | 3356 ms | 2.8 | 6648 MiB | 534% |
 

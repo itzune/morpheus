@@ -133,13 +133,13 @@ autocomplete task, a 2B Basque-pretrained model is sufficient to reach the
 8B quality ceiling. But the quality lead comes with a hard hardware cost that
 fixes the deployment split:
 
-| | Morpheus (91M, 64 MB) | Kimu 2B (2.1 GB) | Latxa 8B (6.6 GB) |
+| | **Morpheus (91M, 64 MB)** | Kimu 2B (2.1 GB) | Latxa 8B (6.6 GB) |
 |---|---|---|---|
-| **GPU (L40)** latency | 76 ms (105 tok/s) | 95 ms (84.5 tok/s) | 115 ms (70.4 tok/s) |
-| **GPU (L40)** memory | 602 MiB VRAM | 3036 MiB VRAM | 6988 MiB VRAM |
-| **CPU laptop** latency | 196 ms (40.7 tok/s) | 1439 ms (5.6 tok/s) | **2869 ms (2.8 tok/s)** |
-| **CPU laptop** memory | 266 MiB RAM | 2357 MiB RAM | 6648 MiB RAM |
-| Autocomplete-viable on CPU? | **yes** | no (9.6× over) | **no** (19× over budget) |
+| **GPU (L40)** latency | **76 ms (105 tok/s)** | 95 ms (84.5 tok/s) | 115 ms (70.4 tok/s) |
+| **GPU (L40)** memory | **602 MiB VRAM** | 3036 MiB VRAM | 6988 MiB VRAM |
+| **CPU laptop** latency | **196 ms (40.7 tok/s)** | 1439 ms (5.6 tok/s) | 2869 ms (2.8 tok/s) |
+| **CPU laptop** memory | **266 MiB RAM** | 2357 MiB RAM | 6648 MiB RAM |
+| Autocomplete-viable on CPU? | **yes** | no (9.6× over) | no (19× over budget) |
 
 On the L40 all three clear the 150 ms threshold and the choice is a
 quality/VRAM trade. Latency scales cleanly with model size: 76 / 95 / 115 ms.

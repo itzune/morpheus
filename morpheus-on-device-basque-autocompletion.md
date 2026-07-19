@@ -165,10 +165,10 @@ Morpheus matches GPT-2's BPC at fewer parameters (the difference is primarily at
 
 | Hardware | Model | Latency | tok/s | Memory |
 |----------|-------|---------|-------|--------|
-| L40 (GPU) | Morpheus Q5_K_M | 76 ms | 105 | 602 MiB VRAM |
+| L40 (GPU) | **Morpheus Q5_K_M** | **76 ms** | **105** | **602 MiB VRAM** |
 | L40 (GPU) | Kimu 2B Q6_K | 95 ms | 84.5 | 3,036 MiB VRAM |
 | L40 (GPU) | Latxa 8B Q6_K | 115 ms | 70.4 | 6,988 MiB VRAM |
-| i7-8550U (CPU) | Morpheus Q5_K_M | 196 ms | 40.7 | 266 MiB RAM |
+| i7-8550U (CPU) | **Morpheus Q5_K_M** | **196 ms** | **40.7** | **266 MiB RAM** |
 | i7-8550U (CPU) | Kimu 2B Q6_K | 1,439 ms | 5.6 | 2,357 MiB RAM |
 | i7-8550U (CPU) | Latxa 8B Q6_K | 2,869 ms | 2.8 | 6,648 MiB RAM |
 

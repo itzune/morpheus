@@ -607,10 +607,10 @@ Both Kimu and Latxa commit to semantically specific continuations — a concrete
 
 | Hardware | Model | mean | p50 | tok/s | Memory | host CPU |
 |---|---|---:|---:|---:|---|---:|
-| L40 (GPU) | Morpheus Q5_K_M | 76 ms | 64 ms | 104.9 | 602 MiB VRAM | 2% |
+| L40 (GPU) | **Morpheus Q5_K_M** | **76 ms** | **64 ms** | **104.9** | **602 MiB VRAM** | 2% |
 | L40 (GPU) | Kimu 2B Q6_K | 95 ms | 98 ms | 84.5 | 3,036 MiB VRAM | 0% |
 | L40 (GPU) | Latxa 8B Q6_K | 115 ms | 115 ms | 70.4 | 6,988 MiB VRAM | 0% |
-| i7-8550U (CPU) | Morpheus Q5_K_M | 196 ms | 165 ms | 40.7 | 266 MiB RAM | 86% |
+| i7-8550U (CPU) | **Morpheus Q5_K_M** | **196 ms** | **165 ms** | **40.7** | **266 MiB RAM** | **86%** |
 | i7-8550U (CPU) | Kimu 2B Q6_K | 1,439 ms | 1,429 ms | 5.6 | 2,357 MiB RAM | 563% |
 | i7-8550U (CPU) | Latxa 8B Q6_K | 2,869 ms | 2,796 ms | 2.8 | 6,648 MiB RAM | 534% |
 
