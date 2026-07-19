@@ -137,9 +137,9 @@ fixes the deployment split:
 |---|---|---|---|
 | **GPU (L40)** latency | 76 ms (105 tok/s) | 95 ms (84.5 tok/s) | 115 ms (70.4 tok/s) |
 | **GPU (L40)** memory | 602 MiB VRAM | 3036 MiB VRAM | 6988 MiB VRAM |
-| **CPU laptop** latency | 196 ms (40.7 tok/s) | — | **2869 ms (2.8 tok/s)** |
-| **CPU laptop** memory | 266 MiB RAM | — | 6648 MiB RAM |
-| Autocomplete-viable on CPU? | **yes** | no | **no** (19× over budget) |
+| **CPU laptop** latency | 196 ms (40.7 tok/s) | 1439 ms (5.6 tok/s) | **2869 ms (2.8 tok/s)** |
+| **CPU laptop** memory | 266 MiB RAM | 2357 MiB RAM | 6648 MiB RAM |
+| Autocomplete-viable on CPU? | **yes** | no (9.6× over) | **no** (19× over budget) |
 
 On the L40 all three clear the 150 ms threshold and the choice is a
 quality/VRAM trade. Latency scales cleanly with model size: 76 / 95 / 115 ms.
@@ -152,7 +152,8 @@ GPU does all the work), whereas morpheus's `morpheus-sp-fim` backend burns 2%
 host CPU on SentencePiece encoding + retokenization-fallback in Python — the
 smaller model is cheaper to *run* but costlier to *serve*. On a CPU laptop
 Latxa 8B collapses to ~2.9 s/request and 6.6 GB RAM — not a real-time model
-off-Gpu — while morpheus stays at 40.7 tok/s. So the two tiers are not a
+off-Gpu — Kimu 2B is 2× faster (~1.4 s, 5.6 tok/s) but still 9.6× over budget,
+while morpheus stays at 40.7 tok/s. So the two tiers are not a
 preference but a constraint: **morpheus is the only one that runs on the edge;
 Kimu and Latxa are the server-side ceiling** (and the FIM fine-tune
 candidates, see point 3 below). Full benchmark:
@@ -574,7 +575,8 @@ preference**:
   points better than morpheus (34.10% / 33.18% vs 24.83%), cross-domain *without*
   specialization (both stayed on-topic across email, essay, and technical
   prompts), but GPU-bound — Latxa collapses to 2.9 s/request (2.8 tok/s) and 6.6
-  GB RAM on the same laptop, ~19× over the latency budget. Kimu 2B is the
+  GB RAM on the same laptop, ~19× over the latency budget; Kimu 2B is 2× faster
+  (~1.4 s, 5.6 tok/s, 9.6× over) but still not viable on CPU. Kimu 2B is the
   efficiency frontier (matches Latxa's CSR at 4× smaller size) and the leading
   candidate for **FIM continued pretraining** (§2) to close the infill gap. A
   practical advantage of both is that they ride on **standard LLMs** (Gemma-2 /

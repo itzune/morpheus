@@ -161,7 +161,7 @@ The figures make the deployment architecture visible: identical client, differen
 | Kimu 2B (base) | 2B | — | **0.341** | — |
 | Latxa 8B (base) | 8B | — | **0.332** | — |
 
-Morpheus matches GPT-2's BPC at fewer parameters (the difference is primarily attributable to 11× more training data). **The Basque LLM comparison** fixes the deployment architecture: both Kimu 2B (Orai NLP, Gemma-2 CPT) and Latxa 8B (HiTZ, Llama-3.1 CPT) save +9 CSR points over Morpheus with artifact-free BPE output, but are GPU-bound. Notably, Kimu 2B *edges out* Latxa 8B (34.1% vs 33.2%) at 4× smaller size — a 2B Basque-pretrained model reaches the 8B quality ceiling on this task. On the consumer laptop CPU, Latxa collapses to 2.8 tok/s (2,869 ms/request, 19× over the latency budget), while Morpheus sustains 40.7 tok/s.
+Morpheus matches GPT-2's BPC at fewer parameters (the difference is primarily attributable to 11× more training data). **The Basque LLM comparison** fixes the deployment architecture: both Kimu 2B (Orai NLP, Gemma-2 CPT) and Latxa 8B (HiTZ, Llama-3.1 CPT) save +9 CSR points over Morpheus with artifact-free BPE output, but are GPU-bound. Notably, Kimu 2B *edges out* Latxa 8B (34.1% vs 33.2%) at 4× smaller size — a 2B Basque-pretrained model reaches the 8B quality ceiling on this task. On the consumer laptop CPU, neither Basque LLM is viable: Kimu collapses to 5.6 tok/s (1,439 ms/request, 9.6× over budget), Latxa to 2.8 tok/s (2,869 ms/request, 19× over), while Morpheus sustains 40.7 tok/s.
 
 | Hardware | Model | Latency | tok/s | Memory |
 |----------|-------|---------|-------|--------|
@@ -169,6 +169,7 @@ Morpheus matches GPT-2's BPC at fewer parameters (the difference is primarily at
 | L40 (GPU) | Kimu 2B Q6_K | 95 ms | 84.5 | 3,036 MiB VRAM |
 | L40 (GPU) | Latxa 8B Q6_K | 115 ms | 70.4 | 6,988 MiB VRAM |
 | i7-8550U (CPU) | Morpheus Q5_K_M | 196 ms | 40.7 | 266 MiB RAM |
+| i7-8550U (CPU) | Kimu 2B Q6_K | 1,439 ms | 5.6 | 2,357 MiB RAM |
 | i7-8550U (CPU) | Latxa 8B Q6_K | 2,869 ms | 2.8 | 6,648 MiB RAM |
 
 The qualitative difference is clear: both Kimu and Latxa commit to semantically specific continuations (a concrete meeting time, an encryption property), while Morpheus often drifts into high-frequency connective filler or unrelated statistical patterns. Morpheus's sweet spot is **formulaic completion** — email openings, fixed collocations, administrative phrasing — and **domain-specialized fine-tunes**.

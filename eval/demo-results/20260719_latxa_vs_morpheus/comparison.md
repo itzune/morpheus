@@ -117,10 +117,8 @@ One model at a time, `-ngl 0 -c 2048 -t 8` (pure CPU).
 | Model | mean | p50 | p95 | tok/s | RAM (RSS) | host CPU |
 |-------|-----:|-----:|-----:|------:|----------:|----:|
 | Morpheus Q5_K_M (91M) | 196 ms | 165 ms | 343 ms | 40.7 | 266 MiB | 86% |
+| Kimu 2B Q6_K | 1439 ms | 1429 ms | 1500 ms | 5.6 | 2357 MiB | 563% |
 | Latxa 8B Q6_K | 2869 ms | 2796 ms | 3356 ms | 2.8 | 6648 MiB | 534% |
-
-*(Kimu 2B was not benchmarked on CPU — at 2B params it would fall between
-Morpheus and Latxa, likely ~1-2 s/request, still over the 150 ms threshold.)*
 
 ### What the numbers say
 
@@ -130,9 +128,11 @@ Morpheus and Latxa, likely ~1-2 s/request, still over the 150 ms threshold.)*
    cheapest (602 MiB, 76 ms) but 9 CSR points behind.
 2. **On CPU, only Morpheus is viable.** Latxa 8B at 2.8 tok/s means a single
    token takes ~360 ms and an 8-token completion takes ~2.9 s — ~19× over the
-   150 ms threshold — while pinning 5.3 cores and 6.6 GB of RAM. Morpheus on
-   the same laptop does 40.7 tok/s (196 ms for 8 tokens), comfortably inside
-   the budget.
+   150 ms threshold — while pinning 5.3 cores and 6.6 GB of RAM. Kimu 2B is
+   2× faster than Latxa (5.6 tok/s, ~1.4 s/request) and uses 2.8× less RAM
+   (2.4 GB), but is still ~9.6× over the budget — not a real-time model
+   off-GPU. Morpheus on the same laptop does 40.7 tok/s (196 ms for 8 tokens),
+   comfortably inside the budget.
 3. **The size gap is the deployment gap.** Latxa is 98× larger on disk
    (6290 vs 64 MiB); Kimu is 33× larger (2100 vs 64 MiB). That is the cost of
    the +9 CSR points — and it is only payable where a GPU is present.
