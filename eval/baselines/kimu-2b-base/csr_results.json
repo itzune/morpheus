@@ -1,0 +1,1597 @@
+{
+  "summary": {
+    "csr_micro": 0.212,
+    "csr_macro": 0.2146,
+    "csr_ci_lower": 0.1732,
+    "csr_ci_upper": 0.2547,
+    "word_accuracy": 0.6174,
+    "n_tests": 30,
+    "n_words": 149,
+    "n_accepted": 92,
+    "eval_time_s": 152.1
+  },
+  "details": [
+    {
+      "prompt": "Euskal Herriko",
+      "target": "Unibertsitatea hezkuntza publikoko erakunde bat da.",
+      "csr": 0.1176,
+      "keystrokes": 45,
+      "total_chars": 51,
+      "n_words": 6,
+      "n_accepted": 3,
+      "word_accuracy": 0.5,
+      "avg_prefix_before_accept": 3.33,
+      "word_results": [
+        {
+          "target": "Unibertsitatea",
+          "typed_prefix": "Unibertsitatea",
+          "predicted": "Unibertsitatearen",
+          "accepted": false,
+          "prefix_len": 14,
+          "confidence": 0.0
+        },
+        {
+          "target": "hezkuntza",
+          "typed_prefix": "hezkuntza",
+          "predicted": "hezkuntza-erakunde",
+          "accepted": false,
+          "prefix_len": 9,
+          "confidence": 0.0
+        },
+        {
+          "target": "publikoko",
+          "typed_prefix": "publik",
+          "predicted": "publikoko",
+          "accepted": true,
+          "prefix_len": 6,
+          "confidence": 0.964
+        },
+        {
+          "target": "erakunde",
+          "typed_prefix": "er",
+          "predicted": "erakunde",
+          "accepted": true,
+          "prefix_len": 2,
+          "confidence": 0.2125
+        },
+        {
+          "target": "bat",
+          "typed_prefix": "bat",
+          "predicted": "batda",
+          "accepted": false,
+          "prefix_len": 3,
+          "confidence": 0.0
+        },
+        {
+          "target": "da.",
+          "typed_prefix": "da",
+          "predicted": "da",
+          "accepted": true,
+          "prefix_len": 2,
+          "confidence": 0.519
+        }
+      ]
+    },
+    {
+      "prompt": "Euskal Herriko Unibertsitatea hezkuntza publikoko",
+      "target": "erakunde bat da.",
+      "csr": -0.0625,
+      "keystrokes": 17,
+      "total_chars": 16,
+      "n_words": 3,
+      "n_accepted": 1,
+      "word_accuracy": 0.3333,
+      "avg_prefix_before_accept": 2.0,
+      "word_results": [
+        {
+          "target": "erakunde",
+          "typed_prefix": "erakunde",
+          "predicted": "erakundeen",
+          "accepted": false,
+          "prefix_len": 8,
+          "confidence": 0.0
+        },
+        {
+          "target": "bat",
+          "typed_prefix": "bat",
+          "predicted": "batda",
+          "accepted": false,
+          "prefix_len": 3,
+          "confidence": 0.0
+        },
+        {
+          "target": "da.",
+          "typed_prefix": "da",
+          "predicted": "da",
+          "accepted": true,
+          "prefix_len": 2,
+          "confidence": 0.6146
+        }
+      ]
+    },
+    {
+      "prompt": "Gainera, ikerketa",
+      "target": "zentroak nazioarteko lankidetza hitzarmenak sinatu ditu.",
+      "csr": 0.2857,
+      "keystrokes": 40,
+      "total_chars": 56,
+      "n_words": 6,
+      "n_accepted": 4,
+      "word_accuracy": 0.6667,
+      "avg_prefix_before_accept": 2.25,
+      "word_results": [
+        {
+          "target": "zentroak",
+          "typed_prefix": "z",
+          "predicted": "zentroak",
+          "accepted": true,
+          "prefix_len": 1,
+          "confidence": 0.8802
+        },
+        {
+          "target": "nazioarteko",
+          "typed_prefix": "naz",
+          "predicted": "nazioarteko",
+          "accepted": true,
+          "prefix_len": 3,
+          "confidence": 0.8411
+        },
+        {
+          "target": "lankidetza",
+          "typed_prefix": "lankidetza",
+          "predicted": "lankidetza-proiektuak",
+          "accepted": false,
+          "prefix_len": 10,
+          "confidence": 0.0
+        },
+        {
+          "target": "hitzarmenak",
+          "typed_prefix": "hitzarmenak",
+          "predicted": "hitzarmenaksinatu",
+          "accepted": false,
+          "prefix_len": 11,
+          "confidence": 0.0
+        },
+        {
+          "target": "sinatu",
+          "typed_prefix": "sin",
+          "predicted": "sinatu",
+          "accepted": true,
+          "prefix_len": 3,
+          "confidence": 0.8556
+        },
+        {
+          "target": "ditu.",
+          "typed_prefix": "di",
+          "predicted": "ditu",
+          "accepted": true,
+          "prefix_len": 2,
+          "confidence": 0.5482
+        }
+      ]
+    },
+    {
+      "prompt": "Gainera, ikerketa zentroak nazioarteko lankidetza",
+      "target": "hitzarmenak sinatu ditu.",
+      "csr": 0.3333,
+      "keystrokes": 16,
+      "total_chars": 24,
+      "n_words": 3,
+      "n_accepted": 2,
+      "word_accuracy": 0.6667,
+      "avg_prefix_before_accept": 3.0,
+      "word_results": [
+        {
+          "target": "hitzarmenak",
+          "typed_prefix": "hit",
+          "predicted": "hitzarmenak",
+          "accepted": true,
+          "prefix_len": 3,
+          "confidence": 0.9958
+        },
+        {
+          "target": "sinatu",
+          "typed_prefix": "sin",
+          "predicted": "sinatu",
+          "accepted": true,
+          "prefix_len": 3,
+          "confidence": 0.7721
+        },
+        {
+          "target": "ditu.",
+          "typed_prefix": "ditu.",
+          "predicted": "ditu.Horien",
+          "accepted": false,
+          "prefix_len": 5,
+          "confidence": 0.0
+        }
+      ]
+    },
+    {
+      "prompt": "Azken urteotan, teknologiaren",
+      "target": "garapenak eragin handia izan du gizartean.",
+      "csr": 0.1667,
+      "keystrokes": 35,
+      "total_chars": 42,
+      "n_words": 6,
+      "n_accepted": 4,
+      "word_accuracy": 0.6667,
+      "avg_prefix_before_accept": 3.75,
+      "word_results": [
+        {
+          "target": "garapenak",
+          "typed_prefix": "gar",
+          "predicted": "garapenak",
+          "accepted": true,
+          "prefix_len": 3,
+          "confidence": 0.8133
+        },
+        {
+          "target": "eragin",
+          "typed_prefix": "eragin",
+          "predicted": "eraginhandia",
+          "accepted": false,
+          "prefix_len": 6,
+          "confidence": 0.0
+        },
+        {
+          "target": "handia",
+          "typed_prefix": "han",
+          "predicted": "handia",
+          "accepted": true,
+          "prefix_len": 3,
+          "confidence": 0.9611
+        },
+        {
+          "target": "izan",
+          "typed_prefix": "izan",
+          "predicted": "izandute",
+          "accepted": false,
+          "prefix_len": 4,
+          "confidence": 0.0
+        },
+        {
+          "target": "du",
+          "typed_prefix": "",
+          "predicted": "du",
+          "accepted": true,
+          "prefix_len": 0,
+          "confidence": 0.4942
+        },
+        {
+          "target": "gizartean.",
+          "typed_prefix": "gizartean",
+          "predicted": "gizartean",
+          "accepted": true,
+          "prefix_len": 9,
+          "confidence": 0.35
+        }
+      ]
+    },
+    {
+      "prompt": "Azken urteotan, teknologiaren garapenak eragin handia",
+      "target": "izan du gizartean.",
+      "csr": 0.3333,
+      "keystrokes": 12,
+      "total_chars": 18,
+      "n_words": 3,
+      "n_accepted": 2,
+      "word_accuracy": 0.6667,
+      "avg_prefix_before_accept": 2.5,
+      "word_results": [
+        {
+          "target": "izan",
+          "typed_prefix": "",
+          "predicted": "izan",
+          "accepted": true,
+          "prefix_len": 0,
+          "confidence": 0.831
+        },
+        {
+          "target": "du",
+          "typed_prefix": "du",
+          "predicted": "dugure",
+          "accepted": false,
+          "prefix_len": 2,
+          "confidence": 0.0
+        },
+        {
+          "target": "gizartean.",
+          "typed_prefix": "gizar",
+          "predicted": "gizartean",
+          "accepted": true,
+          "prefix_len": 5,
+          "confidence": 0.5784
+        }
+      ]
+    },
+    {
+      "prompt": "Ikasleek eskolara",
+      "target": "joateko autobusa goizeko zazpietan hartzen dute.",
+      "csr": 0.2083,
+      "keystrokes": 38,
+      "total_chars": 48,
+      "n_words": 6,
+      "n_accepted": 4,
+      "word_accuracy": 0.6667,
+      "avg_prefix_before_accept": 3.5,
+      "word_results": [
+        {
+          "target": "joateko",
+          "typed_prefix": "jo",
+          "predicted": "joateko",
+          "accepted": true,
+          "prefix_len": 2,
+          "confidence": 0.6299
+        },
+        {
+          "target": "autobusa",
+          "typed_prefix": "autobus",
+          "predicted": "autobusa",
+          "accepted": true,
+          "prefix_len": 7,
+          "confidence": 0.4871
+        },
+        {
+          "target": "goizeko",
+          "typed_prefix": "goizeko",
+          "predicted": "goizeko08:00etan",
+          "accepted": false,
+          "prefix_len": 7,
+          "confidence": 0.0
+        },
+        {
+          "target": "zazpietan",
+          "typed_prefix": "zaz",
+          "predicted": "zazpietan",
+          "accepted": true,
+          "prefix_len": 3,
+          "confidence": 0.965
+        },
+        {
+          "target": "hartzen",
+          "typed_prefix": "hartzen",
+          "predicted": "hartzendute",
+          "accepted": false,
+          "prefix_len": 7,
+          "confidence": 0.0
+        },
+        {
+          "target": "dute.",
+          "typed_prefix": "du",
+          "predicted": "dute",
+          "accepted": true,
+          "prefix_len": 2,
+          "confidence": 0.8255
+        }
+      ]
+    },
+    {
+      "prompt": "Ikasleek eskolara joateko autobusa goizeko",
+      "target": "zazpietan hartzen dute.",
+      "csr": 0.3478,
+      "keystrokes": 15,
+      "total_chars": 23,
+      "n_words": 3,
+      "n_accepted": 3,
+      "word_accuracy": 1.0,
+      "avg_prefix_before_accept": 3.0,
+      "word_results": [
+        {
+          "target": "zazpietan",
+          "typed_prefix": "zaz",
+          "predicted": "zazpietan",
+          "accepted": true,
+          "prefix_len": 3,
+          "confidence": 0.9871
+        },
+        {
+          "target": "hartzen",
+          "typed_prefix": "hart",
+          "predicted": "hartzen",
+          "accepted": true,
+          "prefix_len": 4,
+          "confidence": 0.4795
+        },
+        {
+          "target": "dute.",
+          "typed_prefix": "du",
+          "predicted": "dute",
+          "accepted": true,
+          "prefix_len": 2,
+          "confidence": 0.7324
+        }
+      ]
+    },
+    {
+      "prompt": "Etxebizitza berrien eraikuntzak",
+      "target": "ingurumenaren gaineko eragina aztertu behar da.",
+      "csr": 0.1489,
+      "keystrokes": 40,
+      "total_chars": 47,
+      "n_words": 6,
+      "n_accepted": 3,
+      "word_accuracy": 0.5,
+      "avg_prefix_before_accept": 2.0,
+      "word_results": [
+        {
+          "target": "ingurumenaren",
+          "typed_prefix": "ingurumenaren",
+          "predicted": "ingurumenarengaineko",
+          "accepted": false,
+          "prefix_len": 13,
+          "confidence": 0.0
+        },
+        {
+          "target": "gaineko",
+          "typed_prefix": "ga",
+          "predicted": "gaineko",
+          "accepted": true,
+          "prefix_len": 2,
+          "confidence": 0.9715
+        },
+        {
+          "target": "eragina",
+          "typed_prefix": "er",
+          "predicted": "eragina",
+          "accepted": true,
+          "prefix_len": 2,
+          "confidence": 0.1606
+        },
+        {
+          "target": "aztertu",
+          "typed_prefix": "aztertu",
+          "predicted": "aztertubehar",
+          "accepted": false,
+          "prefix_len": 7,
+          "confidence": 0.0
+        },
+        {
+          "target": "behar",
+          "typed_prefix": "behar",
+          "predicted": "behardu",
+          "accepted": false,
+          "prefix_len": 5,
+          "confidence": 0.0
+        },
+        {
+          "target": "da.",
+          "typed_prefix": "da",
+          "predicted": "da",
+          "accepted": true,
+          "prefix_len": 2,
+          "confidence": 0.4587
+        }
+      ]
+    },
+    {
+      "prompt": "Etxebizitza berrien eraikuntzak ingurumenaren gaineko eragina",
+      "target": "aztertu behar da.",
+      "csr": 0.1765,
+      "keystrokes": 14,
+      "total_chars": 17,
+      "n_words": 3,
+      "n_accepted": 2,
+      "word_accuracy": 0.6667,
+      "avg_prefix_before_accept": 2.0,
+      "word_results": [
+        {
+          "target": "aztertu",
+          "typed_prefix": "az",
+          "predicted": "aztertu",
+          "accepted": true,
+          "prefix_len": 2,
+          "confidence": 0.5865
+        },
+        {
+          "target": "behar",
+          "typed_prefix": "behar",
+          "predicted": "behardu",
+          "accepted": false,
+          "prefix_len": 5,
+          "confidence": 0.0
+        },
+        {
+          "target": "da.",
+          "typed_prefix": "da",
+          "predicted": "da",
+          "accepted": true,
+          "prefix_len": 2,
+          "confidence": 0.3205
+        }
+      ]
+    },
+    {
+      "prompt": "Hizkuntzaren normalizazio",
+      "target": "prozesuak aurrerapauso garrantzitsuak eman ditu.",
+      "csr": 0.2083,
+      "keystrokes": 38,
+      "total_chars": 48,
+      "n_words": 5,
+      "n_accepted": 3,
+      "word_accuracy": 0.6,
+      "avg_prefix_before_accept": 4.67,
+      "word_results": [
+        {
+          "target": "prozesuak",
+          "typed_prefix": "prozesuak",
+          "predicted": "prozesuak",
+          "accepted": true,
+          "prefix_len": 9,
+          "confidence": 0.1025
+        },
+        {
+          "target": "aurrerapauso",
+          "typed_prefix": "aurrerapauso",
+          "predicted": "aurrerapausoak",
+          "accepted": false,
+          "prefix_len": 12,
+          "confidence": 0.0
+        },
+        {
+          "target": "garrantzitsuak",
+          "typed_prefix": "g",
+          "predicted": "garrantzitsuak",
+          "accepted": true,
+          "prefix_len": 1,
+          "confidence": 0.9956
+        },
+        {
+          "target": "eman",
+          "typed_prefix": "eman",
+          "predicted": "emanditu",
+          "accepted": false,
+          "prefix_len": 4,
+          "confidence": 0.0
+        },
+        {
+          "target": "ditu.",
+          "typed_prefix": "ditu",
+          "predicted": "ditu",
+          "accepted": true,
+          "prefix_len": 4,
+          "confidence": 0.1929
+        }
+      ]
+    },
+    {
+      "prompt": "Hizkuntzaren normalizazio prozesuak aurrerapauso",
+      "target": "garrantzitsuak eman ditu.",
+      "csr": 0.44,
+      "keystrokes": 14,
+      "total_chars": 25,
+      "n_words": 3,
+      "n_accepted": 2,
+      "word_accuracy": 0.6667,
+      "avg_prefix_before_accept": 2.5,
+      "word_results": [
+        {
+          "target": "garrantzitsuak",
+          "typed_prefix": "g",
+          "predicted": "garrantzitsuak",
+          "accepted": true,
+          "prefix_len": 1,
+          "confidence": 0.9956
+        },
+        {
+          "target": "eman",
+          "typed_prefix": "eman",
+          "predicted": "emanditu",
+          "accepted": false,
+          "prefix_len": 4,
+          "confidence": 0.0
+        },
+        {
+          "target": "ditu.",
+          "typed_prefix": "ditu",
+          "predicted": "ditu",
+          "accepted": true,
+          "prefix_len": 4,
+          "confidence": 0.1929
+        }
+      ]
+    },
+    {
+      "prompt": "Gurasoek seme-alabei",
+      "target": "irakurtzeko ohitura transmititu behar diete.",
+      "csr": 0.0,
+      "keystrokes": 44,
+      "total_chars": 44,
+      "n_words": 5,
+      "n_accepted": 2,
+      "word_accuracy": 0.4,
+      "avg_prefix_before_accept": 7.0,
+      "word_results": [
+        {
+          "target": "irakurtzeko",
+          "typed_prefix": "irakurtzeko",
+          "predicted": "irakurtzekozaletasuna",
+          "accepted": false,
+          "prefix_len": 11,
+          "confidence": 0.0
+        },
+        {
+          "target": "ohitura",
+          "typed_prefix": "ohitura",
+          "predicted": "ohiturak",
+          "accepted": false,
+          "prefix_len": 7,
+          "confidence": 0.0
+        },
+        {
+          "target": "transmititu",
+          "typed_prefix": "transmiti",
+          "predicted": "transmititu",
+          "accepted": true,
+          "prefix_len": 9,
+          "confidence": 0.4133
+        },
+        {
+          "target": "behar",
+          "typed_prefix": "behar",
+          "predicted": "behardiete",
+          "accepted": false,
+          "prefix_len": 5,
+          "confidence": 0.0
+        },
+        {
+          "target": "diete.",
+          "typed_prefix": "diete",
+          "predicted": "diete",
+          "accepted": true,
+          "prefix_len": 5,
+          "confidence": 0.3149
+        }
+      ]
+    },
+    {
+      "prompt": "Gurasoek seme-alabei irakurtzeko ohitura",
+      "target": "transmititu behar diete.",
+      "csr": 0.0,
+      "keystrokes": 24,
+      "total_chars": 24,
+      "n_words": 3,
+      "n_accepted": 2,
+      "word_accuracy": 0.6667,
+      "avg_prefix_before_accept": 7.0,
+      "word_results": [
+        {
+          "target": "transmititu",
+          "typed_prefix": "transmiti",
+          "predicted": "transmititu",
+          "accepted": true,
+          "prefix_len": 9,
+          "confidence": 0.4133
+        },
+        {
+          "target": "behar",
+          "typed_prefix": "behar",
+          "predicted": "behardiete",
+          "accepted": false,
+          "prefix_len": 5,
+          "confidence": 0.0
+        },
+        {
+          "target": "diete.",
+          "typed_prefix": "diete",
+          "predicted": "diete",
+          "accepted": true,
+          "prefix_len": 5,
+          "confidence": 0.3149
+        }
+      ]
+    },
+    {
+      "prompt": "Osasun sistemaren kudeaketak",
+      "target": "lurralde historikoetako erakundeen arteko koordinazioa eskatzen du.",
+      "csr": 0.3433,
+      "keystrokes": 44,
+      "total_chars": 67,
+      "n_words": 7,
+      "n_accepted": 6,
+      "word_accuracy": 0.8571,
+      "avg_prefix_before_accept": 4.67,
+      "word_results": [
+        {
+          "target": "lurralde",
+          "typed_prefix": "lur",
+          "predicted": "lurralde",
+          "accepted": true,
+          "prefix_len": 3,
+          "confidence": 0.8725
+        },
+        {
+          "target": "historikoetako",
+          "typed_prefix": "historikoeta",
+          "predicted": "historikoetako",
+          "accepted": true,
+          "prefix_len": 12,
+          "confidence": 0.9977
+        },
+        {
+          "target": "erakundeen",
+          "typed_prefix": "er",
+          "predicted": "erakundeen",
+          "accepted": true,
+          "prefix_len": 2,
+          "confidence": 0.3359
+        },
+        {
+          "target": "arteko",
+          "typed_prefix": "arte",
+          "predicted": "arteko",
+          "accepted": true,
+          "prefix_len": 4,
+          "confidence": 0.7557
+        },
+        {
+          "target": "koordinazioa",
+          "typed_prefix": "ko",
+          "predicted": "koordinazioa",
+          "accepted": true,
+          "prefix_len": 2,
+          "confidence": 0.4196
+        },
+        {
+          "target": "eskatzen",
+          "typed_prefix": "eskat",
+          "predicted": "eskatzen",
+          "accepted": true,
+          "prefix_len": 5,
+          "confidence": 0.9109
+        },
+        {
+          "target": "du.",
+          "typed_prefix": "du.",
+          "predicted": "du.Euskal",
+          "accepted": false,
+          "prefix_len": 3,
+          "confidence": 0.0
+        }
+      ]
+    },
+    {
+      "prompt": "Osasun sistemaren kudeaketak lurralde historikoetako erakundeen arteko",
+      "target": "koordinazioa eskatzen du.",
+      "csr": 0.32,
+      "keystrokes": 17,
+      "total_chars": 25,
+      "n_words": 3,
+      "n_accepted": 2,
+      "word_accuracy": 0.6667,
+      "avg_prefix_before_accept": 2.0,
+      "word_results": [
+        {
+          "target": "koordinazioa",
+          "typed_prefix": "ko",
+          "predicted": "koordinazioa",
+          "accepted": true,
+          "prefix_len": 2,
+          "confidence": 0.9898
+        },
+        {
+          "target": "eskatzen",
+          "typed_prefix": "eskatzen",
+          "predicted": "eskatzendu",
+          "accepted": false,
+          "prefix_len": 8,
+          "confidence": 0.0
+        },
+        {
+          "target": "du.",
+          "typed_prefix": "du",
+          "predicted": "du",
+          "accepted": true,
+          "prefix_len": 2,
+          "confidence": 0.2244
+        }
+      ]
+    },
+    {
+      "prompt": "Itsasertzeko herrietako",
+      "target": "arrantzaleek antzinako teknikak mantentzen jarraitzen dute.",
+      "csr": 0.3729,
+      "keystrokes": 37,
+      "total_chars": 59,
+      "n_words": 6,
+      "n_accepted": 5,
+      "word_accuracy": 0.8333,
+      "avg_prefix_before_accept": 3.4,
+      "word_results": [
+        {
+          "target": "arrantzaleek",
+          "typed_prefix": "ar",
+          "predicted": "arrantzaleek",
+          "accepted": true,
+          "prefix_len": 2,
+          "confidence": 0.6114
+        },
+        {
+          "target": "antzinako",
+          "typed_prefix": "antzinako",
+          "predicted": "antzinakoak",
+          "accepted": false,
+          "prefix_len": 9,
+          "confidence": 0.0
+        },
+        {
+          "target": "teknikak",
+          "typed_prefix": "teknik",
+          "predicted": "teknikak",
+          "accepted": true,
+          "prefix_len": 6,
+          "confidence": 0.7338
+        },
+        {
+          "target": "mantentzen",
+          "typed_prefix": "mant",
+          "predicted": "mantentzen",
+          "accepted": true,
+          "prefix_len": 4,
+          "confidence": 0.5776
+        },
+        {
+          "target": "jarraitzen",
+          "typed_prefix": "jar",
+          "predicted": "jarraitzen",
+          "accepted": true,
+          "prefix_len": 3,
+          "confidence": 0.466
+        },
+        {
+          "target": "dute.",
+          "typed_prefix": "du",
+          "predicted": "dute",
+          "accepted": true,
+          "prefix_len": 2,
+          "confidence": 0.4583
+        }
+      ]
+    },
+    {
+      "prompt": "Itsasertzeko herrietako arrantzaleek antzinako teknikak",
+      "target": "mantentzen jarraitzen dute.",
+      "csr": 0.3333,
+      "keystrokes": 18,
+      "total_chars": 27,
+      "n_words": 3,
+      "n_accepted": 3,
+      "word_accuracy": 1.0,
+      "avg_prefix_before_accept": 4.0,
+      "word_results": [
+        {
+          "target": "mantentzen",
+          "typed_prefix": "mantent",
+          "predicted": "mantentzen",
+          "accepted": true,
+          "prefix_len": 7,
+          "confidence": 0.9887
+        },
+        {
+          "target": "jarraitzen",
+          "typed_prefix": "jar",
+          "predicted": "jarraitzen",
+          "accepted": true,
+          "prefix_len": 3,
+          "confidence": 0.8696
+        },
+        {
+          "target": "dute.",
+          "typed_prefix": "du",
+          "predicted": "dute",
+          "accepted": true,
+          "prefix_len": 2,
+          "confidence": 0.8454
+        }
+      ]
+    },
+    {
+      "prompt": "Donostia Zinemaldia irailaren",
+      "target": "amaieran ospatzen den nazioarteko zinema jaialdia da.",
+      "csr": 0.1887,
+      "keystrokes": 43,
+      "total_chars": 53,
+      "n_words": 7,
+      "n_accepted": 3,
+      "word_accuracy": 0.4286,
+      "avg_prefix_before_accept": 2.67,
+      "word_results": [
+        {
+          "target": "amaieran",
+          "typed_prefix": "ama",
+          "predicted": "amaieran",
+          "accepted": true,
+          "prefix_len": 3,
+          "confidence": 0.8641
+        },
+        {
+          "target": "ospatzen",
+          "typed_prefix": "ospatzen",
+          "predicted": "ospatzenda",
+          "accepted": false,
+          "prefix_len": 8,
+          "confidence": 0.0
+        },
+        {
+          "target": "den",
+          "typed_prefix": "den",
+          "predicted": "denarren",
+          "accepted": false,
+          "prefix_len": 3,
+          "confidence": 0.0
+        },
+        {
+          "target": "nazioarteko",
+          "typed_prefix": "naz",
+          "predicted": "nazioarteko",
+          "accepted": true,
+          "prefix_len": 3,
+          "confidence": 0.9897
+        },
+        {
+          "target": "zinema",
+          "typed_prefix": "zinema",
+          "predicted": "zinemajaialdiaren",
+          "accepted": false,
+          "prefix_len": 6,
+          "confidence": 0.0
+        },
+        {
+          "target": "jaialdia",
+          "typed_prefix": "jaialdia",
+          "predicted": "jaialdiada",
+          "accepted": false,
+          "prefix_len": 8,
+          "confidence": 0.0
+        },
+        {
+          "target": "da.",
+          "typed_prefix": "da",
+          "predicted": "da",
+          "accepted": true,
+          "prefix_len": 2,
+          "confidence": 0.6756
+        }
+      ]
+    },
+    {
+      "prompt": "Donostia Zinemaldia irailaren amaieran ospatzen den nazioarteko",
+      "target": "zinema jaialdia da.",
+      "csr": 0.2105,
+      "keystrokes": 15,
+      "total_chars": 19,
+      "n_words": 3,
+      "n_accepted": 2,
+      "word_accuracy": 0.6667,
+      "avg_prefix_before_accept": 2.0,
+      "word_results": [
+        {
+          "target": "zinema",
+          "typed_prefix": "zinema",
+          "predicted": "zinemajaialdia",
+          "accepted": false,
+          "prefix_len": 6,
+          "confidence": 0.0
+        },
+        {
+          "target": "jaialdia",
+          "typed_prefix": "ja",
+          "predicted": "jaialdia",
+          "accepted": true,
+          "prefix_len": 2,
+          "confidence": 0.9994
+        },
+        {
+          "target": "da.",
+          "typed_prefix": "da",
+          "predicted": "da",
+          "accepted": true,
+          "prefix_len": 2,
+          "confidence": 0.5029
+        }
+      ]
+    },
+    {
+      "prompt": "Aralar mendilerroan dagoen",
+      "target": "San Migel santutegia erromeslekua izan da mendeetan zehar.",
+      "csr": 0.0862,
+      "keystrokes": 53,
+      "total_chars": 58,
+      "n_words": 8,
+      "n_accepted": 2,
+      "word_accuracy": 0.25,
+      "avg_prefix_before_accept": 3.0,
+      "word_results": [
+        {
+          "target": "San",
+          "typed_prefix": "San",
+          "predicted": "SanMigel",
+          "accepted": false,
+          "prefix_len": 3,
+          "confidence": 0.0
+        },
+        {
+          "target": "Migel",
+          "typed_prefix": "Mig",
+          "predicted": "Migel",
+          "accepted": true,
+          "prefix_len": 3,
+          "confidence": 0.861
+        },
+        {
+          "target": "santutegia",
+          "typed_prefix": "santutegia",
+          "predicted": "santutegiaren",
+          "accepted": false,
+          "prefix_len": 10,
+          "confidence": 0.0
+        },
+        {
+          "target": "erromeslekua",
+          "typed_prefix": "erromeslekua",
+          "predicted": "erromeslekuada",
+          "accepted": false,
+          "prefix_len": 12,
+          "confidence": 0.0
+        },
+        {
+          "target": "izan",
+          "typed_prefix": "izan",
+          "predicted": "izanda",
+          "accepted": false,
+          "prefix_len": 4,
+          "confidence": 0.0
+        },
+        {
+          "target": "da",
+          "typed_prefix": "da",
+          "predicted": "dabetidanik",
+          "accepted": false,
+          "prefix_len": 2,
+          "confidence": 0.0
+        },
+        {
+          "target": "mendeetan",
+          "typed_prefix": "men",
+          "predicted": "mendeetan",
+          "accepted": true,
+          "prefix_len": 3,
+          "confidence": 0.776
+        },
+        {
+          "target": "zehar.",
+          "typed_prefix": "zehar.",
+          "predicted": "zehar.Ibilbidearen",
+          "accepted": false,
+          "prefix_len": 6,
+          "confidence": 0.0
+        }
+      ]
+    },
+    {
+      "prompt": "Aralar mendilerroan dagoen San Migel santutegia erromeslekua",
+      "target": "izan da mendeetan zehar.",
+      "csr": 0.1667,
+      "keystrokes": 20,
+      "total_chars": 24,
+      "n_words": 4,
+      "n_accepted": 1,
+      "word_accuracy": 0.25,
+      "avg_prefix_before_accept": 3.0,
+      "word_results": [
+        {
+          "target": "izan",
+          "typed_prefix": "izan",
+          "predicted": "izanda",
+          "accepted": false,
+          "prefix_len": 4,
+          "confidence": 0.0
+        },
+        {
+          "target": "da",
+          "typed_prefix": "da",
+          "predicted": "dabetidanik",
+          "accepted": false,
+          "prefix_len": 2,
+          "confidence": 0.0
+        },
+        {
+          "target": "mendeetan",
+          "typed_prefix": "men",
+          "predicted": "mendeetan",
+          "accepted": true,
+          "prefix_len": 3,
+          "confidence": 0.8074
+        },
+        {
+          "target": "zehar.",
+          "typed_prefix": "zehar.",
+          "predicted": "zehar.Ibilbidearen",
+          "accepted": false,
+          "prefix_len": 6,
+          "confidence": 0.0
+        }
+      ]
+    },
+    {
+      "prompt": "Mendiko txirrindularitza txirrindularitza modalitate",
+      "target": "bat da, mendian zehar ibiltzeko diseinatutako bizikletekin praktikatzen dena.",
+      "csr": 0.1558,
+      "keystrokes": 65,
+      "total_chars": 77,
+      "n_words": 9,
+      "n_accepted": 5,
+      "word_accuracy": 0.5556,
+      "avg_prefix_before_accept": 4.0,
+      "word_results": [
+        {
+          "target": "bat",
+          "typed_prefix": "bat",
+          "predicted": "batda",
+          "accepted": false,
+          "prefix_len": 3,
+          "confidence": 0.0
+        },
+        {
+          "target": "da,",
+          "typed_prefix": "da",
+          "predicted": "da",
+          "accepted": true,
+          "prefix_len": 2,
+          "confidence": 0.6476
+        },
+        {
+          "target": "mendian",
+          "typed_prefix": "mendian",
+          "predicted": "mendianegiten",
+          "accepted": false,
+          "prefix_len": 7,
+          "confidence": 0.0
+        },
+        {
+          "target": "zehar",
+          "typed_prefix": "ze",
+          "predicted": "zehar",
+          "accepted": true,
+          "prefix_len": 2,
+          "confidence": 0.9649
+        },
+        {
+          "target": "ibiltzeko",
+          "typed_prefix": "ibiltzeko",
+          "predicted": "ibiltzekoerabiltzen",
+          "accepted": false,
+          "prefix_len": 9,
+          "confidence": 0.0
+        },
+        {
+          "target": "diseinatutako",
+          "typed_prefix": "dise",
+          "predicted": "diseinatutako",
+          "accepted": true,
+          "prefix_len": 4,
+          "confidence": 0.8986
+        },
+        {
+          "target": "bizikletekin",
+          "typed_prefix": "biziklete",
+          "predicted": "bizikletekin",
+          "accepted": true,
+          "prefix_len": 9,
+          "confidence": 0.8975
+        },
+        {
+          "target": "praktikatzen",
+          "typed_prefix": "praktikatzen",
+          "predicted": "praktikatzendena",
+          "accepted": false,
+          "prefix_len": 12,
+          "confidence": 0.0
+        },
+        {
+          "target": "dena.",
+          "typed_prefix": "den",
+          "predicted": "dena",
+          "accepted": true,
+          "prefix_len": 3,
+          "confidence": 0.9409
+        }
+      ]
+    },
+    {
+      "prompt": "Mendiko txirrindularitza txirrindularitza modalitate bat da, mendian zehar ibiltzeko",
+      "target": "diseinatutako bizikletekin praktikatzen dena.",
+      "csr": 0.3111,
+      "keystrokes": 31,
+      "total_chars": 45,
+      "n_words": 4,
+      "n_accepted": 4,
+      "word_accuracy": 1.0,
+      "avg_prefix_before_accept": 5.75,
+      "word_results": [
+        {
+          "target": "diseinatutako",
+          "typed_prefix": "dise",
+          "predicted": "diseinatutako",
+          "accepted": true,
+          "prefix_len": 4,
+          "confidence": 0.8783
+        },
+        {
+          "target": "bizikletekin",
+          "typed_prefix": "biziklete",
+          "predicted": "bizikletekin",
+          "accepted": true,
+          "prefix_len": 9,
+          "confidence": 0.8545
+        },
+        {
+          "target": "praktikatzen",
+          "typed_prefix": "praktik",
+          "predicted": "praktikatzen",
+          "accepted": true,
+          "prefix_len": 7,
+          "confidence": 0.7914
+        },
+        {
+          "target": "dena.",
+          "typed_prefix": "den",
+          "predicted": "dena",
+          "accepted": true,
+          "prefix_len": 3,
+          "confidence": 0.9659
+        }
+      ]
+    },
+    {
+      "prompt": "Euskal dantzak herri bakoitzeko",
+      "target": "tradizioen arabera aldatzen dira eta jaietan ikus daitezke.",
+      "csr": 0.2373,
+      "keystrokes": 45,
+      "total_chars": 59,
+      "n_words": 8,
+      "n_accepted": 7,
+      "word_accuracy": 0.875,
+      "avg_prefix_before_accept": 2.86,
+      "word_results": [
+        {
+          "target": "tradizioen",
+          "typed_prefix": "tradizioen",
+          "predicted": "tradizioenarabera",
+          "accepted": false,
+          "prefix_len": 10,
+          "confidence": 0.0
+        },
+        {
+          "target": "arabera",
+          "typed_prefix": "ara",
+          "predicted": "arabera",
+          "accepted": true,
+          "prefix_len": 3,
+          "confidence": 0.8794
+        },
+        {
+          "target": "aldatzen",
+          "typed_prefix": "ald",
+          "predicted": "aldatzen",
+          "accepted": true,
+          "prefix_len": 3,
+          "confidence": 0.7451
+        },
+        {
+          "target": "dira",
+          "typed_prefix": "di",
+          "predicted": "dira",
+          "accepted": true,
+          "prefix_len": 2,
+          "confidence": 0.4681
+        },
+        {
+          "target": "eta",
+          "typed_prefix": "e",
+          "predicted": "eta",
+          "accepted": true,
+          "prefix_len": 1,
+          "confidence": 0.2203
+        },
+        {
+          "target": "jaietan",
+          "typed_prefix": "jaietan",
+          "predicted": "jaietan",
+          "accepted": true,
+          "prefix_len": 7,
+          "confidence": 0.1391
+        },
+        {
+          "target": "ikus",
+          "typed_prefix": "ik",
+          "predicted": "ikus",
+          "accepted": true,
+          "prefix_len": 2,
+          "confidence": 0.5497
+        },
+        {
+          "target": "daitezke.",
+          "typed_prefix": "da",
+          "predicted": "daitezke",
+          "accepted": true,
+          "prefix_len": 2,
+          "confidence": 0.1838
+        }
+      ]
+    },
+    {
+      "prompt": "Euskal dantzak herri bakoitzeko tradizioen arabera aldatzen dira",
+      "target": "eta jaietan ikus daitezke.",
+      "csr": 0.3077,
+      "keystrokes": 18,
+      "total_chars": 26,
+      "n_words": 4,
+      "n_accepted": 2,
+      "word_accuracy": 0.5,
+      "avg_prefix_before_accept": 2.5,
+      "word_results": [
+        {
+          "target": "eta",
+          "typed_prefix": "eta",
+          "predicted": "etahorregatik",
+          "accepted": false,
+          "prefix_len": 3,
+          "confidence": 0.0
+        },
+        {
+          "target": "jaietan",
+          "typed_prefix": "jai",
+          "predicted": "jaietan",
+          "accepted": true,
+          "prefix_len": 3,
+          "confidence": 0.2678
+        },
+        {
+          "target": "ikus",
+          "typed_prefix": "ikus",
+          "predicted": "ikusgarri",
+          "accepted": false,
+          "prefix_len": 4,
+          "confidence": 0.0
+        },
+        {
+          "target": "daitezke.",
+          "typed_prefix": "da",
+          "predicted": "daitezke",
+          "accepted": true,
+          "prefix_len": 2,
+          "confidence": 0.8332
+        }
+      ]
+    },
+    {
+      "prompt": "Literatura lehiaketa honek",
+      "target": "euskaraz idatzitako lanak saritzen ditu hainbat kategoriatan.",
+      "csr": 0.2295,
+      "keystrokes": 47,
+      "total_chars": 61,
+      "n_words": 7,
+      "n_accepted": 5,
+      "word_accuracy": 0.7143,
+      "avg_prefix_before_accept": 4.0,
+      "word_results": [
+        {
+          "target": "euskaraz",
+          "typed_prefix": "eus",
+          "predicted": "euskaraz",
+          "accepted": true,
+          "prefix_len": 3,
+          "confidence": 0.4573
+        },
+        {
+          "target": "idatzitako",
+          "typed_prefix": "idatz",
+          "predicted": "idatzitako",
+          "accepted": true,
+          "prefix_len": 5,
+          "confidence": 0.9439
+        },
+        {
+          "target": "lanak",
+          "typed_prefix": "lan",
+          "predicted": "lanak",
+          "accepted": true,
+          "prefix_len": 3,
+          "confidence": 0.3571
+        },
+        {
+          "target": "saritzen",
+          "typed_prefix": "saritzen",
+          "predicted": "saritzendu",
+          "accepted": false,
+          "prefix_len": 8,
+          "confidence": 0.0
+        },
+        {
+          "target": "ditu",
+          "typed_prefix": "ditu",
+          "predicted": "ditu",
+          "accepted": true,
+          "prefix_len": 4,
+          "confidence": 0.4153
+        },
+        {
+          "target": "hainbat",
+          "typed_prefix": "hainbat",
+          "predicted": "hainbatkategoriatan",
+          "accepted": false,
+          "prefix_len": 7,
+          "confidence": 0.0
+        },
+        {
+          "target": "kategoriatan.",
+          "typed_prefix": "kateg",
+          "predicted": "kategoriatan",
+          "accepted": true,
+          "prefix_len": 5,
+          "confidence": 0.4142
+        }
+      ]
+    },
+    {
+      "prompt": "Literatura lehiaketa honek euskaraz idatzitako lanak saritzen",
+      "target": "ditu hainbat kategoriatan.",
+      "csr": 0.2692,
+      "keystrokes": 19,
+      "total_chars": 26,
+      "n_words": 3,
+      "n_accepted": 3,
+      "word_accuracy": 1.0,
+      "avg_prefix_before_accept": 4.33,
+      "word_results": [
+        {
+          "target": "ditu",
+          "typed_prefix": "ditu",
+          "predicted": "ditu",
+          "accepted": true,
+          "prefix_len": 4,
+          "confidence": 0.3478
+        },
+        {
+          "target": "hainbat",
+          "typed_prefix": "hain",
+          "predicted": "hainbat",
+          "accepted": true,
+          "prefix_len": 4,
+          "confidence": 0.8089
+        },
+        {
+          "target": "kategoriatan.",
+          "typed_prefix": "kateg",
+          "predicted": "kategoriatan",
+          "accepted": true,
+          "prefix_len": 5,
+          "confidence": 0.329
+        }
+      ]
+    },
+    {
+      "prompt": "Itsaspeko arrantzak ekosistema hauskorrak",
+      "target": "kaltetu ditzake eta horregatik araudi zorrotzak ezarri dira.",
+      "csr": 0.1,
+      "keystrokes": 54,
+      "total_chars": 60,
+      "n_words": 8,
+      "n_accepted": 4,
+      "word_accuracy": 0.5,
+      "avg_prefix_before_accept": 3.75,
+      "word_results": [
+        {
+          "target": "kaltetu",
+          "typed_prefix": "kalte",
+          "predicted": "kaltetu",
+          "accepted": true,
+          "prefix_len": 5,
+          "confidence": 0.9645
+        },
+        {
+          "target": "ditzake",
+          "typed_prefix": "ditzake",
+          "predicted": "ditzakeela",
+          "accepted": false,
+          "prefix_len": 7,
+          "confidence": 0.0
+        },
+        {
+          "target": "eta",
+          "typed_prefix": "eta",
+          "predicted": "eta",
+          "accepted": true,
+          "prefix_len": 3,
+          "confidence": 0.1274
+        },
+        {
+          "target": "horregatik",
+          "typed_prefix": "horreg",
+          "predicted": "horregatik",
+          "accepted": true,
+          "prefix_len": 6,
+          "confidence": 0.9999
+        },
+        {
+          "target": "araudi",
+          "typed_prefix": "araudi",
+          "predicted": "araudizorrotza",
+          "accepted": false,
+          "prefix_len": 6,
+          "confidence": 0.0
+        },
+        {
+          "target": "zorrotzak",
+          "typed_prefix": "zorrotzak",
+          "predicted": "zorrotzakdaude",
+          "accepted": false,
+          "prefix_len": 9,
+          "confidence": 0.0
+        },
+        {
+          "target": "ezarri",
+          "typed_prefix": "e",
+          "predicted": "ezarri",
+          "accepted": true,
+          "prefix_len": 1,
+          "confidence": 0.9773
+        },
+        {
+          "target": "dira.",
+          "typed_prefix": "dira.",
+          "predicted": "dira.Arrantza",
+          "accepted": false,
+          "prefix_len": 5,
+          "confidence": 0.0
+        }
+      ]
+    },
+    {
+      "prompt": "Itsaspeko arrantzak ekosistema hauskorrak kaltetu ditzake eta horregatik",
+      "target": "araudi zorrotzak ezarri dira.",
+      "csr": 0.1034,
+      "keystrokes": 26,
+      "total_chars": 29,
+      "n_words": 4,
+      "n_accepted": 1,
+      "word_accuracy": 0.25,
+      "avg_prefix_before_accept": 1.0,
+      "word_results": [
+        {
+          "target": "araudi",
+          "typed_prefix": "araudi",
+          "predicted": "araudizorrotza",
+          "accepted": false,
+          "prefix_len": 6,
+          "confidence": 0.0
+        },
+        {
+          "target": "zorrotzak",
+          "typed_prefix": "zorrotzak",
+          "predicted": "zorrotzakdaude",
+          "accepted": false,
+          "prefix_len": 9,
+          "confidence": 0.0
+        },
+        {
+          "target": "ezarri",
+          "typed_prefix": "e",
+          "predicted": "ezarri",
+          "accepted": true,
+          "prefix_len": 1,
+          "confidence": 0.9701
+        },
+        {
+          "target": "dira.",
+          "typed_prefix": "dira.",
+          "predicted": "dira.Arrantza",
+          "accepted": false,
+          "prefix_len": 5,
+          "confidence": 0.0
+        }
+      ]
+    }
+  ]
+}

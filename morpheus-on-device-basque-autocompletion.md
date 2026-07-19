@@ -158,10 +158,10 @@ The figures make the deployment architecture visible: identical client, differen
 |-------|--------|-----|-------------------|---------------|
 | GPT-2 eus-euscrawl | 124M | 0.981 | 0.110 | 37.6% |
 | **Morpheus (Mamba-2)** | **91M** | **0.970** | **0.094** | **60.4%** |
-| Kimu 2B (base) | 2B | — | **0.341** | — |
-| Latxa 8B (base) | 8B | — | **0.332** | — |
+| Kimu 2B (base) | 2B | 0.744 | 0.215 | 61.7% |
+| Latxa 8B (base) | 8B | **0.490** | **0.266** | **75.2%** |
 
-Morpheus matches GPT-2's BPC at fewer parameters (the difference is primarily attributable to 11× more training data). **The Basque LLM comparison** fixes the deployment architecture: both Kimu 2B (Orai NLP, Gemma-2 CPT) and Latxa 8B (HiTZ, Llama-3.1 CPT) save +9 CSR points over Morpheus with artifact-free BPE output, but are GPU-bound. Notably, Kimu 2B *edges out* Latxa 8B (34.1% vs 33.2%) at 4× smaller size — a 2B Basque-pretrained model reaches the 8B quality ceiling on this task. On the consumer laptop CPU, neither Basque LLM is viable: Kimu collapses to 5.6 tok/s (1,439 ms/request, 9.6× over budget), Latxa to 2.8 tok/s (2,869 ms/request, 19× over), while Morpheus sustains 40.7 tok/s.
+Morpheus matches GPT-2's BPC at fewer parameters (the difference is primarily attributable to 11× more training data). **The Basque LLM comparison** fixes the deployment architecture: both Kimu 2B (Orai NLP, Gemma-2 CPT) and Latxa 8B (HiTZ, Llama-3.1 CPT) save +9 free-acceptance CSR points over Morpheus (34.1%/33.2% vs 24.8% via the full demo stack) with artifact-free BPE output, but are GPU-bound. On raw simplified CSR (table above), Latxa 8B leads as expected for a 4× larger model; on the free-acceptance benchmark, Kimu 2B *edges out* Latxa 8B at 4× smaller size — a 2B Basque-pretrained model reaches the 8B quality ceiling on this task. On the consumer laptop CPU, neither Basque LLM is viable: Kimu collapses to 5.6 tok/s (1,439 ms/request, 9.6× over budget), Latxa to 2.8 tok/s (2,869 ms/request, 19× over), while Morpheus sustains 40.7 tok/s.
 
 | Hardware | Model | Latency | tok/s | Memory |
 |----------|-------|---------|-------|--------|
