@@ -14,7 +14,7 @@
 
 Can a Basque text-editor autocompletion system run locally on a consumer device? We answer affirmatively by training **Morpheus**, a 91M-parameter Mamba-2 State Space Model on a 4.62B-token curated Basque corpus (~10B tokens seen). The model fits in 55 MB (Q4_K_M), runs at 318 tok/s on a 2017 laptop CPU with 97 ms end-to-end latency, and achieves 25.3% Character Savings Rate with 76% morpheme boundary accuracy.
 
-A head-to-head comparison against **Latxa 8B (base)** establishes a **two-tier deployment architecture fixed by hardware**: Morpheus is the only model that runs on the edge (40.7 tok/s on a consumer CPU); Latxa 8B is the server-side quality ceiling (+8.35 CSR points) but collapses to 2.8 tok/s on the same hardware. Along the way, we expose a **fertility paradox** — lower tokenizer fertility destroys morphological accuracy in agglutinative languages — and a **CSR paradox** — the keystroke-savings metric structurally penalizes the very language the system is designed to serve. We also contribute five inference engineering strategies that add 3.9× CSR on top of the raw model, and a Fill-in-the-Middle extension for cursor-mid-text completion.
+A head-to-head comparison against **Kimu 2B (base)** and **Latxa 8B (base)** establishes a **two-tier deployment architecture fixed by hardware**: Morpheus is the only model that runs on the edge (40.7 tok/s on a consumer CPU); both Basque LLMs are GPU-bound but save +9 CSR points (34.1%/33.2% vs 24.8%), with Kimu 2B matching the 8B quality ceiling at 4× smaller size. Along the way, we expose a **fertility paradox** — lower tokenizer fertility destroys morphological accuracy in agglutinative languages — and a **CSR paradox** — the keystroke-savings metric structurally penalizes the very language the system is designed to serve. We also contribute five inference engineering strategies that add 3.9× CSR on top of the raw model, and a Fill-in-the-Middle extension for cursor-mid-text completion.
 
 ---
 
@@ -32,6 +32,7 @@ Two strategic paths present themselves. **Adapting an existing Basque LLM** (the
 | Gmail Smart Compose | ~80M | Server | Cloud TPU | LSTM | Multi-token |
 | GitHub Copilot | Multi-B | Server | Cloud GPU | Transformer (FIM) | Multi-token |
 | **Morpheus** | **91M** | **55 MB** | **On-device (laptop)** | **Mamba-2** | **Multi-token** |
+| Kimu 2B (base) | 2B | 2.1 GB | Server (GPU) | Transformer | Multi-token |
 | Latxa 8B (base) | 8B | 6.6 GB | Server (GPU) | Transformer | Multi-token |
 
 **Table 1.** Morpheus in context. Both Google and Morpheus chose recurrent architectures to avoid KV-cache latency; Morpheus achieves it without the data center.
@@ -157,18 +158,20 @@ The two figures make the two-tier architecture visible: identical client, differ
 |-------|--------|-----|-------------------|---------------|
 | GPT-2 eus-euscrawl | 124M | 0.981 | 0.110 | 37.6% |
 | **Morpheus (Mamba-2)** | **91M** | **0.970** | **0.094** | **60.4%** |
+| Kimu 2B (base) | 2B | — | **0.341** | — |
 | Latxa 8B (base) | 8B | — | **0.332** | — |
 
-Morpheus matches GPT-2's BPC at fewer parameters (the difference is primarily attributable to 11× more training data). **The Latxa 8B comparison** fixes the deployment architecture: Latxa saves +8.35 CSR points with artifact-free output, but is GPU-bound. On the consumer laptop CPU, Latxa collapses to 2.8 tok/s (2,869 ms/request, 19× over the latency budget), while Morpheus sustains 40.7 tok/s.
+Morpheus matches GPT-2's BPC at fewer parameters (the difference is primarily attributable to 11× more training data). **The Basque LLM comparison** fixes the deployment architecture: both Kimu 2B (Orai NLP, Gemma-2 CPT) and Latxa 8B (HiTZ, Llama-3.1 CPT) save +9 CSR points over Morpheus with artifact-free BPE output, but are GPU-bound. Notably, Kimu 2B *edges out* Latxa 8B (34.1% vs 33.2%) at 4× smaller size — a 2B Basque-pretrained model reaches the 8B quality ceiling on this task. On the consumer laptop CPU, Latxa collapses to 2.8 tok/s (2,869 ms/request, 19× over the latency budget), while Morpheus sustains 40.7 tok/s.
 
 | Hardware | Model | Latency | tok/s | Memory |
 |----------|-------|---------|-------|--------|
-| L40 (GPU) | Morpheus Q5_K_M | 75 ms | 106 | 602 MiB VRAM |
-| L40 (GPU) | Latxa 8B Q6_K | 115 ms | 69.5 | 6,988 MiB VRAM |
+| L40 (GPU) | Morpheus Q5_K_M | 76 ms | 105 | 602 MiB VRAM |
+| L40 (GPU) | Kimu 2B Q6_K | 95 ms | 84.5 | 3,036 MiB VRAM |
+| L40 (GPU) | Latxa 8B Q6_K | 115 ms | 70.4 | 6,988 MiB VRAM |
 | i7-8550U (CPU) | Morpheus Q5_K_M | 196 ms | 40.7 | 266 MiB RAM |
 | i7-8550U (CPU) | Latxa 8B Q6_K | 2,869 ms | 2.8 | 6,648 MiB RAM |
 
-The qualitative difference is clear: Latxa commits to semantically specific continuations (a concrete meeting time, an encryption property), while Morpheus often drifts into high-frequency connective filler or unrelated statistical patterns. Morpheus's sweet spot is **formulaic completion** — email openings, fixed collocations, administrative phrasing — and **domain-specialized fine-tunes**.
+The qualitative difference is clear: both Kimu and Latxa commit to semantically specific continuations (a concrete meeting time, an encryption property), while Morpheus often drifts into high-frequency connective filler or unrelated statistical patterns. Morpheus's sweet spot is **formulaic completion** — email openings, fixed collocations, administrative phrasing — and **domain-specialized fine-tunes**.
 
 ### 7.3 The CSR Paradox
 
@@ -225,7 +228,7 @@ Morpheus demonstrates that **on-device predictive autocompletion for an agglutin
 
 3. **Inference engineering as a first-class contribution.** Five strategies addressing the tokenization trap add 3.9× CSR on top of the raw model — retokenization fallback, sticky merge, top-k exceeding display-k, next-word extraction, and completion logging with replay.
 
-4. **Two-tier deployment architecture.** Morpheus (91M, 55 MB) runs on the edge for formulaic completion and domain fine-tunes. Latxa 8B (base) is the server-side quality ceiling (+8.35 CSR points, cross-domain competence), but GPU-bound. The split is a hardware constraint, not a preference. A thick-proxy FastAPI server wraps compiled `llama.cpp` and exposes a `{prefix, suffix} → {text}` protocol; an Obsidian plugin demonstrates that the identical editor client switches tiers by changing one URL (§6).
+4. **Two-tier deployment architecture.** Morpheus (91M, 55 MB) runs on the edge for formulaic completion and domain fine-tunes. Kimu 2B (2.1 GB) and Latxa 8B (6.2 GB) are the server-side quality ceiling (+9 CSR points, cross-domain competence), but GPU-bound. Kimu 2B is the efficiency frontier: it matches Latxa's CSR at 4× smaller size. The split is a hardware constraint, not a preference. A thick-proxy FastAPI server wraps compiled `llama.cpp` and exposes a `{prefix, suffix} → {text}` protocol; an Obsidian plugin demonstrates that the identical editor client switches tiers by changing one URL (§6).
 
 5. **Data quality over quantity.** The model converged at ~8.8B tokens; a 2–5B token high-quality corpus would likely match the full 10B mixed-quality one. For low-resource languages, aggressive quality filtering dominates raw scale.
 
@@ -233,7 +236,7 @@ Morpheus demonstrates that **on-device predictive autocompletion for an agglutin
 
 ### The Path Forward
 
-The model has converged. The next steps are: (1) integrate Apertium Basque for morpheme pre-segmentation; (2) distill a mobile-variant model (~5–10M); (3) run FIM continued pretraining on Latxa 8B (base) as the server-side model; (4) domain-specific fine-tuning to mitigate corpus-induced artifacts; and (5) conduct user studies with real Basque speakers.
+The model has converged. The next steps are: (1) integrate Apertium Basque for morpheme pre-segmentation; (2) distill a mobile-variant model (~5–10M); (3) run FIM continued pretraining on Kimu 2B or Latxa 8B (base) as the server-side model; (4) domain-specific fine-tuning to mitigate corpus-induced artifacts; and (5) conduct user studies with real Basque speakers.
 
 ---
 

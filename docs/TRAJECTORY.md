@@ -104,7 +104,7 @@ This differs from the mobile-keyboard UX in three ways that matter for the model
 Point 1 is the gap. The model is currently AR-only — it cannot see the suffix.
 Closing that gap is decision #1.
 
-### 1.4 A server-side baseline: Latxa 8B sets the quality ceiling
+### 1.4 Server-side baselines: Kimu 2B and Latxa 8B set the quality ceiling
 
 While morpheus targets on-device O(1) latency, a larger server-side model
 defines the quality bar the on-device model asymptotes toward — and the
@@ -116,39 +116,47 @@ baseline any FIM fine-tune must beat. We deployed **HiTZ/Latxa-Llama-3.1-8B**
 var swap (`MORPHEUS_BACKEND=llama-fim`).
 
 **Head-to-head on the same 30-test CSR set** (`eval/targets.json`, free-acceptance,
-1 token/step, same hardware, same day):
+1 token/step, same hardware, same day), against the two most popular Basque
+LLM base models — Orai NLP's Kimu 2B (Gemma-2 CPT) and HiTZ's Latxa 8B
+(Llama-3.1 CPT):
 
 | Model | Params | Macro CSR | Accept rate | Avg conf |
 |-------|-------:|----------:|------------:|---------:|
 | Morpheus v3_fim Q5_K_M (on-device) | 91M | 24.83% | 27.5% | 0.35 |
-| **Latxa 8B Q6_K** (server) | 8B | **33.18%** | **40.2%** | **0.49** |
+| **Kimu 2B Q6_K** (server) | 2B | **34.10%** | 35.5% | 0.42 |
+| Latxa 8B Q6_K (server) | 8B | 33.18% | **40.2%** | **0.49** |
 
-Latxa saves **+8.4 CSR points** — roughly a third more keystrokes than morpheus
-on identical sentences. The filter gap is 0.00 (BPE output is artifact-free,
-unlike SentencePiece byte-fallback). But the quality lead comes with a hard
-hardware cost that fixes the deployment split:
+Both Basque LLMs beat Morpheus by **~9 CSR points** (33–34% vs 24.8%) — the gap
+a 2B+ pretrained backbone opens over a 91M from-scratch model. Notably, Kimu
+2B *edges out* Latxa 8B (+0.9 pts) despite being 4× smaller: on this
+autocomplete task, a 2B Basque-pretrained model is sufficient to reach the
+8B quality ceiling. But the quality lead comes with a hard hardware cost that
+fixes the deployment split:
 
-| | Morpheus (91M, 64 MB) | Latxa 8B (6.6 GB) |
-|---|---|---|
-| **GPU (L40)** latency | 75 ms (106 tok/s) | 115 ms (69.5 tok/s) |
-| **GPU (L40)** memory | 602 MiB VRAM | 6988 MiB VRAM |
-| **CPU laptop** latency | 196 ms (40.7 tok/s) | **2869 ms (2.8 tok/s)** |
-| **CPU laptop** memory | 266 MiB RAM | 6648 MiB RAM |
-| Autocomplete-viable on CPU? | **yes** | **no** (19× over budget) |
+| | Morpheus (91M, 64 MB) | Kimu 2B (2.1 GB) | Latxa 8B (6.6 GB) |
+|---|---|---|---|
+| **GPU (L40)** latency | 76 ms (105 tok/s) | 95 ms (84.5 tok/s) | 115 ms (70.4 tok/s) |
+| **GPU (L40)** memory | 602 MiB VRAM | 3036 MiB VRAM | 6988 MiB VRAM |
+| **CPU laptop** latency | 196 ms (40.7 tok/s) | — | **2869 ms (2.8 tok/s)** |
+| **CPU laptop** memory | 266 MiB RAM | — | 6648 MiB RAM |
+| Autocomplete-viable on CPU? | **yes** | no | **no** (19× over budget) |
 
-On the L40 both clear the 150 ms threshold and the choice is a quality/VRAM
-trade. The GPU itself is not the bottleneck — utilization across both
-processes on the single card is 32% mean / 78% peak. The host-CPU signal runs
-*counter* to model size: Latxa's model server idles at 3% host CPU (the
-`llama-fim` backend hands llama-server a plain string and the GPU does all
-the work), whereas morpheus's `morpheus-sp-fim` backend burns 24% host CPU on
-SentencePiece encoding + retokenization-fallback in Python — the smaller model
-is cheaper to *run* but costlier to *serve*. On a CPU laptop Latxa 8B
-collapses to ~2.9 s/request and 6.6 GB RAM — not a real-time model off-GPU —
-while morpheus stays at 40.7 tok/s. So the two tiers are not a preference but
-a constraint: **morpheus is the only one that runs on the edge; Latxa is the
-server-side ceiling** (and the FIM fine-tune candidate, see point 3 below).
-Full benchmark: [`comparison.md`](../eval/demo-results/20260719_latxa_vs_morpheus/comparison.md#latency--resource-footprint).
+On the L40 all three clear the 150 ms threshold and the choice is a
+quality/VRAM trade. Latency scales cleanly with model size: 76 / 95 / 115 ms.
+Kimu is the efficiency frontier — it matches Latxa's CSR at 43% less VRAM and
+19 ms lower latency. The GPU itself is not the bottleneck — utilization across
+all three processes on the single card is 31% mean / 78% peak. The host-CPU
+signal runs *counter* to model size: Latxa's and Kimu's model servers idle at
+0% host CPU (the `llama-fim` backend hands llama-server a plain string and the
+GPU does all the work), whereas morpheus's `morpheus-sp-fim` backend burns 2%
+host CPU on SentencePiece encoding + retokenization-fallback in Python — the
+smaller model is cheaper to *run* but costlier to *serve*. On a CPU laptop
+Latxa 8B collapses to ~2.9 s/request and 6.6 GB RAM — not a real-time model
+off-Gpu — while morpheus stays at 40.7 tok/s. So the two tiers are not a
+preference but a constraint: **morpheus is the only one that runs on the edge;
+Kimu and Latxa are the server-side ceiling** (and the FIM fine-tune
+candidates, see point 3 below). Full benchmark:
+[`comparison.md`](../eval/demo-results/20260719_latxa_vs_morpheus/comparison.md#latency--resource-footprint).
 
 #### Domain examples — where the quality difference is visible
 
@@ -161,10 +169,12 @@ continuations across three writing domains (greedy, 12 tokens):
 | Model | Continuation | Conf |
 |-------|-------------|-----:|
 | Latxa 8B | `dizuet, 18:00etan. Bilera` *("to you [pl.], at 18:00. Meeting…")* | 0.45 |
+| Kimu 2B | `dizut. -Bai, noski. Noiz` *("to you [sg]. -Yes, of course. When…")* | 0.42 |
 | Morpheus | `dizugu, eta, ondoren, egutegia eta` *("we propose, and, then, the calendar and")* | 0.34 |
 
-Both pick a valid dative verb form, but Latxa commits to a concrete meeting
-time; morpheus drifts into generic `eta, ondoren` connective filler.
+All three pick a valid dative verb form. Latxa commits to a concrete meeting
+time; Kimu drifts into a dialogue response; morpheus drifts into generic
+`eta, ondoren` connective filler.
 
 **Essay / article** — `Adimen artifizialak Hezkuntzan izango duen eragina`
 ("The impact AI will have on Education")
@@ -172,41 +182,49 @@ time; morpheus drifts into generic `eta, ondoren` connective filler.
 | Model | Continuation | Conf |
 |-------|-------------|-----:|
 | Latxa 8B | `aztertuko dute Euskal Herri` *("will examine [in] the Basque Country")* | 0.56 |
+| Kimu 2B | `aztertuko dute bihar, Elkargu` *("will examine tomorrow, the Council")* | 0.55 |
 | Morpheus | `aztertzeko, EHUko ikertzaile talde batek,` *("to examine, a UPV/EHU research team,")* | 0.33 |
 
-Both correctly continue with *aztertu* (examine) — the strongest collocation.
-Latxa's confidence is markedly higher (0.56 vs 0.33).
+All three correctly continue with *aztertu* (examine) — the strongest
+collocation. Kimu and Latxa are near-identical in confidence (0.55 vs 0.56);
+morpheus lags.
 
 **Educational / technical** — `Suhesia sareko komunikazio guztiak`
 ("The firewall [?] all network communications")
 
 | Model | Continuation | Conf |
 |-------|-------------|-----:|
+| Kimu 2B | `kontrolatzeko eta kudeatzeko erabiltzen` *("to control and manage [used]")* | 0.45 |
 | Latxa 8B | `zifratuta daude, eta ez dago er` *("are encrypted, and there is no…")* | 0.42 |
 | Morpheus | `, 100.000 biztanletik gora` *(", over 100,000 inhabitants")* | 0.35 |
 
-Here the models diverge sharply. Latxa stays on-topic (network security →
-encryption). Morpheus drifts to an unrelated demographic filler — a hallmark
-of an underpowered model latching onto a high-frequency statistical pattern
-instead of the sentence's semantic thread.
+Here the models diverge sharply. Both Kimu and Latxa stay on-topic (network
+security → control/encryption). Kimu's continuation is arguably more natural
+(firewalls control traffic) and carries higher confidence. Morpheus drifts to
+an unrelated demographic filler — a hallmark of an underpowered model latching
+onto a high-frequency statistical pattern instead of the sentence's semantic
+thread.
 
 #### What this establishes
 
 1. **The two-tier positioning is validated.** Morpheus (91M, 55 MB Q4) remains
-   the on-device/edge model; Latxa 8B (6.6 GB Q6) is the server-side model. They
-   are complementary, not competing — the +8 CSR points and cleaner output
-   justify the server deployment where latency budget allows.
+   the on-device/edge model; Kimu 2B (2.1 GB Q6) and Latxa 8B (6.6 GB Q6) are
+   the server-side models. They are complementary, not competing — the +9 CSR
+   points and cleaner output justify the server deployment where latency budget
+   allows. Kimu 2B is the efficiency frontier: it matches Latxa's CSR at 4×
+   smaller size.
 2. **This is the *base* model with no FIM training.** AR append (cursor at
    end-of-buffer) works well; FIM infill (cursor mid-sentence) is non-functional
    — Latxa emits EOS immediately on the `<|fim_begin|>` sentinels it has never
    seen. That gap is precisely what a FIM continued-pretraining stage would fill.
-3. **Latxa 8B is the FIM fine-tune candidate, not the 2B Qwen.** The original
+3. **Kimu 2B is the leading FIM fine-tune candidate, Latxa 8B the fallback.** The original
    plan (Option B: Qwen3.5-2B-Base) preserved Mamba-family architectural
-   continuity. But the 8B Latxa base is already Basque-adapted (no CPT needed),
-   already beats morpheus by +8 CSR points as-is, and fits full-FT on one L40
-   (~24–30 GB). The marginal FIM-training cost on 8B vs 2B is GPU time, and the
-   quality ceiling is higher. (The 2B Qwen path remains a fallback if 8B
-   full-FT proves too slow on the single L40.)
+   continuity. But Kimu 2B (Gemma-2 CPT on Basque) is already Basque-adapted (no
+   CPT needed), already beats morpheus by +9 CSR points as-is (34.10% — even
+   edging out Latxa 8B's 33.18%), and its 2B size makes full-FT on one L40 fast
+   and memory-feasible (~24–30 GB). Latxa 8B remains a fallback if a higher
+   quality ceiling is worth the longer training time. (The 2B Qwen path is now
+   the lowest-priority fallback, superseded by Kimu.)
 
 Full comparison + raw result files: [`eval/demo-results/20260719_latxa_vs_morpheus/`](../eval/demo-results/20260719_latxa_vs_morpheus/comparison.md).
 
@@ -552,16 +570,17 @@ preference**:
   but scoped to what a 91M model can genuinely predict, not general expository
   writing.
 
-- **Latxa 8B (base) is the server-side tier.** It is +8.35 CSR points better
-  (33.18% vs 24.83%), cross-domain *without* specialization (it stayed on-topic
-  across email, essay, and technical prompts), but GPU-bound — it collapses to
-  2.9 s/request (2.8 tok/s) and 6.6 GB RAM on the same laptop, ~19× over the
-  latency budget. It is the candidate for **FIM continued pretraining** (§2) to
-  close the infill gap, and a practical advantage is that it rides on a
-  **standard LLM** (Llama-3.1): the surrounding ecosystem — quantization,
-  serving, editor plugins, eval harnesses — is mature and shared with
-  mainstream work, lowering the engineering burden relative to the bespoke
-  Mamba-2 toolchain.
+- **Kimu 2B and Latxa 8B (base) are the server-side tier.** Both are +9 CSR
+  points better than morpheus (34.10% / 33.18% vs 24.83%), cross-domain *without*
+  specialization (both stayed on-topic across email, essay, and technical
+  prompts), but GPU-bound — Latxa collapses to 2.9 s/request (2.8 tok/s) and 6.6
+  GB RAM on the same laptop, ~19× over the latency budget. Kimu 2B is the
+  efficiency frontier (matches Latxa's CSR at 4× smaller size) and the leading
+  candidate for **FIM continued pretraining** (§2) to close the infill gap. A
+  practical advantage of both is that they ride on **standard LLMs** (Gemma-2 /
+  Llama-3.1): the surrounding ecosystem — quantization, serving, editor plugins,
+  eval harnesses — is mature and shared with mainstream work, lowering the
+  engineering burden relative to the bespoke Mamba-2 toolchain.
 
 The plan is therefore a continued-pretraining stage that adds FIM tokens and
 trains on a 50/50 FIM+AR mix — applied to the Latxa 8B base on the GPU side —
