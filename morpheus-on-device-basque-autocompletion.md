@@ -161,7 +161,7 @@ The figures make the deployment architecture visible: identical client, differen
 | Kimu 2B (base) | 2B | 0.744 | 0.215 | 61.7% |
 | Latxa 8B (base) | 8B | **0.490** | **0.266** | **75.2%** |
 
-Morpheus matches GPT-2's BPC at fewer parameters (the difference is primarily attributable to 11× more training data). **The Basque LLM comparison** fixes the deployment architecture: both Kimu 2B (Orai NLP, Gemma-2 CPT) and Latxa 8B (HiTZ, Llama-3.1 CPT) save +9 free-acceptance CSR points over Morpheus (34.1%/33.2% vs 24.8%, measured on Q6_K quantized GGUF served via the full demo stack) with artifact-free BPE output, but are GPU-bound. On raw simplified CSR (table above), Latxa 8B leads as expected for a 4× larger model; on the free-acceptance benchmark, Kimu 2B *edges out* Latxa 8B at 4× smaller size — a 2B Basque-pretrained model reaches the 8B quality ceiling on this task. On the consumer laptop CPU, neither Basque LLM is viable: Kimu collapses to 5.6 tok/s (1,439 ms/request, 9.6× over budget), Latxa to 2.8 tok/s (2,869 ms/request, 19× over), while Morpheus sustains 40.7 tok/s.
+Morpheus matches GPT-2's BPC at fewer parameters (the difference is primarily attributable to 11× more training data). **The Basque LLM comparison** fixes the deployment architecture: both Kimu 2B (Orai NLP, Gemma-2 CPT) and Latxa 8B (HiTZ, Llama-3.1 CPT) save +9 free-acceptance CSR points over Morpheus (34.1%/33.2% vs 24.8%, measured on Q6_K quantized GGUF served via the full demo stack) with artifact-free BPE output, but are GPU-bound. On raw simplified CSR (table above), Latxa 8B leads as expected for a 4× larger model; on the free-acceptance benchmark, Kimu 2B *edges out* Latxa 8B at 4× smaller size — a 2B Basque-pretrained model reaches the 8B quality ceiling on this task. **A critical capability gap**: Morpheus has been extended with FIM (§8) and serves cursor-mid-text infill; the base Basque LLMs have **no FIM training** — they emit EOS immediately on FIM sentinels, so their +9 CSR advantage holds only for end-of-buffer append. Closing the infill gap via FIM continued pretraining on Kimu 2B is the natural next step (§9). On the consumer laptop CPU, neither Basque LLM is viable: Kimu collapses to 5.6 tok/s (1,439 ms/request, 9.6× over budget), Latxa to 2.8 tok/s (2,869 ms/request, 19× over), while Morpheus sustains 40.7 tok/s.
 
 | Hardware | Model | Latency | tok/s | Memory |
 |----------|-------|---------|-------|--------|
@@ -237,7 +237,7 @@ Morpheus demonstrates that **on-device predictive autocompletion for an agglutin
 
 ### The Path Forward
 
-The model has converged. The next steps are: (1) integrate Apertium Basque for morpheme pre-segmentation; (2) distill a mobile-variant model (~5–10M); (3) run FIM continued pretraining on Kimu 2B or Latxa 8B (base) as the server-side model; (4) domain-specific fine-tuning to mitigate corpus-induced artifacts; and (5) conduct user studies with real Basque speakers.
+The model has converged. The next steps are: (1) integrate Apertium Basque for morpheme pre-segmentation; (2) distill a mobile-variant model (~5–10M); (3) run FIM continued pretraining on Kimu 2B (base) as the server-side model — the leading candidate, as it matches Latxa 8B's CSR at 4× smaller size — with Latxa 8B as fallback; (4) domain-specific fine-tuning to mitigate corpus-induced artifacts; and (5) conduct user studies with real Basque speakers.
 
 ---
 

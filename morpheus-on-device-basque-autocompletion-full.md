@@ -940,7 +940,7 @@ Morpheus demonstrates that **State Space Models (Mamba-2) are a viable architect
 
 ### The Path Forward
 
-The model has converged (PPL flat from step 67K). The next steps are: (1) integrate **Apertium Basque** for surface-preserving morpheme pre-segmentation, pushing MorphAcc toward 83%; (2) apply aggressive quality filtering to a 2–5B token subset; (3) distill a **Morpheus-Mobile** (~5–10M) for the Gboard paradigm; (4) investigate the metric inversion with larger evaluation sets; and (5) **productize the two tiers** — keep Morpheus as the on-device model scoped to formulaic completion and domain fine-tunes, and run FIM continued pretraining on Latxa 8B (base) as the server-side model, exploiting its standard-LLM ecosystem to serve cross-domain ghost-text where a GPU is available.
+The model has converged (PPL flat from step 67K). The next steps are: (1) integrate **Apertium Basque** for surface-preserving morpheme pre-segmentation, pushing MorphAcc toward 83%; (2) apply aggressive quality filtering to a 2–5B token subset; (3) distill a **Morpheus-Mobile** (~5–10M) for the Gboard paradigm; (4) investigate the metric inversion with larger evaluation sets; and (5) **productize the two tiers** — keep Morpheus as the on-device model scoped to formulaic completion and domain fine-tunes, and run FIM continued pretraining on Kimu 2B (base) as the server-side model — the leading candidate, as it matches Latxa 8B's CSR at 4× smaller size (§6.6) — with Latxa 8B as the fallback if a higher quality ceiling is worth the longer training time. Both ride on standard-LLM ecosystems (Gemma-2 / Llama-3.1), lowering the engineering burden relative to the bespoke Mamba-2 toolchain.
 
 ---
 
