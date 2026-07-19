@@ -12,7 +12,7 @@
 
 ## Abstract
 
-Can a Basque text-editor autocompletion system run locally on a consumer device? We answer affirmatively by training **Morpheus**, a 91M-parameter Mamba-2 State Space Model on a 4.62B-token curated Basque corpus (~10B tokens seen). The model fits in 55 MB (Q4_K_M), runs at 318 tok/s on a 2017 laptop CPU with 97 ms end-to-end latency, and achieves 25.3% Character Savings Rate with 76% morpheme boundary accuracy.
+Can a Basque text-editor autocompletion system run locally on a consumer device? We answer affirmatively by training **Morpheus**, a 91M-parameter Mamba-2 State Space Model on a 4.62B-token curated Basque corpus (~10B tokens seen). The model fits in 55 MB (Q4_K_M), decodes at 318 tok/s on a 2017 laptop CPU (97 ms raw inference; 40.7 tok/s and 196 ms end-to-end through the serving stack, §7.2), and achieves 25.3% Character Savings Rate with 76% morpheme boundary accuracy.
 
 A head-to-head comparison against **Kimu 2B (base)** and **Latxa 8B (base)** establishes a **two-tier deployment architecture fixed by hardware**: Morpheus is the only model that runs on the edge with acceptable latency (40.7 tok/s on a consumer CPU); both Basque LLMs are GPU-bound but save +9 CSR points (34.1%/33.2% vs 24.8%), with Kimu 2B matching the 8B quality ceiling at 4× smaller size. Along the way, we expose a **fertility paradox** — lower tokenizer fertility destroys morphological accuracy in agglutinative languages — and a **CSR paradox** — the keystroke-savings metric structurally penalizes the very language the system is designed to serve. We also contribute five ghost-text inference engineering strategies (smart context, ghost suffix, digit-token repair, garbage filtering, acceptance logging) and a Fill-in-the-Middle extension for cursor-mid-text completion.
 
@@ -106,7 +106,7 @@ Deploying a subword language model as real-time ghost text in a desktop editor (
 
 ## 6. Deployment: From Model to Editor
 
-A model that achieves 318 tok/s in isolation cannot reach the user's cursor without a serving stack. Morpheus deploys through a **thick-proxy architecture**: a FastAPI server wraps a compiled `llama.cpp` backend and exposes a thin-client protocol that any editor can speak.
+A model that achieves 318 tok/s decode in isolation cannot reach the user's cursor without a serving stack — and that stack imposes real cost: end-to-end throughput drops to 40.7 tok/s (196 ms per request, §7.2), with roughly half the latency consumed by Python FastAPI, SentencePiece tokenization, and the inference-engineering pipeline. Morpheus deploys through a **thick-proxy architecture**: a FastAPI server wraps a compiled `llama.cpp` backend and exposes a thin-client protocol that any editor can speak.
 
 **Export and quantization.** The PyTorch checkpoint is exported to GGUF via `llama.cpp` tooling and quantized to Q4_K_M (55 MB). A critical reproducibility finding: `llama-server` auto-prepends a BOS token for string prompts, and its built-in SentencePiece tokenizer diverges from the reference library on the 4K vocabulary, collapsing CSR from ~28% to ~4%. The server therefore sends **token IDs, not strings** — a mitigation that generalizes to FIM.
 
@@ -224,6 +224,7 @@ The feared premature-truncation failure mode did not materialize. AR capability 
 - **No morphological pre-segmentation** yet: MorphAcc could improve from 76% toward 83%+ with Apertium-based surface-preserving boundaries.
 - **No user study:** All evaluation is simulation-based. The model is too large for mobile (Gboard: 1.4M/1.4 MB); a distilled ~5–10M variant has not been trained.
 - **Evaluation limitations:** PPL is the only reliable metric; CSR and MorphAcc saturate at available sample sizes. The metric inversion (§7.4) — autocomplete metrics moving opposite to PPL improvement — suggests that a better model distributes probability across valid morphological variants, depressing exact-match accuracy.
+- **Serving overhead:** Raw decode speed (318 tok/s, §5.2) is ~8× faster than end-to-end served throughput (40.7 tok/s, §7.2). Part of this gap is measurement methodology (decode-only vs. total-wall including prefill), but roughly 80–95 ms per request is Python FastAPI + SentencePiece tokenization + inference-engineering overhead. Native C++ tokenization and streaming responses could halve this overhead, bringing served latency toward the ~100 ms raw inference floor.
 
 ---
 
