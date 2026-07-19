@@ -26,6 +26,8 @@ Along the way we expose two structural biases in standard NLP evaluation metrics
 
 ## 1. Introduction
 
+**Why ghost-text autocomplete.** Inline ghost-text completion — suggestions accepted with a single keystroke — is the primary interaction paradigm for the two largest deployed LLM products: Gmail Smart Compose and GitHub Copilot. Its dominance is backed by measurable productivity gains: controlled experiments report that AI-assisted code completion significantly reduces task completion time (Peng et al., 2023), and GitHub's own internal study confirmed time savings at deployment scale (Ziegler et al., 2022). A controlled head-to-head study comparing autocomplete to chat-based assistance found they achieve **productivity parity**, but autocomplete does so at lower interaction friction — the user never leaves the writing surface (Mozannar et al., 2024). Beyond keystroke savings, ghost-text has subtler cognitive effects: it nudges writing toward more succinct and predictable language (Arnold et al., 2020), and opinionated suggestions can shift users' views even when not explicitly accepted (Jakesch et al., 2023). Its defining engineering constraint is real-time latency: Smart Compose targets sub-100 ms per keystroke, beyond which users perceive delay and disengage (Chen et al., 2019). This constraint makes on-device deployment necessary rather than merely desirable — and excludes the languages and hardware that cloud-scale systems do not serve.
+
 **The research question.** Can a Basque text-editor autocompletion system run **entirely locally on a consumer device**, without network calls? For high-resource languages, autocompletion is a solved problem at scale — but the solutions are architecturally diverse and none serves Basque on-device. We approach the question by first surveying what exists, then analyzing what architecture could serve Basque, and finally building and benchmarking a candidate.
 
 **Surveying the autocompletion landscape.** Production autocompletion systems fall into three paradigms, each with a distinct architecture and deployment profile (detailed in §2.1):
@@ -1327,6 +1329,11 @@ Haizean lore,` (0.358) | `<|fim_hole|>Kontuak kontu, presoen eskubide` (0.445) |
 29. Sainz, O., et al. (2025). *Instructing Large Language Models for Low-Resource Languages: A Systematic Study for Basque*. EMNLP 2025.
 30. Bavarian, M., et al. (2022). *Efficient Training of Language Models to Fill in the Middle*. arXiv:2207.14255.
 31. Roziere, B., et al. (2023). *Code Llama: Open Foundation Models for Code*. arXiv:2308.12950.
+32. Mozannar, C., et al. (2024). *The RealHumanEval: Evaluating Large Language Models' Abilities to Support Programmers*. arXiv:2404.02806.
+33. Peng, S., Kalliamvakou, E., Cihon, P., & Demirer, M. (2023). *The Impact of AI on Developer Productivity: Evidence from GitHub Copilot*. arXiv:2302.06590.
+34. Ziegler, A., et al. (2022). *Productivity Assessment of Neural Code Completion*. MAPS@PLDI 2022.
+35. Arnold, K., et al. (2020). *Predictive Text Encourages Predictable Writing*. ACM IUI 2020.
+36. Jakesch, M., et al. (2023). *Co-Writing with Opinionated Language Models Affects Users' Views*. CHI 2023.
 
 ---
 

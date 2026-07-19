@@ -20,6 +20,8 @@ A head-to-head comparison against **Kimu 2B (base)** and **Latxa 8B (base)** est
 
 ## 1. Introduction
 
+Inline ghost-text completion — suggestions accepted with a single keystroke — is the primary interaction paradigm for the two largest deployed LLM products: Gmail Smart Compose and GitHub Copilot. Its dominance reflects measurable productivity: controlled experiments report that AI code completion significantly reduces task time (Peng et al., 2023; Ziegler et al., 2022), and a head-to-head comparison found autocomplete achieves **productivity parity with chat-based assistance at lower interaction friction** — the user never leaves the writing surface (Mozannar et al., 2024). Beyond keystroke savings, ghost-text subtly shapes what people write, nudging toward more predictable language (Arnold et al., 2020). Its defining engineering constraint is real-time latency: Smart Compose targets sub-100 ms per keystroke, beyond which users disengage (Chen et al., 2019). This constraint makes on-device deployment necessary rather than merely desirable — and excludes the languages that cloud-scale systems do not serve.
+
 Basque (Euskara) is a low-resource, morphologically agglutinative language isolate. A single verb can encode subject, object, indirect object, tense, mood, and aspect through suffix chains (e.g., *ekarriko dizkizut* — "I will bring them to you"). Nouns take 12+ case suffixes plus number and definiteness marking. Predicting the next word therefore requires **morphological productivity** — the ability to generate grammatically correct suffix sequences never seen as a unit during training.
 
 Production autocompletion systems fall into three paradigms: **server-side multi-token completion** (Gmail Smart Compose, GitHub Copilot), **on-device next-word prediction** (Gboard), and **on-device multi-token continuation** — a Smart Compose equivalent for desktop editors. This third paradigm is the gap: no system runs it on-device for a morphologically complex language. None of the three targets Basque.
@@ -329,6 +331,10 @@ this capability gap (cf. §6.6 / §7.2).
 12. Hoffmann, J., et al. (2022). *Training Compute-Optimal Large Language Models* (Chinchilla). arXiv:2203.15556.
 13. Sardana, N., et al. (2024). *Beyond Chinchilla-Optimal: Accounting for Inference in Language Model Scaling Laws*. arXiv:2401.00448.
 14. Roziere, B., et al. (2023). *Code Llama: Open Foundation Models for Code*. arXiv:2308.12950.
+15. Mozannar, C., et al. (2024). *The RealHumanEval: Evaluating Large Language Models' Abilities to Support Programmers*. arXiv:2404.02806.
+16. Peng, S., Kalliamvakou, E., Cihon, P., & Demirer, M. (2023). *The Impact of AI on Developer Productivity: Evidence from GitHub Copilot*. arXiv:2302.06590.
+17. Ziegler, A., et al. (2022). *Productivity Assessment of Neural Code Completion*. MAPS@PLDI 2022.
+18. Arnold, K., et al. (2020). *Predictive Text Encourages Predictable Writing*. ACM IUI 2020.
 
 ---
 
