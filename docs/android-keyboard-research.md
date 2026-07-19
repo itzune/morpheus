@@ -401,7 +401,7 @@ following word.
 Our 4K Unigram SentencePiece tokenizer, when loaded by llama.cpp, diverges
 slightly from the reference SP model. On the server, we work around this by
 using token-ID prompts (feeding integer token IDs directly, bypassing text
-tokenization). This is documented in the paper (§5.5, Inference Engineering).
+tokenization). This is documented in the paper (§5.4, Inference Engineering for Ghost-Text Autocomplete) and the companion futo-basque KEYBOARD_ENGINEERING.md.
 
 ### Options for Android
 
@@ -605,7 +605,8 @@ language differs. Work done on one port informs the other.
 - **HuggingFace (safetensors)**: [huggingface.co/itzune/morpheus](https://huggingface.co/itzune/morpheus)
 - **HuggingFace (GGUF)**: [huggingface.co/itzune/morpheus-gguf](https://huggingface.co/itzune/morpheus-gguf)
 - **Server demo inference engineering**: `demo/server.py` (reference implementation for all ported logic in §7).
-- **Paper**: `morpheus-on-device-basque-autocompletion-full.md`, §5.5 "Inference Engineering for Agglutinative Keyboards".
+- **Paper**: `morpheus-on-device-basque-autocompletion-full.md`, §5.4 "Inference Engineering for Ghost-Text Autocomplete".
+- **Keyboard paradigm**: `futo-transformer-basque/KEYBOARD_ENGINEERING.md` (retokenization fallback, sticky merge, next-word CSR).
 
 ---
 

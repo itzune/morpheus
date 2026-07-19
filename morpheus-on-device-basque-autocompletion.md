@@ -6,7 +6,7 @@
 >
 > **Code & Models:** `github.com/itzune/morpheus`
 >
-> **Keywords:** predictive autocompletion, Basque, Euskara, Mamba, State Space Models, agglutinative languages, on-device inference, keystroke savings, next-word prediction, subword tokenization
+> **Keywords:** predictive autocompletion, Basque, Euskara, Mamba, State Space Models, agglutinative languages, on-device inference, keystroke savings, subword tokenization
 
 ---
 
@@ -14,7 +14,7 @@
 
 Can a Basque text-editor autocompletion system run locally on a consumer device? We answer affirmatively by training **Morpheus**, a 91M-parameter Mamba-2 State Space Model on a 4.62B-token curated Basque corpus (~10B tokens seen). The model fits in 55 MB (Q4_K_M), runs at 318 tok/s on a 2017 laptop CPU with 97 ms end-to-end latency, and achieves 25.3% Character Savings Rate with 76% morpheme boundary accuracy.
 
-A head-to-head comparison against **Kimu 2B (base)** and **Latxa 8B (base)** establishes a **two-tier deployment architecture fixed by hardware**: Morpheus is the only model that runs on the edge with acceptable latency (40.7 tok/s on a consumer CPU); both Basque LLMs are GPU-bound but save +9 CSR points (34.1%/33.2% vs 24.8%), with Kimu 2B matching the 8B quality ceiling at 4× smaller size. Along the way, we expose a **fertility paradox** — lower tokenizer fertility destroys morphological accuracy in agglutinative languages — and a **CSR paradox** — the keystroke-savings metric structurally penalizes the very language the system is designed to serve. We also contribute five inference engineering strategies that add 3.9× CSR on top of the raw model, and a Fill-in-the-Middle extension for cursor-mid-text completion.
+A head-to-head comparison against **Kimu 2B (base)** and **Latxa 8B (base)** establishes a **two-tier deployment architecture fixed by hardware**: Morpheus is the only model that runs on the edge with acceptable latency (40.7 tok/s on a consumer CPU); both Basque LLMs are GPU-bound but save +9 CSR points (34.1%/33.2% vs 24.8%), with Kimu 2B matching the 8B quality ceiling at 4× smaller size. Along the way, we expose a **fertility paradox** — lower tokenizer fertility destroys morphological accuracy in agglutinative languages — and a **CSR paradox** — the keystroke-savings metric structurally penalizes the very language the system is designed to serve. We also contribute five ghost-text inference engineering strategies (smart context, ghost suffix, digit-token repair, garbage filtering, acceptance logging) and a Fill-in-the-Middle extension for cursor-mid-text completion.
 
 ---
 
@@ -82,23 +82,21 @@ The contrast is most stark in verbal morphology. At 4K, the pluralizer `zki` is 
 
 ---
 
-## 5. Inference Engineering for Agglutinative Keyboards
+## 5. Inference Engineering for Ghost-Text Autocomplete
 
-Deploying a subword language model as a real-time keyboard with whole-word suggestion chips exposes the **tokenization trap** — a structural failure mode invisible in batch evaluation. The word *Kaixo* ("hello") tokenizes as `[▁Ka, i, xo]`, but when the user types *Kaix*, the tokenizer produces `[▁Ka, ix]` — a different path that cannot reach the correct completion. This is not a model deficiency; it is a property of subword tokenization, especially acute in agglutinative languages with long, morphologically complex words.
+Deploying a subword language model as real-time ghost text in a desktop editor (the Obsidian plugin and web demo) exposes failure modes invisible in batch perplexity evaluation. The server-side proxy applies five strategies:
 
-Five strategies address this:
+1. **Smart context (token-aligned prefix).** When the user types *Kaixo, zer mod*, the SentencePiece tokenizer segments the trailing fragment as `[▁mo, d]` — a partial token on a different path than the complete word *moduz*. The proxy strips trailing subword fragments before querying, giving the model a clean token boundary.
 
-1. **Retokenization fallback.** Query the model from progressively shorter prefixes in parallel, filter results by the user's typed prefix. For *Kaix*, the system also queries from *Kai* and *Ka* — the latter reaches the correct token path and surfaces *Kaixo*.
+2. **Ghost suffix (overlap deduplication).** Mirroring Gmail Smart Compose, only the non-typed suffix is shown as ghost text. If the user typed *mod* and the model predicts * moduz?*, the ghost text is *uz?*.
 
-2. **Sticky merge (candidate carry-forward).** When the model predicts *izan* after *idatzia* and the user types *i*, the prediction vanishes because the token path changes. A sticky pool preserves previous candidates, filtering by the current prefix and boosting survivors.
+3. **Digit-token repair.** SentencePiece byte-fallback can produce digit tokens that decode to garbage. Rather than filtering post-hoc, the proxy walks the greedy token path and swaps digit tokens for their best non-digit alternative at each position — a token-level repair before decoding.
 
-3. **Top-k exceeds display-k.** The keyboard shows 3 chips but fetches 5, populating the sticky pool with lower-ranked but relevant predictions.
+4. **Byte-fallback garbage filtering.** When the typed prefix's tokenization is incompatible with the desired word (e.g. *zaud* → `[▁za, u, d]` cannot reach *zaude*), the model emits non-Latin byte-fallback characters. The proxy detects and suppresses these, falling back to multi-prefix querying when needed.
 
-4. **Next-word candidate extraction.** When greedy continuation begins with a space-prefixed token, extract it as a next-word candidate rather than discarding it.
+5. **Confidence scoring and acceptance logging.** Each suggestion carries an average per-token probability (exposed to the Obsidian plugin's `confidenceThreshold` setting). Every Tab-acceptance is logged to `/api/log`, transforming real sessions into an evaluation dataset.
 
-5. **Completion logging with replay.** Every chip acceptance is logged as a (context, candidates, accepted word) tuple. This transforms real sessions into an evaluation dataset replayable against any checkpoint.
-
-**Impact:** These strategies add **3.9× CSR** on top of the raw model (0.094 → 0.362), demonstrating that inference engineering is a major contribution, not a marginal optimization.
+**Evaluation methodology.** The product metric is Character Savings Rate (CSR) under free-acceptance (Trnka & McCoy, 2008) — the same methodology Gmail Smart Compose uses (Chen et al., 2019): a keystroke-by-keystroke simulation where Tab-accepts save matched characters. Our CSR (§7) is measured on the deployed greedy endpoint with all five strategies active. A companion next-word keyboard paradigm (word chips, retokenization fallback, sticky merge) is documented in the futo-basque project.
 
 ---
 
@@ -217,7 +215,7 @@ Morpheus demonstrates that **on-device predictive autocompletion for an agglutin
 
 2. **The CSR paradox.** Keystroke-savings metrics structurally penalize morphologically complex languages. The model's native Basque achieves the *lowest* CSR despite the *highest* Top-3 accuracy. CSR should never be used as a primary optimization target for agglutinative autocomplete.
 
-3. **Inference engineering as a first-class contribution.** Five strategies addressing the tokenization trap add 3.9× CSR on top of the raw model — retokenization fallback, sticky merge, top-k exceeding display-k, next-word extraction, and completion logging with replay.
+3. **Inference engineering for ghost-text autocomplete.** Five server-side strategies — smart context (token-aligned prefix), ghost suffix (Smart Compose overlap dedup), digit-token repair, byte-fallback garbage filtering, and confidence scoring with acceptance logging — that address failure modes of subword-tokenized SSM models in real-time ghost-text deployment. The free-acceptance CSR (Trnka & McCoy, 2008; Chen et al., 2019) is the primary product metric, measured on the deployed endpoint with all strategies active.
 
 4. **Two-tier deployment architecture.** Morpheus (91M, 55 MB) runs on the edge for formulaic completion and domain fine-tunes. Kimu 2B (2.1 GB) and Latxa 8B (6.2 GB) are the server-side quality ceiling (+9 CSR points, cross-domain competence), but GPU-bound. Kimu 2B is the efficiency frontier: it matches Latxa's CSR at 4× smaller size. The split is a hardware constraint, not a preference. A thick-proxy FastAPI server wraps compiled `llama.cpp` and exposes a `{prefix, suffix} → {text}` protocol; an Obsidian plugin demonstrates that the identical editor client switches tiers by changing one URL (§6).
 

@@ -44,11 +44,12 @@ All models evaluated with the same simplified CSR: greedy decode until word boun
 
 ### Inference Engineering Value
 
-| Morpheus CSR | Simplified (raw) | Full Pipeline (with engineering) | Improvement |
-|-------------|------------------|----------------------------------|-------------|
-| Value | 0.094 | 0.362 | **3.9×** |
+| Regime | Simplified CSR | With engineering | Gap |
+|--------|----------------|------------------|-----|
+| Ghost-text (smart context, ghost suffix, garbage filter) | 0.266 | 0.271 | +0.005 (CSR-neutral) |
+| Keyboard (retokenization, sticky merge, top-k) | 0.094 | 0.362 | **3.9×** |
 
-The full pipeline (retokenization fallback, sticky merge, top-k alternatives, etc.) improves CSR by 3.9× over the raw model.
+Two regimes: the ghost-text strategies (§5.4 of the write-up) are CSR-neutral — they clean the ghost text (no byte-fallback garbage, no digit artifacts) but do not change keystroke savings, because junk output never matches the gold text anyway. The keyboard strategies (retokenization fallback, sticky merge) change *which words the model can reach* via multiple token paths, producing the large 3.9× effect. The keyboard engineering is documented in the companion futo-basque project.
 
 ## Key Takeaways
 
@@ -56,7 +57,7 @@ The full pipeline (retokenization fallback, sticky merge, top-k alternatives, et
 2. **Morpheus beats GPT-2 on BPC** despite being smaller — more training data matters.
 3. **Latxa 8B is better but 88× larger** — Morpheus offers a favorable efficiency/BPC trade-off for on-device deployment. Kimu 2B (BPC 0.744) is the efficiency frontier among Basque LLMs, outperforming the instruct Latxa-Qwen3.5-2B (0.822) despite fewer training tokens.
 4. **Word accuracy is more informative than CSR** for cross-model comparison (avoids the CSR paradox).
-5. **Inference engineering adds 3.9× CSR** on top of the raw model — this is a major contribution.
+5. **Two inference-engineering regimes** — ghost-text strategies (smart context, garbage filter) are CSR-neutral (+0.005 gap); keyboard strategies (retokenization, sticky merge) add 3.9× CSR by changing which words are reachable. The former is documented in §5.4; the latter in the companion futo-basque project.
 6. **Morpheus is a base LM** — naturally suited for autocomplete. Latxa-Qwen3.5-2B is an instruct model and produces noisy completions; the base Basque LLMs (Kimu 2B, Latxa 8B) produce clean output but are GPU-bound.
 
 ## Deployment Size Comparison
