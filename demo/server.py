@@ -352,6 +352,22 @@ def stop_llama_server():
 N_PROBS = 5
 
 
+# ── Shared HTTP client (connection pooling / keep-alive) ──────────────
+# Creating an httpx.AsyncClient per request costs ~60ms of TCP setup/teardown
+# per call (measured against localhost llama-server). This singleton keeps the
+# connection warm so repeated requests reuse it via HTTP keep-alive. Per-request
+# timeouts override the default via the `timeout=` kwarg on .post()/.get().
+_http_client: httpx.AsyncClient | None = None
+
+
+def _client() -> httpx.AsyncClient:
+    """Return the process-wide shared httpx client (lazy singleton)."""
+    global _http_client
+    if _http_client is None:
+        _http_client = httpx.AsyncClient(timeout=30.0)
+    return _http_client
+
+
 async def _call_llama(prompt_ids: list[int], max_tokens: int, temperature: float, greedy: bool) -> dict:
     """Call llama-server /completion with token-ID prompt and top-k logprobs.
 
@@ -368,10 +384,9 @@ async def _call_llama(prompt_ids: list[int], max_tokens: int, temperature: float
         payload.update({"temperature": 0.0, "top_p": 1.0, "top_k": 0, "repeat_penalty": 1.1})
     else:
         payload["temperature"] = temperature
-    async with httpx.AsyncClient(timeout=30.0) as client:
-        r = await client.post(f"{LLAMA_SERVER_URL}/completion", json=payload)
-        r.raise_for_status()
-        return r.json()
+    r = await _client().post(f"{LLAMA_SERVER_URL}/completion", json=payload, timeout=30.0)
+    r.raise_for_status()
+    return r.json()
 
 
 # ── Token-level digit repair & candidate extraction ──────
@@ -1068,9 +1083,8 @@ async def get_logs(limit: int = 100):
 @app.get("/health")
 async def health():
     try:
-        async with httpx.AsyncClient(timeout=5.0) as client:
-            r = await client.get(f"{LLAMA_SERVER_URL}/health")
-            llama_ok = r.status_code == 200
+        r = await _client().get(f"{LLAMA_SERVER_URL}/health", timeout=5.0)
+        llama_ok = r.status_code == 200
     except Exception:
         llama_ok = False
 
@@ -1238,10 +1252,9 @@ async def openai_completions(req: CompletionRequest):
         )
 
     # ── Non-streaming ──
-    async with httpx.AsyncClient(timeout=60.0) as client:
-        r = await client.post(f"{LLAMA_SERVER_URL}/completion", json=payload)
-        r.raise_for_status()
-        data = r.json()
+    r = await _client().post(f"{LLAMA_SERVER_URL}/completion", json=payload, timeout=60.0)
+    r.raise_for_status()
+    data = r.json()
 
     # ── Always-on strategies (see docs/ARCHITECTURE.md §3.3) ──
     text, confidence = backend.postprocess(data.get("content", ""), data, stops)
@@ -1299,41 +1312,41 @@ async def _stream_openai(payload: dict, stops: list[str]):
 
     stop_emitted = False
     try:
-        async with httpx.AsyncClient(timeout=None) as client:
-            async with client.stream(
-                "POST", f"{LLAMA_SERVER_URL}/completion", json=payload
-            ) as r:
-                r.raise_for_status()
-                async for line in r.aiter_lines():
-                    if not line or not line.startswith("data:"):
-                        continue
-                    data_str = line[len("data:") :].strip()
-                    if not data_str or data_str == "[DONE]":
-                        continue
-                    try:
-                        d = json.loads(data_str)
-                    except json.JSONDecodeError:
-                        continue
-                    text = backend.clean_chunk(d.get("content", ""))
-                    # Client-side stop fallback (in case llama-server missed)
-                    if text and stops:
-                        for s in stops:
-                            if s and s in text:
-                                text = text[: text.index(s)]
-                                stop_emitted = True
-                                if text:
-                                    yield frame(text)
-                                yield frame("", "stop")
-                                break
-                        if stop_emitted:
-                            break
-                    if text:
-                        yield frame(text)
-                    if d.get("stop") or d.get("stopped_eos"):
-                        if not stop_emitted:
-                            yield frame("", "stop")
+        client = _client()
+        async with client.stream(
+            "POST", f"{LLAMA_SERVER_URL}/completion", json=payload, timeout=None
+        ) as r:
+            r.raise_for_status()
+            async for line in r.aiter_lines():
+                if not line or not line.startswith("data:"):
+                    continue
+                data_str = line[len("data:") :].strip()
+                if not data_str or data_str == "[DONE]":
+                    continue
+                try:
+                    d = json.loads(data_str)
+                except json.JSONDecodeError:
+                    continue
+                text = backend.clean_chunk(d.get("content", ""))
+                # Client-side stop fallback (in case llama-server missed)
+                if text and stops:
+                    for s in stops:
+                        if s and s in text:
+                            text = text[: text.index(s)]
                             stop_emitted = True
+                            if text:
+                                yield frame(text)
+                            yield frame("", "stop")
+                            break
+                    if stop_emitted:
                         break
+                if text:
+                    yield frame(text)
+                if d.get("stop") or d.get("stopped_eos"):
+                    if not stop_emitted:
+                        yield frame("", "stop")
+                        stop_emitted = True
+                    break
         if not stop_emitted:
             yield frame("", "length")
         yield "data: [DONE]\n\n"
@@ -1430,19 +1443,19 @@ async def complete_prefix_suffix(req: CompleteRequest):
         "n_probs": N_PROBS,
         "stop": stops,
     }
-    async with httpx.AsyncClient(timeout=30.0) as client:
-        if req.n <= 1:
-            text, confidence, finish = await _complete_once(client, payload, stops)
-        else:
-            # best-of-n: fire n parallel samples, pick highest-confidence
-            # non-empty result. llama-server uses a random seed by default,
-            # so even at low temperature the samples diverge. (At temp 0.0
-            # all samples are identical — best-of-n is pointless there.)
-            results = await asyncio.gather(
-                *[_complete_once(client, payload, stops) for _ in range(req.n)],
-                return_exceptions=True,
-            )
-            text, confidence, finish = _pick_best_of_n(results)
+    client = _client()
+    if req.n <= 1:
+        text, confidence, finish = await _complete_once(client, payload, stops)
+    else:
+        # best-of-n: fire n parallel samples, pick highest-confidence
+        # non-empty result. llama-server uses a random seed by default,
+        # so even at low temperature the samples diverge. (At temp 0.0
+        # all samples are identical — best-of-n is pointless there.)
+        results = await asyncio.gather(
+            *[_complete_once(client, payload, stops) for _ in range(req.n)],
+            return_exceptions=True,
+        )
+        text, confidence, finish = _pick_best_of_n(results)
     return {"text": text, "confidence": confidence, "finish_reason": finish}
 
 
