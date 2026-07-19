@@ -21,6 +21,7 @@ import type { MorpheusSettings } from "./main";
 export type TelemetryEventType =
   | "suggested"
   | "accepted"
+  | "partially_accepted"
   | "rejected"
   | "ignored";
 
@@ -34,6 +35,12 @@ interface TelemetryEventData {
   prompt_length?: number;
   suggestion_text?: string;
   context?: string;
+  /** Cumulative accepted length (UTF-16 codepoints), Copilot convention.
+   *  Set on partially_accepted events. */
+  accepted_length?: number;
+  /** Why the suggestion was rejected: "dismissed" (Esc), "cycled" (Alt+]),
+   *  "cycled_back" (Alt+[). Only set on rejected events. */
+  reject_reason?: string;
 }
 
 interface TelemetryEvent extends TelemetryEventData {
@@ -110,13 +117,40 @@ export class TelemetryService {
     });
   }
 
-  /** Called when the user presses Esc to dismiss a suggestion. */
-  trackRejected(suggestionId: string, model: string): void {
+  /** Called when the user accepts part of a suggestion (Ctrl+Right).
+   *  Follows the Copilot convention: acceptedLength is CUMULATIVE — it
+   *  includes everything accepted so far, not just the latest word. */
+  trackPartiallyAccepted(
+    suggestionId: string,
+    model: string,
+    acceptedLength: number,
+    totalLength: number
+  ): void {
+    // Partial acceptance does NOT clear `outstanding` — the suggestion
+    // is still showing (the remainder). It will be cleared by a final
+    // `accepted` (Tab) or `rejected`/`ignored` later.
+    this.enqueue({
+      event_type: "partially_accepted",
+      model,
+      suggestion_id: suggestionId,
+      accepted_length: acceptedLength,
+      suggestion_length: totalLength,
+    });
+  }
+
+  /** Called when the user presses Esc to dismiss a suggestion, or cycles
+   *  to another alternative (Alt+]/[). */
+  trackRejected(
+    suggestionId: string,
+    model: string,
+    reason: "dismissed" | "cycled" | "cycled_back" = "dismissed"
+  ): void {
     this.outstanding = null;
     this.enqueue({
       event_type: "rejected",
       model,
       suggestion_id: suggestionId,
+      reject_reason: reason,
     });
   }
 

@@ -66,6 +66,10 @@ class TelemetryEvent(BaseModel):
     prompt_length: Optional[int] = None
     suggestion_text: Optional[str] = None
     context: Optional[str] = None
+    accepted_length: Optional[int] = None
+    reject_reason: Optional[str] = Field(
+        None, description="dismissed | cycled | cycled_back"
+    )
 
 
 class EventsBatch(BaseModel):

@@ -2,8 +2,9 @@
 
 Ghost-text autocompletion for [Obsidian](https://obsidian.md), powered by a
 [Morpheus](https://github.com/itzune/morpheus) demo server. Type naturally —
-suggestions appear as transparent inline text. **Tab** to accept, **Esc** to
-dismiss.
+suggestions appear as transparent inline text. Accept with **Tab**, accept
+just the next word with **Ctrl+Right**, cycle alternatives with **Alt+]** /
+**Alt+[**, dismiss with **Esc**.
 
 The server URL is configurable, so the **same plugin** works with either tier
 of the Morpheus two-tier architecture:
@@ -30,7 +31,9 @@ Obsidian editor ──prefix+suffix──▶ Morpheus demo server ──▶ llam
    calls `llama-server`, and cleans up the output — all per-backend.
 3. The plugin renders the returned text as inline ghost text at the cursor.
    Low-confidence suggestions (below the threshold) are suppressed.
-4. **Tab** inserts the suggestion; **Esc** dismisses it.
+4. **Tab** inserts the suggestion; **Ctrl+Right** accepts the next word
+   (keeping the remainder as ghost text); **Alt+]** fetches an alternative;
+   **Alt+[** goes back to the previous one; **Esc** dismisses.
 
 The plugin is **backend-agnostic**: it speaks the simple `{prefix, suffix}
 → {text, confidence}` protocol. All model-specific concerns (tokenization,
@@ -105,6 +108,7 @@ Open **Settings → Morpheus Autocomplete**:
 | **Trigger delay** | 500 ms | Pause length after typing before fetching. Lower = snappier but more requests. |
 | **Max tokens** | 16 | Suggestion length cap. Ghost text longer than ~1 line is rarely useful. |
 | **Temperature** | 0.2 | 0 = greedy/deterministic. Higher = more creative but less predictable. |
+| **Cycle temperature (Alt+])** | 0.7 | Temperature for alternative-cycling. Higher than baseline so cycle requests diverge from the greedy top-1. |
 | **Confidence threshold** | 0.15 | Suppress suggestions below this confidence. Higher = fewer but better. |
 | **Best-of-N** | 1 | Fire N parallel samples, keep highest-confidence. Only useful with temperature > 0. |
 | **Context before cursor** | 1500 chars | How much text before the cursor to send as prefix. |
@@ -145,8 +149,57 @@ Then set **Server URL** in the plugin settings to match.
 - **Acceptance logging**: On Tab-accept, the plugin fire-and-forgets an event
   to the server's `POST /api/log` endpoint. These logs build the eval dataset
   used for CSR (Character Saved Ratio) measurement — see `demo/csr_eval.py`.
+- **Partial acceptance (Ctrl+Right)**: Inserts the next word of the suggestion
+  and keeps the remainder as ghost text, so you can accept word-by-word.
+  Follows the VS Code / Copilot "accept next word" convention.
 - **`requestUrl`**: Uses Obsidian's built-in HTTP client (not `fetch`) to
   avoid CORS issues and work within the Electron sandbox.
+
+## Keybindings
+
+| Key | Action |
+|-----|--------|
+| **Tab** | Accept the full suggestion. |
+| **Ctrl+Right** | Accept the next word (partial acceptance). The remainder stays as ghost text — press again for the next word, or Tab for the rest. |
+| **Alt+]** | Cycle to the next alternative. Fetches a new completion at the cycle temperature (higher → more diverse). |
+| **Alt+[** | Cycle back to the previous alternative (from history). |
+| **Esc** | Dismiss the suggestion. |
+
+## Telemetry
+
+The plugin supports **opt-in telemetry** for measuring autocompletion quality
+across models, inspired by GitHub Copilot's `didShowCompletion` /
+`didPartiallyAcceptCompletion` / `didAcceptCompletionItem` protocol.
+
+**Five event types** are tracked:
+
+| Event | When | Key fields |
+|-------|------|------------|
+| `suggested` | A suggestion is shown (denominator) | `latency_ms`, `confidence`, `model` |
+| `partially_accepted` | Ctrl+Right — word accepted | `accepted_length` (cumulative, Copilot convention) |
+| `accepted` | Tab — full acceptance | `suggestion_id` |
+| `rejected` | Esc, Alt+], Alt+[ | `reject_reason` (`dismissed` / `cycled` / `cycled_back`) |
+| `ignored` | User typed past without interacting | `suggestion_id` |
+
+**Metrics derived** (per model, in the dashboard):
+
+- **Acceptance rate** = accepted / suggested (Copilot's #1 metric)
+- **Engagement rate** = distinct suggestions interacted with / suggested
+  (counts partial accepts + rejects, not just full accepts)
+- **Latency** p50 / p95 / avg
+- **Confidence vs. acceptance** correlation
+
+Privacy:
+- **Default off.** Set a telemetry endpoint to enable.
+- **Separate toggle** "Include suggestion text" — metrics work without sending
+  any content, just counts and lengths.
+- **Self-hostable**: the telemetry server is a standalone FastAPI + SQLite
+  service (`demo/telemetry/`). Run it anywhere — your laptop, the GPU server,
+  or a dedicated box. See `demo/telemetry/README.md`.
+- **Cross-model**: because it's a separate service, events from all backends
+  (Morpheus local, Kimu 2B, Latxa 8B) aggregate in one place for comparison.
+
+See `demo/telemetry/README.md` for deployment instructions.
 
 ## License
 

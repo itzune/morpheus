@@ -25,13 +25,32 @@ CREATE TABLE IF NOT EXISTS events (
     suggestion_length INTEGER,
     prompt_length INTEGER,
     suggestion_text TEXT,
-    context TEXT
+    context TEXT,
+    accepted_length INTEGER,
+    reject_reason TEXT
 );
 CREATE INDEX IF NOT EXISTS idx_events_model ON events(model);
 CREATE INDEX IF NOT EXISTS idx_events_type ON events(event_type);
 CREATE INDEX IF NOT EXISTS idx_events_ts ON events(timestamp);
 CREATE INDEX IF NOT EXISTS idx_events_sid ON events(suggestion_id);
 """
+
+# Columns added after initial release. Each is added via ALTER TABLE if missing.
+_MIGRATIONS = [
+    ("accepted_length", "ALTER TABLE events ADD COLUMN accepted_length INTEGER"),
+    ("reject_reason", "ALTER TABLE events ADD COLUMN reject_reason TEXT"),
+]
+
+
+def _migrate(conn) -> None:
+    """Add columns that were introduced after the initial schema."""
+    existing = {
+        row[1]
+        for row in conn.execute("PRAGMA table_info(events)").fetchall()
+    }
+    for col, sql in _MIGRATIONS:
+        if col not in existing:
+            conn.execute(sql)
 
 
 def init_db(db_path: str | None = None) -> None:
@@ -42,6 +61,7 @@ def init_db(db_path: str | None = None) -> None:
     _DB_PATH.parent.mkdir(parents=True, exist_ok=True)
     with _get_conn() as conn:
         conn.executescript(SCHEMA)
+        _migrate(conn)
 
 
 @contextmanager
@@ -78,11 +98,11 @@ def insert_events(events: list[dict[str, Any]]) -> int:
                 """INSERT INTO events
                    (timestamp, session_id, model, event_type, suggestion_id,
                     latency_ms, confidence, suggestion_length, prompt_length,
-                    suggestion_text, context)
+                    suggestion_text, context, accepted_length, reject_reason)
                    VALUES
                    (:timestamp, :session_id, :model, :event_type, :suggestion_id,
                     :latency_ms, :confidence, :suggestion_length, :prompt_length,
-                    :suggestion_text, :context)""",
+                    :suggestion_text, :context, :accepted_length, :reject_reason)""",
                 events,
             )
             return len(events)
@@ -132,12 +152,13 @@ def get_stats(hours: int = 24) -> dict:
         rows = conn.execute(
             """SELECT
                 model,
-                SUM(CASE WHEN event_type = 'suggested' THEN 1 ELSE 0 END) as suggested,
-                SUM(CASE WHEN event_type = 'accepted'  THEN 1 ELSE 0 END) as accepted,
-                SUM(CASE WHEN event_type = 'rejected'  THEN 1 ELSE 0 END) as rejected,
-                SUM(CASE WHEN event_type = 'ignored'   THEN 1 ELSE 0 END) as ignored,
-                AVG(CASE WHEN event_type = 'suggested' THEN latency_ms END) as avg_latency_ms,
-                AVG(CASE WHEN event_type = 'suggested' THEN confidence END) as avg_confidence
+                SUM(CASE WHEN event_type = 'suggested'  THEN 1 ELSE 0 END) as suggested,
+                SUM(CASE WHEN event_type = 'accepted'   THEN 1 ELSE 0 END) as accepted,
+                SUM(CASE WHEN event_type = 'rejected'   THEN 1 ELSE 0 END) as rejected,
+                SUM(CASE WHEN event_type = 'ignored'    THEN 1 ELSE 0 END) as ignored,
+                SUM(CASE WHEN event_type = 'partially_accepted' THEN 1 ELSE 0 END) as partial_acceptances,
+                AVG(CASE WHEN event_type = 'suggested'  THEN latency_ms END) as avg_latency_ms,
+                AVG(CASE WHEN event_type = 'suggested'  THEN confidence END) as avg_confidence
                FROM events
                WHERE timestamp >= datetime('now', ?)
                GROUP BY model
@@ -152,6 +173,24 @@ def get_stats(hours: int = 24) -> dict:
             accepted = d["accepted"] or 0
             d["acceptance_rate"] = (
                 round(accepted / suggested, 4) if suggested > 0 else 0.0
+            )
+            d["partial_acceptances"] = d["partial_acceptances"] or 0
+            # “engagement rate” = fraction of suggestions the user
+            # interacted with (accepted, partially accepted, or explicitly
+            # rejected via Esc/cycle), excluding pure ignores. Counted by
+            # DISTINCT suggestion_id so multiple partial-accept events on
+            # the same suggestion don't inflate the metric.
+            interacted_ids = conn.execute(
+                """SELECT COUNT(DISTINCT suggestion_id) as n
+                   FROM events
+                   WHERE model = ?
+                     AND event_type IN ('accepted','partially_accepted','rejected')
+                     AND suggestion_id IS NOT NULL
+                     AND timestamp >= datetime('now', ?)""",
+                (d["model"], cutoff),
+            ).fetchone()
+            d["engagement_rate"] = (
+                round(interacted_ids["n"] / suggested, 4) if suggested > 0 else 0.0
             )
             d["avg_latency_ms"] = (
                 round(d["avg_latency_ms"], 1) if d["avg_latency_ms"] else 0.0
@@ -207,6 +246,7 @@ def get_stats(hours: int = 24) -> dict:
 
         total_suggested = sum(m["suggested"] for m in models)
         total_accepted = sum(m["accepted"] for m in models)
+        total_partial = sum(m["partial_acceptances"] for m in models)
         overall_rate = (
             round(total_accepted / total_suggested, 4)
             if total_suggested > 0
@@ -218,6 +258,7 @@ def get_stats(hours: int = 24) -> dict:
             "overall": {
                 "suggested": total_suggested,
                 "accepted": total_accepted,
+                "partial_acceptances": total_partial,
                 "acceptance_rate": overall_rate,
                 "models": len(models),
             },

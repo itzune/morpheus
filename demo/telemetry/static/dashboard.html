@@ -75,9 +75,11 @@
           <th>Model</th>
           <th class="num">Suggested</th>
           <th class="num">Accepted</th>
+          <th class="num">Partial</th>
           <th class="num">Rejected</th>
           <th class="num">Ignored</th>
           <th class="num">Accept Rate</th>
+          <th class="num">Engagement</th>
           <th class="num">Avg Latency</th>
           <th class="num">P50</th>
           <th class="num">P95</th>
@@ -129,6 +131,7 @@
       document.getElementById('cards').innerHTML =
         '<div class="card"><div class="label">Suggested</div><div class="value">' + overall.suggested + '</div></div>' +
         '<div class="card"><div class="label">Accepted</div><div class="value" style="color:var(--green)">' + overall.accepted + '</div></div>' +
+        '<div class="card"><div class="label">Partial</div><div class="value" style="color:var(--blue)">' + (overall.partial_acceptances || 0) + '</div></div>' +
         '<div class="card"><div class="label">Accept Rate</div><div class="value">' + fmtPct(overall.acceptance_rate) + '</div></div>' +
         '<div class="card"><div class="label">Models</div><div class="value">' + overall.models + '</div></div>';
     }
@@ -136,7 +139,7 @@
     function renderTable(models) {
       const body = document.getElementById('stats-body');
       if (!models || models.length === 0) {
-        body.innerHTML = '<tr><td colspan="10" class="empty">No data yet. Start typing in Obsidian with telemetry enabled.</td></tr>';
+        body.innerHTML = '<tr><td colspan="12" class="empty">No data yet. Start typing in Obsidian with telemetry enabled.</td></tr>';
         return;
       }
       body.innerHTML = models.map(function(m) {
@@ -144,9 +147,11 @@
           '<td>' + shortModel(m.model) + '</td>' +
           '<td class="num">' + (m.suggested || 0) + '</td>' +
           '<td class="num" style="color:var(--green)">' + (m.accepted || 0) + '</td>' +
+          '<td class="num" style="color:var(--blue)">' + (m.partial_acceptances || 0) + '</td>' +
           '<td class="num" style="color:var(--red)">' + (m.rejected || 0) + '</td>' +
           '<td class="num" style="color:var(--muted)">' + (m.ignored || 0) + '</td>' +
           '<td class="num"><strong>' + fmtPct(m.acceptance_rate) + '</strong></td>' +
+          '<td class="num">' + fmtPct(m.engagement_rate) + '</td>' +
           '<td class="num">' + fmtMs(m.avg_latency_ms) + '</td>' +
           '<td class="num">' + fmtMs(m.p50_latency_ms) + '</td>' +
           '<td class="num">' + fmtMs(m.p95_latency_ms) + '</td>' +

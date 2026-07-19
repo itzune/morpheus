@@ -33,6 +33,8 @@ export interface MorpheusSettings {
   maxTokens: number;
   /** Sampling temperature (0 = greedy). */
   temperature: number;
+  /** Temperature for Alt+] cycling (higher = more diverse alternatives). */
+  cycleTemperature: number;
   /** Suppress suggestions below this confidence (0.0–1.0). */
   confidenceThreshold: number;
   /** Best-of-N: fire N parallel samples, keep highest-confidence. */
@@ -55,6 +57,7 @@ const DEFAULT_SETTINGS: MorpheusSettings = {
   triggerDelay: 500,
   maxTokens: 16,
   temperature: 0.2,
+  cycleTemperature: 0.7,
   confidenceThreshold: 0.15,
   bestOfN: 1,
   contextBefore: 1500,
@@ -249,6 +252,21 @@ class MorpheusSettingTab extends PluginSettingTab {
           .setDynamicTooltip()
           .onChange(async (value) => {
             this.plugin.settings.temperature = value;
+            await this.plugin.saveSettings();
+          })
+      );
+
+    // ── Cycle temperature ──
+    new Setting(containerEl)
+      .setName("Cycle temperature (Alt+])")
+      .setDesc("Temperature for alternative-cycling (Alt+]). Higher than baseline so cycle requests diverge from the greedy top-1.")
+      .addSlider((slider) =>
+        slider
+          .setLimits(0, 2, 0.05)
+          .setValue(this.plugin.settings.cycleTemperature)
+          .setDynamicTooltip()
+          .onChange(async (value) => {
+            this.plugin.settings.cycleTemperature = value;
             await this.plugin.saveSettings();
           })
       );
