@@ -32,8 +32,8 @@ Two strategic paths present themselves. **Adapting an existing Basque LLM** (the
 | Gmail Smart Compose | ~80M | Server | Cloud TPU | LSTM | Multi-token |
 | GitHub Copilot | Multi-B | Server | Cloud GPU | Transformer (FIM) | Multi-token |
 | **Morpheus** | **91M** | **55 MB** | **On-device (laptop)** | **Mamba-2** | **Multi-token** |
-| Kimu 2B (base) | 2B | 2.1 GB | Server (GPU) | Transformer | Multi-token |
-| Latxa 8B (base) | 8B | 6.6 GB | Server (GPU) | Transformer | Multi-token |
+| Kimu 2B (base) | 2B | 2.1 GB (Q6_K) | Server (GPU) | Transformer | Multi-token |
+| Latxa 8B (base) | 8B | 6.6 GB (Q6_K) | Server (GPU) | Transformer | Multi-token |
 
 **Table 1.** Morpheus in context. Both Google and Morpheus chose recurrent architectures to avoid KV-cache latency; Morpheus achieves it without the data center.
 
@@ -152,7 +152,7 @@ The figures make the deployment architecture visible: identical client, differen
 
 ### 7.2 Cross-Model Comparison
 
-**Bits Per Character (BPC)** is the correct tokenizer-independent metric for comparing models with different vocabularies:
+**Bits Per Character (BPC)** is the correct tokenizer-independent metric for comparing models with different vocabularies. BPC, simplified CSR, and Word Accuracy below are computed via direct PyTorch forward passes on full-precision (BF16) HuggingFace weights (`scripts/eval_baselines.py`) — not the quantized GGUF deployment:
 
 | Model | Params | BPC | CSR (simplified) | Word Accuracy |
 |-------|--------|-----|-------------------|---------------|
@@ -161,7 +161,7 @@ The figures make the deployment architecture visible: identical client, differen
 | Kimu 2B (base) | 2B | 0.744 | 0.215 | 61.7% |
 | Latxa 8B (base) | 8B | **0.490** | **0.266** | **75.2%** |
 
-Morpheus matches GPT-2's BPC at fewer parameters (the difference is primarily attributable to 11× more training data). **The Basque LLM comparison** fixes the deployment architecture: both Kimu 2B (Orai NLP, Gemma-2 CPT) and Latxa 8B (HiTZ, Llama-3.1 CPT) save +9 free-acceptance CSR points over Morpheus (34.1%/33.2% vs 24.8% via the full demo stack) with artifact-free BPE output, but are GPU-bound. On raw simplified CSR (table above), Latxa 8B leads as expected for a 4× larger model; on the free-acceptance benchmark, Kimu 2B *edges out* Latxa 8B at 4× smaller size — a 2B Basque-pretrained model reaches the 8B quality ceiling on this task. On the consumer laptop CPU, neither Basque LLM is viable: Kimu collapses to 5.6 tok/s (1,439 ms/request, 9.6× over budget), Latxa to 2.8 tok/s (2,869 ms/request, 19× over), while Morpheus sustains 40.7 tok/s.
+Morpheus matches GPT-2's BPC at fewer parameters (the difference is primarily attributable to 11× more training data). **The Basque LLM comparison** fixes the deployment architecture: both Kimu 2B (Orai NLP, Gemma-2 CPT) and Latxa 8B (HiTZ, Llama-3.1 CPT) save +9 free-acceptance CSR points over Morpheus (34.1%/33.2% vs 24.8%, measured on Q6_K quantized GGUF served via the full demo stack) with artifact-free BPE output, but are GPU-bound. On raw simplified CSR (table above), Latxa 8B leads as expected for a 4× larger model; on the free-acceptance benchmark, Kimu 2B *edges out* Latxa 8B at 4× smaller size — a 2B Basque-pretrained model reaches the 8B quality ceiling on this task. On the consumer laptop CPU, neither Basque LLM is viable: Kimu collapses to 5.6 tok/s (1,439 ms/request, 9.6× over budget), Latxa to 2.8 tok/s (2,869 ms/request, 19× over), while Morpheus sustains 40.7 tok/s.
 
 | Hardware | Model | Latency | tok/s | Memory |
 |----------|-------|---------|-------|--------|

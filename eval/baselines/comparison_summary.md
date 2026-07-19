@@ -1,7 +1,7 @@
 # Cross-Model Baseline Evaluation Summary
 
 **Date**: 2026-07-11
-**Evaluator**: `scripts/eval_baselines.py`
+**Evaluator**: `scripts/eval_baselines.py` (direct PyTorch forward pass on full-precision BF16 HuggingFace weights; not the Q6_K GGUF deployment)
 **Corpus**: `eval/real_corpus/` (14 files, 475,750 chars — Wikipedia + Berria)
 **CSR targets**: `eval/targets.json` (30 tests, 149 words)
 **⚠ Corpus contamination caveat**: Wikipedia/Berria may appear in all three models' training data. Absolute BPC is optimistic; relative comparison is valid.
