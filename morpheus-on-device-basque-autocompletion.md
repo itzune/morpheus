@@ -132,7 +132,7 @@ Any editor plugin speaks this protocol — no FIM tokens, no tokenizer, no Sente
 
 ![**Figure 2.** The same plugin, same editor — pointed at a GPU server running Latxa 8B (6.6 GB). Only the Server URL changed. The suggestion is longer and more specific. The model completes the user's sentence about Latxa with "*dira. Hala ere, ezin da lokalean exekutatu*" — "they are. However, it cannot be run locally" — a self-aware articulation of the two-tier constraint.](assets/morpheus-obsidian-plugin-autocompletion-latxa8b.png){width=90%}
 
-The two figures make the two-tier architecture visible: identical client, different backend, abstracted behind a URL. The 91M model runs locally (status bar: `v3_fim.Q5_K_M.gguf`); the 8B model runs on the GPU (status bar: `HITZ.Latxa-Llama-3.1-8B.Q6_K.gguf`). The hardware constraint — not a preference — determines which tier serves the user.
+The figures make the deployment architecture visible: identical client, different backend, abstracted behind a URL. The 91M model runs locally (status bar: `v3_fim.Q5_K_M.gguf`); the 2B and 8B models run on the GPU (status bar: `Gemma-Kimu-2b-base.Q6_K.gguf` or `HITZ.Latxa-Llama-3.1-8B.Q6_K.gguf`). The hardware constraint — not a preference — determines which tier serves the user.
 
 ---
 
