@@ -279,14 +279,6 @@ training — they cannot attend to the suffix and typically generate from the pr
 emit empty strings, or leak FIM sentinel tokens. Their columns are included to illustrate
 this capability gap (cf. §6.6 / §7.2).
 
-### FIM (Fill-in-the-Middle) Examples
-
-The prefix and suffix are given; the model must generate the **middle** (shown in bold in the full sentence).
-Only **Morpheus** was trained with FIM. Kimu 2B and Latxa 8B are base models without FIM
-training — they cannot attend to the suffix and typically generate from the prefix only,
-emit empty strings, or leak FIM sentinel tokens. Their columns are included to illustrate
-this capability gap (cf. §6.6 / §7.2).
-
 ### F.5 Email / workplace — iberba.eus (Epostak eta gutunak)
 
 > **Full sentence:** Iazko azken batzarrean adostu genuen bezala, **urteko memoria martxoa baino lehen** amaitu beharra dago.
