@@ -448,7 +448,11 @@ async def _generate_with_repair(
     confidence = compute_confidence(result)
     content = result.get("content", "")
 
-    if not filter_digits:
+    # BPE backends (Llama/transformer) pass string prompts and don't need
+    # digit repair — it's a SentencePiece byte-fallback workaround. A
+    # converged 8B BPE model produces clean Latin text; any digits in its
+    # output are legitimate (e.g. "3 milioi"), not byte-fallback garbage.
+    if not filter_digits or isinstance(prompt_ids, str):
         latency = (time.perf_counter() - t0) * 1000
         return content, confidence, candidates, latency
 

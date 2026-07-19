@@ -392,11 +392,11 @@ class LlamaFIMBackend(ModelBackend):
         return text
 
     def decode(self, ids: list[int]) -> str:
-        raise NotImplementedError(
-            "LlamaFIMBackend has no local tokenizer; token-level decode "
-            "(legacy digit repair) is a SentencePiece-only strategy. Use "
-            "the /v1/* OpenAI routes, which need no decode."
-        )
+        # No local tokenizer — return empty so any code path that calls
+        # decode() degrades gracefully instead of crashing. The /v1/*
+        # OpenAI routes never call this; the legacy /api/* greedy endpoint
+        # skips digit repair for string-prompt backends (see server.py).
+        return ""
 
     # ── Prompt construction ──
     def normalize_prompt(self, prompt) -> Prompt:

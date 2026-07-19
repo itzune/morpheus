@@ -1,10 +1,23 @@
 # Morpheus — On-Device Basque Autocomplete
 
-Morpheus is an on-device predictive autocompletion system for Basque (Euskara). It is a 91M-parameter Mamba-2 State Space Model trained from scratch on a curated ~4.62B-token Basque corpus, quantized to a 55 MB GGUF and served via `llama.cpp` on a consumer CPU — 318 tok/s decode and 97 ms end-to-end autocomplete latency on a 2017 laptop, with zero network calls.
+**Can a Basque text-editor autocompletion system run locally on a consumer device?**
+
+This is the question this project investigates. Basque (Euskara) is a low-resource, morphologically agglutinative language isolate for which no on-device multi-token completion system exists. The answer is worked out in three stages:
+
+1. **Survey the autocompletion landscape.** Production systems span three paradigms, each with a distinct architecture and deployment profile: server-side multi-token completion (GitHub Copilot, Google Smart Compose), on-device next-word prediction (Gboard, a 1.4M-parameter model specialized for smartphone keyboards), and on-device multi-token continuation (a Smart Compose–equivalent for desktop editors). None of these targets Basque, and the on-device multi-token paradigm has not been attempted for an agglutinative language.
+
+2. **Analyze architecture options for Basque.** Two strategic paths present themselves. **Adapt an existing Basque LLM** — the HiTZ center's Latxa models (Llama-3.1-8B–based) — where a critical distinction emerges: Fill-in-the-Middle (FIM), the objective needed for cursor-mid-text completion, is a pretraining-style objective that conflicts with instruction tuning, so the instruct-vs-base choice is decisive. Or **train a new architecture from scratch**, where the on-device parameter budget (≤300 MB, constant latency) rules out large Transformers with their KV-cache latency variance, favoring State Space Models (Mamba-2) with O(1) per-step inference.
+
+3. **Train Morpheus and benchmark against Latxa.** This repo pursues the from-scratch path. **Morpheus** is a 91M-parameter Mamba-2 model trained on a curated ~4.62B-token Basque corpus, quantized to a 55 MB GGUF and served via `llama.cpp` on a consumer CPU — 318 tok/s decode and 97 ms end-to-end autocomplete latency on a 2017 laptop, with zero network calls. It is then benchmarked head-to-head against the existing general-purpose alternative, **Latxa 8B (base)** (HiTZ/Latxa-Llama-3.1-8B).
+
+The comparison establishes a **two-tier deployment architecture, fixed by hardware rather than preference**:
+
+- **Morpheus (91M, 55 MB)** is the only model that runs on the edge (40.7 tok/s on a 2017 laptop CPU), but its quality ceiling is visible on generative prose — its sweet spot is **formulaic completion** (email openings/closings, fixed collocations) and **domain-specialized fine-tunes** where a narrow distribution raises the hit rate on the patterns it can actually learn.
+- **Latxa 8B (base)** is the server-side quality ceiling (+8.35 CSR points, cross-domain competence without specialization) but is GPU-bound, collapsing to 2.9 s/request on the same laptop. It is the candidate for FIM continued pretraining, and a practical advantage is that it rides on a **standard LLM** (Llama-3.1) with its mature ecosystem (quantization, serving, editor plugins, eval harnesses) shared with mainstream work.
 
 The model uses a 4,000-token SentencePiece Unigram vocabulary, chosen so that Basque's agglutinative morphology (root + suffix chains) splits into reusable subwords rather than fusing into opaque atomic tokens.
 
-For the full architecture, training, evaluation, and deployment details, see **[morpheus-on-device-basque-autocompletion.pdf](./morpheus-on-device-basque-autocompletion.pdf)**.
+For the full architecture, training, evaluation, and deployment details, see **[morpheus-on-device-basque-autocompletion.pdf](./morpheus-on-device-basque-autocompletion.pdf)** — the write-up covers the survey, the architecture-selection decision, the two-model benchmark, and the evaluation-methodology findings (a "fertility paradox" and a "CSR paradox" that make perplexity the only reliable checkpoint-ranking metric for agglutinative languages).
 
 ## Models on Hugging Face
 

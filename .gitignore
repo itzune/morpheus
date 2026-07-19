@@ -12,6 +12,9 @@ exports/
 logs/
 wandb/
 
+# Downloaded baseline/comparison GGUFs (large, not trained in this repo)
+models/
+
 # Data (large files)
 data/*.npy
 data/splits/

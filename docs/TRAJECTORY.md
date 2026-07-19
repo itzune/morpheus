@@ -104,6 +104,112 @@ This differs from the mobile-keyboard UX in three ways that matter for the model
 Point 1 is the gap. The model is currently AR-only — it cannot see the suffix.
 Closing that gap is decision #1.
 
+### 1.4 A server-side baseline: Latxa 8B sets the quality ceiling
+
+While morpheus targets on-device O(1) latency, a larger server-side model
+defines the quality bar the on-device model asymptotes toward — and the
+baseline any FIM fine-tune must beat. We deployed **HiTZ/Latxa-Llama-3.1-8B**
+(the HiTZ continued-pretraining of Llama-3.1-8B on 4.2B Basque tokens; the
+*base* model, not the instruct variant) on the L40 GPU server via the same
+`llama-server` + demo proxy, using the existing `llama-fim` backend
+([`demo/backends.py`](../demo/backends.py)) — zero client changes, just an env
+var swap (`MORPHEUS_BACKEND=llama-fim`).
+
+**Head-to-head on the same 30-test CSR set** (`eval/targets.json`, free-acceptance,
+1 token/step, same hardware, same day):
+
+| Model | Params | Macro CSR | Accept rate | Avg conf |
+|-------|-------:|----------:|------------:|---------:|
+| Morpheus v3_fim Q5_K_M (on-device) | 91M | 24.83% | 27.5% | 0.35 |
+| **Latxa 8B Q6_K** (server) | 8B | **33.18%** | **40.2%** | **0.49** |
+
+Latxa saves **+8.4 CSR points** — roughly a third more keystrokes than morpheus
+on identical sentences. The filter gap is 0.00 (BPE output is artifact-free,
+unlike SentencePiece byte-fallback). But the quality lead comes with a hard
+hardware cost that fixes the deployment split:
+
+| | Morpheus (91M, 64 MB) | Latxa 8B (6.6 GB) |
+|---|---|---|
+| **GPU (L40)** latency | 75 ms (106 tok/s) | 115 ms (69.5 tok/s) |
+| **GPU (L40)** memory | 602 MiB VRAM | 6988 MiB VRAM |
+| **CPU laptop** latency | 196 ms (40.7 tok/s) | **2869 ms (2.8 tok/s)** |
+| **CPU laptop** memory | 266 MiB RAM | 6648 MiB RAM |
+| Autocomplete-viable on CPU? | **yes** | **no** (19× over budget) |
+
+On the L40 both clear the 150 ms threshold and the choice is a quality/VRAM
+trade. The GPU itself is not the bottleneck — utilization across both
+processes on the single card is 32% mean / 78% peak. The host-CPU signal runs
+*counter* to model size: Latxa's model server idles at 3% host CPU (the
+`llama-fim` backend hands llama-server a plain string and the GPU does all
+the work), whereas morpheus's `morpheus-sp-fim` backend burns 24% host CPU on
+SentencePiece encoding + retokenization-fallback in Python — the smaller model
+is cheaper to *run* but costlier to *serve*. On a CPU laptop Latxa 8B
+collapses to ~2.9 s/request and 6.6 GB RAM — not a real-time model off-GPU —
+while morpheus stays at 40.7 tok/s. So the two tiers are not a preference but
+a constraint: **morpheus is the only one that runs on the edge; Latxa is the
+server-side ceiling** (and the FIM fine-tune candidate, see point 3 below).
+Full benchmark: [`comparison.md`](../eval/demo-results/20260719_latxa_vs_morpheus/comparison.md#latency--resource-footprint).
+
+#### Domain examples — where the quality difference is visible
+
+The CSR gap is real but abstract. The difference is clearer in side-by-side
+continuations across three writing domains (greedy, 12 tokens):
+
+**Email writing** — `Egun on! Astelehenean bilera bat egitea proposatzen`
+("Good morning! I propose holding a meeting on Monday")
+
+| Model | Continuation | Conf |
+|-------|-------------|-----:|
+| Latxa 8B | `dizuet, 18:00etan. Bilera` *("to you [pl.], at 18:00. Meeting…")* | 0.45 |
+| Morpheus | `dizugu, eta, ondoren, egutegia eta` *("we propose, and, then, the calendar and")* | 0.34 |
+
+Both pick a valid dative verb form, but Latxa commits to a concrete meeting
+time; morpheus drifts into generic `eta, ondoren` connective filler.
+
+**Essay / article** — `Adimen artifizialak Hezkuntzan izango duen eragina`
+("The impact AI will have on Education")
+
+| Model | Continuation | Conf |
+|-------|-------------|-----:|
+| Latxa 8B | `aztertuko dute Euskal Herri` *("will examine [in] the Basque Country")* | 0.56 |
+| Morpheus | `aztertzeko, EHUko ikertzaile talde batek,` *("to examine, a UPV/EHU research team,")* | 0.33 |
+
+Both correctly continue with *aztertu* (examine) — the strongest collocation.
+Latxa's confidence is markedly higher (0.56 vs 0.33).
+
+**Educational / technical** — `Suhesia sareko komunikazio guztiak`
+("The firewall [?] all network communications")
+
+| Model | Continuation | Conf |
+|-------|-------------|-----:|
+| Latxa 8B | `zifratuta daude, eta ez dago er` *("are encrypted, and there is no…")* | 0.42 |
+| Morpheus | `, 100.000 biztanletik gora` *(", over 100,000 inhabitants")* | 0.35 |
+
+Here the models diverge sharply. Latxa stays on-topic (network security →
+encryption). Morpheus drifts to an unrelated demographic filler — a hallmark
+of an underpowered model latching onto a high-frequency statistical pattern
+instead of the sentence's semantic thread.
+
+#### What this establishes
+
+1. **The two-tier positioning is validated.** Morpheus (91M, 55 MB Q4) remains
+   the on-device/edge model; Latxa 8B (6.6 GB Q6) is the server-side model. They
+   are complementary, not competing — the +8 CSR points and cleaner output
+   justify the server deployment where latency budget allows.
+2. **This is the *base* model with no FIM training.** AR append (cursor at
+   end-of-buffer) works well; FIM infill (cursor mid-sentence) is non-functional
+   — Latxa emits EOS immediately on the `<|fim_begin|>` sentinels it has never
+   seen. That gap is precisely what a FIM continued-pretraining stage would fill.
+3. **Latxa 8B is the FIM fine-tune candidate, not the 2B Qwen.** The original
+   plan (Option B: Qwen3.5-2B-Base) preserved Mamba-family architectural
+   continuity. But the 8B Latxa base is already Basque-adapted (no CPT needed),
+   already beats morpheus by +8 CSR points as-is, and fits full-FT on one L40
+   (~24–30 GB). The marginal FIM-training cost on 8B vs 2B is GPU time, and the
+   quality ceiling is higher. (The 2B Qwen path remains a fallback if 8B
+   full-FT proves too slow on the single L40.)
+
+Full comparison + raw result files: [`eval/demo-results/20260719_latxa_vs_morpheus/`](../eval/demo-results/20260719_latxa_vs_morpheus/comparison.md).
+
 ---
 
 ## 2. Decision 1 — Fill-in-the-Middle via continued pretraining
@@ -429,16 +535,40 @@ touches only the tokenizer + embeddings, not the server.
 
 ## 8. Summary
 
-Morpheus's architecture is best suited to **desktop text-editor ghost-text
-autocomplete**: long sessions, constant decode latency, morphology-aware
-tokenization. The missing capability is **cursor-position awareness**, which
-FIM provides. The plan is a continued-pretraining stage that adds FIM tokens
-and trains on a 50/50 FIM+AR mix of the existing corpus, evaluated with a new
-Basque infilling benchmark, and deployed through a **reusable Basque inference
-server** (the proxy with an OpenAI-compatible face) that centralizes the
-tokenization fix and FIM template — letting any editor client (Continue.dev,
-Obsidian, Vim, CLI) connect with zero model-specific code. The first step is
-building that server face and dogfooding prefix-only completion against the
-current checkpoint, before any GPU work. Every step is evidence-grounded in
-the FIM literature and the comparison findings; none requires an architecture
-change or new data collection.
+The comparison against the base HiTZ/Latxa-Llama-3.1-8B (§1.4) settles the
+deployment architecture as a **two-tier split, fixed by hardware rather than
+preference**:
+
+- **Morpheus (Mamba-2, 91M, 64 MB) is the on-device tier.** It is the only
+  model that runs on the edge — 40.7 tok/s on a 2017 consumer laptop CPU — but
+  its quality ceiling is real: on essay and technical prose it gives *naive*
+  predictions, drifting to high-frequency connective filler or unrelated
+  statistical patterns instead of holding the semantic thread. Its sweet spot
+  is **formulaic completion** (email openings/closings, fixed collocations,
+  common administrative phrasing) and, given its parameter budget, **domain-
+  specialized fine-tunes** where a narrow distribution raises the hit rate on
+  the patterns it can actually learn. Mamba-2's O(1) decode and constant memory
+  remain the right architecture for long-session, constant-latency edge use —
+  but scoped to what a 91M model can genuinely predict, not general expository
+  writing.
+
+- **Latxa 8B (base) is the server-side tier.** It is +8.35 CSR points better
+  (33.18% vs 24.83%), cross-domain *without* specialization (it stayed on-topic
+  across email, essay, and technical prompts), but GPU-bound — it collapses to
+  2.9 s/request (2.8 tok/s) and 6.6 GB RAM on the same laptop, ~19× over the
+  latency budget. It is the candidate for **FIM continued pretraining** (§2) to
+  close the infill gap, and a practical advantage is that it rides on a
+  **standard LLM** (Llama-3.1): the surrounding ecosystem — quantization,
+  serving, editor plugins, eval harnesses — is mature and shared with
+  mainstream work, lowering the engineering burden relative to the bespoke
+  Mamba-2 toolchain.
+
+The plan is therefore a continued-pretraining stage that adds FIM tokens and
+trains on a 50/50 FIM+AR mix — applied to the Latxa 8B base on the GPU side —
+evaluated with a new Basque infilling benchmark, and deployed through a
+**reusable Basque inference server** (the proxy with an OpenAI-compatible
+face) that centralizes the tokenization fix and FIM template, letting any
+editor client (Continue.dev, Obsidian, Vim, CLI) connect with zero model-
+specific code. Every step is evidence-grounded in the FIM literature and the
+comparison findings; none requires an architecture change or new data
+collection.
