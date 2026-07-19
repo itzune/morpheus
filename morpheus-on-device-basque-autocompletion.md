@@ -26,16 +26,18 @@ Production autocompletion systems fall into three paradigms: **server-side multi
 
 Two strategic paths present themselves. **Adapting an existing Basque LLM** (the HiTZ Latxa family, Llama-3.1-based, or Orai NLP's Kimu, Gemma-2-based) is viable for the server tier, but at 2B–8B parameters these models cannot serve the on-device case. **Training a new architecture from scratch** is necessary for the edge tier. We selected Mamba-2 — a State Space Model with O(1) per-step inference and constant memory, the same property Google exploited for Smart Compose but solved at the architecture level rather than with data-center TPUs.
 
-| System | Params | Size | Deployment | Architecture | Paradigm |
-|--------|--------|------|-----------|--------------|----------|
-| Gboard (on-device NWP) | 1.4M | 1.4 MB | On-device (mobile) | LSTM | Next-word |
-| Gmail Smart Compose | ~80M | Server | Cloud TPU | LSTM | Multi-token |
-| GitHub Copilot | Multi-B | Server | Cloud GPU | Transformer (FIM) | Multi-token |
-| **Morpheus** | **91M** | **55 MB** | **On-device (laptop)** | **Mamba-2** | **Multi-token** |
-| Kimu 2B (base) | 2B | 2.1 GB (Q6_K) | Server (GPU) | Transformer | Multi-token |
-| Latxa 8B (base) | 8B | 6.6 GB (Q6_K) | Server (GPU) | Transformer | Multi-token |
+| System | Params | Size | Training Data | Deployment | Architecture | Paradigm |
+|--------|--------|------|---------------|-----------|--------------|----------|
+| Gboard (on-device NWP) | 1.4M | 1.4 MB | Federated (per-user) | On-device (mobile) | LSTM | Next-word |
+| Gmail Smart Compose | ~80M | Server | ~8B emails (~320B+ tok est.) | Cloud TPU | LSTM | Multi-token |
+| GitHub Copilot | Multi-B | Server | Proprietary code corpus | Cloud GPU | Transformer (FIM) | Multi-token |
+| **Morpheus** | **91M** | **55 MB** | **4.62B tokens (curated Basque)** | **On-device (laptop)** | **Mamba-2** | **Multi-token** |
+| Kimu 2B (base) | 2B | 2.1 GB (Q6_K) | ZelaiHandi (1.5B Basque CPT)† | Server (GPU) | Transformer | Multi-token |
+| Latxa 8B (base) | 8B | 6.6 GB (Q6_K) | Latxa Corpus v2 (4.2B CPT)† | Server (GPU) | Transformer | Multi-token |
 
-**Table 1.** Morpheus in context. Both Google and Morpheus chose recurrent architectures to avoid KV-cache latency; Morpheus achieves it without the data center.
+**Table 1.** Morpheus in context. Both Google and Morpheus chose recurrent architectures to avoid KV-cache latency; Morpheus achieves it without the data center. The data asymmetry is stark: Smart Compose trains on ~8B proprietary emails (~320B+ tokens, est.) — roughly **70× Morpheus's 4.62B-token curated Basque corpus** — at comparable model scale (91M vs ~80M), yet Morpheus runs the same paradigm on-device.
+
+†Continual pre-training (CPT) atop base models pre-trained on trillions of tokens (Gemma-2-2b ~2T, Llama-3.1-8B ~15T); value shown is Basque-specific CPT only.
 
 ---
 
