@@ -154,7 +154,7 @@ smaller model is cheaper to *run* but costlier to *serve*. On a CPU laptop
 Latxa 8B collapses to ~2.9 s/request and 6.6 GB RAM — not a real-time model
 off-Gpu — Kimu 2B is 2× faster (~1.4 s, 5.6 tok/s) but still 9.6× over budget,
 while morpheus stays at 40.7 tok/s. So the two tiers are not a
-preference but a constraint: **morpheus is the only one that runs on the edge;
+preference but a constraint: **morpheus is the only one that runs on the edge with acceptable latency;
 Kimu and Latxa are the server-side ceiling** (and the FIM fine-tune
 candidates, see point 3 below). Full benchmark:
 [`comparison.md`](../eval/demo-results/20260719_latxa_vs_morpheus/comparison.md#latency--resource-footprint).
