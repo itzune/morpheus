@@ -229,6 +229,78 @@ The model has converged. The next steps are: (1) integrate Apertium Basque for m
 
 ---
 
+## Appendix E: Three-Model Qualitative Comparison
+
+Top-3 sampled completions (temperature 0.7, 20 tokens) from each model.
+All prompts are **authentic Basque sentences** sourced from Wikipedia (eu),
+Berria newspaper, and the iberba.eus email-writing guide — no invented text.
+Gold continuations are the actual completions from the source documents.
+No evaluation is offered here; the reader is invited to compare.
+
+Models: **Morpheus** (91M Mamba-2, Q5_K_M), **Kimu 2B** (Gemma-2, Q6_K),
+**Latxa 8B** (Llama-3.1, Q6_K). All served via the same demo stack on an L40 GPU.
+
+_Three representative examples shown here. The full set of 7 AR + 5 FIM examples is in Appendix E of the detailed version._
+
+### E.4 Geography — Wikipedia (Bilbo)
+
+> **Prompt:** Euriak udazkenean eta udaberrian ugariak izaten dira; negua, berriz,
+> (Rains are abundant in autumn and spring; winter, however,)
+> **Gold:** eztia, eta uda ez oso beroa.
+> (mild, and the summer not very hot.)
+
+| # | Morpheus | Kimu 2B | Latxa 8B |
+|---|----------|---------|----------|
+| 1 | `elurtutako lurraldeetan egoten da.` (0.39) | `lehorra izaten da. Euri urtea izaten denean, uholdeak izaten` (0.517) | `hotz eta hezea da. Urteko batez besteko tenperatura` (0.611) |
+| 2 | `freskoa, eta udazkenean, berriz, ez­berdina, baina` (0.363) | `lehorra izaten da. Horrez gain, mendiek eta basoek udazk` (0.525) | `hotza eta elurtsua izaten da. Udak epelak eta hezeak` (0.634) |
+| 3 | `udazkenean eta udaberrian izaten da, eta negu-neguetan, uda` (0.4) | `lehorragoa izaten da.
+Abeltzaintzari dagokionez, ab` (0.595) | `hotz eta lehorrak izaten dira. Udak epelak izaten dira` (0.59) |
+
+### E.7 Email / workplace — iberba.eus (Epostak eta gutunak)
+
+> **Prompt:** Iazko azken batzarrean adostu genuen bezala, urteko memoria
+> (As agreed in last year's meeting, the annual report)
+> **Gold:** martxoa baino lehen amaitu beharra dago.
+> (must be finished before March.)
+
+| # | Morpheus | Kimu 2B | Latxa 8B |
+|---|----------|---------|----------|
+| 1 | `aurkeztuko dugu.` (0.377) | `prestatzen hasiak gara. Helburu nagusia herritar guztiek gure lanaren` (0.365) | `eta balantzea eginda ekarri ditugu, egia esan, ez da` (0.367) |
+| 2 | `egitea, eta beti ere, talde bakoitzak bere testuinguruan Plan Orokorraren barruan, nola ez, bere` (0.191) | `idazteko ardura hartu nuen nire gain, eta gaur, urte` (0.488) | `idatzi dugu. Memorian urtean zehar egindako ekintza` (0.521) |
+| 3 | `ere osatu eta aurkeztu dugu.` (0.182) | `eta balantzea aurkeztu dizkizuegu.` (0.567) | `egitea tokatzen zaigu, eta proiektuaren hasieran jarritako` (0.374) |
+
+---
+
+### FIM (Fill-in-the-Middle) Examples
+
+The prefix and suffix are given; the model must generate the **middle** (shown in bold in the full sentence).
+Only **Morpheus** was trained with FIM. Kimu 2B and Latxa 8B are base models without FIM
+training — they cannot attend to the suffix and typically generate from the prefix only,
+emit empty strings, or leak FIM sentinel tokens. Their columns are included to illustrate
+this capability gap (cf. §6.6 / §7.2).
+
+### FIM (Fill-in-the-Middle) Examples
+
+The prefix and suffix are given; the model must generate the **middle** (shown in bold in the full sentence).
+Only **Morpheus** was trained with FIM. Kimu 2B and Latxa 8B are base models without FIM
+training — they cannot attend to the suffix and typically generate from the prefix only,
+emit empty strings, or leak FIM sentinel tokens. Their columns are included to illustrate
+this capability gap (cf. §6.6 / §7.2).
+
+### F.5 Email / workplace — iberba.eus (Epostak eta gutunak)
+
+> **Full sentence:** Iazko azken batzarrean adostu genuen bezala, **urteko memoria martxoa baino lehen** amaitu beharra dago.
+
+| # | Morpheus (FIM) | Kimu 2B (no FIM) | Latxa 8B (no FIM) |
+|---|----------------|------------------|-------------------|
+| 1 | `aurten ere,` (0.167) | `Jarraitu irakurtzen 'Ostiela!' blogean.` (0.545) | *(empty)* |
+| 2 | `aurten ez da ezer` (0.31) | `Hala, bihar, martxoak 25, asteazkena, eging` (0.433) | `Ezin daiteke onartu, ezin daiteke onetsi.<|f` (0.379) |
+| 3 | `hileko kuotak` (0.272) | `Kultura batzordeak egindako proposamena da.` (0.425) | *(empty)* |
+
+
+
+---
+
 ## References
 
 1. Contreras, M. (2026). *QuechuaTok: Morphological Boundary Accuracy as a Necessary Metric for Tokenizer Evaluation in Agglutinative Low-Resource Languages*. arXiv:2606.23943.

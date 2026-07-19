@@ -1121,6 +1121,179 @@ Each gate targets a distinct failure class that PPL alone cannot detect: data co
 
 ---
 
+## Appendix E: Three-Model Qualitative Comparison
+
+Top-3 sampled completions (temperature 0.7, 20 tokens) from each model.
+All prompts are **authentic Basque sentences** sourced from Wikipedia (eu),
+Berria newspaper, and the iberba.eus email-writing guide — no invented text.
+Gold continuations are the actual completions from the source documents.
+No evaluation is offered here; the reader is invited to compare.
+
+Models: **Morpheus** (91M Mamba-2, Q5_K_M), **Kimu 2B** (Gemma-2, Q6_K),
+**Latxa 8B** (Llama-3.1, Q6_K). All served via the same demo stack on an L40 GPU.
+
+### E.1 Education — Wikipedia (Hezkuntza)
+
+> **Prompt:** Estatua da
+> (The State is)
+> **Gold:** hezkuntza sistemaren gestio eta erregulazioaren erantzule.
+> (responsible for the management and regulation of the education system.)
+
+| # | Morpheus | Kimu 2B | Latxa 8B |
+|---|----------|---------|----------|
+| 1 | `ingeniaritza eta teknologiako ikerketarako zentro nagusia (adibidez, Arabi` (0.278) | `hizkuntza-politika eraginkorrik ez duen herrialde bakarra.` (0.54) | `erretratutik anuntzio klasikora egiten den trantsizioaren ad` (0.399) |
+| 2 | `beste bat, ez du ez torlojurik, ez bateriarik, ez GP` (0.364) | `gizakiaren hutsunea, azalpenak ematen dituena, baina ha` (0.293) | `, beraz, hildakoa eta kontenplazioa. Hala ere, ez` (0.321) |
+| 3 | `, hain zuzen, estatuaren funtzionamendua arautzen duena.` (0.322) | `, bere berma bakarra prozesuaren hondamendia eta gauzatze eza bait` (0.269) | `hizkuntza gutxituen aldeko ekintzailea, baina E` (0.415) |
+
+### E.2 News / politics — Berria
+
+> **Prompt:** Segurtasun Batzordea ere sei hilabete
+> (The Security Committee, six months)
+> **Gold:** barru bilduko da, adostutakoaren jarraipena egiteko.
+> (will meet, to follow up on what was agreed.)
+
+| # | Morpheus | Kimu 2B | Latxa 8B |
+|---|----------|---------|----------|
+| 1 | `ko epean bilduko da, eta, horretarako, beste kide batzuk izendatuko ditu.` (0.441) | `tik behin bilduko da, eta bi urtean behin, behin betiko on` (0.457) | `z atzeratu da` (0.412) |
+| 2 | `z aritu da lanean, eta 2013ko maiatzean amaitu zuen, eta orain` (0.262) | `ko epean eguneratzea erabaki dute; eta, epe horretan` (0.378) | `z etenda dugu. Urteko azken saioan, eskatu genien M` (0.204) |
+| 3 | `ko epean sartuko da, alegaziorik jaso ez denean.` (0.365) | `an behin bilduko da, eta hurrengo bilera urtarrilean eging` (0.625) | `z atzeratu dute` (0.453) |
+
+### E.3 Language & culture — Wikipedia (Euskara batua)
+
+> **Prompt:** Batasuna giputz euskaran zergatik oinarritu zen azaltzeko,
+> (To explain why the unification was based on Gipuzkoan Basque,)
+> **Gold:** arrazoi demografikoak ematen dira gehienetan.
+> (demographic reasons are most often given.)
+
+| # | Morpheus | Kimu 2B | Latxa 8B |
+|---|----------|---------|----------|
+| 1 | `1860ko artikulu batean, J. M. Lekuona, "E` (0.286) | `hainbat adibide emango dituzte.` (0.391) | `Aintzane Ezenarro Aralarreko Gipuzkoako Batzarkide` (0.617) |
+| 2 | `beharbada, latinez Latinis edo latinismo hitzak erabili zituen, baina` (0.26) | `aurrekoan erabilitako argumentu bat berreskuratu behar izan dugu, hau` (0.226) | `aurreko aldian esandakoaz gain, beste zerbait erantsi behar` (0.449) |
+| 3 | *(empty)* | `bi arrazoi nagusi aipatzen ditu: batetik, euskara bera (irakur` (0.377) | `gogora dezagun euskara eta euskara batuaren ibilbidea` (0.476) |
+
+### E.4 Geography — Wikipedia (Bilbo)
+
+> **Prompt:** Euriak udazkenean eta udaberrian ugariak izaten dira; negua, berriz,
+> (Rains are abundant in autumn and spring; winter, however,)
+> **Gold:** eztia, eta uda ez oso beroa.
+> (mild, and the summer not very hot.)
+
+| # | Morpheus | Kimu 2B | Latxa 8B |
+|---|----------|---------|----------|
+| 1 | `elurtutako lurraldeetan egoten da.` (0.39) | `lehorra izaten da. Euri urtea izaten denean, uholdeak izaten` (0.517) | `hotz eta hezea da. Urteko batez besteko tenperatura` (0.611) |
+| 2 | `freskoa, eta udazkenean, berriz, ez­berdina, baina` (0.363) | `lehorra izaten da. Horrez gain, mendiek eta basoek udazk` (0.525) | `hotza eta elurtsua izaten da. Udak epelak eta hezeak` (0.634) |
+| 3 | `udazkenean eta udaberrian izaten da, eta negu-neguetan, uda` (0.4) | `lehorragoa izaten da.
+Abeltzaintzari dagokionez, ab` (0.595) | `hotz eta lehorrak izaten dira. Udak epelak izaten dira` (0.59) |
+
+### E.5 Music / arts — Wikipedia (Musika)
+
+> **Prompt:** Ming dinastiaren garaian
+> (During the Ming dynasty)
+> **Gold:** hasi zen jai eta ospakizunetako musika kodetzen eta kontserbatorioetan irakasten.
+> (began codifying festive and ceremonial music and teaching it in conservatories.)
+
+| # | Morpheus | Kimu 2B | Latxa 8B |
+|---|----------|---------|----------|
+| 1 | `, 1834an, Urrezko Gurutzadak, 15 urte` (0.22) | `(1368-1644), Txinako ipar-ekialdeko` (0.636) | `(1368-1644), familia noble bateko alaba zen Li Xuezhire` (0.368) |
+| 2 | `, 1200. urtean, sultanak 1.800.` (0.307) | `(1368–1644), Txinako iparraldeko Dharahara era` (0.499) | `eskribau edo funtzionario izan zen. Haren lanak arkeologiaren` (0.351) |
+| 3 | `, "Maitalearen Etxea" ("Maitalearen Etxea"` (0.445) | `, 1368tik 1644ra, Minggoek eta Hanek` (0.488) | `(K.a. 475-221), Txinako literatura garai nahasia zen.` (0.355) |
+
+### E.6 History — Wikipedia (Euskal Herria)
+
+> **Prompt:** Erdi Aroan gaztelaniaz idatzi zuen Gonzalo de Berceo Errioxako idazlea
+> (Gonzalo de Berceo, the Riojan writer who wrote in Castilian in the Middle Ages,)
+> **Gold:** ziur aski euskalduna zen.
+> (was almost certainly Basque-speaking.)
+
+| # | Morpheus | Kimu 2B | Latxa 8B |
+|---|----------|---------|----------|
+| 1 | `, eta "La casa del lino" (1862) liburua idatzi` (0.272) | `jaio zela 800 urte beteko dira aurten. Gaur egun` (0.687) | `. Idazleak berak idatzi zituen bere obra guztiak,` (0.436) |
+| 2 | `Lau urte geroago, 1870eko irailean, Riberaseko` (0.277) | `da.
+Bizitza.
+Gonzalo Berceo (Berceo, Errioxa,` (0.475) | `izan zen. Bere bizitzari buruzko datu gutxi ezagutzen da` (0.559) |
+| 3 | `.` (0.421) | *(empty)* | `da. Izan ere, Berceo Errioxako Espinosa de Moncayo` (0.554) |
+
+### E.7 Email / workplace — iberba.eus (Epostak eta gutunak)
+
+> **Prompt:** Iazko azken batzarrean adostu genuen bezala, urteko memoria
+> (As agreed in last year's meeting, the annual report)
+> **Gold:** martxoa baino lehen amaitu beharra dago.
+> (must be finished before March.)
+
+| # | Morpheus | Kimu 2B | Latxa 8B |
+|---|----------|---------|----------|
+| 1 | `aurkeztuko dugu.` (0.377) | `prestatzen hasiak gara. Helburu nagusia herritar guztiek gure lanaren` (0.365) | `eta balantzea eginda ekarri ditugu, egia esan, ez da` (0.367) |
+| 2 | `egitea, eta beti ere, talde bakoitzak bere testuinguruan Plan Orokorraren barruan, nola ez, bere` (0.191) | `idazteko ardura hartu nuen nire gain, eta gaur, urte` (0.488) | `idatzi dugu. Memorian urtean zehar egindako ekintza` (0.521) |
+| 3 | `ere osatu eta aurkeztu dugu.` (0.182) | `eta balantzea aurkeztu dizkizuegu.` (0.567) | `egitea tokatzen zaigu, eta proiektuaren hasieran jarritako` (0.374) |
+
+---
+
+### FIM (Fill-in-the-Middle) Examples
+
+The prefix and suffix are given; the model must generate the **middle** (shown in bold in the full sentence).
+Only **Morpheus** was trained with FIM. Kimu 2B and Latxa 8B are base models without FIM
+training — they cannot attend to the suffix and typically generate from the prefix only,
+emit empty strings, or leak FIM sentinel tokens. Their columns are included to illustrate
+this capability gap (cf. §6.6 / §7.2).
+
+### F.1 Language & culture — Wikipedia (Euskara batua)
+
+> **Full sentence:** Hirietako hainbat euskaldunek, **euskalkien erreferentzia sendorik gabe,** euskara batua ama-hizkuntzatzat ikasi du.
+
+| # | Morpheus (FIM) | Kimu 2B (no FIM) | Latxa 8B (no FIM) |
+|---|----------------|------------------|-------------------|
+| 1 | `ordea,` (0.132) | `Hirietako hainbat euskaldunek euskara batua ama-hizkuntzatz` (0.813) | *(empty)* |
+| 2 | `berriz, xuberotar` (0.147) | `Euskara batua, jatorriz, euskalkiak erabiliz sortuta` (0.508) | `<|fim_begin|>Hirietako hainbat euskaldunek,<` (0.71) |
+| 3 | `gaztelania` (0.295) | `Ama-hizkuntza eta hizkuntza batua. Euskararen bidegurutzean` (0.497) | *(empty)* |
+
+### F.2 Society / economy — Wikipedia (Donostia)
+
+> **Full sentence:** Langabeziari dagokionez, **Euskal Autonomi Erkidegoko hiriburuetan tasa baxuena dago** Donostian.
+
+| # | Morpheus (FIM) | Kimu 2B (no FIM) | Latxa 8B (no FIM) |
+|---|----------------|------------------|-------------------|
+| 1 | `1.100 pertsona gutxiago daude` (0.302) | `</subformat>
+"Donostia ez dago ondo, baina ez da bakar` (0.298) | `Donostian, langabeziak behera egin du azken urtean,` (0.56) |
+| 2 | `630 lagunek egin dute` (0.181) | `Hilabeteko langabezia-tasa hilabete lehenago baino ia puntu` (0.457) | `XX. mendearen amaieran eta XXI.aren hasieran, langabezia-tasa` (0.563) |
+| 3 | `%59koa da` (0.303) | `Donostian 2021eko urtarrilean 2.477` (0.426) | `Lanbiden lanik gabe ageri diren herritarren kopurua 1.` (0.409) |
+
+### F.3 News / politics — Wikipedia (Nafarroa Garaia)
+
+> **Full sentence:** Hirukotea osatzeko lehen porrotaren ondoren, **PSN-ko hainbat kideren kritika zorrotzak** egon ziren.
+
+| # | Morpheus (FIM) | Kimu 2B (no FIM) | Latxa 8B (no FIM) |
+|---|----------------|------------------|-------------------|
+| 1 | `Tudelano-n` (0.31) | `1971-1974
+"The Boss" abeslari eta lider` (0.341) | *(empty)* |
+| 2 | `Urdulizen` (0.312) | `Lehen aldiz Prime Time Championshipean, Tamina SAn irabazi ondoren` (0.385) | *(empty)* |
+| 3 | `Rioko Joko Olinpikoetan` (0.421) | `Kirolak.
+Sakontzeko, irakurri: «AEBetako kiro` (0.347) | *(empty)* |
+
+### F.4 News / journalism — Berria
+
+> **Full sentence:** Plazaren ingurumarietan korrika zebiltzanek **gomazko pilotak ez, su armen hotsak** aditu zituzten.
+
+| # | Morpheus (FIM) | Kimu 2B (no FIM) | Latxa 8B (no FIM) |
+|---|----------------|------------------|-------------------|
+| 1 | `korrika zihoazenak` (0.432) | `"Otsoa da!" zioen emakume batek, eta korrika hasi` (0.382) | *(empty)* |
+| 2 | `, barrakak` (0.146) | `<poem>
+Jainkoak sortu zuen gizakia
+Haizean lore,` (0.358) | `<|fim_hole|>Kontuak kontu, presoen eskubide` (0.445) |
+| 3 | `, 12-13 urte arteko gazte eta umeak` (0.266) | `<li> "Kalitate handia duen antzezlana da Ama Kuraia".` (0.326) | `«Ematen du <|fim_begin|>hemen ere<|fim_hole` (0.403) |
+
+### F.5 Email / workplace — iberba.eus (Epostak eta gutunak)
+
+> **Full sentence:** Iazko azken batzarrean adostu genuen bezala, **urteko memoria martxoa baino lehen** amaitu beharra dago.
+
+| # | Morpheus (FIM) | Kimu 2B (no FIM) | Latxa 8B (no FIM) |
+|---|----------------|------------------|-------------------|
+| 1 | `aurten ere,` (0.167) | `Jarraitu irakurtzen 'Ostiela!' blogean.` (0.545) | *(empty)* |
+| 2 | `aurten ez da ezer` (0.31) | `Hala, bihar, martxoak 25, asteazkena, eging` (0.433) | `Ezin daiteke onartu, ezin daiteke onetsi.<|f` (0.379) |
+| 3 | `hileko kuotak` (0.272) | `Kultura batzordeak egindako proposamena da.` (0.425) | *(empty)* |
+
+
+---
+
 ## References
 
 1. Contreras, M. (2026). *QuechuaTok: Morphological Boundary Accuracy as a Necessary Metric for Tokenizer Evaluation in Agglutinative Low-Resource Languages*. arXiv:2606.23943.

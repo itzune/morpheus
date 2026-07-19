@@ -1,0 +1,623 @@
+{
+  "ar": [
+    {
+      "domain": "Education",
+      "source": "Wikipedia (Hezkuntza)",
+      "prompt": "Estatua da",
+      "gold": "hezkuntza sistemaren gestio eta erregulazioaren erantzule.",
+      "full": "Estatua da hezkuntza sistemaren gestio eta erregulazioaren erantzule.",
+      "models": {
+        "morpheus": [
+          {
+            "text": "ingeniaritza eta teknologiako ikerketarako zentro nagusia (adibidez, Arabi",
+            "confidence": 0.278
+          },
+          {
+            "text": "beste bat, ez du ez torlojurik, ez bateriarik, ez GP",
+            "confidence": 0.364
+          },
+          {
+            "text": ", hain zuzen, estatuaren funtzionamendua arautzen duena.",
+            "confidence": 0.322
+          }
+        ],
+        "kimu": [
+          {
+            "text": "hizkuntza-politika eraginkorrik ez duen herrialde bakarra.",
+            "confidence": 0.54
+          },
+          {
+            "text": "gizakiaren hutsunea, azalpenak ematen dituena, baina ha",
+            "confidence": 0.293
+          },
+          {
+            "text": ", bere berma bakarra prozesuaren hondamendia eta gauzatze eza bait",
+            "confidence": 0.269
+          }
+        ],
+        "latxa": [
+          {
+            "text": "erretratutik anuntzio klasikora egiten den trantsizioaren ad",
+            "confidence": 0.399
+          },
+          {
+            "text": ", beraz, hildakoa eta kontenplazioa. Hala ere, ez",
+            "confidence": 0.321
+          },
+          {
+            "text": "hizkuntza gutxituen aldeko ekintzailea, baina E",
+            "confidence": 0.415
+          }
+        ]
+      }
+    },
+    {
+      "domain": "News / politics",
+      "source": "Berria",
+      "prompt": "Segurtasun Batzordea ere sei hilabete",
+      "gold": "barru bilduko da, adostutakoaren jarraipena egiteko.",
+      "full": "Segurtasun Batzordea ere sei hilabete barru bilduko da, adostutakoaren jarraipena egiteko.",
+      "models": {
+        "morpheus": [
+          {
+            "text": "ko epean bilduko da, eta, horretarako, beste kide batzuk izendatuko ditu.",
+            "confidence": 0.441
+          },
+          {
+            "text": "z aritu da lanean, eta 2013ko maiatzean amaitu zuen, eta orain",
+            "confidence": 0.262
+          },
+          {
+            "text": "ko epean sartuko da, alegaziorik jaso ez denean.",
+            "confidence": 0.365
+          }
+        ],
+        "kimu": [
+          {
+            "text": "tik behin bilduko da, eta bi urtean behin, behin betiko on",
+            "confidence": 0.457
+          },
+          {
+            "text": "ko epean eguneratzea erabaki dute; eta, epe horretan",
+            "confidence": 0.378
+          },
+          {
+            "text": "an behin bilduko da, eta hurrengo bilera urtarrilean eging",
+            "confidence": 0.625
+          }
+        ],
+        "latxa": [
+          {
+            "text": "z atzeratu da",
+            "confidence": 0.412
+          },
+          {
+            "text": "z etenda dugu. Urteko azken saioan, eskatu genien M",
+            "confidence": 0.204
+          },
+          {
+            "text": "z atzeratu dute",
+            "confidence": 0.453
+          }
+        ]
+      }
+    },
+    {
+      "domain": "Language & culture",
+      "source": "Wikipedia (Euskara batua)",
+      "prompt": "Batasuna giputz euskaran zergatik oinarritu zen azaltzeko,",
+      "gold": "arrazoi demografikoak ematen dira gehienetan.",
+      "full": "Batasuna giputz euskaran zergatik oinarritu zen azaltzeko, arrazoi demografikoak ematen dira gehienetan.",
+      "models": {
+        "morpheus": [
+          {
+            "text": "1860ko artikulu batean, J. M. Lekuona, \"E",
+            "confidence": 0.286
+          },
+          {
+            "text": "beharbada, latinez Latinis edo latinismo hitzak erabili zituen, baina",
+            "confidence": 0.26
+          },
+          {
+            "text": "",
+            "confidence": 0.0
+          }
+        ],
+        "kimu": [
+          {
+            "text": "hainbat adibide emango dituzte.",
+            "confidence": 0.391
+          },
+          {
+            "text": "aurrekoan erabilitako argumentu bat berreskuratu behar izan dugu, hau",
+            "confidence": 0.226
+          },
+          {
+            "text": "bi arrazoi nagusi aipatzen ditu: batetik, euskara bera (irakur",
+            "confidence": 0.377
+          }
+        ],
+        "latxa": [
+          {
+            "text": "Aintzane Ezenarro Aralarreko Gipuzkoako Batzarkide",
+            "confidence": 0.617
+          },
+          {
+            "text": "aurreko aldian esandakoaz gain, beste zerbait erantsi behar",
+            "confidence": 0.449
+          },
+          {
+            "text": "gogora dezagun euskara eta euskara batuaren ibilbidea",
+            "confidence": 0.476
+          }
+        ]
+      }
+    },
+    {
+      "domain": "Geography",
+      "source": "Wikipedia (Bilbo)",
+      "prompt": "Euriak udazkenean eta udaberrian ugariak izaten dira; negua, berriz,",
+      "gold": "eztia, eta uda ez oso beroa.",
+      "full": "Euriak udazkenean eta udaberrian ugariak izaten dira; negua, berriz, eztia, eta uda ez oso beroa.",
+      "models": {
+        "morpheus": [
+          {
+            "text": "elurtutako lurraldeetan egoten da.",
+            "confidence": 0.39
+          },
+          {
+            "text": "freskoa, eta udazkenean, berriz, ez­berdina, baina",
+            "confidence": 0.363
+          },
+          {
+            "text": "udazkenean eta udaberrian izaten da, eta negu-neguetan, uda",
+            "confidence": 0.4
+          }
+        ],
+        "kimu": [
+          {
+            "text": "lehorra izaten da. Euri urtea izaten denean, uholdeak izaten",
+            "confidence": 0.517
+          },
+          {
+            "text": "lehorra izaten da. Horrez gain, mendiek eta basoek udazk",
+            "confidence": 0.525
+          },
+          {
+            "text": "lehorragoa izaten da.\nAbeltzaintzari dagokionez, ab",
+            "confidence": 0.595
+          }
+        ],
+        "latxa": [
+          {
+            "text": "hotz eta hezea da. Urteko batez besteko tenperatura",
+            "confidence": 0.611
+          },
+          {
+            "text": "hotza eta elurtsua izaten da. Udak epelak eta hezeak",
+            "confidence": 0.634
+          },
+          {
+            "text": "hotz eta lehorrak izaten dira. Udak epelak izaten dira",
+            "confidence": 0.59
+          }
+        ]
+      }
+    },
+    {
+      "domain": "Music / arts",
+      "source": "Wikipedia (Musika)",
+      "prompt": "Ming dinastiaren garaian",
+      "gold": "hasi zen jai eta ospakizunetako musika kodetzen eta kontserbatorioetan irakasten.",
+      "full": "Ming dinastiaren garaian hasi zen jai eta ospakizunetako musika kodetzen eta kontserbatorioetan irakasten.",
+      "models": {
+        "morpheus": [
+          {
+            "text": ", 1834an, Urrezko Gurutzadak, 15 urte",
+            "confidence": 0.22
+          },
+          {
+            "text": ", 1200. urtean, sultanak 1.800.",
+            "confidence": 0.307
+          },
+          {
+            "text": ", \"Maitalearen Etxea\" (\"Maitalearen Etxea\"",
+            "confidence": 0.445
+          }
+        ],
+        "kimu": [
+          {
+            "text": "(1368-1644), Txinako ipar-ekialdeko",
+            "confidence": 0.636
+          },
+          {
+            "text": "(1368–1644), Txinako iparraldeko Dharahara era",
+            "confidence": 0.499
+          },
+          {
+            "text": ", 1368tik 1644ra, Minggoek eta Hanek",
+            "confidence": 0.488
+          }
+        ],
+        "latxa": [
+          {
+            "text": "(1368-1644), familia noble bateko alaba zen Li Xuezhire",
+            "confidence": 0.368
+          },
+          {
+            "text": "eskribau edo funtzionario izan zen. Haren lanak arkeologiaren",
+            "confidence": 0.351
+          },
+          {
+            "text": "(K.a. 475-221), Txinako literatura garai nahasia zen.",
+            "confidence": 0.355
+          }
+        ]
+      }
+    },
+    {
+      "domain": "History",
+      "source": "Wikipedia (Euskal Herria)",
+      "prompt": "Erdi Aroan gaztelaniaz idatzi zuen Gonzalo de Berceo Errioxako idazlea",
+      "gold": "ziur aski euskalduna zen.",
+      "full": "Erdi Aroan gaztelaniaz idatzi zuen Gonzalo de Berceo Errioxako idazlea ziur aski euskalduna zen.",
+      "models": {
+        "morpheus": [
+          {
+            "text": ", eta \"La casa del lino\" (1862) liburua idatzi",
+            "confidence": 0.272
+          },
+          {
+            "text": "Lau urte geroago, 1870eko irailean, Riberaseko",
+            "confidence": 0.277
+          },
+          {
+            "text": ".",
+            "confidence": 0.421
+          }
+        ],
+        "kimu": [
+          {
+            "text": "jaio zela 800 urte beteko dira aurten. Gaur egun",
+            "confidence": 0.687
+          },
+          {
+            "text": "da.\nBizitza.\nGonzalo Berceo (Berceo, Errioxa,",
+            "confidence": 0.475
+          },
+          {
+            "text": "",
+            "confidence": 1.0
+          }
+        ],
+        "latxa": [
+          {
+            "text": ". Idazleak berak idatzi zituen bere obra guztiak,",
+            "confidence": 0.436
+          },
+          {
+            "text": "izan zen. Bere bizitzari buruzko datu gutxi ezagutzen da",
+            "confidence": 0.559
+          },
+          {
+            "text": "da. Izan ere, Berceo Errioxako Espinosa de Moncayo",
+            "confidence": 0.554
+          }
+        ]
+      }
+    },
+    {
+      "domain": "Email / workplace",
+      "source": "iberba.eus (Epostak eta gutunak)",
+      "prompt": "Iazko azken batzarrean adostu genuen bezala, urteko memoria",
+      "gold": "martxoa baino lehen amaitu beharra dago.",
+      "full": "Iazko azken batzarrean adostu genuen bezala, urteko memoria martxoa baino lehen amaitu beharra dago.",
+      "models": {
+        "morpheus": [
+          {
+            "text": "aurkeztuko dugu.",
+            "confidence": 0.377
+          },
+          {
+            "text": "egitea, eta beti ere, talde bakoitzak bere testuinguruan Plan Orokorraren barruan, nola ez, bere",
+            "confidence": 0.191
+          },
+          {
+            "text": "ere osatu eta aurkeztu dugu.",
+            "confidence": 0.182
+          }
+        ],
+        "kimu": [
+          {
+            "text": "prestatzen hasiak gara. Helburu nagusia herritar guztiek gure lanaren",
+            "confidence": 0.365
+          },
+          {
+            "text": "idazteko ardura hartu nuen nire gain, eta gaur, urte",
+            "confidence": 0.488
+          },
+          {
+            "text": "eta balantzea aurkeztu dizkizuegu.",
+            "confidence": 0.567
+          }
+        ],
+        "latxa": [
+          {
+            "text": "eta balantzea eginda ekarri ditugu, egia esan, ez da",
+            "confidence": 0.367
+          },
+          {
+            "text": "idatzi dugu. Memorian urtean zehar egindako ekintza",
+            "confidence": 0.521
+          },
+          {
+            "text": "egitea tokatzen zaigu, eta proiektuaren hasieran jarritako",
+            "confidence": 0.374
+          }
+        ]
+      }
+    }
+  ],
+  "fim": [
+    {
+      "domain": "Language & culture",
+      "source": "Wikipedia (Euskara batua)",
+      "prefix": "Hirietako hainbat euskaldunek,",
+      "middle": "euskalkien erreferentzia sendorik gabe,",
+      "suffix": "euskara batua ama-hizkuntzatzat ikasi du.",
+      "full": "Hirietako hainbat euskaldunek, euskalkien erreferentzia sendorik gabe, euskara batua ama-hizkuntzatzat ikasi du.",
+      "models": {
+        "morpheus": [
+          {
+            "text": "ordea,",
+            "confidence": 0.132
+          },
+          {
+            "text": "berriz, xuberotar",
+            "confidence": 0.147
+          },
+          {
+            "text": "gaztelania",
+            "confidence": 0.295
+          }
+        ],
+        "kimu": [
+          {
+            "text": "Hirietako hainbat euskaldunek euskara batua ama-hizkuntzatz",
+            "confidence": 0.813
+          },
+          {
+            "text": "Euskara batua, jatorriz, euskalkiak erabiliz sortuta",
+            "confidence": 0.508
+          },
+          {
+            "text": "Ama-hizkuntza eta hizkuntza batua. Euskararen bidegurutzean",
+            "confidence": 0.497
+          }
+        ],
+        "latxa": [
+          {
+            "text": "",
+            "confidence": 0.117
+          },
+          {
+            "text": "<|fim_begin|>Hirietako hainbat euskaldunek,<",
+            "confidence": 0.71
+          },
+          {
+            "text": "",
+            "confidence": 0.117
+          }
+        ]
+      }
+    },
+    {
+      "domain": "Society / economy",
+      "source": "Wikipedia (Donostia)",
+      "prefix": "Langabeziari dagokionez,",
+      "middle": "Euskal Autonomi Erkidegoko hiriburuetan tasa baxuena dago",
+      "suffix": "Donostian.",
+      "full": "Langabeziari dagokionez, Euskal Autonomi Erkidegoko hiriburuetan tasa baxuena dago Donostian.",
+      "models": {
+        "morpheus": [
+          {
+            "text": "1.100 pertsona gutxiago daude",
+            "confidence": 0.302
+          },
+          {
+            "text": "630 lagunek egin dute",
+            "confidence": 0.181
+          },
+          {
+            "text": "%59koa da",
+            "confidence": 0.303
+          }
+        ],
+        "kimu": [
+          {
+            "text": "</subformat>\n\"Donostia ez dago ondo, baina ez da bakar",
+            "confidence": 0.298
+          },
+          {
+            "text": "Hilabeteko langabezia-tasa hilabete lehenago baino ia puntu",
+            "confidence": 0.457
+          },
+          {
+            "text": "Donostian 2021eko urtarrilean 2.477",
+            "confidence": 0.426
+          }
+        ],
+        "latxa": [
+          {
+            "text": "Donostian, langabeziak behera egin du azken urtean,",
+            "confidence": 0.56
+          },
+          {
+            "text": "XX. mendearen amaieran eta XXI.aren hasieran, langabezia-tasa",
+            "confidence": 0.563
+          },
+          {
+            "text": "Lanbiden lanik gabe ageri diren herritarren kopurua 1.",
+            "confidence": 0.409
+          }
+        ]
+      }
+    },
+    {
+      "domain": "News / politics",
+      "source": "Wikipedia (Nafarroa Garaia)",
+      "prefix": "Hirukotea osatzeko lehen porrotaren ondoren,",
+      "middle": "PSN-ko hainbat kideren kritika zorrotzak",
+      "suffix": "egon ziren.",
+      "full": "Hirukotea osatzeko lehen porrotaren ondoren, PSN-ko hainbat kideren kritika zorrotzak egon ziren.",
+      "models": {
+        "morpheus": [
+          {
+            "text": "Tudelano-n",
+            "confidence": 0.31
+          },
+          {
+            "text": "Urdulizen",
+            "confidence": 0.312
+          },
+          {
+            "text": "Rioko Joko Olinpikoetan",
+            "confidence": 0.421
+          }
+        ],
+        "kimu": [
+          {
+            "text": "1971-1974\n\"The Boss\" abeslari eta lider",
+            "confidence": 0.341
+          },
+          {
+            "text": "Lehen aldiz Prime Time Championshipean, Tamina SAn irabazi ondoren",
+            "confidence": 0.385
+          },
+          {
+            "text": "Kirolak.\nSakontzeko, irakurri: «AEBetako kiro",
+            "confidence": 0.347
+          }
+        ],
+        "latxa": [
+          {
+            "text": "",
+            "confidence": 0.197
+          },
+          {
+            "text": "",
+            "confidence": 0.197
+          },
+          {
+            "text": "",
+            "confidence": 0.197
+          }
+        ]
+      }
+    },
+    {
+      "domain": "News / journalism",
+      "source": "Berria",
+      "prefix": "Plazaren ingurumarietan korrika zebiltzanek",
+      "middle": "gomazko pilotak ez, su armen hotsak",
+      "suffix": "aditu zituzten.",
+      "full": "Plazaren ingurumarietan korrika zebiltzanek gomazko pilotak ez, su armen hotsak aditu zituzten.",
+      "models": {
+        "morpheus": [
+          {
+            "text": "korrika zihoazenak",
+            "confidence": 0.432
+          },
+          {
+            "text": ", barrakak",
+            "confidence": 0.146
+          },
+          {
+            "text": ", 12-13 urte arteko gazte eta umeak",
+            "confidence": 0.266
+          }
+        ],
+        "kimu": [
+          {
+            "text": "\"Otsoa da!\" zioen emakume batek, eta korrika hasi",
+            "confidence": 0.382
+          },
+          {
+            "text": "<poem>\nJainkoak sortu zuen gizakia\nHaizean lore,",
+            "confidence": 0.358
+          },
+          {
+            "text": "<li> \"Kalitate handia duen antzezlana da Ama Kuraia\".",
+            "confidence": 0.326
+          }
+        ],
+        "latxa": [
+          {
+            "text": "",
+            "confidence": 0.129
+          },
+          {
+            "text": "<|fim_hole|>Kontuak kontu, presoen eskubide",
+            "confidence": 0.445
+          },
+          {
+            "text": "«Ematen du <|fim_begin|>hemen ere<|fim_hole",
+            "confidence": 0.403
+          }
+        ]
+      }
+    },
+    {
+      "domain": "Email / workplace",
+      "source": "iberba.eus (Epostak eta gutunak)",
+      "prefix": "Iazko azken batzarrean adostu genuen bezala,",
+      "middle": "urteko memoria martxoa baino lehen",
+      "suffix": "amaitu beharra dago.",
+      "full": "Iazko azken batzarrean adostu genuen bezala, urteko memoria martxoa baino lehen amaitu beharra dago.",
+      "models": {
+        "morpheus": [
+          {
+            "text": "aurten ere,",
+            "confidence": 0.167
+          },
+          {
+            "text": "aurten ez da ezer",
+            "confidence": 0.31
+          },
+          {
+            "text": "hileko kuotak",
+            "confidence": 0.272
+          }
+        ],
+        "kimu": [
+          {
+            "text": "Jarraitu irakurtzen 'Ostiela!' blogean.",
+            "confidence": 0.545
+          },
+          {
+            "text": "Hala, bihar, martxoak 25, asteazkena, eging",
+            "confidence": 0.433
+          },
+          {
+            "text": "Kultura batzordeak egindako proposamena da.",
+            "confidence": 0.425
+          }
+        ],
+        "latxa": [
+          {
+            "text": "",
+            "confidence": 0.205
+          },
+          {
+            "text": "Ezin daiteke onartu, ezin daiteke onetsi.<|f",
+            "confidence": 0.379
+          },
+          {
+            "text": "",
+            "confidence": 0.2
+          }
+        ]
+      }
+    }
+  ]
+}
