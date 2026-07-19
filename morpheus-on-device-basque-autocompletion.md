@@ -24,7 +24,7 @@ Basque (Euskara) is a low-resource, morphologically agglutinative language isola
 
 Production autocompletion systems fall into three paradigms: **server-side multi-token completion** (Gmail Smart Compose, GitHub Copilot), **on-device next-word prediction** (Gboard), and **on-device multi-token continuation** — a Smart Compose equivalent for desktop editors. This third paradigm is the gap: no system runs it on-device for a morphologically complex language. None of the three targets Basque.
 
-Two strategic paths present themselves. **Adapting an existing Basque LLM** (the HiTZ Latxa family, Llama-3.1-based) is viable for the server tier, but at 8B parameters it cannot serve the on-device case. **Training a new architecture from scratch** is necessary for the edge tier. We selected Mamba-2 — a State Space Model with O(1) per-step inference and constant memory, the same property Google exploited for Smart Compose but solved at the architecture level rather than with data-center TPUs.
+Two strategic paths present themselves. **Adapting an existing Basque LLM** (the HiTZ Latxa family, Llama-3.1-based, or Orai NLP's Kimu, Gemma-2-based) is viable for the server tier, but at 2B–8B parameters these models cannot serve the on-device case. **Training a new architecture from scratch** is necessary for the edge tier. We selected Mamba-2 — a State Space Model with O(1) per-step inference and constant memory, the same property Google exploited for Smart Compose but solved at the architecture level rather than with data-center TPUs.
 
 | System | Params | Size | Deployment | Architecture | Paradigm |
 |--------|--------|------|-----------|--------------|----------|
