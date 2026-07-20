@@ -232,6 +232,8 @@ The feared premature-truncation failure mode did not materialize. AR capability 
 
 Morpheus demonstrates that **on-device predictive autocompletion for an agglutinative language is feasible**. A 91M Mamba-2 model, fitting in 55 MB with zero network calls, provides real-time ghost-text completion on a 2017 laptop CPU — comparable in scale to Gmail Smart Compose but without the data-center dependency.
 
+**An honest quality assessment.** Morpheus is clearly the weakest of the three models we benchmarked (§7.2). It trails Kimu 2B and Latxa 8B by ~9 CSR points (24.8% vs 33–34%) and by 0.23–0.48 BPC. The qualitative gap is more telling than the numbers: on essay and technical prompts, Morpheus drifts into high-frequency connective filler or unrelated statistical patterns rather than holding a sentence's semantic thread, while both Basque LLMs commit to concrete, on-topic continuations. Morpheus's sweet spot is **sentence-line completion** — email openings, fixed collocations, administrative phrasing — where local statistics suffice. It lacks the context comprehension to sustain coherent multi-sentence argumentation; no amount of inference engineering closes that gap, because it is a parameter-budget limitation (91M vs 2–8B). What Morpheus buys with that constraint is the only model that runs on-device with acceptable latency — a hardware constraint, not a quality claim.
+
 ### Key Contributions
 
 1. **The fertility paradox.** For agglutinative tokenizers, lower fertility *destroys* morphological accuracy. MorphAcc drops from 66.7% (4K) to 28.6% (32K) — replicating QuechuaTok across language families.
